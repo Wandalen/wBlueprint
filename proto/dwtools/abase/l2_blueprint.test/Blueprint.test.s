@@ -1844,7 +1844,7 @@ var Self =
     is,
 
     complexFields,
-    // defineConstructor,
+    defineConstructor,
 
   },
 
