@@ -18,6 +18,7 @@ var Blueprint2 = _.blueprint
 
 var instance = Blueprint2.construct();
 console.log( instance );
+
 /* log :
 {
   field2 : 2,

@@ -1785,27 +1785,30 @@ complexFields.description =
 
 //
 
-// function defineConstructor()
-// {
-//
-//   xxx
-//   debugger;
-//   let TokensCollection = _.blueprint.defineConstructor
-//   ({
-//     ins : null,
-//     names : null,
-//   });
-//
-//   debugger;
-//   test.is( _.constructorIs( TokensCollection ) );
-//   debugger;
-//
-// }
-//
-// defineConstructor.description =
-// `
-// - xxx
-// `
+function defineConstructor()
+{
+
+  xxx
+  debugger;
+  let constr = _.blueprint.defineConstructor
+  ({
+    ins : null,
+    names : null,
+  });
+
+  debugger;
+  test.is( _.routineIs( constr ) );
+  debugger;
+  var exp = { ins : null, names : null };
+  var instance = constr();
+  test.identical( instance, exp );
+
+}
+
+defineConstructor.description =
+`
+- xxx
+`
 
 // --
 // declare
