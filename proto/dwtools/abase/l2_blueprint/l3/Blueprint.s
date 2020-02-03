@@ -135,7 +135,6 @@ function define()
   {
     let construction = this;
 
-    debugger;
     if( construction === undefined )
     {
       construction = null;
