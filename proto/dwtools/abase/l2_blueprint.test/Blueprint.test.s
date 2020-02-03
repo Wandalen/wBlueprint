@@ -11,7 +11,7 @@ if( typeof module !== 'undefined' )
 
   if( !_.module.isIncluded( 'wProto' ) )
   {
-    require( '../../abase/l3_proto/Include.s' );
+    require( '../../abase/l2_blueprint/Include.s' );
   }
 
 }
