@@ -162,12 +162,14 @@ module:
           - ../proto/dwtools/abase/l2_blueprint/Include.s
           - ../proto/dwtools/abase/l2_blueprint/l1
           - ../proto/dwtools/abase/l2_blueprint/l1/Definition.s
+          - ../proto/dwtools/abase/l2_blueprint/l1/Proto.s
           - ../proto/dwtools/abase/l2_blueprint/l3
           - ../proto/dwtools/abase/l2_blueprint/l3/Blueprint.s
           - ../proto/dwtools/abase/l2_blueprint/l3/Construction.s
           - ../proto/dwtools/abase/l2_blueprint/l3/Trait.s
           - ../proto/dwtools/abase/l2_blueprint.test
           - ../proto/dwtools/abase/l2_blueprint.test/Blueprint.test.s
+          - ../proto/dwtools/abase/l2_blueprint.test/Prototype.test.s
           - ../proto/dwtools/amid
           - ../proto/dwtools/atop
     submodule:
