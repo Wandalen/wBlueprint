@@ -41,7 +41,7 @@ path :
       content : prime
 
   entry.proto.no.tests :
-    path : proto/dwtools/___
+    path : proto/dwtools/abase/l2_blueprint/Include.s
     criterion :
       tests : 'no.tests'
   entry.proto.only.tests :
@@ -50,7 +50,7 @@ path :
       tests : 'only.tests'
 
   entry.out.raw.debug :
-    path : '{path::out.*=1}/source/dwtools/___'
+    path : '{path::out.*=1}/source/dwtools/abase/l2_blueprint.test/**'
     criterion :
       debug : [ debug, release ]
       raw : raw
@@ -219,4 +219,3 @@ build :
       - build::raw.release
       - build::release
       - build::npm
-
