@@ -13,6 +13,7 @@ if( typeof module !== 'undefined' )
   let _ = require( '../../Tools.s' );
 
   require( './l1/Definition.s' );
+  require( './l1/Proto.s' );
 
   require( './l3/Blueprint.s' );
   require( './l3/Construction.s' );
