@@ -100,6 +100,7 @@ function field( o )
   o.constructionInit = null;
 
   let definition = new _.Definition( o );
+  let ini = definition.ini;
 
   /* */
 
@@ -137,33 +138,39 @@ function field( o )
     if( o.iniToIns === 'val' )
     {
       definition.constructionInit = constructionInitVal;
-      handlers.push( definition );
+      // handlers.push( definition.constructionInit );
     }
     else if( o.iniToIns === 'shallow' )
     {
       definition.constructionInit = constructionInitShallow;
-      handlers.push( definition );
+      // handlers.push( definition.constructionInit );
     }
     else if( o.iniToIns === 'clone' )
     {
       debugger;
       definition.constructionInit = constructionInitClone;
-      handlers.push( definition );
+      // handlers.push( definition.constructionInit );
     }
     else if( o.iniToIns === 'make' )
     {
       debugger;
       definition.constructionInit = constructionInitCall;
-      handlers.push( definition )
+      // handlers.push( definition.constructionInit )
     }
     else if( o.iniToIns === 'construct' )
     {
       debugger;
       definition.constructionInit = constructionInitNew;
-      handlers.push( definition )
+      // handlers.push( definition.constructionInit )
     }
     else _.assert( 0 );
 
+    _.assert( _.strIs( definition.name ) );
+    handlers.push({ constructionInit : definition.constructionInit, name : definition.name })
+    definition.constructionInit.meta =
+    {
+      extenral : { ini : ini }
+    }
   }
 
   /* */
@@ -180,23 +187,23 @@ function field( o )
 
   function constructionInitVal( construction, name )
   {
-    construction[ name ] = this.ini;
+    construction[ name ] = ini;
   }
   function constructionInitShallow( construction, name )
   {
-    construction[ name ] = _.entityMake( this.ini );
+    construction[ name ] = _.entityMake( ini );
   }
   function constructionInitClone( construction, name )
   {
-    construction[ name ] = _.cloneJust( this.ini );
+    construction[ name ] = _.cloneJust( ini );
   }
   function constructionInitCall( construction, name )
   {
-    construction[ name ] = this.ini()
+    construction[ name ] = ini()
   }
   function constructionInitNew( construction, name )
   {
-    construction[ name ] = new this.ini()
+    construction[ name ] = new ini()
   }
 
 }

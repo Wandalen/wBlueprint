@@ -53,24 +53,43 @@ function typed( o )
     blueprint.constructionHandlers.allocate = allocateUntyped;
   }
 
-  function allocateTyped( construction, blueprint )
+  function allocateTyped( construction, construct )
   {
     if( construction === null )
-    construction = new( _.constructorJoin( blueprint.construct, [ blueprint ] ) );
-    _.assert( construction === null || construction instanceof blueprint.construct );
+    construction = new( _.constructorJoin( construct, [ construct ] ) );
+    _.assert( construction === null || construction instanceof construct );
     return construction;
   }
 
-  function allocateUntyped( construction, blueprint )
+  function allocateUntyped( construction, construct )
   {
-    if( construction && construction instanceof blueprint.construct )
+    if( construction && construction instanceof construct )
     construction = Object.create( null );
     else if( construction === null )
     construction = Object.create( null );
     _.assert( construction === null || _.mapIs( construction ) );
-    _.assert( !( construction instanceof blueprint.construct ) );
+    _.assert( !( construction instanceof construct ) );
     return construction;
   }
+
+  // function allocateTyped( construction, blueprint )
+  // {
+  //   if( construction === null )
+  //   construction = new( _.constructorJoin( blueprint.construct, [ blueprint ] ) );
+  //   _.assert( construction === null || construction instanceof blueprint.construct );
+  //   return construction;
+  // }
+  //
+  // function allocateUntyped( construction, blueprint )
+  // {
+  //   if( construction && construction instanceof blueprint.construct )
+  //   construction = Object.create( null );
+  //   else if( construction === null )
+  //   construction = Object.create( null );
+  //   _.assert( construction === null || _.mapIs( construction ) );
+  //   _.assert( !( construction instanceof blueprint.construct ) );
+  //   return construction;
+  // }
 
 }
 

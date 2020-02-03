@@ -87,47 +87,72 @@ function extend( dst, src )
 
 function makeWithBlueprint( construction, blueprint, args )
 {
-
-  if( args === undefined )
-  args = [];
-
-  _.assert( construction === null || _.objectIs( construction ) );
-  _.assert( _.arrayLike( args ) );
-  _.assert( args.length === 0 || args.length === 1 );
   _.assert( arguments.length === 2 || arguments.length === 3 );
-  _.assert( _.blueprint.is( blueprint ) );
-  _.assert( !!blueprint.traits.typed );
+  _.assert( _.blueprint.isRuntime( blueprint.runtime ) );
+  return _.construction.makeWithRuntime( construction, blueprint.runtime, args );
+}
 
-  let o = args[ 0 ];
+//
 
-  if( args.length === 1 && _.arrayLike( args[ 0 ] ) )
+function makeWithRuntime( construction, runtime, args )
+{
+  _.assert( arguments.length === 2 || arguments.length === 3 );
+
+  let o2 =
   {
-    return constructionsFromLong( args[ 0 ] );
+    construction,
+    args,
+    runtime,
   }
 
-  if( construction === null )
-  if( blueprint.traits.typed.value )
-  if( o instanceof blueprint.construct )
+  return _.construction._make( o2 );
+}
+
+//
+
+function _make( o )
+{
+
+  if( o.args === undefined || o.args === null )
+  o.args = [];
+
+  _.assertRoutineOptions( _make, arguments );
+  _.assert( o.construction === null || _.objectIs( o.construction ) );
+  _.assert( _.arrayLike( o.args ) );
+  _.assert( o.args.length === 0 || o.args.length === 1 );
+  _.assert( arguments.length === 1 );
+  _.assert( _.boolIs( o.runtime.typed ) );
+
+  let op = o.args[ 0 ];
+
+  if( o.args.length === 1 && _.arrayLike( op ) )
   {
-    _.assert( args.length === 1 );
-    return o;
+    return constructionsFromLong( op );
   }
 
-  construction = constructionAllocate();
+  if( o.construction === null )
+  if( o.runtime.typed )
+  if( op instanceof o.runtime.construct )
+  {
+    _.assert( o.args.length === 1 );
+    return op;
+  }
 
-  if( blueprint.traits.typed.value )
-  _.assert( construction instanceof blueprint.construct );
+  o.construction = constructionAllocate();
+
+  if( o.runtime.typed )
+  _.assert( o.construction instanceof o.runtime.construct );
   else
-  _.assert( !( construction instanceof blueprint.construct ) );
+  _.assert( !( o.construction instanceof o.runtime.construct ) );
 
-  _.construction._init( construction, blueprint );
-  _.construction._extendArguments( construction, blueprint, args );
+  _.construction._init( o.construction, o.runtime );
+  _.construction._extendArguments( o.construction, o.runtime, o.args );
 
-  return construction;
+  return o.construction;
 
   function constructionAllocate()
   {
-    return blueprint.constructionHandlers.allocate( construction, blueprint );
+    return o.runtime.constructionHandlers.allocate( o.construction, o.runtime.construct );
   }
 
   function constructionsFromLong( long )
@@ -135,81 +160,74 @@ function makeWithBlueprint( construction, blueprint, args )
     let result = [];
     for( let i = 0 ; i < long.length ; i++ )
     {
-      let o = long[ i ];
-      if( o === null )
+      let op = long[ i ];
+      if( op === null )
       continue;
-      if( construction === null )
-      result.push( blueprint.construct( o ) );
+      if( o.construction === null )
+      result.push( o.runtime.construct.call( null, op ) );
       else
-      result.push( new blueprint.construct( o ) );
+      result.push( new o.runtime.construct( op ) );
     }
     return result;
   }
 
 }
 
+_make.defaults =
+{
+  construction : null,
+  args : null,
+  runtime : null,
+}
+
 //
 
-function _init( construction, blueprint )
+function _init( construction, runtime )
 {
   _.assert( arguments.length === 2 );
 
-  if( blueprint.constructionHandlers.initBegin )
-  for( let i = 0 ; i < blueprint.constructionHandlers.initBegin.length ; i++ )
-  blueprint.constructionHandlers.initBegin[ i ]( construction, blueprint );
+  if( runtime.constructionHandlers.initBegin )
+  for( let i = 0 ; i < runtime.constructionHandlers.initBegin.length ; i++ )
+  runtime.constructionHandlers.initBegin[ i ]( construction, runtime );
 
-  _.construction._initFields( construction, blueprint );
-  _.construction._initDefines( construction, blueprint );
+  _.construction._initFields( construction, runtime );
+  _.construction._initDefines( construction, runtime );
 
-  if( blueprint.constructionHandlers.initEnd )
-  for( let i = 0 ; i < blueprint.constructionHandlers.initEnd.length ; i++ )
-  blueprint.constructionHandlers.initEnd[ i ]( construction, blueprint );
+  if( runtime.constructionHandlers.initEnd )
+  for( let i = 0 ; i < runtime.constructionHandlers.initEnd.length ; i++ )
+  runtime.constructionHandlers.initEnd[ i ]( construction, runtime );
 
   return construction;
 }
 
 //
 
-function _initFields( construction, blueprint )
+function _initFields( construction, runtime )
 {
 
   _.assert( _.objectIs( construction ) );
-  _.assert( _.blueprint.is( blueprint ) );
+  _.assert( _.blueprint.isRuntime( runtime ) );
   _.assert( arguments.length === 2 );
 
-  _.mapExtend( construction, blueprint.fields );
+  _.mapExtend( construction, runtime.fields );
 
   return construction;
 }
 
 //
 
-function _initDefines( construction, blueprint )
+function _initDefines( construction, runtime )
 {
 
   _.assert( _.objectIs( construction ) );
-  _.assert( _.blueprint.is( blueprint ) );
+  _.assert( _.blueprint.isRuntime( runtime ) );
   _.assert( arguments.length === 2 );
 
-  // for( let f in blueprint.namedDefinitions )
-  // {
-  //   let definition = blueprint.namedDefinitions[ f ];
-  //   // if( definition.isMeta )
-  //   // continue;
-  //   // _.assert( _.routineIs( definition.initialValueGet ) );
-  //   if( definition.initialValueGet )
-  //   _.assert( 0, 'not implemented' );
-  //   // definition.initialValueGet({ fieldName : f });
-  //   // construction[ f ] = definition.initialValueGet({ fieldName : f })
-  // }
-
-  if( blueprint.constructionHandlers.constructionInit )
-  for( let i = 0 ; i < blueprint.constructionHandlers.constructionInit.length ; i++ )
+  if( runtime.constructionHandlers.constructionInit )
+  for( let i = 0 ; i < runtime.constructionHandlers.constructionInit.length ; i++ )
   {
-    let definition = blueprint.constructionHandlers.constructionInit[ i ];
-    _.assert( _.strDefined( definition.name ) );
-    _.assert( _.routineIs( definition.constructionInit ) );
-    definition.constructionInit( construction, definition.name )
+    let constructionInitContext = runtime.constructionHandlers.constructionInit[ i ];
+    constructionInitContext.constructionInit.call( null, construction, constructionInitContext.name );
   }
 
   return construction;
@@ -217,11 +235,11 @@ function _initDefines( construction, blueprint )
 
 //
 
-function _extendArguments( construction, blueprint, args )
+function _extendArguments( construction, runtime, args )
 {
 
   _.assert( _.objectIs( construction ) );
-  _.assert( _.blueprint.is( blueprint ) );
+  _.assert( _.blueprint.isRuntime( runtime ) );
   _.assert( args === undefined || _.arrayLike( args ) );
   _.assert( args === undefined || args.length === 0 || args.length === 1 );
   _.assert( arguments.length === 3 );
@@ -250,7 +268,6 @@ function Construction()
 
 Construction.prototype = Object.create( null );
 Object.freeze( Construction.prototype );
-// Construction.prototype.constructor = Construction;
 
 // --
 // namespace construction
@@ -266,6 +283,8 @@ var ConstructionExtension =
   extend,
 
   makeWithBlueprint,
+  makeWithRuntime,
+  _make,
   _init,
   _initFields,
   _initDefines,

@@ -1716,7 +1716,6 @@ is.description =
 - namespace _.blueprint is not blueprint
 `
 
-
 //
 
 function complexFields( test )
@@ -1785,29 +1784,98 @@ complexFields.description =
 
 //
 
-function defineConstructor()
+function compileSourceCode( test )
 {
 
-  xxx
-  debugger;
+  /* */
+
+  var e = [];
+  var blueprint = _.blueprint.define
+  ({
+    typed : _.trait.typed(),
+    array : _.define.shallow( [ e ] ),
+    map : _.define.shallow( { k : e } ),
+  });
+  var instance1 = blueprint.construct();
+  var instance2 = blueprint.construct();
+  var exp =
+  {
+    array : [ [] ],
+    map : { k : [] },
+  }
+
+  test.identical( instance1, exp );
+  test.identical( instance1 instanceof blueprint.construct, true );
+  test.identical( instance2, exp );
+  test.identical( instance2 instanceof blueprint.construct, true );
+  test.is( instance1.array !== instance2.array );
+  test.is( instance1.map !== instance2.map );
+  test.is( instance1.array[ 0 ] === instance2.array[ 0 ] );
+  test.is( instance1.map.k === instance2.map.k );
+
+  /* */
+
+  // debugger;
+  // var sourceCode = blueprint.compileSourceCode();
+  // debugger;
+
+/*
+  var constructor = blueprint.compileConstructor();
+  var instance1 = constructor();
+  var instance2 = constructor();
+  var exp =
+  {
+    array : [ [] ],
+    map : { k : [] },
+  }
+
+  test.identical( instance1, exp );
+  test.identical( instance1 instanceof constructor, true );
+  test.identical( instance2, exp );
+  test.identical( instance2 instanceof constructor, true );
+  test.is( instance1.array !== instance2.array );
+  test.is( instance1.map !== instance2.map );
+  test.is( instance1.array[ 0 ] === instance2.array[ 0 ] );
+  test.is( instance1.map.k === instance2.map.k );
+*/
+
+  /* */
+
+}
+
+compileSourceCode.description =
+`
+- xxx
+`
+
+//
+
+function defineConstructor( test )
+{
+
   let constr = _.blueprint.defineConstructor
   ({
     ins : null,
     names : null,
   });
 
-  debugger;
   test.is( _.routineIs( constr ) );
-  debugger;
+
   var exp = { ins : null, names : null };
   var instance = constr();
   test.identical( instance, exp );
+  test.is( _.mapIs( instance ) );
+
+  var exp = { ins : 13, names : null };
+  var instance = constr({ ins : 13 });
+  test.identical( instance, exp );
+  test.is( _.mapIs( instance ) );
 
 }
 
 defineConstructor.description =
 `
-- xxx
+- _.blueprint.defineConstructor returns constructor of blueprint
 `
 
 // --
@@ -1844,6 +1912,7 @@ var Self =
     is,
 
     complexFields,
+    compileSourceCode,
     defineConstructor,
 
   },

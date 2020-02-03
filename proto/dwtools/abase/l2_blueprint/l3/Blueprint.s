@@ -25,6 +25,15 @@ function isBlueprintOf( blueprint, construction )
 
 //
 
+function isRuntime( runtime )
+{
+  if( !runtime )
+  return false;
+  return Object.getPrototypeOf( runtime ) === _.BlueprintRuntime;
+}
+
+//
+
 function blueprintIsBlueprintOf( construction )
 {
   let blueprint = this;
@@ -40,7 +49,12 @@ function compileSourceCode( blueprint )
   _.assert( arguments.length === 1 );
   let generator = _.Generator();
 
-  generator.external( xxx );
+  // generator.external( x ); /* zzz : implement */
+
+  generator.import
+  ({
+    src : _.construction.makeWithRuntime
+  });
 
   return generator.generateSourceCode();
 }
@@ -92,9 +106,19 @@ function define()
   _.assert( _.mapIs( _.Construction.prototype ) );
 
   blueprint.construct = construct;
-  construct.blueprint = blueprint
+  // construct.blueprint = blueprint
 
   _.blueprint._blueprintForm( blueprint );
+
+  let runtime = Object.create( _.BlueprintRuntime );
+  runtime.constructionHandlers = blueprint.constructionHandlers;
+  runtime.fields = blueprint.fields;
+  runtime.construct = construct;
+  runtime.typed = blueprint.traits.typed.value;
+  Object.preventExtensions( runtime );
+
+  blueprint.runtime = runtime;
+  construct.runtime = runtime;
 
   Object.preventExtensions( blueprint );
   Object.preventExtensions( blueprint.namedDefinitions );
@@ -111,27 +135,27 @@ function define()
   {
     let construction = this;
 
+    debugger;
     if( construction === undefined )
     {
       construction = null;
     }
     else if( _.blueprint.is( construction ) )
     {
-      _.assert( construction === blueprint );
       construction = null;
     }
-    else if( arguments.length === 1 && arguments[ 0 ] === blueprint )
+    else if( arguments.length === 1 && arguments[ 0 ] === runtime.construct )
     {
-      /* if argument is its own blueprint then typed container is only needed */
+      /* if argument is its own constructr then typed container is only what needed */
       return construction;
     }
 
-    if( blueprint.makeCompiled ) /* xxx */
+    if( runtime.makeCompiled ) /* zzz */
     debugger;
-    if( blueprint.makeCompiled )
-    construction = blueprint.makeCompiled( construction, arguments );
+    if( runtime.makeCompiled )
+    construction = runtime.makeCompiled( construction, arguments );
     else
-    construction = _.construction.makeWithBlueprint( construction, blueprint, arguments );
+    construction = _.construction.makeWithRuntime( construction, runtime, arguments );
 
     return construction;
   }
@@ -442,10 +466,13 @@ function definitionQualifiedName( blueprint, definition )
 // declare
 // --
 
-let Blueprint = Object.create( null );
+let BlueprintRuntime = Object.create( null );
+Object.preventExtensions( BlueprintRuntime );
 
+let Blueprint = Object.create( null );
 Blueprint.isBlueprintOf = blueprintIsBlueprintOf;
 Blueprint.compileSourceCode = blueprintCompileSourceCode;
+Object.preventExtensions( Blueprint );
 
 let blueprint = function Blueprint()
 {
@@ -463,6 +490,7 @@ var BlueprintExtension =
 
   is,
   isBlueprintOf,
+  isRuntime,
   compileSourceCode,
   define,
   _amend,
@@ -493,6 +521,7 @@ var ToolsExtension =
 
   // fields
 
+  BlueprintRuntime,
   Blueprint,
 
 }
