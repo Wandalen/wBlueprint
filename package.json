@@ -1,32 +1,22 @@
 {
-  "name": "wblueprint",
-  "version": "0.3.4",
-  "description": "Classes defining tool on steroids. Make possible multiple inheritances, removing fields in descendants, defining the schema of structure, typeless objects, generating optimal code for definition, and many cool things alternatives cant do.",
-  "author": "Kostiantyn Wandalen <wanalen@willbe.so>",
-  "license": "MIT",
-  "main": "proto/dwtools/abase/l2_blueprint/Include.s",
-  "files": [
-    "proto/dwtools/abase/l2_blueprint",
-    "proto/dwtools/Tools.s"
-  ],
-  "scripts": {
-    "test": "wtest .run proto",
-    "docgen": "wdocgen .build proto"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https ://github.com/Wandalen/wBlueprint.git"
-  },
-  "bugs": {
-    "url": "https ://github.com/Wandalen/wBlueprint/issues"
-  },
-  "dependencies": {
-    "wTools": "alpha"
-  },
-  "devDependencies": {
-    "wTesting": "alpha"
-  },
-  "keywords": [
-    "wTools"
-  ]
+  "name" : "wblueprint", 
+  "version" : "0.3.5", 
+  "description" : "Classes defining tool on steroids. Make possible multiple inheritances, removing fields in descendants, defining the schema of structure, typeless objects, generating optimal code for definition, and many cool things alternatives cant do.", 
+  "author" : "Kostiantyn Wandalen <wanalen@willbe.so>", 
+  "license" : "MIT", 
+  "main" : "proto/dwtools/abase/l2_blueprint/Include.s", 
+  "files" : [ "proto/dwtools/abase/l2_blueprint", "proto/dwtools/Tools.s" ], 
+  "scripts" : { "test" : "wtest .run proto", "docgen" : "wdocgen .build proto" }, 
+  "repository" : 
+  {
+    "type" : "git", 
+    "url" : "https ://github.com/Wandalen/wBlueprint.git"
+  }, 
+  "bugs" : 
+  {
+    "url" : "https ://github.com/Wandalen/wBlueprint/issues"
+  }, 
+  "dependencies" : { "wTools" : "alpha" }, 
+  "devDependencies" : { "wTesting" : "alpha" }, 
+  "keywords" : [ "wTools" ]
 }
