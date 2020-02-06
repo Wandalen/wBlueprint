@@ -421,6 +421,12 @@ function construct( blueprint )
 {
   let result;
   _.assert( arguments.length === 1 );
+
+  if( !_.blueprint.is( blueprint ) )
+  {
+    blueprint = _.blueprint.define( blueprint );
+  }
+
   let construct = _.blueprint.constructorOf( blueprint );
   _.assert( _.routineIs( construct ), 'Cant find constructor for blueprint' );
   let construction2 = construct();

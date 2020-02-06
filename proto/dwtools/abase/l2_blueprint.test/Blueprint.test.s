@@ -1878,6 +1878,42 @@ defineConstructor.description =
 - _.blueprint.defineConstructor returns constructor of blueprint
 `
 
+//
+
+function constructions( test )
+{
+
+  var exp =
+  {
+    segments : [ 2,2 ],
+    size : [ 2,2 ],
+    axis : 2,
+  }
+  var got = _.blueprint
+  .construct
+  ({
+    segments : _.define.shallow([ 2,2 ]),
+    size : _.define.shallow([ 2,2 ]),
+    axis : 2,
+  })
+  var got = test.identical( got, exp );
+
+
+/*
+
+var Settings = _.like()
+.also
+({
+  segments : _.define.own([ 2,2 ]),
+  size : _.define.own([ 2,2 ]),
+  axis : 2,
+})
+.end
+
+*/
+
+}
+
 // --
 // declare
 // --
@@ -1914,6 +1950,8 @@ var Self =
     complexFields,
     compileSourceCode,
     defineConstructor,
+
+    constructions,
 
   },
 
