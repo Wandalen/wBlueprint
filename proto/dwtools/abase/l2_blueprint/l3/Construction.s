@@ -65,13 +65,26 @@ function extend( dst, src )
   if( dst === null )
   dst = Object.create( null );
 
-  for( let s in src )
+  if( _.blueprint.is( src ) )
   {
-    let def = src[ s ];
-    if( _.definitionIs( def ) )
-    definitionExtend( def, dst, s );
-    else
-    dst[ s ] = def;
+    _.assert( !_.blueprint.is( dst ), 'not implemented' ); /* xxx */
+    _.mapExtend( dst, src.fields );
+
+    _.assert( 0, 'not implemented' ); 
+
+  }
+  else
+  {
+
+    for( let s in src )
+    {
+      let def = src[ s ];
+      if( _.definitionIs( def ) )
+      definitionExtend( def, dst, s );
+      else
+      dst[ s ] = def;
+    }
+
   }
 
   return dst;
