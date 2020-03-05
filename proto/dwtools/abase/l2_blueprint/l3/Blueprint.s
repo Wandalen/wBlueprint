@@ -282,12 +282,12 @@ function _amend( o )
     for( let k in ext.namedDefinitions )
     {
       let definition = ext.namedDefinitions[ k ]
-      extendWitNamedDefinition( definition.clone(), k );
+      extendWithNamedDefinition( definition.clone(), k );
     }
     for( let k = 0 ; k < ext.unnamedDefinitions.length ; k++ )
     {
       let definition = ext.unnamedDefinitions[ k ]
-      extendWitUnnamedDefinition( definition, k );
+      extendWithUnnamedDefinition( definition, k );
     }
     for( let k in ext.traits )
     {
