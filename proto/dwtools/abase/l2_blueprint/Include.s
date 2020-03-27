@@ -10,7 +10,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../../Tools.s' );
+  let _ = require( '../../../dwtools/Tools.s' );
 
   require( './l1/Definition.s' );
   require( './l1/Proto.s' );
