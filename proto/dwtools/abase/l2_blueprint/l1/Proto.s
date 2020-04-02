@@ -11,10 +11,15 @@ let _ = _global_.wTools;
 // --
 
 /**
+ * @namespace wTools.prototype
+ * @memberof module:Tools/base/Proto
+ */
+
+/**
  * Iterate through prototypes.
  * @param {object} proto - prototype
  * @function each
- * @memberof module:Tools/base/Proto.Tools/Tools.prototype
+ * @memberof namespace:wTools.prototype
  */
 
 function each( proto, onEach )
@@ -75,7 +80,7 @@ function each( proto, onEach )
  * @param {object} srcProto - proto stack to investigate.
  * @param {object} insProto - proto to look for.
  * @function hasPrototype
- * @memberof module:Tools/base/Proto.Tools.prototype
+ * @memberof namespace:Tools.prototype
  */
 
 function hasPrototype( srcProto, insProto )
@@ -97,7 +102,7 @@ function hasPrototype( srcProto, insProto )
  * Return proto owning names.
  * @param {object} srcPrototype - src object to investigate proto stack.
  * @function hasProperty
- * @memberof module:Tools/base/Proto.Tools.prototype
+ * @memberof namespace:Tools.prototype
  */
 
 function hasProperty( srcPrototype, names ) /* xxx qqq : names could be only string */
