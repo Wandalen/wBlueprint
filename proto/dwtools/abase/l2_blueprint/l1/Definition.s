@@ -6,7 +6,7 @@
 * Collection of definitions for constructions.
 * @namespace "wTools.define"
 * @extends Tools
-* @memberof module:Tools/base/Proto
+* @module Tools/base/Proto
 */
 
 let Self = _global_.wTools;
@@ -26,7 +26,8 @@ let _ = _global_.wTools;
   @see {@link module:Tools/base/Proto.wTools.define.makeWith}
   @see {@link module:Tools/base/Proto.wTools.define.contained}
 * @class Definition
-* @memberof namespace:wTools.define
+* @namespace Tools.define
+* @module Tools/base/Proto
 */
 
 function Definition( o )
@@ -478,7 +479,7 @@ _.mapExtend( _.define, DefineExtension );
 * Routines to manipulate definitions.
 * @namespace "wTools.definition"
 * @extends Tools
-* @memberof module:Tools/base/Proto
+* @module Tools/base/Proto
 */
 
 let DefinitionExtension =
