@@ -2,6 +2,13 @@
 
 'use strict';
 
+/**
+* Collection of definitions for constructions.
+* @namespace "wTools.define"
+* @extends Tools
+* @module Tools/base/Proto
+*/
+
 let Self = _global_.wTools;
 let _global = _global_;
 let _ = _global_.wTools;
@@ -19,7 +26,8 @@ let _ = _global_.wTools;
   @see {@link module:Tools/base/Proto.wTools.define.makeWith}
   @see {@link module:Tools/base/Proto.wTools.define.contained}
 * @class Definition
-* @memberof module:Tools/base/Proto.wTools.define
+* @namespace Tools.define
+* @module Tools/base/Proto
 */
 
 function Definition( o )
@@ -445,12 +453,7 @@ let ConstructionHandlers =
 
 //
 
-/**
-* Collection of definitions for constructions.
-* @namespace "wTools.define"
-* @augments wTools
-* @memberof module:Tools/base/Proto
-*/
+
 
 let DefineExtension =
 {
@@ -475,8 +478,8 @@ _.mapExtend( _.define, DefineExtension );
 /**
 * Routines to manipulate definitions.
 * @namespace "wTools.definition"
-* @augments wTools
-* @memberof module:Tools/base/Proto
+* @extends Tools
+* @module Tools/base/Proto
 */
 
 let DefinitionExtension =
