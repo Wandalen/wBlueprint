@@ -166,7 +166,7 @@ prototype.defaults =
 
 /**
 * Collection of definitions which are traits.
-* @namespace "wTools.trait"
+* @namespace wTools.trait
 * @extends Tools
 * @module Tools/base/Proto
 */
@@ -188,7 +188,7 @@ _.mapExtend( _.trait, TraitExtension );
 
 /**
 * Routines to manipulate traits.
-* @namespace "wTools.definition"
+* @namespace wTools.definition
 * @extends Tools
 * @module Tools/base/Proto
 */

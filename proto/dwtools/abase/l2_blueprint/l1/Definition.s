@@ -4,7 +4,7 @@
 
 /**
 * Collection of definitions for constructions.
-* @namespace "wTools.define"
+* @namespace wTools.define
 * @extends Tools
 * @module Tools/base/Proto
 */
@@ -477,7 +477,7 @@ _.mapExtend( _.define, DefineExtension );
 
 /**
 * Routines to manipulate definitions.
-* @namespace "wTools.definition"
+* @namespace wTools.definition
 * @extends Tools
 * @module Tools/base/Proto
 */
