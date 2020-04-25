@@ -1,6 +1,6 @@
 {
   "name" : "wblueprint", 
-  "version" : "0.3.68", 
+  "version" : "0.3.69", 
   "description" : "Classes defining tool on steroids. Make possible multiple inheritances, removing fields in descendants, defining the schema of structure, typeless objects, generating optimal code for definition, and many cool things alternatives cant do.", 
   "author" : "Kostiantyn Wandalen <wanalen@willbe.so>", 
   "license" : "MIT", 
@@ -16,7 +16,7 @@
   {
     "url" : "https ://github.com/Wandalen/wBlueprint/issues"
   }, 
-  "dependencies" : { "wTools" : "alpha" }, 
-  "devDependencies" : { "wblueprint" : "file:.", "wTesting" : "alpha" }, 
+  "dependencies" : { "wTools" : "gamma" }, 
+  "devDependencies" : { "wblueprint" : "file:.", "wTesting" : "gamma" }, 
   "keywords" : [ "wTools" ]
 }
