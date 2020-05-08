@@ -2,7 +2,7 @@
   "name" : "wblueprint",
   "version" : "0.3.83",
   "description" : "Classes defining tool on steroids. Make possible multiple inheritances, removing fields in descendants, defining the schema of structure, typeless objects, generating optimal code for definition, and many cool things alternatives cant do.",
-  "author" : "Kostiantyn Wandalen <wanalen@willbe.so>",
+  "author" : "Kostiantyn Wandalen <wanalen@01.school>",
   "license" : "MIT",
   "main" : "proto/dwtools/abase/l2_blueprint/Include.s",
   "files" : [ "proto/dwtools/abase/l2_blueprint", "proto/dwtools/Tools.s" ],
