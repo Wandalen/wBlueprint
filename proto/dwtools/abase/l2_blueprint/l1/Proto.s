@@ -151,7 +151,7 @@ _.mapExtend( _.prototype, PrototypeExtension );
 // export
 // --
 
-if( typeof module !== 'undefined' && module !== null )
+if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 
 })();

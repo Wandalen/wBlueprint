@@ -219,7 +219,7 @@ _.assert( _.routineIs( _.traitIs ) );
 // export
 // --
 
-if( typeof module !== 'undefined' && module !== null )
+if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 
 })();

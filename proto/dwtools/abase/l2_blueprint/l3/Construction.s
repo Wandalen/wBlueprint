@@ -327,7 +327,7 @@ Object.assign( _, ToolsExtension );
 // export
 // --
 
-if( typeof module !== 'undefined' && module !== null )
+if( typeof module !== 'undefined' )
 module[ 'exports' ] = _;
 
 })();
