@@ -6,7 +6,7 @@
   "license" : "MIT",
   "main" : "proto/dwtools/abase/l2_blueprint/Include.s",
   "files" : [ "proto/dwtools/abase/l2_blueprint", "proto/dwtools/Tools.s" ],
-  "scripts" : { "test" : "wtest .run proto rapidity:-3", "docgen" : "wdocgen .build proto" },
+  "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-3", "docgen" : "wdocgen .build proto" },
   "repository" :
   {
     "type" : "git",
