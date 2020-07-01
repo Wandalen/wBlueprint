@@ -1465,6 +1465,4 @@ module:
       ../.im.will.yml:
         hash: 23911fdb719c3211eff94d3036ca174e
         size: 4607
-      wBlueprint.out.will.yml:
-        hash: 7b4bd1054397a2d9792f71196ceb85b0
-        size: 37881
+      wBlueprint.out.will.yml: *ref_0
