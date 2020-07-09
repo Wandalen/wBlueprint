@@ -4,8 +4,8 @@
   "description" : "Classes defining tool on steroids. Make possible multiple inheritances, removing fields in descendants, defining the schema of structure, typeless objects, generating optimal code for definition, and many cool things alternatives cant do.",
   "author" : "Kostiantyn Wandalen <wanalen@01.school>",
   "license" : "MIT",
-  "main" : "proto/dwtools/abase/l2_blueprint/Include.s",
-  "files" : [ "proto/dwtools/abase/l2_blueprint", "proto/dwtools/Tools.s" ],
+  "main" : "proto/wtools/abase/l2_blueprint/Include.s",
+  "files" : [ "proto/wtools/abase/l2_blueprint", "proto/wtools/Tools.s" ],
   "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-3", "docgen" : "wdocgen .build proto" },
   "repository" :
   {
