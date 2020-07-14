@@ -4,15 +4,16 @@
 
 if( typeof module !== 'undefined' )
 {
-
   let _ = require( '../../../wtools/Tools.s' );
+
+  require( '../../abase/l2_blueprint/Include.s' );
 
   _.include( 'wTesting' );
 
-  if( !_.module.isIncluded( 'wProto' ) )
-  {
-    require( '../../abase/l2_blueprint/Include.s' );
-  }
+  // if( !_.module.isIncluded( 'wProto' ) )
+  // {
+  //   require( '../../abase/l2_blueprint/Include.s' );
+  // }
 
 }
 
@@ -105,7 +106,7 @@ function constructTyped( test )
   test.identical( _.blueprint.isBlueprintOf( Blueprint, instance ), true );
 
   test.identical( instance instanceof Blueprint.construct, true );
-  test.identical( Object.getPrototypeOf( instance ), _.Construction.prototype );
+  test.identical( Object.getPrototypeOf( Object.getPrototypeOf( instance ) ), _.Construction.prototype );
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 3 );
@@ -188,7 +189,7 @@ function constructWithoutHelper( test )
   test.identical( _.blueprint.isBlueprintOf( Blueprint, instance ), true );
 
   test.identical( instance instanceof Blueprint.construct, true );
-  test.identical( Object.getPrototypeOf( instance ), _.Construction.prototype );
+  test.identical( Object.getPrototypeOf( Object.getPrototypeOf( instance ) ), _.Construction.prototype );
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 3 );
@@ -250,7 +251,7 @@ function constructWithoutHelper( test )
   test.identical( _.blueprint.isBlueprintOf( Blueprint, instance ), true );
 
   test.identical( instance instanceof Blueprint.construct, true );
-  test.identical( Object.getPrototypeOf( instance ), _.Construction.prototype );
+  test.identical( Object.getPrototypeOf( Object.getPrototypeOf( instance ) ), _.Construction.prototype );
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 3 );
@@ -335,7 +336,7 @@ function constructWithArgumentMap( test )
 
   test.is( instance !== opts );
   var exp = { field1 : 13 }
-  test.identical( instance, exp );
+  test.contains( instance, exp ); /* xxx : should be containsAll */
 
   test.identical( _.blueprint.is( Blueprint ), true );
   test.identical( _.construction.isTyped( instance ), true );
@@ -343,7 +344,7 @@ function constructWithArgumentMap( test )
   test.identical( _.blueprint.isBlueprintOf( Blueprint, instance ), true );
 
   test.identical( instance instanceof Blueprint.construct, true );
-  test.identical( Object.getPrototypeOf( instance ), _.Construction.prototype );
+  test.identical( Object.getPrototypeOf( Object.getPrototypeOf( instance ) ), _.Construction.prototype );
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 3 );
@@ -407,7 +408,7 @@ function constructWithArgumentMap( test )
 
   test.is( instance !== opts );
   var exp = { field1 : 13 }
-  test.identical( instance, exp );
+  test.containsOnly( instance, exp );
 
   test.identical( _.blueprint.is( Blueprint ), true );
   test.identical( _.construction.isTyped( instance ), true );
@@ -415,7 +416,7 @@ function constructWithArgumentMap( test )
   test.identical( _.blueprint.isBlueprintOf( Blueprint, instance ), true );
 
   test.identical( instance instanceof Blueprint.construct, true );
-  test.identical( Object.getPrototypeOf( instance ), _.Construction.prototype );
+  test.identical( Object.getPrototypeOf( Object.getPrototypeOf( instance ) ), _.Construction.prototype );
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 3 );
@@ -485,7 +486,7 @@ function constructWithArgumentMapUndeclaredFields( test )
 
   test.is( instance !== opts );
   var exp = { field1 : rfield, fieldBad : 13 }
-  test.identical( instance, exp );
+  test.containsOnly( instance, exp );
   test.identical( instance instanceof Blueprint.construct, true );
 
   /* */
@@ -519,7 +520,7 @@ function constructWithArgumentMapUndeclaredFields( test )
 
   test.is( instance !== opts );
   var exp = { field1 : rfield, fieldBad : 13 }
-  test.identical( instance, exp );
+  test.containsOnly( instance, exp );
   test.identical( instance instanceof Blueprint.construct, true );
 
   /* */
@@ -609,7 +610,7 @@ function constructWithArgumentInstance( test )
   test.is( instance2 !== opts );
   test.is( instance1 !== instance2 );
   var exp = { field1 : 13 }
-  test.identical( instance2, exp );
+  test.containsOnly( instance2, exp );
 
   test.identical( _.blueprint.is( Blueprint ), true );
   test.identical( _.construction.isTyped( instance2 ), false );
@@ -646,7 +647,7 @@ function constructWithArgumentInstance( test )
   test.is( instance2 !== opts );
   test.is( instance1 === instance2 );
   var exp = { field1 : 13 }
-  test.identical( instance2, exp );
+  test.containsOnly( instance2, exp );
 
   test.identical( _.blueprint.is( Blueprint ), true );
   test.identical( _.construction.isTyped( instance2 ), true );
@@ -654,7 +655,7 @@ function constructWithArgumentInstance( test )
   test.identical( _.blueprint.isBlueprintOf( Blueprint, instance2 ), true );
 
   test.identical( instance2 instanceof Blueprint.construct, true );
-  test.identical( Object.getPrototypeOf( instance2 ), _.Construction.prototype );
+  test.identical( Object.getPrototypeOf( Object.getPrototypeOf( instance2 ) ), _.Construction.prototype );
   test.identical( instance2.constructor, undefined );
   var prototypes = _.prototype.each( instance2 );
   test.identical( prototypes.length, 3 );
@@ -687,7 +688,7 @@ function constructWithArgumentInstance( test )
   test.is( instance2 !== opts );
   test.is( instance1 !== instance2 );
   var exp = { field1 : 13 }
-  test.identical( instance2, exp );
+  test.containsOnly( instance2, exp );
 
   test.identical( _.blueprint.is( Blueprint ), true );
   test.identical( _.construction.isTyped( instance2 ), false );
@@ -724,7 +725,7 @@ function constructWithArgumentInstance( test )
   test.is( instance2 !== opts );
   test.is( instance1 !== instance2 );
   var exp = { field1 : 13 }
-  test.identical( instance2, exp );
+  test.containsOnly( instance2, exp );
 
   test.identical( _.blueprint.is( Blueprint ), true );
   test.identical( _.construction.isTyped( instance2 ), true );
@@ -732,7 +733,7 @@ function constructWithArgumentInstance( test )
   test.identical( _.blueprint.isBlueprintOf( Blueprint, instance2 ), true );
 
   test.identical( instance2 instanceof Blueprint.construct, true );
-  test.identical( Object.getPrototypeOf( instance2 ), _.Construction.prototype );
+  test.identical( Object.getPrototypeOf( Object.getPrototypeOf( instance2 ) ), _.Construction.prototype );
   test.identical( instance2.constructor, undefined );
   var prototypes = _.prototype.each( instance2 );
   test.identical( prototypes.length, 3 );
@@ -786,15 +787,15 @@ function constructWithArgumentLong( test )
   test.is( instances !== args );
   test.is( _.arrayIs( instances ) );
   var exp = { field1 : 1 }
-  test.identical( instances[ 0 ], exp );
+  test.containsOnly( instances[ 0 ], exp );
   test.identical( instances[ 0 ] instanceof Blueprint.construct, false );
   test.is( instances[ 0 ] !== args[ 0 ] );
   var exp = { field1 : 2 }
-  test.identical( instances[ 1 ], exp );
+  test.containsOnly( instances[ 1 ], exp );
   test.identical( instances[ 1 ] instanceof Blueprint.construct, false );
   test.is( instances[ 1 ] !== args[ 1 ] );
   var exp = { field1 : rfield }
-  test.identical( instances[ 2 ], exp );
+  test.containsOnly( instances[ 2 ], exp );
   test.identical( instances[ 2 ] instanceof Blueprint.construct, false );
   test.is( instances[ 2 ] !== args[ 2 ] );
 
@@ -812,15 +813,15 @@ function constructWithArgumentLong( test )
   test.is( instances !== args );
   test.is( _.arrayIs( instances ) );
   var exp = { field1 : 1 }
-  test.identical( instances[ 0 ], exp );
+  test.containsOnly( instances[ 0 ], exp );
   test.identical( instances[ 0 ] instanceof Blueprint.construct, true );
   test.is( instances[ 0 ] !== args[ 0 ] );
   var exp = { field1 : 2 }
-  test.identical( instances[ 1 ], exp );
+  test.containsOnly( instances[ 1 ], exp );
   test.identical( instances[ 1 ] instanceof Blueprint.construct, true );
   test.is( instances[ 1 ] === args[ 1 ] );
   var exp = { field1 : rfield }
-  test.identical( instances[ 2 ], exp );
+  test.containsOnly( instances[ 2 ], exp );
   test.identical( instances[ 2 ] instanceof Blueprint.construct, true );
   test.is( instances[ 2 ] === args[ 2 ] );
 
@@ -838,15 +839,15 @@ function constructWithArgumentLong( test )
   test.is( instances !== args );
   test.is( _.arrayIs( instances ) );
   var exp = { field1 : 1 }
-  test.identical( instances[ 0 ], exp );
+  test.containsOnly( instances[ 0 ], exp );
   test.identical( instances[ 0 ] instanceof Blueprint.construct, false );
   test.is( instances[ 0 ] !== args[ 0 ] );
   var exp = { field1 : 2 }
-  test.identical( instances[ 1 ], exp );
+  test.containsOnly( instances[ 1 ], exp );
   test.identical( instances[ 1 ] instanceof Blueprint.construct, false );
   test.is( instances[ 1 ] !== args[ 1 ] );
   var exp = { field1 : rfield }
-  test.identical( instances[ 2 ], exp );
+  test.containsOnly( instances[ 2 ], exp );
   test.identical( instances[ 2 ] instanceof Blueprint.construct, false );
   test.is( instances[ 2 ] !== args[ 2 ] );
 
@@ -864,15 +865,15 @@ function constructWithArgumentLong( test )
   test.is( instances !== args );
   test.is( _.arrayIs( instances ) );
   var exp = { field1 : 1 }
-  test.identical( instances[ 0 ], exp );
+  test.containsOnly( instances[ 0 ], exp );
   test.identical( instances[ 0 ] instanceof Blueprint.construct, true );
   test.is( instances[ 0 ] !== args[ 0 ] );
   var exp = { field1 : 2 }
-  test.identical( instances[ 1 ], exp );
+  test.containsOnly( instances[ 1 ], exp );
   test.identical( instances[ 1 ] instanceof Blueprint.construct, true );
   test.is( instances[ 1 ] !== args[ 1 ] );
   var exp = { field1 : rfield }
-  test.identical( instances[ 2 ], exp );
+  test.containsOnly( instances[ 2 ], exp );
   test.identical( instances[ 2 ] instanceof Blueprint.construct, true );
   test.is( instances[ 2 ] !== args[ 2 ] );
 
@@ -1128,7 +1129,7 @@ function blueprintExtend( test )
 
   var exp = { field1 : 'b1', field2 : 'b1', field3 : 'b2' };
   var instance = Blueprint2.construct();
-  test.identical( instance, exp );
+  test.containsOnly( instance, exp );
   test.identical( instance instanceof Blueprint1.construct, false );
   test.identical( instance instanceof Blueprint2.construct, true );
 
@@ -1152,7 +1153,7 @@ function blueprintExtend( test )
 
   var exp = { field1 : 'b1', field2 : 'b1', field3 : 'b2' };
   var instance = Blueprint2.construct();
-  test.identical( instance, exp );
+  test.containsOnly( instance, exp );
   test.identical( instance instanceof Blueprint1.construct, false );
   test.identical( instance instanceof Blueprint2.construct, true );
 
@@ -1215,7 +1216,7 @@ function blueprintSupplement( test )
 
   var exp = { field1 : 'b1', field2 : 'b2', field3 : 'b2' };
   var instance = Blueprint2.construct();
-  test.identical( instance, exp );
+  test.containsOnly( instance, exp );
   test.identical( instance instanceof Blueprint1.construct, false );
   test.identical( instance instanceof Blueprint2.construct, true );
 
@@ -1239,7 +1240,7 @@ function blueprintSupplement( test )
 
   var exp = { field1 : 'b1', field2 : 'b2', field3 : 'b2' };
   var instance = Blueprint2.construct();
-  test.identical( instance, exp );
+  test.containsOnly( instance, exp );
   test.identical( instance instanceof Blueprint1.construct, false );
   test.identical( instance instanceof Blueprint2.construct, false );
 
@@ -1263,7 +1264,7 @@ function blueprintSupplement( test )
 
   var exp = { field1 : 'b1', field2 : 'b2', field3 : 'b2' };
   var instance = Blueprint2.construct();
-  test.identical( instance, exp );
+  test.containsOnly( instance, exp );
   test.identical( instance instanceof Blueprint1.construct, false );
   test.identical( instance instanceof Blueprint2.construct, true );
 
@@ -1316,9 +1317,23 @@ function blueprintStatic( test )
     statics2 : ss( [ staticsA, staticsB ] )
   });
 
-  var exp = { 'field1' : 'b1', 'field2' : 'b1', 'method1' : m1 };
   var instance = Blueprint1.construct();
-  test.identical( instance, exp );
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b1',
+    'staticField1' : 'sf1',
+    'staticField2' : { 'k' : 'staticField2' },
+    'staticField3' : 'sf3',
+    'staticField4' : { 'k' : 'staticField4' },
+    'staticField5' : { 'k' : 'staticField5' },
+    'staticField6' : { 'k' : 'staticField6' }
+  };
+  test.identical( _.mapFields( instance ), exp );
+
+  var exp = { 'field1' : 'b1', 'field2' : 'b1' };
+  test.identical( _.mapOwnFields( instance ), exp );
+
   test.identical( instance instanceof Blueprint1.construct, true );
   var exp =
   {
@@ -1365,9 +1380,9 @@ function blueprintInherit( test )
   });
 
   test.description = 'control blueprint1';
-  var exp = { 'field1' : 'b1', 'field2' : 'b1' };
+  var exp = { 'field1' : 'b1', 'field2' : 'b1', staticField1 : 'b1', staticField2 : 'b1' };
   var instance = Blueprint1.construct();
-  test.identical( instance, exp );
+  test.containsOnly( instance, exp );
   test.identical( instance instanceof Blueprint1.construct, true );
   var exp =
   {
@@ -1390,9 +1405,11 @@ function blueprintInherit( test )
   });
 
   test.description = 'blueprint2';
-  var exp = { 'field2' : 'b2', 'field3' : 'b2' };
   var instance = Blueprint2.construct();
-  test.identical( instance, exp );
+
+  var exp = { 'field1' : 'b1', 'field2' : 'b2', 'field3' : 'b2', staticField1 : 'b1', staticField2 : 'b2', staticField3 : 'b2' };
+  test.containsOnly( instance, exp );
+
   test.identical( instance instanceof Blueprint1.construct, true );
   test.identical( instance instanceof Blueprint2.construct, true );
   var exp =
@@ -1407,9 +1424,9 @@ function blueprintInherit( test )
   test.identical( got, exp );
 
   test.description = 'control blueprint1';
-  var exp = { 'field1' : 'b1', 'field2' : 'b1' };
+  var exp = { 'field1' : 'b1', 'field2' : 'b1', staticField1 : 'b1', staticField2 : 'b1' };
   var instance = Blueprint1.construct();
-  test.identical( instance, exp );
+  test.containsOnly( instance, exp );
   test.identical( instance instanceof Blueprint1.construct, true );
   test.identical( instance instanceof Blueprint2.construct, false );
   var exp =
@@ -1599,7 +1616,7 @@ function constructMultipleReuse( test )
   var instance = _.blueprint.construct( Blueprint3 );
 
   var exp = { 'field1' : null, 'field2' : null, 'field3' : '3' };
-  test.identical( instance, exp );
+  test.containsOnly( instance, exp );
 
   var exp = { 'field1' : null, 'field2' : null, 'field3' : '3' };
   var got = _.mapAllProperties( instance );
@@ -1738,9 +1755,9 @@ function complexFields( test )
     map : { k : [] },
   }
 
-  test.identical( instance1, exp );
+  test.containsOnly( instance1, exp );
   test.identical( instance1 instanceof blueprint.construct, true );
-  test.identical( instance2, exp );
+  test.containsOnly( instance2, exp );
   test.identical( instance2 instanceof blueprint.construct, true );
   test.is( instance1.array !== instance2.array );
   test.is( instance1.map !== instance2.map );
@@ -1804,9 +1821,9 @@ function compileSourceCode( test )
     map : { k : [] },
   }
 
-  test.identical( instance1, exp );
+  test.containsOnly( instance1, exp );
   test.identical( instance1 instanceof blueprint.construct, true );
-  test.identical( instance2, exp );
+  test.containsOnly( instance2, exp );
   test.identical( instance2 instanceof blueprint.construct, true );
   test.is( instance1.array !== instance2.array );
   test.is( instance1.map !== instance2.map );
