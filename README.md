@@ -6,5 +6,5 @@ Classes defining tool on steroids. Make possible multiple inheritances, removing
 ## Try out
 ```
 npm install
-node sample/Sample.js
+node sample/Sample.s
 ```
