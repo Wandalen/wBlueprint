@@ -103,7 +103,7 @@ function hasPrototype( test )
 let Self =
 {
 
-  name : 'Tools.base.l2.Blueprint.prototype',
+  name : 'Tools.l2.Blueprint.prototype',
   silencing : 1,
 
   tests :

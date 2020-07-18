@@ -1938,7 +1938,7 @@ var Settings = _.like()
 let Self =
 {
 
-  name : 'Tools.base.l2.Blueprint.blueprint',
+  name : 'Tools.l2.Blueprint.blueprint',
   silencing : 1,
 
   tests :
