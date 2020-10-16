@@ -5,19 +5,19 @@
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../../Tools.s' );
-
-  _.include( 'wTesting' );
+  let _ = require( '../../../wtools/Tools.s' );
 
   // if( !_.module.isIncluded( 'wBlueprint' ) )
   // {
     require( '../../abase/l2_blueprint/Include.s' );
   // }
 
+  _.include( 'wTesting' );
+
 }
 
-var _global = _global_;
-var _ = _global_.wTools;
+let _global = _global_;
+let _ = _global_.wTools;
 
 // --
 // test
@@ -100,10 +100,10 @@ function hasPrototype( test )
 // declare
 // --
 
-var Self =
+let Self =
 {
 
-  name : 'Tools.base.l2.Blueprint.prototype',
+  name : 'Tools.l2.Blueprint.prototype',
   silencing : 1,
 
   tests :

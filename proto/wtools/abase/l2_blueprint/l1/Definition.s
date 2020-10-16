@@ -2,6 +2,13 @@
 
 'use strict';
 
+/**
+* Collection of definitions for constructions.
+* @namespace wTools.define
+* @extends Tools
+* @module Tools/base/Proto
+*/
+
 let Self = _global_.wTools;
 let _global = _global_;
 let _ = _global_.wTools;
@@ -19,7 +26,8 @@ let _ = _global_.wTools;
   @see {@link module:Tools/base/Proto.wTools.define.makeWith}
   @see {@link module:Tools/base/Proto.wTools.define.contained}
 * @class Definition
-* @memberof module:Tools/base/Proto.wTools.define
+* @namespace Tools.define
+* @module Tools/base/Proto
 */
 
 function Definition( o )
@@ -31,7 +39,7 @@ function Definition( o )
   else
   return new( _.constructorJoin( Definition, arguments ) );
   _.mapExtend( this, o );
-  _.assert( _.longHas( [ 'etc', 'trait', 'definition.unnamed', 'definition.named' ], o.definitionGroup ) );
+  _.assert( _.longHas( _.definition.DefinitionKind, o.definitionKind ) );
   return this;
 }
 
@@ -60,7 +68,7 @@ function _traitMake( routine, o )
   _.assert( _.strDefined( routine.name ) );
   _.assert( _.mapIs( o ) );
 
-  o.definitionGroup = 'trait';
+  o.definitionKind = 'trait';
   o.ini = null;
   o.kind = routine.name;
   if( !o.constructionAmend )
@@ -94,7 +102,7 @@ function field( o )
   _.assert( o.insToDat === 'val', 'not implemented' );
   _.assert( o.datToDat === 'val', 'not implemented' );
 
-  o.definitionGroup = 'definition.named';
+  o.definitionKind = 'definition.named';
   o.blueprintForm2 = blueprintForm2;
   o.name = null;
   o.constructionInit = null;
@@ -106,26 +114,26 @@ function field( o )
 
   if( o.iniToIns === 'val' )
   {
-    definition.initialValueGet = function get() { return this.ini }
+    definition.valueGenerate = function get() { return this.ini }
   }
   else if( o.iniToIns === 'shallow' )
   {
-    definition.initialValueGet = function get() { return _.entityMake( this.ini ) }
+    definition.valueGenerate = function get() { return _.entityMake( this.ini ) }
   }
   else if( o.iniToIns === 'deep' )
   {
     debugger;
-    definition.initialValueGet = function get() { return _.cloneJust( this.ini ) }
+    definition.valueGenerate = function get() { return _.cloneJust( this.ini ) }
   }
   else if( o.iniToIns === 'make' )
   {
     debugger;
-    definition.initialValueGet = function get() { return this.ini() }
+    definition.valueGenerate = function get() { return this.ini() }
   }
   else if( o.iniToIns === 'construct' )
   {
     debugger;
-    definition.initialValueGet = function get() { return new this.ini() }
+    definition.valueGenerate = function get() { return new this.ini() }
   }
   else _.assert( 0 );
 
@@ -241,7 +249,7 @@ static          : [ 0 , 1 ]                                                     
 enumerable      : [ 0 , 1 ]                                                                                 @default : 1
 configurable    : [ 0 , 1 ]                                                                                 @default : 1
 writable        : [ 0 , 1 ]                                                                                 @default : 1
-initialValueGet : routine                                                                                   @default : null
+valueGenerate : routine                                                                                   @default : null
 collection      : [ scalar , array , map ]                                                                  @default : scalar
 insToIns        : [ val , shallow , deep ]                                                                  @default : val
 datToIns        : [ val , shallow , deep ]                                                                  @default : val
@@ -280,7 +288,7 @@ function _amendment( o )
     _.assert( _.objectIs( arg ) );
   }
 
-  o.definitionGroup = 'definition.unnamed';
+  o.definitionKind = 'definition.unnamed';
 
   let definition = new _.Definition( o );
 
@@ -341,7 +349,7 @@ function _static( field )
 
   let o = Object.create( null );
   o.value = field;
-  o.definitionGroup = 'definition.named';
+  o.definitionKind = 'definition.named';
   o.name = null;
 
   let definition = new _.Definition( o );
@@ -376,7 +384,7 @@ function statics( fields )
 
   let o = Object.create( null );
   o.value = fields;
-  o.definitionGroup = 'definition.named';
+  o.definitionKind = 'definition.named';
   o.name = null;
 
   let definition = new _.Definition( o );
@@ -417,9 +425,11 @@ function statics( fields )
 // define
 // --
 
+let DefinitionKind = [ 'etc', 'trait', 'definition.unnamed', 'definition.named' ];
+
 let KnownFields =
 {
-  initialValueGet : 'routine::initialValueGet( map::o ) -> anything::',
+  valueGenerate : 'routine::valueGenerate( map::o ) -> anything::',
   constructionAmend : 'routine::constructionAmend( Construction::construction primitive::key ) -> nothing::',
   blueprintAmend : 'routine::( map::o ) -> nothing::',
   blueprintForm1 : 'routine::( Blueprint::blueprint ) -> nothing::',
@@ -445,13 +455,6 @@ let ConstructionHandlers =
 
 //
 
-/**
-* Collection of definitions for constructions.
-* @namespace "wTools.define"
-* @augments wTools
-* @memberof module:Tools/base/Proto
-*/
-
 let DefineExtension =
 {
 
@@ -474,9 +477,9 @@ _.mapExtend( _.define, DefineExtension );
 
 /**
 * Routines to manipulate definitions.
-* @namespace "wTools.definition"
-* @augments wTools
-* @memberof module:Tools/base/Proto
+* @namespace wTools.definition
+* @extends Tools
+* @module Tools/base/Proto
 */
 
 let DefinitionExtension =
@@ -488,6 +491,7 @@ let DefinitionExtension =
   _traitMake,
 
   // fields
+  DefinitionKind,
   KnownFields,
   BlueprintHandlers,
   ConstructionHandlers,
@@ -512,7 +516,7 @@ _.mapExtend( _, ToolsExtension );
 // export
 // --
 
-if( typeof module !== 'undefined' && module !== null )
+if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 
 })();

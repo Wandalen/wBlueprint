@@ -213,7 +213,7 @@ function _amend( o )
     {
       if( _.traitIs( ext ) )
       extendWithTrait( ext, k );
-      else if( ext.definitionGroup === 'definition.named' )
+      else if( ext.definitionKind === 'definition.named' )
       extendWithNamedDefinition( ext, k );
       else
       extendWithUnnamedDefinition( ext, k );
@@ -246,7 +246,7 @@ function _amend( o )
 
   function extendWithNamedDefinition( ext, key )
   {
-    _.assert( ext.definitionGroup === 'definition.named' );
+    _.assert( ext.definitionKind === 'definition.named' );
 
     if( o.amending === 'supplement' )
     if( o.blueprint.namedDefinitions[ key ] !== undefined )
@@ -265,7 +265,7 @@ function _amend( o )
 
   function extendWithUnnamedDefinition( ext )
   {
-    _.assert( ext.definitionGroup === 'definition.unnamed' );
+    _.assert( ext.definitionKind === 'definition.unnamed' );
     o.blueprint.unnamedDefinitions.push( ext );
     if( ext.blueprintAmend )
     ext.blueprintAmend( o );
@@ -282,12 +282,12 @@ function _amend( o )
     for( let k in ext.namedDefinitions )
     {
       let definition = ext.namedDefinitions[ k ]
-      extendWitNamedDefinition( definition.clone(), k );
+      extendWithNamedDefinition( definition.clone(), k );
     }
     for( let k = 0 ; k < ext.unnamedDefinitions.length ; k++ )
     {
       let definition = ext.unnamedDefinitions[ k ]
-      extendWitUnnamedDefinition( definition, k );
+      extendWithUnnamedDefinition( definition, k );
     }
     for( let k in ext.traits )
     {
@@ -538,7 +538,7 @@ Object.assign( _, ToolsExtension );
 // export
 // --
 
-if( typeof module !== 'undefined' && module !== null )
+if( typeof module !== 'undefined' )
 module[ 'exports' ] = _;
 
 })();

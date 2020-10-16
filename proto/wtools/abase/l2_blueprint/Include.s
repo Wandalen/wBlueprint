@@ -10,7 +10,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../../Tools.s' );
+  let _ = require( '../../../wtools/Tools.s' );
 
   require( './l1/Definition.s' );
   require( './l1/Proto.s' );
@@ -21,7 +21,7 @@ if( typeof module !== 'undefined' )
 
 }
 
-if( typeof module !== 'undefined' && module !== null )
+if( typeof module !== 'undefined' )
 module[ 'exports' ] = wTools;
 
 })();

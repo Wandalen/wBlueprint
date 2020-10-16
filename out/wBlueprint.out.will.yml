@@ -3,14 +3,14 @@ root:
   - wBlueprint.out
 consistency:
   wBlueprint.out.will.yml: &ref_0
-    hash: ac9ba9130d8f903078561635f9cbf2c6
-    size: 38099
+    hash: 0f931ea52616510d4303350903a272b1
+    size: 38044
   ../.ex.will.yml: &ref_1
-    hash: 6d90b11569063cc2f5c49976bfd5f983
-    size: 1906
+    hash: 7f16b7905c40f2370ff4e0ae119fa205
+    size: 1907
   ../.im.will.yml: &ref_2
-    hash: 23911fdb719c3211eff94d3036ca174e
-    size: 4607
+    hash: 8b8dfd5cb09aaa475c2c5aee402bb605
+    size: 4605
 module:
   wBlueprint.out:
     about:
@@ -24,16 +24,16 @@ module:
       enabled: 1
       version: 0.4.0
       interpreters:
-        - njs >= 8.0.0
+        - njs >= 10.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
       keywords:
         - tools
         - wTools
       license: MIT
-      author: Kostiantyn Wandalen <wanalen@willbe.so>
+      author: Kostiantyn Wandalen <wanalen@01.school>
       contributors:
-        - Kostiantyn Wandalen <wanalen@willbe.so>
+        - Kostiantyn Wandalen <wanalen@01.school>
       npm.name: wblueprint
       npm.scripts:
         test: wtest .run proto/**
@@ -113,7 +113,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: ../proto/dwtools/abase/l2_blueprint/Include.s
+        path: ../proto/wtools/abase/l2_blueprint/Include.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -123,13 +123,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/abase/l2_blueprint.test/**'
+        path: '{path::out.*=1}/source/wtools/abase/l2_blueprint.test/**'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/abase/l2_blueprint.test/**'
+        path: '{path::out.*=1}/source/wtools/abase/l2_blueprint.test/**'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -155,23 +155,24 @@ module:
           export: 1
         path:
           - ../proto
-          - ../proto/dwtools
-          - ../proto/dwtools/Tools.s
-          - ../proto/dwtools/abase
-          - ../proto/dwtools/abase/l2_blueprint
-          - ../proto/dwtools/abase/l2_blueprint/Include.s
-          - ../proto/dwtools/abase/l2_blueprint/l1
-          - ../proto/dwtools/abase/l2_blueprint/l1/Definition.s
-          - ../proto/dwtools/abase/l2_blueprint/l1/Proto.s
-          - ../proto/dwtools/abase/l2_blueprint/l3
-          - ../proto/dwtools/abase/l2_blueprint/l3/Blueprint.s
-          - ../proto/dwtools/abase/l2_blueprint/l3/Construction.s
-          - ../proto/dwtools/abase/l2_blueprint/l3/Trait.s
-          - ../proto/dwtools/abase/l2_blueprint.test
-          - ../proto/dwtools/abase/l2_blueprint.test/Blueprint.test.s
-          - ../proto/dwtools/abase/l2_blueprint.test/Prototype.test.s
-          - ../proto/dwtools/amid
-          - ../proto/dwtools/atop
+          - ../proto/Integration.test.ss
+          - ../proto/wtools
+          - ../proto/wtools/Tools.s
+          - ../proto/wtools/abase
+          - ../proto/wtools/abase/l2_blueprint
+          - ../proto/wtools/abase/l2_blueprint/Include.s
+          - ../proto/wtools/abase/l2_blueprint/l1
+          - ../proto/wtools/abase/l2_blueprint/l1/Definition.s
+          - ../proto/wtools/abase/l2_blueprint/l1/Proto.s
+          - ../proto/wtools/abase/l2_blueprint/l3
+          - ../proto/wtools/abase/l2_blueprint/l3/Blueprint.s
+          - ../proto/wtools/abase/l2_blueprint/l3/Construction.s
+          - ../proto/wtools/abase/l2_blueprint/l3/Trait.s
+          - ../proto/wtools/abase/l2_blueprint.test
+          - ../proto/wtools/abase/l2_blueprint.test/Blueprint.test.s
+          - ../proto/wtools/abase/l2_blueprint.test/Prototype.test.s
+          - ../proto/wtools/amid
+          - ../proto/wtools/atop
     submodule:
       wTools:
         path: 'npm:///wTools'
@@ -185,7 +186,6 @@ module:
           prefixPath: ''
         dst:
           prefixPath: ''
-        mandatory: 1
         criterion:
           tests: no.tests
           debug: debug
@@ -200,7 +200,6 @@ module:
           prefixPath: ''
         dst:
           prefixPath: ''
-        mandatory: 1
         criterion:
           tests: no.tests
           debug: release
@@ -215,7 +214,6 @@ module:
           prefixPath: ''
         dst:
           prefixPath: ''
-        mandatory: 1
         criterion:
           tests: no.tests
           debug: debug
@@ -230,7 +228,6 @@ module:
           prefixPath: ''
         dst:
           prefixPath: ''
-        mandatory: 1
         criterion:
           tests: no.tests
           debug: release
@@ -245,7 +242,6 @@ module:
           prefixPath: ''
         dst:
           prefixPath: ''
-        mandatory: 1
         criterion:
           raw: raw
           debug: release
@@ -261,7 +257,6 @@ module:
           prefixPath: ''
         dst:
           prefixPath: ''
-        mandatory: 1
         criterion:
           tests: no.tests
           raw: compiled
@@ -278,7 +273,6 @@ module:
           prefixPath: ''
         dst:
           prefixPath: ''
-        mandatory: 1
         criterion:
           tests: no.tests
           raw: compiled
@@ -294,7 +288,6 @@ module:
           prefixPath: ''
         dst:
           prefixPath: ''
-        mandatory: 1
         criterion:
           tests: only.tests
           raw: compiled
@@ -310,7 +303,6 @@ module:
           prefixPath: ''
         dst:
           prefixPath: ''
-        mandatory: 1
         criterion:
           tests: only.tests
           raw: compiled
@@ -324,6 +316,8 @@ module:
             '**': ''
           prefixPath: ../proto
         mandatory: 1
+        dstRewritingOnlyPreserving: 1
+        linking: hardLinkMaybe
         criterion:
           generated: 1
           content: proto
@@ -336,7 +330,6 @@ module:
           prefixPath: 'path::exported.dir.proto.export'
           recursive: 0
         recursive: 0
-        mandatory: 1
         criterion:
           generated: 1
           content: proto
@@ -598,7 +591,7 @@ module:
           debug: release
       reflect.proto.debug.raw:
         opts:
-          reflector: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto.debug.raw'
         criterion:
           tests: no.tests
           debug: debug
@@ -608,7 +601,7 @@ module:
           - files.reflect
       reflect.proto.release.raw:
         opts:
-          reflector: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto.release.raw'
         criterion:
           tests: no.tests
           debug: release
@@ -618,7 +611,7 @@ module:
           - files.reflect
       reflect.proto.debug.compiled:
         opts:
-          reflector: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto.debug.compiled'
         criterion:
           tests: no.tests
           debug: debug
@@ -628,7 +621,7 @@ module:
           - files.reflect
       reflect.proto.release.compiled:
         opts:
-          reflector: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto.release.compiled'
         criterion:
           tests: no.tests
           debug: release
@@ -639,7 +632,7 @@ module:
       transpile.proto.raw:
         opts:
           entry: 'path::entry.proto.no.tests'
-          reflector: 'reflector::transpile.proto.raw*'
+          filePath: 'reflector::transpile.proto.raw'
         criterion:
           raw: raw
           debug: release
@@ -649,7 +642,7 @@ module:
       transpile.proto.no.tests.compiled.debug:
         opts:
           entry: 'path::entry.proto.*=1'
-          reflector: 'reflector::transpile.proto.no.tests.compiled*'
+          filePath: 'reflector::transpile.proto.no.tests.compiled.debug'
         criterion:
           tests: no.tests
           raw: compiled
@@ -660,7 +653,7 @@ module:
       transpile.proto.no.tests.compiled.release:
         opts:
           entry: 'path::entry.proto.*=1'
-          reflector: 'reflector::transpile.proto.no.tests.compiled*'
+          filePath: 'reflector::transpile.proto.no.tests.compiled.release'
         criterion:
           tests: no.tests
           raw: compiled
@@ -672,7 +665,7 @@ module:
         opts:
           entry: 'path::entry.proto.*=1'
           external.before: '{path::out.*=1}/Main.s'
-          reflector: 'reflector::transpile.proto.only.tests.compiled*'
+          filePath: 'reflector::transpile.proto.only.tests.compiled.debug'
         criterion:
           tests: only.tests
           raw: compiled
@@ -684,7 +677,7 @@ module:
         opts:
           entry: 'path::entry.proto.*=1'
           external.before: '{path::out.*=1}/Main.s'
-          reflector: 'reflector::transpile.proto.only.tests.compiled*'
+          filePath: 'reflector::transpile.proto.only.tests.compiled.release'
         criterion:
           tests: only.tests
           raw: compiled
@@ -694,7 +687,7 @@ module:
           - files.transpile
       exported.proto.export:
         opts:
-          reflector: 'reflector::exported.proto.export*'
+          filePath: 'reflector::exported.proto.export'
         criterion:
           generated: 1
           content: proto
@@ -703,7 +696,7 @@ module:
           - files.reflect
       exported.files.proto.export:
         opts:
-          reflector: 'reflector::exported.files.proto.export*'
+          filePath: 'reflector::exported.files.proto.export'
         criterion:
           generated: 1
           content: proto
@@ -813,16 +806,16 @@ module:
       enabled: 1
       version: 0.4.0
       interpreters:
-        - njs >= 8.0.0
+        - njs >= 10.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
       keywords:
         - tools
         - wTools
       license: MIT
-      author: Kostiantyn Wandalen <wanalen@willbe.so>
+      author: Kostiantyn Wandalen <wanalen@01.school>
       contributors:
-        - Kostiantyn Wandalen <wanalen@willbe.so>
+        - Kostiantyn Wandalen <wanalen@01.school>
       npm.name: wblueprint
       npm.scripts:
         test: wtest .run proto/**
@@ -902,7 +895,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: proto/dwtools/abase/l2_blueprint/Include.s
+        path: proto/wtools/abase/l2_blueprint/Include.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -912,13 +905,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/abase/l2_blueprint.test/**'
+        path: '{path::out.*=1}/source/wtools/abase/l2_blueprint.test/**'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/abase/l2_blueprint.test/**'
+        path: '{path::out.*=1}/source/wtools/abase/l2_blueprint.test/**'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -941,7 +934,6 @@ module:
         src:
           filePath:
             'path::proto': '{path::out.*=1}/source'
-        mandatory: 1
         criterion:
           tests: no.tests
           debug: debug
@@ -953,7 +945,6 @@ module:
         src:
           filePath:
             'path::proto': '{path::out.*=1}/source'
-        mandatory: 1
         criterion:
           tests: no.tests
           debug: release
@@ -965,7 +956,6 @@ module:
         src:
           filePath:
             'path::proto': '{path::out.*=1}/source'
-        mandatory: 1
         criterion:
           tests: no.tests
           debug: debug
@@ -977,7 +967,6 @@ module:
         src:
           filePath:
             'path::proto': '{path::out.*=1}/source'
-        mandatory: 1
         criterion:
           tests: no.tests
           debug: release
@@ -989,7 +978,6 @@ module:
         src:
           filePath:
             'path::proto': '{path::out.raw.release}'
-        mandatory: 1
         criterion:
           raw: raw
           debug: release
@@ -1002,7 +990,6 @@ module:
             '**.test*': 0
             '**.test/**': 0
             'path::proto': '{path::out.*=1}/Main.s'
-        mandatory: 1
         criterion:
           tests: no.tests
           raw: compiled
@@ -1016,7 +1003,6 @@ module:
             '**.test*': 0
             '**.test/**': 0
             'path::proto': '{path::out.*=1}/Main.s'
-        mandatory: 1
         criterion:
           tests: no.tests
           raw: compiled
@@ -1029,7 +1015,6 @@ module:
           filePath:
             '**.test*': 1
             'path::proto': '{path::out.*=1}/Tests.test.s'
-        mandatory: 1
         criterion:
           tests: only.tests
           raw: compiled
@@ -1042,7 +1027,6 @@ module:
           filePath:
             '**.test*': 1
             'path::proto': '{path::out.*=1}/Tests.test.s'
-        mandatory: 1
         criterion:
           tests: only.tests
           raw: compiled
@@ -1307,7 +1291,7 @@ module:
           debug: release
       reflect.proto.debug.raw:
         opts:
-          reflector: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto.debug.raw'
         criterion:
           tests: no.tests
           debug: debug
@@ -1317,7 +1301,7 @@ module:
           - files.reflect
       reflect.proto.release.raw:
         opts:
-          reflector: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto.release.raw'
         criterion:
           tests: no.tests
           debug: release
@@ -1327,7 +1311,7 @@ module:
           - files.reflect
       reflect.proto.debug.compiled:
         opts:
-          reflector: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto.debug.compiled'
         criterion:
           tests: no.tests
           debug: debug
@@ -1337,7 +1321,7 @@ module:
           - files.reflect
       reflect.proto.release.compiled:
         opts:
-          reflector: 'reflector::reflect.proto*'
+          filePath: 'reflector::reflect.proto.release.compiled'
         criterion:
           tests: no.tests
           debug: release
@@ -1348,7 +1332,7 @@ module:
       transpile.proto.raw:
         opts:
           entry: 'path::entry.proto.no.tests'
-          reflector: 'reflector::transpile.proto.raw*'
+          filePath: 'reflector::transpile.proto.raw'
         criterion:
           raw: raw
           debug: release
@@ -1358,7 +1342,7 @@ module:
       transpile.proto.no.tests.compiled.debug:
         opts:
           entry: 'path::entry.proto.*=1'
-          reflector: 'reflector::transpile.proto.no.tests.compiled*'
+          filePath: 'reflector::transpile.proto.no.tests.compiled.debug'
         criterion:
           tests: no.tests
           raw: compiled
@@ -1369,7 +1353,7 @@ module:
       transpile.proto.no.tests.compiled.release:
         opts:
           entry: 'path::entry.proto.*=1'
-          reflector: 'reflector::transpile.proto.no.tests.compiled*'
+          filePath: 'reflector::transpile.proto.no.tests.compiled.release'
         criterion:
           tests: no.tests
           raw: compiled
@@ -1381,7 +1365,7 @@ module:
         opts:
           entry: 'path::entry.proto.*=1'
           external.before: '{path::out.*=1}/Main.s'
-          reflector: 'reflector::transpile.proto.only.tests.compiled*'
+          filePath: 'reflector::transpile.proto.only.tests.compiled.debug'
         criterion:
           tests: only.tests
           raw: compiled
@@ -1393,7 +1377,7 @@ module:
         opts:
           entry: 'path::entry.proto.*=1'
           external.before: '{path::out.*=1}/Main.s'
-          reflector: 'reflector::transpile.proto.only.tests.compiled*'
+          filePath: 'reflector::transpile.proto.only.tests.compiled.release'
         criterion:
           tests: only.tests
           raw: compiled
@@ -1477,9 +1461,9 @@ module:
           - 'build::npm'
     consistency:
       ../.ex.will.yml:
-        hash: 6d90b11569063cc2f5c49976bfd5f983
-        size: 1906
+        hash: 7f16b7905c40f2370ff4e0ae119fa205
+        size: 1907
       ../.im.will.yml:
-        hash: 23911fdb719c3211eff94d3036ca174e
-        size: 4607
+        hash: 8b8dfd5cb09aaa475c2c5aee402bb605
+        size: 4605
       wBlueprint.out.will.yml: *ref_0

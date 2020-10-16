@@ -166,9 +166,9 @@ prototype.defaults =
 
 /**
 * Collection of definitions which are traits.
-* @namespace "wTools.trait"
-* @augments wTools
-* @memberof module:Tools/base/Proto
+* @namespace wTools.trait
+* @extends Tools
+* @module Tools/base/Proto
 */
 
 let TraitExtension =
@@ -188,9 +188,9 @@ _.mapExtend( _.trait, TraitExtension );
 
 /**
 * Routines to manipulate traits.
-* @namespace "wTools.definition"
-* @augments wTools
-* @memberof module:Tools/base/Proto
+* @namespace wTools.definition
+* @extends Tools
+* @module Tools/base/Proto
 */
 
 let DefinitionTraitExtension =
@@ -219,7 +219,7 @@ _.assert( _.routineIs( _.traitIs ) );
 // export
 // --
 
-if( typeof module !== 'undefined' && module !== null )
+if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 
 })();
