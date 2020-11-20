@@ -52,12 +52,12 @@ function constructTyped( test )
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 1 );
-  test.is( prototypes[ 0 ] === instance );
-  test.is( !_.prototype.hasPrototype( instance, Blueprint ) );
-  test.is( _.objectIs( instance ) );
-  test.is( _.mapIs( instance ) );
-  test.is( _.mapLike( instance ) );
-  test.is( !_.instanceIs( instance ) );
+  test.true( prototypes[ 0 ] === instance );
+  test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
+  test.true( _.objectIs( instance ) );
+  test.true( _.mapIs( instance ) );
+  test.true( _.mapLike( instance ) );
+  test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
 
@@ -81,12 +81,12 @@ function constructTyped( test )
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 1 );
-  test.is( prototypes[ 0 ] === instance );
-  test.is( !_.prototype.hasPrototype( instance, Blueprint ) );
-  test.is( _.objectIs( instance ) );
-  test.is( _.mapIs( instance ) );
-  test.is( _.mapLike( instance ) );
-  test.is( !_.instanceIs( instance ) );
+  test.true( prototypes[ 0 ] === instance );
+  test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
+  test.true( _.objectIs( instance ) );
+  test.true( _.mapIs( instance ) );
+  test.true( _.mapLike( instance ) );
+  test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
 
@@ -110,16 +110,16 @@ function constructTyped( test )
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 3 );
-  test.is( prototypes[ 0 ] === instance );
-  test.is( prototypes[ 1 ] === Blueprint.construct.prototype );
-  test.is( prototypes[ 2 ] === _.Construction.prototype );
-  test.is( _.prototype.hasPrototype( instance, instance ) );
-  test.is( _.prototype.hasPrototype( instance, Blueprint.construct.prototype ) );
-  test.is( _.prototype.hasPrototype( instance, _.Construction.prototype ) );
-  test.is( _.objectIs( instance ) );
-  test.is( !_.mapIs( instance ) );
-  test.is( _.mapLike( instance ) );
-  test.is( !_.instanceIs( instance ) );
+  test.true( prototypes[ 0 ] === instance );
+  test.true( prototypes[ 1 ] === Blueprint.construct.prototype );
+  test.true( prototypes[ 2 ] === _.Construction.prototype );
+  test.true( _.prototype.hasPrototype( instance, instance ) );
+  test.true( _.prototype.hasPrototype( instance, Blueprint.construct.prototype ) );
+  test.true( _.prototype.hasPrototype( instance, _.Construction.prototype ) );
+  test.true( _.objectIs( instance ) );
+  test.true( !_.mapIs( instance ) );
+  test.true( _.mapLike( instance ) );
+  test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
 
@@ -164,12 +164,12 @@ function constructWithoutHelper( test )
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 1 );
-  test.is( prototypes[ 0 ] === instance );
-  test.is( !_.prototype.hasPrototype( instance, Blueprint ) );
-  test.is( _.objectIs( instance ) );
-  test.is( _.mapIs( instance ) );
-  test.is( _.mapLike( instance ) );
-  test.is( !_.instanceIs( instance ) );
+  test.true( prototypes[ 0 ] === instance );
+  test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
+  test.true( _.objectIs( instance ) );
+  test.true( _.mapIs( instance ) );
+  test.true( _.mapLike( instance ) );
+  test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
 
@@ -193,16 +193,16 @@ function constructWithoutHelper( test )
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 3 );
-  test.is( prototypes[ 0 ] === instance );
-  test.is( prototypes[ 1 ] === Blueprint.construct.prototype );
-  test.is( prototypes[ 2 ] === _.Construction.prototype );
-  test.is( _.prototype.hasPrototype( instance, instance ) );
-  test.is( _.prototype.hasPrototype( instance, Blueprint.construct.prototype ) );
-  test.is( _.prototype.hasPrototype( instance, _.Construction.prototype ) );
-  test.is( _.objectIs( instance ) );
-  test.is( !_.mapIs( instance ) );
-  test.is( _.mapLike( instance ) );
-  test.is( !_.instanceIs( instance ) );
+  test.true( prototypes[ 0 ] === instance );
+  test.true( prototypes[ 1 ] === Blueprint.construct.prototype );
+  test.true( prototypes[ 2 ] === _.Construction.prototype );
+  test.true( _.prototype.hasPrototype( instance, instance ) );
+  test.true( _.prototype.hasPrototype( instance, Blueprint.construct.prototype ) );
+  test.true( _.prototype.hasPrototype( instance, _.Construction.prototype ) );
+  test.true( _.objectIs( instance ) );
+  test.true( !_.mapIs( instance ) );
+  test.true( _.mapLike( instance ) );
+  test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
 
@@ -226,12 +226,12 @@ function constructWithoutHelper( test )
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 1 );
-  test.is( prototypes[ 0 ] === instance );
-  test.is( !_.prototype.hasPrototype( instance, Blueprint ) );
-  test.is( _.objectIs( instance ) );
-  test.is( _.mapIs( instance ) );
-  test.is( _.mapLike( instance ) );
-  test.is( !_.instanceIs( instance ) );
+  test.true( prototypes[ 0 ] === instance );
+  test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
+  test.true( _.objectIs( instance ) );
+  test.true( _.mapIs( instance ) );
+  test.true( _.mapLike( instance ) );
+  test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
 
@@ -255,16 +255,16 @@ function constructWithoutHelper( test )
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 3 );
-  test.is( prototypes[ 0 ] === instance );
-  test.is( prototypes[ 1 ] === Blueprint.construct.prototype );
-  test.is( prototypes[ 2 ] === _.Construction.prototype );
-  test.is( _.prototype.hasPrototype( instance, instance ) );
-  test.is( _.prototype.hasPrototype( instance, Blueprint.construct.prototype ) );
-  test.is( _.prototype.hasPrototype( instance, _.Construction.prototype ) );
-  test.is( _.objectIs( instance ) );
-  test.is( !_.mapIs( instance ) );
-  test.is( _.mapLike( instance ) );
-  test.is( !_.instanceIs( instance ) );
+  test.true( prototypes[ 0 ] === instance );
+  test.true( prototypes[ 1 ] === Blueprint.construct.prototype );
+  test.true( prototypes[ 2 ] === _.Construction.prototype );
+  test.true( _.prototype.hasPrototype( instance, instance ) );
+  test.true( _.prototype.hasPrototype( instance, Blueprint.construct.prototype ) );
+  test.true( _.prototype.hasPrototype( instance, _.Construction.prototype ) );
+  test.true( _.objectIs( instance ) );
+  test.true( !_.mapIs( instance ) );
+  test.true( _.mapLike( instance ) );
+  test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
 
@@ -300,7 +300,7 @@ function constructWithArgumentMap( test )
   var opts = { field1 : 13 };
   var instance = Blueprint.construct( opts );
 
-  test.is( instance !== opts );
+  test.true( instance !== opts );
   var exp = { field1 : 13 }
   test.identical( instance, exp );
 
@@ -314,12 +314,12 @@ function constructWithArgumentMap( test )
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 1 );
-  test.is( prototypes[ 0 ] === instance );
-  test.is( !_.prototype.hasPrototype( instance, Blueprint ) );
-  test.is( _.objectIs( instance ) );
-  test.is( _.mapIs( instance ) );
-  test.is( _.mapLike( instance ) );
-  test.is( !_.instanceIs( instance ) );
+  test.true( prototypes[ 0 ] === instance );
+  test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
+  test.true( _.objectIs( instance ) );
+  test.true( _.mapIs( instance ) );
+  test.true( _.mapLike( instance ) );
+  test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
 
@@ -334,7 +334,7 @@ function constructWithArgumentMap( test )
   var opts = { field1 : 13 };
   var instance = Blueprint.construct( opts );
 
-  test.is( instance !== opts );
+  test.true( instance !== opts );
   var exp = { field1 : 13 }
   test.contains( instance, exp ); /* xxx : should be containsAll */
 
@@ -348,16 +348,16 @@ function constructWithArgumentMap( test )
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 3 );
-  test.is( prototypes[ 0 ] === instance );
-  test.is( prototypes[ 1 ] === Blueprint.construct.prototype );
-  test.is( prototypes[ 2 ] === _.Construction.prototype );
-  test.is( _.prototype.hasPrototype( instance, instance ) );
-  test.is( _.prototype.hasPrototype( instance, Blueprint.construct.prototype ) );
-  test.is( _.prototype.hasPrototype( instance, _.Construction.prototype ) );
-  test.is( _.objectIs( instance ) );
-  test.is( !_.mapIs( instance ) );
-  test.is( _.mapLike( instance ) );
-  test.is( !_.instanceIs( instance ) );
+  test.true( prototypes[ 0 ] === instance );
+  test.true( prototypes[ 1 ] === Blueprint.construct.prototype );
+  test.true( prototypes[ 2 ] === _.Construction.prototype );
+  test.true( _.prototype.hasPrototype( instance, instance ) );
+  test.true( _.prototype.hasPrototype( instance, Blueprint.construct.prototype ) );
+  test.true( _.prototype.hasPrototype( instance, _.Construction.prototype ) );
+  test.true( _.objectIs( instance ) );
+  test.true( !_.mapIs( instance ) );
+  test.true( _.mapLike( instance ) );
+  test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
 
@@ -372,7 +372,7 @@ function constructWithArgumentMap( test )
   var opts = { field1 : 13 };
   var instance = new Blueprint.construct( opts );
 
-  test.is( instance !== opts );
+  test.true( instance !== opts );
   var exp = { field1 : 13 }
   test.identical( instance, exp );
 
@@ -386,12 +386,12 @@ function constructWithArgumentMap( test )
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 1 );
-  test.is( prototypes[ 0 ] === instance );
-  test.is( !_.prototype.hasPrototype( instance, Blueprint ) );
-  test.is( _.objectIs( instance ) );
-  test.is( _.mapIs( instance ) );
-  test.is( _.mapLike( instance ) );
-  test.is( !_.instanceIs( instance ) );
+  test.true( prototypes[ 0 ] === instance );
+  test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
+  test.true( _.objectIs( instance ) );
+  test.true( _.mapIs( instance ) );
+  test.true( _.mapLike( instance ) );
+  test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
 
@@ -406,7 +406,7 @@ function constructWithArgumentMap( test )
   var opts = { field1 : 13 };
   var instance = new Blueprint.construct( opts );
 
-  test.is( instance !== opts );
+  test.true( instance !== opts );
   var exp = { field1 : 13 }
   test.containsOnly( instance, exp );
 
@@ -420,16 +420,16 @@ function constructWithArgumentMap( test )
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 3 );
-  test.is( prototypes[ 0 ] === instance );
-  test.is( prototypes[ 1 ] === Blueprint.construct.prototype );
-  test.is( prototypes[ 2 ] === _.Construction.prototype );
-  test.is( _.prototype.hasPrototype( instance, instance ) );
-  test.is( _.prototype.hasPrototype( instance, Blueprint.construct.prototype ) );
-  test.is( _.prototype.hasPrototype( instance, _.Construction.prototype ) );
-  test.is( _.objectIs( instance ) );
-  test.is( !_.mapIs( instance ) );
-  test.is( _.mapLike( instance ) );
-  test.is( !_.instanceIs( instance ) );
+  test.true( prototypes[ 0 ] === instance );
+  test.true( prototypes[ 1 ] === Blueprint.construct.prototype );
+  test.true( prototypes[ 2 ] === _.Construction.prototype );
+  test.true( _.prototype.hasPrototype( instance, instance ) );
+  test.true( _.prototype.hasPrototype( instance, Blueprint.construct.prototype ) );
+  test.true( _.prototype.hasPrototype( instance, _.Construction.prototype ) );
+  test.true( _.objectIs( instance ) );
+  test.true( !_.mapIs( instance ) );
+  test.true( _.mapLike( instance ) );
+  test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
 
@@ -467,7 +467,7 @@ function constructWithArgumentMapUndeclaredFields( test )
   var opts = { fieldBad : 13 };
   var instance = Blueprint.construct( opts );
 
-  test.is( instance !== opts );
+  test.true( instance !== opts );
   var exp = { field1 : rfield, fieldBad : 13 }
   test.identical( instance, exp );
   test.identical( instance instanceof Blueprint.construct, false );
@@ -484,7 +484,7 @@ function constructWithArgumentMapUndeclaredFields( test )
   var opts = { fieldBad : 13 };
   var instance = Blueprint.construct( opts );
 
-  test.is( instance !== opts );
+  test.true( instance !== opts );
   var exp = { field1 : rfield, fieldBad : 13 }
   test.containsOnly( instance, exp );
   test.identical( instance instanceof Blueprint.construct, true );
@@ -501,7 +501,7 @@ function constructWithArgumentMapUndeclaredFields( test )
   var opts = { fieldBad : 13 };
   var instance = new Blueprint.construct( opts );
 
-  test.is( instance !== opts );
+  test.true( instance !== opts );
   var exp = { field1 : rfield, fieldBad : 13 }
   test.identical( instance, exp );
   test.identical( instance instanceof Blueprint.construct, false );
@@ -518,7 +518,7 @@ function constructWithArgumentMapUndeclaredFields( test )
   var opts = { fieldBad : 13 };
   var instance = new Blueprint.construct( opts );
 
-  test.is( instance !== opts );
+  test.true( instance !== opts );
   var exp = { field1 : rfield, fieldBad : 13 }
   test.containsOnly( instance, exp );
   test.identical( instance instanceof Blueprint.construct, true );
@@ -606,9 +606,9 @@ function constructWithArgumentInstance( test )
   var instance1 = Blueprint.construct( opts );
   var instance2 = Blueprint.construct( instance1 );
 
-  test.is( instance1 !== opts );
-  test.is( instance2 !== opts );
-  test.is( instance1 !== instance2 );
+  test.true( instance1 !== opts );
+  test.true( instance2 !== opts );
+  test.true( instance1 !== instance2 );
   var exp = { field1 : 13 }
   test.containsOnly( instance2, exp );
 
@@ -622,12 +622,12 @@ function constructWithArgumentInstance( test )
   test.identical( instance2.constructor, undefined );
   var prototypes = _.prototype.each( instance2 );
   test.identical( prototypes.length, 1 );
-  test.is( prototypes[ 0 ] === instance2 );
-  test.is( !_.prototype.hasPrototype( instance2, Blueprint ) );
-  test.is( _.objectIs( instance2 ) );
-  test.is( _.mapIs( instance2 ) );
-  test.is( _.mapLike( instance2 ) );
-  test.is( !_.instanceIs( instance2 ) );
+  test.true( prototypes[ 0 ] === instance2 );
+  test.true( !_.prototype.hasPrototype( instance2, Blueprint ) );
+  test.true( _.objectIs( instance2 ) );
+  test.true( _.mapIs( instance2 ) );
+  test.true( _.mapLike( instance2 ) );
+  test.true( !_.instanceIs( instance2 ) );
   test.identical( _.mapKeys( instance2 ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance2 ), [ 'field1' ] );
 
@@ -643,9 +643,9 @@ function constructWithArgumentInstance( test )
   var instance1 = Blueprint.construct( opts );
   var instance2 = Blueprint.construct( instance1 );
 
-  test.is( instance1 !== opts );
-  test.is( instance2 !== opts );
-  test.is( instance1 === instance2 );
+  test.true( instance1 !== opts );
+  test.true( instance2 !== opts );
+  test.true( instance1 === instance2 );
   var exp = { field1 : 13 }
   test.containsOnly( instance2, exp );
 
@@ -659,16 +659,16 @@ function constructWithArgumentInstance( test )
   test.identical( instance2.constructor, undefined );
   var prototypes = _.prototype.each( instance2 );
   test.identical( prototypes.length, 3 );
-  test.is( prototypes[ 0 ] === instance2 );
-  test.is( prototypes[ 1 ] === Blueprint.construct.prototype );
-  test.is( prototypes[ 2 ] === _.Construction.prototype );
-  test.is( _.prototype.hasPrototype( instance2, instance2 ) );
-  test.is( _.prototype.hasPrototype( instance2, Blueprint.construct.prototype ) );
-  test.is( _.prototype.hasPrototype( instance2, _.Construction.prototype ) );
-  test.is( _.objectIs( instance2 ) );
-  test.is( !_.mapIs( instance2 ) );
-  test.is( _.mapLike( instance2 ) );
-  test.is( !_.instanceIs( instance2 ) );
+  test.true( prototypes[ 0 ] === instance2 );
+  test.true( prototypes[ 1 ] === Blueprint.construct.prototype );
+  test.true( prototypes[ 2 ] === _.Construction.prototype );
+  test.true( _.prototype.hasPrototype( instance2, instance2 ) );
+  test.true( _.prototype.hasPrototype( instance2, Blueprint.construct.prototype ) );
+  test.true( _.prototype.hasPrototype( instance2, _.Construction.prototype ) );
+  test.true( _.objectIs( instance2 ) );
+  test.true( !_.mapIs( instance2 ) );
+  test.true( _.mapLike( instance2 ) );
+  test.true( !_.instanceIs( instance2 ) );
   test.identical( _.mapKeys( instance2 ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance2 ), [ 'field1' ] );
 
@@ -684,9 +684,9 @@ function constructWithArgumentInstance( test )
   var instance1 = new Blueprint.construct( opts );
   var instance2 = new Blueprint.construct( instance1 );
 
-  test.is( instance1 !== opts );
-  test.is( instance2 !== opts );
-  test.is( instance1 !== instance2 );
+  test.true( instance1 !== opts );
+  test.true( instance2 !== opts );
+  test.true( instance1 !== instance2 );
   var exp = { field1 : 13 }
   test.containsOnly( instance2, exp );
 
@@ -700,12 +700,12 @@ function constructWithArgumentInstance( test )
   test.identical( instance2.constructor, undefined );
   var prototypes = _.prototype.each( instance2 );
   test.identical( prototypes.length, 1 );
-  test.is( prototypes[ 0 ] === instance2 );
-  test.is( !_.prototype.hasPrototype( instance2, Blueprint ) );
-  test.is( _.objectIs( instance2 ) );
-  test.is( _.mapIs( instance2 ) );
-  test.is( _.mapLike( instance2 ) );
-  test.is( !_.instanceIs( instance2 ) );
+  test.true( prototypes[ 0 ] === instance2 );
+  test.true( !_.prototype.hasPrototype( instance2, Blueprint ) );
+  test.true( _.objectIs( instance2 ) );
+  test.true( _.mapIs( instance2 ) );
+  test.true( _.mapLike( instance2 ) );
+  test.true( !_.instanceIs( instance2 ) );
   test.identical( _.mapKeys( instance2 ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance2 ), [ 'field1' ] );
 
@@ -721,9 +721,9 @@ function constructWithArgumentInstance( test )
   var instance1 = new Blueprint.construct( opts );
   var instance2 = new Blueprint.construct( instance1 );
 
-  test.is( instance1 !== opts );
-  test.is( instance2 !== opts );
-  test.is( instance1 !== instance2 );
+  test.true( instance1 !== opts );
+  test.true( instance2 !== opts );
+  test.true( instance1 !== instance2 );
   var exp = { field1 : 13 }
   test.containsOnly( instance2, exp );
 
@@ -737,16 +737,16 @@ function constructWithArgumentInstance( test )
   test.identical( instance2.constructor, undefined );
   var prototypes = _.prototype.each( instance2 );
   test.identical( prototypes.length, 3 );
-  test.is( prototypes[ 0 ] === instance2 );
-  test.is( prototypes[ 1 ] === Blueprint.construct.prototype );
-  test.is( prototypes[ 2 ] === _.Construction.prototype );
-  test.is( _.prototype.hasPrototype( instance2, instance2 ) );
-  test.is( _.prototype.hasPrototype( instance2, Blueprint.construct.prototype ) );
-  test.is( _.prototype.hasPrototype( instance2, _.Construction.prototype ) );
-  test.is( _.objectIs( instance2 ) );
-  test.is( !_.mapIs( instance2 ) );
-  test.is( _.mapLike( instance2 ) );
-  test.is( !_.instanceIs( instance2 ) );
+  test.true( prototypes[ 0 ] === instance2 );
+  test.true( prototypes[ 1 ] === Blueprint.construct.prototype );
+  test.true( prototypes[ 2 ] === _.Construction.prototype );
+  test.true( _.prototype.hasPrototype( instance2, instance2 ) );
+  test.true( _.prototype.hasPrototype( instance2, Blueprint.construct.prototype ) );
+  test.true( _.prototype.hasPrototype( instance2, _.Construction.prototype ) );
+  test.true( _.objectIs( instance2 ) );
+  test.true( !_.mapIs( instance2 ) );
+  test.true( _.mapLike( instance2 ) );
+  test.true( !_.instanceIs( instance2 ) );
   test.identical( _.mapKeys( instance2 ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance2 ), [ 'field1' ] );
 
@@ -784,20 +784,20 @@ function constructWithArgumentLong( test )
   var args = [ { field1 : 1 }, new Blueprint.construct({ field1 : 2 }), Blueprint.construct() ];
   var instances = Blueprint.construct( args );
 
-  test.is( instances !== args );
-  test.is( _.arrayIs( instances ) );
+  test.true( instances !== args );
+  test.true( _.arrayIs( instances ) );
   var exp = { field1 : 1 }
   test.containsOnly( instances[ 0 ], exp );
   test.identical( instances[ 0 ] instanceof Blueprint.construct, false );
-  test.is( instances[ 0 ] !== args[ 0 ] );
+  test.true( instances[ 0 ] !== args[ 0 ] );
   var exp = { field1 : 2 }
   test.containsOnly( instances[ 1 ], exp );
   test.identical( instances[ 1 ] instanceof Blueprint.construct, false );
-  test.is( instances[ 1 ] !== args[ 1 ] );
+  test.true( instances[ 1 ] !== args[ 1 ] );
   var exp = { field1 : rfield }
   test.containsOnly( instances[ 2 ], exp );
   test.identical( instances[ 2 ] instanceof Blueprint.construct, false );
-  test.is( instances[ 2 ] !== args[ 2 ] );
+  test.true( instances[ 2 ] !== args[ 2 ] );
 
   /* */
 
@@ -810,20 +810,20 @@ function constructWithArgumentLong( test )
   var args = [ { field1 : 1 }, new Blueprint.construct({ field1 : 2 }), Blueprint.construct() ];
   var instances = Blueprint.construct( args );
 
-  test.is( instances !== args );
-  test.is( _.arrayIs( instances ) );
+  test.true( instances !== args );
+  test.true( _.arrayIs( instances ) );
   var exp = { field1 : 1 }
   test.containsOnly( instances[ 0 ], exp );
   test.identical( instances[ 0 ] instanceof Blueprint.construct, true );
-  test.is( instances[ 0 ] !== args[ 0 ] );
+  test.true( instances[ 0 ] !== args[ 0 ] );
   var exp = { field1 : 2 }
   test.containsOnly( instances[ 1 ], exp );
   test.identical( instances[ 1 ] instanceof Blueprint.construct, true );
-  test.is( instances[ 1 ] === args[ 1 ] );
+  test.true( instances[ 1 ] === args[ 1 ] );
   var exp = { field1 : rfield }
   test.containsOnly( instances[ 2 ], exp );
   test.identical( instances[ 2 ] instanceof Blueprint.construct, true );
-  test.is( instances[ 2 ] === args[ 2 ] );
+  test.true( instances[ 2 ] === args[ 2 ] );
 
   /* */
 
@@ -836,20 +836,20 @@ function constructWithArgumentLong( test )
   var args = [ { field1 : 1 }, new Blueprint.construct({ field1 : 2 }), Blueprint.construct() ];
   var instances = new Blueprint.construct( args );
 
-  test.is( instances !== args );
-  test.is( _.arrayIs( instances ) );
+  test.true( instances !== args );
+  test.true( _.arrayIs( instances ) );
   var exp = { field1 : 1 }
   test.containsOnly( instances[ 0 ], exp );
   test.identical( instances[ 0 ] instanceof Blueprint.construct, false );
-  test.is( instances[ 0 ] !== args[ 0 ] );
+  test.true( instances[ 0 ] !== args[ 0 ] );
   var exp = { field1 : 2 }
   test.containsOnly( instances[ 1 ], exp );
   test.identical( instances[ 1 ] instanceof Blueprint.construct, false );
-  test.is( instances[ 1 ] !== args[ 1 ] );
+  test.true( instances[ 1 ] !== args[ 1 ] );
   var exp = { field1 : rfield }
   test.containsOnly( instances[ 2 ], exp );
   test.identical( instances[ 2 ] instanceof Blueprint.construct, false );
-  test.is( instances[ 2 ] !== args[ 2 ] );
+  test.true( instances[ 2 ] !== args[ 2 ] );
 
   /* */
 
@@ -862,20 +862,20 @@ function constructWithArgumentLong( test )
   var args = [ { field1 : 1 }, new Blueprint.construct({ field1 : 2 }), Blueprint.construct() ];
   var instances = new Blueprint.construct( args );
 
-  test.is( instances !== args );
-  test.is( _.arrayIs( instances ) );
+  test.true( instances !== args );
+  test.true( _.arrayIs( instances ) );
   var exp = { field1 : 1 }
   test.containsOnly( instances[ 0 ], exp );
   test.identical( instances[ 0 ] instanceof Blueprint.construct, true );
-  test.is( instances[ 0 ] !== args[ 0 ] );
+  test.true( instances[ 0 ] !== args[ 0 ] );
   var exp = { field1 : 2 }
   test.containsOnly( instances[ 1 ], exp );
   test.identical( instances[ 1 ] instanceof Blueprint.construct, true );
-  test.is( instances[ 1 ] !== args[ 1 ] );
+  test.true( instances[ 1 ] !== args[ 1 ] );
   var exp = { field1 : rfield }
   test.containsOnly( instances[ 2 ], exp );
   test.identical( instances[ 2 ] instanceof Blueprint.construct, true );
-  test.is( instances[ 2 ] !== args[ 2 ] );
+  test.true( instances[ 2 ] !== args[ 2 ] );
 
   /* */
 
@@ -907,20 +907,20 @@ function constructWithHelper( test )
 
   var prototypes = _.prototype.each( _.Blueprint );
   test.identical( prototypes.length, 1 );
-  test.is( prototypes[ 0 ] === _.Blueprint );
+  test.true( prototypes[ 0 ] === _.Blueprint );
   var prototypes = _.prototype.each( Blueprint1 );
   test.identical( prototypes.length, 2 );
-  test.is( prototypes[ 0 ] === Blueprint1 );
-  test.is( prototypes[ 1 ] === _.Blueprint );
+  test.true( prototypes[ 0 ] === Blueprint1 );
+  test.true( prototypes[ 1 ] === _.Blueprint );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 1 );
-  test.is( prototypes[ 0 ] === instance );
+  test.true( prototypes[ 0 ] === instance );
 
-  test.is( !_.prototype.hasPrototype( instance, Blueprint1 ) );
-  test.is( _.objectIs( instance ) );
-  test.is( _.mapIs( instance ) );
-  test.is( _.mapLike( instance ) );
-  test.is( !_.instanceIs( instance ) );
+  test.true( !_.prototype.hasPrototype( instance, Blueprint1 ) );
+  test.true( _.objectIs( instance ) );
+  test.true( _.mapIs( instance ) );
+  test.true( _.mapLike( instance ) );
+  test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
 
@@ -947,20 +947,20 @@ function constructWithNewAndHelper( test )
 
   var prototypes = _.prototype.each( _.Blueprint );
   test.identical( prototypes.length, 1 );
-  test.is( prototypes[ 0 ] === _.Blueprint );
+  test.true( prototypes[ 0 ] === _.Blueprint );
   var prototypes = _.prototype.each( Blueprint );
   test.identical( prototypes.length, 2 );
-  test.is( prototypes[ 0 ] === Blueprint );
-  test.is( prototypes[ 1 ] === _.Blueprint );
+  test.true( prototypes[ 0 ] === Blueprint );
+  test.true( prototypes[ 1 ] === _.Blueprint );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 1 );
-  test.is( prototypes[ 0 ] === instance );
+  test.true( prototypes[ 0 ] === instance );
 
-  test.is( !_.prototype.hasPrototype( instance, Blueprint ) );
-  test.is( _.objectIs( instance ) );
-  test.is( _.mapIs( instance ) );
-  test.is( _.mapLike( instance ) );
-  test.is( !_.instanceIs( instance ) );
+  test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
+  test.true( _.objectIs( instance ) );
+  test.true( _.mapIs( instance ) );
+  test.true( _.mapLike( instance ) );
+  test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
 
@@ -1487,10 +1487,10 @@ function orderOfDefinitions( test )
   var instance3 = _.blueprint.construct( Blueprint3 );
   var prototypes3 = _.prototype.each( instance3 );
   test.identical( prototypes3.length, 4 );
-  test.is( prototypes3[ 0 ] === instance3 );
-  test.is( prototypes3[ 1 ] === Blueprint3.construct.prototype );
-  test.is( prototypes3[ 2 ] === Blueprint1.construct.prototype );
-  test.is( prototypes3[ 3 ] === _.Construction.prototype );
+  test.true( prototypes3[ 0 ] === instance3 );
+  test.true( prototypes3[ 1 ] === Blueprint3.construct.prototype );
+  test.true( prototypes3[ 2 ] === Blueprint1.construct.prototype );
+  test.true( prototypes3[ 3 ] === _.Construction.prototype );
 
   /* */
 
@@ -1522,18 +1522,18 @@ function orderOfDefinitions( test )
   var instance2 = _.blueprint.construct( Blueprint2 );
   var prototypes2 = _.prototype.each( instance2 );
   test.identical( prototypes2.length, 4 );
-  test.is( prototypes2[ 0 ] === instance2 );
-  test.is( prototypes2[ 1 ] === Blueprint2.construct.prototype );
-  test.is( prototypes2[ 2 ] === Blueprint1.construct.prototype );
-  test.is( prototypes2[ 3 ] === _.Construction.prototype );
+  test.true( prototypes2[ 0 ] === instance2 );
+  test.true( prototypes2[ 1 ] === Blueprint2.construct.prototype );
+  test.true( prototypes2[ 2 ] === Blueprint1.construct.prototype );
+  test.true( prototypes2[ 3 ] === _.Construction.prototype );
 
   var instance3 = _.blueprint.construct( Blueprint3 );
   var prototypes3 = _.prototype.each( instance3 );
   test.identical( prototypes3.length, 4 );
-  test.is( prototypes3[ 0 ] === instance3 );
-  test.is( prototypes3[ 1 ] === Blueprint3.construct.prototype );
-  test.is( prototypes3[ 2 ] === Blueprint1.construct.prototype );
-  test.is( prototypes3[ 3 ] === _.Construction.prototype );
+  test.true( prototypes3[ 0 ] === instance3 );
+  test.true( prototypes3[ 1 ] === Blueprint3.construct.prototype );
+  test.true( prototypes3[ 2 ] === Blueprint1.construct.prototype );
+  test.true( prototypes3[ 3 ] === _.Construction.prototype );
 
   /* */
 
@@ -1569,24 +1569,24 @@ function constructSingleReuse( test )
 
   var prototypes = _.prototype.each( _.Blueprint );
   test.identical( prototypes.length, 1 );
-  test.is( prototypes[ 0 ] === _.Blueprint );
+  test.true( prototypes[ 0 ] === _.Blueprint );
   var prototypes = _.prototype.each( Blueprint2 );
   test.identical( prototypes.length, 2 );
-  test.is( prototypes[ 0 ] === Blueprint2 );
-  test.is( prototypes[ 1 ] === _.Blueprint );
+  test.true( prototypes[ 0 ] === Blueprint2 );
+  test.true( prototypes[ 1 ] === _.Blueprint );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 4 );
-  test.is( prototypes[ 0 ] === instance );
-  test.is( prototypes[ 1 ] === Blueprint2.construct.prototype );
-  test.is( prototypes[ 2 ] === Blueprint1.construct.prototype );
-  test.is( prototypes[ 3 ] === _.Construction.prototype );
+  test.true( prototypes[ 0 ] === instance );
+  test.true( prototypes[ 1 ] === Blueprint2.construct.prototype );
+  test.true( prototypes[ 2 ] === Blueprint1.construct.prototype );
+  test.true( prototypes[ 3 ] === _.Construction.prototype );
 
-  test.is( _.prototype.hasPrototype( instance, Blueprint1.construct.prototype ) );
-  test.is( _.prototype.hasPrototype( instance, Blueprint2.construct.prototype ) );
-  test.is( _.objectIs( instance ) );
-  test.is( !_.mapIs( instance ) );
-  test.is( _.mapLike( instance ) );
-  test.is( !_.instanceIs( instance ) );
+  test.true( _.prototype.hasPrototype( instance, Blueprint1.construct.prototype ) );
+  test.true( _.prototype.hasPrototype( instance, Blueprint2.construct.prototype ) );
+  test.true( _.objectIs( instance ) );
+  test.true( !_.mapIs( instance ) );
+  test.true( _.mapLike( instance ) );
+  test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
 
@@ -1624,25 +1624,25 @@ function constructMultipleReuse( test )
 
   var prototypes = _.prototype.each( _.Blueprint );
   test.identical( prototypes.length, 1 );
-  test.is( prototypes[ 0 ] === _.Blueprint );
+  test.true( prototypes[ 0 ] === _.Blueprint );
   var prototypes = _.prototype.each( Blueprint3 );
   test.identical( prototypes.length, 2 );
-  test.is( prototypes[ 0 ] === Blueprint3 );
-  test.is( prototypes[ 1 ] === _.Blueprint );
+  test.true( prototypes[ 0 ] === Blueprint3 );
+  test.true( prototypes[ 1 ] === _.Blueprint );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 4 );
-  test.is( prototypes[ 0 ] === instance );
-  test.is( prototypes[ 1 ] === Blueprint3.construct.prototype );
-  test.is( prototypes[ 2 ] === Blueprint2.construct.prototype );
-  test.is( prototypes[ 3 ] === _.Construction.prototype );
+  test.true( prototypes[ 0 ] === instance );
+  test.true( prototypes[ 1 ] === Blueprint3.construct.prototype );
+  test.true( prototypes[ 2 ] === Blueprint2.construct.prototype );
+  test.true( prototypes[ 3 ] === _.Construction.prototype );
 
-  test.is( !_.prototype.hasPrototype( instance, Blueprint1.construct.prototype ) );
-  test.is( _.prototype.hasPrototype( instance, Blueprint2.construct.prototype ) );
-  test.is( _.prototype.hasPrototype( instance, Blueprint3.construct.prototype ) );
-  test.is( _.objectIs( instance ) );
-  test.is( !_.mapIs( instance ) );
-  test.is( _.mapLike( instance ) );
-  test.is( !_.instanceIs( instance ) );
+  test.true( !_.prototype.hasPrototype( instance, Blueprint1.construct.prototype ) );
+  test.true( _.prototype.hasPrototype( instance, Blueprint2.construct.prototype ) );
+  test.true( _.prototype.hasPrototype( instance, Blueprint3.construct.prototype ) );
+  test.true( _.objectIs( instance ) );
+  test.true( !_.mapIs( instance ) );
+  test.true( _.mapLike( instance ) );
+  test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1', 'field2', 'field3' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1', 'field2', 'field3' ] );
 
@@ -1677,20 +1677,20 @@ constructMultipleReuse.description =
 //   debugger;
 //   var prototypes = _.prototype.each( _.Blueprint );
 //   test.identical( prototypes.length, 1 );
-//   test.is( prototypes[ 0 ] === _.Blueprint );
+//   test.true( prototypes[ 0 ] === _.Blueprint );
 //   var prototypes = _.prototype.each( Blueprint1 );
 //   test.identical( prototypes.length, 2 );
-//   test.is( prototypes[ 0 ] === Blueprint1 );
-//   test.is( prototypes[ 1 ] === _.Blueprint );
+//   test.true( prototypes[ 0 ] === Blueprint1 );
+//   test.true( prototypes[ 1 ] === _.Blueprint );
 //   var prototypes = _.prototype.each( instance );
 //   test.identical( prototypes.length, 3 );
-//   test.is( prototypes[ 0 ] === instance );
-//   test.is( prototypes[ 1 ] === Blueprint1 );
-//   test.is( prototypes[ 2 ] === _.Blueprint );
+//   test.true( prototypes[ 0 ] === instance );
+//   test.true( prototypes[ 1 ] === Blueprint1 );
+//   test.true( prototypes[ 2 ] === _.Blueprint );
 //   debugger;
 //
-//   test.is( _.prototype.hasPrototype( instance, Blueprint1 ) );
-//   test.is( _.routineIs( instance ) );
+//   test.true( _.prototype.hasPrototype( instance, Blueprint1 ) );
+//   test.true( _.routineIs( instance ) );
 //   // test.identical( _.mapKeys( instance ), [ 'functor' ] );
 //   // test.identical( _.mapAllKeys( instance ), [ 'functor' ] );
 //
@@ -1759,10 +1759,10 @@ function complexFields( test )
   test.identical( instance1 instanceof blueprint.construct, true );
   test.containsOnly( instance2, exp );
   test.identical( instance2 instanceof blueprint.construct, true );
-  test.is( instance1.array !== instance2.array );
-  test.is( instance1.map !== instance2.map );
-  test.is( instance1.array[ 0 ] === instance2.array[ 0 ] );
-  test.is( instance1.map.k === instance2.map.k );
+  test.true( instance1.array !== instance2.array );
+  test.true( instance1.map !== instance2.map );
+  test.true( instance1.array[ 0 ] === instance2.array[ 0 ] );
+  test.true( instance1.map.k === instance2.map.k );
 
   /* */
 
@@ -1784,10 +1784,10 @@ function complexFields( test )
   test.identical( instance1 instanceof constructor, true );
   test.identical( instance2, exp );
   test.identical( instance2 instanceof constructor, true );
-  test.is( instance1.array !== instance2.array );
-  test.is( instance1.map !== instance2.map );
-  test.is( instance1.array[ 0 ] === instance2.array[ 0 ] );
-  test.is( instance1.map.k === instance2.map.k );
+  test.true( instance1.array !== instance2.array );
+  test.true( instance1.map !== instance2.map );
+  test.true( instance1.array[ 0 ] === instance2.array[ 0 ] );
+  test.true( instance1.map.k === instance2.map.k );
 */
 
   /* */
@@ -1825,10 +1825,10 @@ function compileSourceCode( test )
   test.identical( instance1 instanceof blueprint.construct, true );
   test.containsOnly( instance2, exp );
   test.identical( instance2 instanceof blueprint.construct, true );
-  test.is( instance1.array !== instance2.array );
-  test.is( instance1.map !== instance2.map );
-  test.is( instance1.array[ 0 ] === instance2.array[ 0 ] );
-  test.is( instance1.map.k === instance2.map.k );
+  test.true( instance1.array !== instance2.array );
+  test.true( instance1.map !== instance2.map );
+  test.true( instance1.array[ 0 ] === instance2.array[ 0 ] );
+  test.true( instance1.map.k === instance2.map.k );
 
   /* */
 
@@ -1850,10 +1850,10 @@ function compileSourceCode( test )
   test.identical( instance1 instanceof constructor, true );
   test.identical( instance2, exp );
   test.identical( instance2 instanceof constructor, true );
-  test.is( instance1.array !== instance2.array );
-  test.is( instance1.map !== instance2.map );
-  test.is( instance1.array[ 0 ] === instance2.array[ 0 ] );
-  test.is( instance1.map.k === instance2.map.k );
+  test.true( instance1.array !== instance2.array );
+  test.true( instance1.map !== instance2.map );
+  test.true( instance1.array[ 0 ] === instance2.array[ 0 ] );
+  test.true( instance1.map.k === instance2.map.k );
 */
 
   /* */
@@ -1876,17 +1876,17 @@ function defineConstructor( test )
     names : null,
   });
 
-  test.is( _.routineIs( constr ) );
+  test.true( _.routineIs( constr ) );
 
   var exp = { ins : null, names : null };
   var instance = constr();
   test.identical( instance, exp );
-  test.is( _.mapIs( instance ) );
+  test.true( _.mapIs( instance ) );
 
   var exp = { ins : 13, names : null };
   var instance = constr({ ins : 13 });
   test.identical( instance, exp );
-  test.is( _.mapIs( instance ) );
+  test.true( _.mapIs( instance ) );
 
 }
 
