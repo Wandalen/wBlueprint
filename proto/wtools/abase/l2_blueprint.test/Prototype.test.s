@@ -7,10 +7,7 @@ if( typeof module !== 'undefined' )
 
   let _ = require( '../../../wtools/Tools.s' );
 
-  // if( !_.module.isIncluded( 'wBlueprint' ) )
-  // {
-    require( '../../abase/l2_blueprint/Include.s' );
-  // }
+  require( '../../abase/l2_blueprint/Include.s' );
 
   _.include( 'wTesting' );
 

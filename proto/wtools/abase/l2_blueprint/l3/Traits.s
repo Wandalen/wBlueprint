@@ -1,4 +1,4 @@
-( function _Trait_s_() {
+( function _Traits_s_() {
 
 'use strict';
 
@@ -19,7 +19,7 @@ function callable( o )
   o = { callback : arguments[ 0 ] };
   _.routineOptions( callable, o );
   _.assert( arguments.length === 1 );
-  _.assert( _.routineIs( o.value ) );
+  _.assert( _.routineIs( o.val ) );
 
   return _.definition._traitMake( callable, o );
 }
@@ -34,10 +34,10 @@ callable.defaults =
 function typed( o )
 {
   if( !_.mapIs( o ) )
-  o = { value : arguments[ 0 ] };
+  o = { val : arguments[ 0 ] };
   _.routineOptions( typed, o );
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.boolIs( o.value ) );
+  _.assert( _.boolIs( o.val ) );
 
   o.blueprintForm2 = blueprintForm2;
 
@@ -45,12 +45,20 @@ function typed( o )
 
   function blueprintForm2( blueprint )
   {
-    _.assert( blueprint.constructionHandlers.allocate === undefined );
-    _.assert( _.boolIs( blueprint.traits.typed.value ) );
-    if( blueprint.traits.typed.value )
-    blueprint.constructionHandlers.allocate = allocateTyped;
+
+    _.assert( blueprint._InternalRoutinesMap.allocate === undefined );
+    _.assert( _.boolIs( blueprint.Traits.typed.val ) );
+
+    if( blueprint.Traits.typed.val )
+    blueprint._InternalRoutinesMap.allocate = allocateTyped;
     else
-    blueprint.constructionHandlers.allocate = allocateUntyped;
+    blueprint._InternalRoutinesMap.allocate = allocateUntyped;
+
+    if( blueprint.Traits.typed.val )
+    blueprint._InternalRoutinesMap.reconstruct = reconstructTyped;
+    else
+    blueprint._InternalRoutinesMap.reconstruct = reconstructUntyped;
+
   }
 
   function allocateTyped( construction, construct )
@@ -72,30 +80,44 @@ function typed( o )
     return construction;
   }
 
-  // function allocateTyped( construction, blueprint )
-  // {
-  //   if( construction === null )
-  //   construction = new( _.constructorJoin( blueprint.construct, [ blueprint ] ) );
-  //   _.assert( construction === null || construction instanceof blueprint.construct );
-  //   return construction;
-  // }
-  //
-  // function allocateUntyped( construction, blueprint )
-  // {
-  //   if( construction && construction instanceof blueprint.construct )
-  //   construction = Object.create( null );
-  //   else if( construction === null )
-  //   construction = Object.create( null );
-  //   _.assert( construction === null || _.mapIs( construction ) );
-  //   _.assert( !( construction instanceof blueprint.construct ) );
-  //   return construction;
-  // }
+  function reconstructTyped( construction, construct )
+  {
+    if( construction )
+    {
+      if( !construction || !( construction instanceof construct ) )
+      Object.setPrototypeOf( construction, construct.prototype );
+    }
+    else if( construction === null )
+    {
+      _.assert( 0, 'not tested' );
+      construction = new( _.constructorJoin( construct, [ construct ] ) );
+    }
+    _.assert( construction instanceof construct );
+    return construction;
+  }
+
+  function reconstructUntyped( construction, construct )
+  {
+    if( construction )
+    {
+      if( Object.getPrototypeOf( construction ) !== null )
+      Object.setPrototypeOf( construction, null );
+    }
+    else if( construction === null )
+    {
+      _.assert( 0, 'not tested' );
+      construction = Object.create( null );
+    }
+    _.assert( _.mapIs( construction ) );
+    _.assert( !( construction instanceof construct ) );
+    return construction;
+  }
 
 }
 
 typed.defaults =
 {
-  value : true,
+  val : true,
 }
 
 //
@@ -103,10 +125,10 @@ typed.defaults =
 function extendable( o )
 {
   if( !_.mapIs( o ) )
-  o = { value : arguments[ 0 ] };
+  o = { val : arguments[ 0 ] };
   _.routineOptions( typed, o );
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.boolIs( o.value ) );
+  _.assert( _.boolIs( o.val ) );
 
   o.blueprintForm2 = blueprintForm2;
 
@@ -114,23 +136,24 @@ function extendable( o )
 
   function blueprintForm2( blueprint )
   {
-    _.assert( _.boolIs( blueprint.traits.extendable.value ) );
-    if( blueprint.traits.extendable.value )
+    _.assert( _.boolIs( blueprint.Traits.extendable.val ) );
+    if( blueprint.Traits.extendable.val )
     return;
-    blueprint.constructionHandlers.initEnd = blueprint.constructionHandlers.initEnd || [];
-    blueprint.constructionHandlers.initEnd.push( preventExtensions );
+    blueprint._InternalRoutinesMap.initEnd = blueprint._InternalRoutinesMap.initEnd || [];
+    blueprint._InternalRoutinesMap.initEnd.push( preventExtensions );
   }
 
-  function preventExtensions( construction, blueprint )
+  // function preventExtensions( construction, blueprint )
+  function preventExtensions( genesis )
   {
-    Object.preventExtensions( construction );
+    Object.preventExtensions( genesis.construction );
   }
 
 }
 
 extendable.defaults =
 {
-  value : true,
+  val : true,
 }
 
 //
@@ -138,10 +161,10 @@ extendable.defaults =
 function prototype( o )
 {
   if( !_.mapIs( o ) )
-  o = { value : arguments[ 0 ] };
+  o = { val : arguments[ 0 ] };
   _.routineOptions( typed, o );
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.blueprint.is( o.value ) );
+  _.assert( _.blueprint.is( o.val ) );
 
   o.blueprintForm2 = blueprintForm2;
 
@@ -149,15 +172,44 @@ function prototype( o )
 
   function blueprintForm2( blueprint )
   {
-    _.assert( _.blueprint.is( blueprint.traits.prototype.value ) );
-    blueprint.construct.prototype = Object.create( blueprint.traits.prototype.value.construct.prototype );
+    _.assert( _.blueprint.is( blueprint.Traits.prototype.val ) );
+    _.assert( blueprint.construct === undefined );
+    _.assert( blueprint.Traits.prototype.val.construct === undefined );
+    _.assert( _.routineIs( blueprint.Traits.prototype.val.Construct ) );
+    blueprint.Construct.prototype = Object.create( blueprint.Traits.prototype.val.Construct.prototype );
   }
 
 }
 
 prototype.defaults =
 {
-  value : true,
+  val : true,
+}
+
+//
+
+function name( o )
+{
+  if( !_.mapIs( o ) )
+  o = { val : arguments[ 0 ] };
+  _.routineOptions( typed, o );
+  _.assert( arguments.length === 1 );
+  _.assert( _.strIs( o.val ) );
+
+  o.blueprintForm2 = blueprintForm2;
+
+  return _.definition._traitMake( name, o );
+
+  function blueprintForm2( blueprint )
+  {
+    blueprint.Name = o.val;
+  }
+
+}
+
+name.defaults =
+{
+  val : null,
 }
 
 // --
@@ -178,6 +230,7 @@ let TraitExtension =
   typed,
   extendable,
   prototype,
+  name,
 
 }
 

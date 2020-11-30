@@ -45,17 +45,16 @@ function isInstanceOf( construction, blueprint )
   {
     construction = next
     next = Object.getPrototypeOf( construction );
-
-    if( construction === blueprint.construct.prototype )
+    if( construction === blueprint.Construct.prototype )
     return true;
-
   }
   while( next )
 
-  if( construction !== _.Construction.prototype )
-  return false;
+  // if( construction !== _.Construction.prototype ) /* yyy */
+  // return false;
+  // return true;
 
-  return true;
+  return false; /* yyy */
 }
 
 //
@@ -68,10 +67,8 @@ function extend( dst, src )
   if( _.blueprint.is( src ) )
   {
     _.assert( !_.blueprint.is( dst ), 'not implemented' ); /* xxx */
-    _.mapExtend( dst, src.fields );
-
-    _.assert( 0, 'not implemented' ); 
-
+    _.mapExtend( dst, src.Fields );
+    _.assert( 0, 'not implemented' );
   }
   else
   {
@@ -98,74 +95,94 @@ function extend( dst, src )
 
 //
 
-function makeWithBlueprint( construction, blueprint, args )
+function constructWithBlueprint( construction, blueprint, args )
 {
   _.assert( arguments.length === 2 || arguments.length === 3 );
-  _.assert( _.blueprint.isRuntime( blueprint.runtime ) );
-  return _.construction.makeWithRuntime( construction, blueprint.runtime, args );
+  _.assert( _.blueprint.isRuntime( blueprint._Runtime ) );
+  return _.construction.constructWithRuntime( construction, blueprint._Runtime, args );
 }
 
 //
 
-function makeWithRuntime( construction, runtime, args )
+function constructWithRuntime( construction, runtime, args )
 {
   _.assert( arguments.length === 2 || arguments.length === 3 );
 
-  let o2 =
-  {
-    construction,
-    args,
-    runtime,
-  }
+  let genesis = Object.create( null );
+  genesis.construction = construction;
+  genesis.args = args;
+  genesis.runtime = runtime;
+  genesis.reconstructing = 0;
 
-  return _.construction._make( o2 );
+  return _.construction._construct( genesis );
 }
 
 //
 
-function _make( o )
+function reconstructWithRuntime( construction, runtime, args )
+{
+  _.assert( arguments.length === 2 || arguments.length === 3 );
+
+  let genesis = Object.create( null );
+  genesis.construction = construction;
+  genesis.args = args;
+  genesis.runtime = runtime;
+  genesis.reconstructing = 1;
+
+  return _.construction._construct( genesis );
+}
+
+//
+
+function _construct( genesis )
 {
 
-  if( o.args === undefined || o.args === null )
-  o.args = [];
+  if( genesis.args === undefined || genesis.args === null )
+  genesis.args = [];
 
-  _.assertRoutineOptions( _make, arguments );
-  _.assert( o.construction === null || _.objectIs( o.construction ) );
-  _.assert( _.arrayLike( o.args ) );
-  _.assert( o.args.length === 0 || o.args.length === 1 );
+  _.assertRoutineOptions( _construct, arguments );
+  _.assert( genesis.construction === null || _.objectIs( genesis.construction ) );
+  _.assert( _.arrayLike( genesis.args ) );
+  _.assert( genesis.args.length === 0 || genesis.args.length === 1 );
   _.assert( arguments.length === 1 );
-  _.assert( _.boolIs( o.runtime.typed ) );
+  _.assert( _.boolIs( genesis.runtime.typed ) );
 
-  let op = o.args[ 0 ];
+  let op = genesis.args[ 0 ];
 
-  if( o.args.length === 1 && _.arrayLike( op ) )
+  if( genesis.args.length === 1 && _.arrayLike( op ) )
   {
     return constructionsFromLong( op );
   }
 
-  if( o.construction === null )
-  if( o.runtime.typed )
-  if( op instanceof o.runtime.construct )
+  if( genesis.construction === null ) /* xxx : ? */
+  if( genesis.runtime.typed )
+  if( op instanceof genesis.runtime.construct )
   {
-    _.assert( o.args.length === 1 );
+    _.assert( genesis.args.length === 1 );
     return op;
   }
 
-  o.construction = constructionAllocate();
+  genesis.construction = constructAct();
 
-  if( o.runtime.typed )
-  _.assert( o.construction instanceof o.runtime.construct );
+  if( genesis.runtime.typed )
+  _.assert( genesis.construction instanceof genesis.runtime.construct );
   else
-  _.assert( !( o.construction instanceof o.runtime.construct ) );
+  _.assert( !( genesis.construction instanceof genesis.runtime.construct ) );
 
-  _.construction._init( o.construction, o.runtime );
-  _.construction._extendArguments( o.construction, o.runtime, o.args );
+  _.construction._init( genesis );
+  if( !genesis.reconstructing )
+  _.construction._extendArguments( genesis );
 
-  return o.construction;
+  return genesis.construction;
 
-  function constructionAllocate()
+  /* */
+
+  function constructAct()
   {
-    return o.runtime.constructionHandlers.allocate( o.construction, o.runtime.construct );
+    if( genesis.reconstructing )
+    return genesis.runtime._InternalRoutinesMap.reconstruct( genesis.construction, genesis.runtime.construct );
+    else
+    return genesis.runtime._InternalRoutinesMap.allocate( genesis.construction, genesis.runtime.construct );
   }
 
   function constructionsFromLong( long )
@@ -176,99 +193,132 @@ function _make( o )
       let op = long[ i ];
       if( op === null )
       continue;
-      if( o.construction === null )
-      result.push( o.runtime.construct.call( null, op ) );
+      if( genesis.construction === null )
+      result.push( genesis.runtime.construct.call( null, op ) );
       else
-      result.push( new o.runtime.construct( op ) );
+      result.push( new genesis.runtime.construct( op ) );
     }
     return result;
   }
 
 }
 
-_make.defaults =
+_construct.defaults =
 {
   construction : null,
   args : null,
   runtime : null,
+  reconstructing : 0,
 }
 
 //
 
-function _init( construction, runtime )
+function _init( genesis )
 {
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 1 );
 
-  if( runtime.constructionHandlers.initBegin )
-  for( let i = 0 ; i < runtime.constructionHandlers.initBegin.length ; i++ )
-  runtime.constructionHandlers.initBegin[ i ]( construction, runtime );
+  if( genesis.runtime._InternalRoutinesMap.initBegin )
+  for( let i = 0 ; i < genesis.runtime._InternalRoutinesMap.initBegin.length ; i++ )
+  genesis.runtime._InternalRoutinesMap.initBegin[ i ]( genesis );
 
-  _.construction._initFields( construction, runtime );
-  _.construction._initDefines( construction, runtime );
+  _.construction._initFields( genesis );
+  _.construction._initDefines( genesis );
 
-  if( runtime.constructionHandlers.initEnd )
-  for( let i = 0 ; i < runtime.constructionHandlers.initEnd.length ; i++ )
-  runtime.constructionHandlers.initEnd[ i ]( construction, runtime );
+  if( genesis.runtime._InternalRoutinesMap.initEnd )
+  for( let i = 0 ; i < genesis.runtime._InternalRoutinesMap.initEnd.length ; i++ )
+  genesis.runtime._InternalRoutinesMap.initEnd[ i ]( genesis );
 
-  return construction;
+  return genesis;
+}
+
+_init.defaults =
+{
+  construction : null,
+  runtime : null,
+  reconstructing : 0,
 }
 
 //
 
-function _initFields( construction, runtime )
+function _initFields( genesis )
 {
 
-  _.assert( _.objectIs( construction ) );
-  _.assert( _.blueprint.isRuntime( runtime ) );
-  _.assert( arguments.length === 2 );
+  _.assert( _.objectIs( genesis.construction ) );
+  _.assert( _.blueprint.isRuntime( genesis.runtime ) );
+  _.assert( arguments.length === 1 );
 
-  _.mapExtend( construction, runtime.fields );
+  if( genesis.reconstructing )
+  _.mapSupplement( genesis.construction, genesis.runtime.Fields );
+  else
+  _.mapExtend( genesis.construction, genesis.runtime.Fields );
 
-  return construction;
+  return genesis.construction;
+}
+
+_initFields.defaults =
+{
+  construction : null,
+  runtime : null,
+  reconstructing : 0,
 }
 
 //
 
-function _initDefines( construction, runtime )
+function _initDefines( genesis )
 {
 
-  _.assert( _.objectIs( construction ) );
-  _.assert( _.blueprint.isRuntime( runtime ) );
-  _.assert( arguments.length === 2 );
+  _.assert( _.objectIs( genesis.construction ) );
+  _.assert( _.blueprint.isRuntime( genesis.runtime ) );
+  _.assert( arguments.length === 1 );
 
-  if( runtime.constructionHandlers.constructionInit )
-  for( let i = 0 ; i < runtime.constructionHandlers.constructionInit.length ; i++ )
+  if( genesis.runtime._InternalRoutinesMap.constructionInit )
+  for( let i = 0 ; i < genesis.runtime._InternalRoutinesMap.constructionInit.length ; i++ )
   {
-    let constructionInitContext = runtime.constructionHandlers.constructionInit[ i ];
-    constructionInitContext.constructionInit.call( null, construction, constructionInitContext.name );
+    let constructionInitContext = genesis.runtime._InternalRoutinesMap.constructionInit[ i ];
+    constructionInitContext.constructionInit.call( null, genesis.construction, constructionInitContext.name ); /* xxx : pass genesis? */
   }
 
-  return construction;
+  return genesis.construction;
+}
+
+_initDefines.defaults =
+{
+  construction : null,
+  runtime : null,
+  reconstructing : 0,
 }
 
 //
 
-function _extendArguments( construction, runtime, args )
+function _extendArguments( genesis )
 {
 
-  _.assert( _.objectIs( construction ) );
-  _.assert( _.blueprint.isRuntime( runtime ) );
-  _.assert( args === undefined || _.arrayLike( args ) );
-  _.assert( args === undefined || args.length === 0 || args.length === 1 );
-  _.assert( arguments.length === 3 );
+  _.assert( _.objectIs( genesis.construction ) );
+  _.assert( _.blueprint.isRuntime( genesis.runtime ) );
+  _.assert( genesis.args === undefined || _.arrayLike( genesis.args ) );
+  _.assert( genesis.args === undefined || genesis.args.length === 0 || genesis.args.length === 1 );
+  _.assert( arguments.length === 1 );
 
-  if( !args || !args.length )
-  return construction;
+  if( !genesis.args || !genesis.args.length )
+  return genesis.construction;
 
-  _.assert( args.length === 1 );
-  let o = args[ 0 ];
+  _.assert( genesis.args.length === 1 );
+  let o = genesis.args[ 0 ];
 
   _.assert( _.objectIs( o ) );
 
-  if( construction !== o )
-  _.mapExtend( construction, o );
+  if( genesis.construction !== o )
+  _.mapExtend( genesis.construction, o );
 
-  return construction;
+  return genesis.construction;
+}
+
+_extendArguments.defaults =
+{
+  construction : null,
+  args : null,
+  runtime : null,
+  reconstructing : 0,
 }
 
 // --
@@ -295,9 +345,10 @@ var ConstructionExtension =
   isInstanceOf,
   extend,
 
-  makeWithBlueprint,
-  makeWithRuntime,
-  _make,
+  constructWithBlueprint,
+  constructWithRuntime,
+  reconstructWithRuntime,
+  _construct,
   _init,
   _initFields,
   _initDefines,

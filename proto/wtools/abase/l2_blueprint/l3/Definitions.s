@@ -1,87 +1,34 @@
-( function _Definition_s_() {
+( function _Definitions_s_() {
 
 'use strict';
-
-/**
-* Collection of definitions for constructions.
-* @namespace wTools.define
-* @extends Tools
-* @module Tools/base/Proto
-*/
 
 let Self = _global_.wTools;
 let _global = _global_;
 let _ = _global_.wTools;
 
 // --
-// implement
-// --
-
-/**
-* @classdesc Class container for creating property-like entity from non-primitive value.
-  Is used by routines:
-  @see {@link module:Tools/base/Proto.wTools.define.own}
-  @see {@link module:Tools/base/Proto.wTools.define.common}
-  @see {@link module:Tools/base/Proto.wTools.define.instanceOf}
-  @see {@link module:Tools/base/Proto.wTools.define.makeWith}
-  @see {@link module:Tools/base/Proto.wTools.define.contained}
-* @class Definition
-* @namespace Tools.define
-* @module Tools/base/Proto
-*/
-
-function Definition( o )
-{
-  _.assert( arguments.length === 1 );
-  if( !( this instanceof Definition ) )
-  if( o instanceof Definition )
-  return o;
-  else
-  return new( _.constructorJoin( Definition, arguments ) );
-  _.mapExtend( this, o );
-  _.assert( _.longHas( _.definition.DefinitionKind, o.definitionKind ) );
-  return this;
-}
-
-Definition.prototype = Object.create( null );
-Definition.prototype.clone = function()
-{
-  return new Definition( this );
-}
-
-//
-
-function _constructionAmendCant( construction, key )
-{
-  let trait = this;
-  debugger;
-  throw _.err( `Trait::${trait.kind} cant extend created construction after initialization. Use this trait during initialization only.` );
-}
-
-//
-
-function _traitMake( routine, o )
-{
-
-  _.assert( arguments.length === 2 );
-  _.assert( _.routineIs( routine ) );
-  _.assert( _.strDefined( routine.name ) );
-  _.assert( _.mapIs( o ) );
-
-  o.definitionKind = 'trait';
-  o.ini = null;
-  o.kind = routine.name;
-  if( !o.constructionAmend )
-  o.constructionAmend = _.definition._constructionAmendCant;
-
-  let definition = new _.Definition( o );
-  Object.freeze( definition );
-  return definition;
-}
-
-// --
 // collection
 // --
+
+function _pairArgumentshead( routine, args )
+{
+  let o = args[ 1 ];
+
+  if( !o )
+  o = { val : args[ 0 ] };
+  else
+  o.val = args[ 0 ];
+
+  o = _.routineOptions( routine, o );
+
+  _.assert( arguments.length === 2 );
+  _.assert( args.length === 1 || args.length === 2 );
+  _.assert( args[ 1 ] === undefined || _.mapIs( args[ 1 ] ) );
+
+  return o;
+}
+
+//
 
 function field( o )
 {
@@ -102,7 +49,7 @@ function field( o )
   _.assert( o.insToDat === 'val', 'not implemented' );
   _.assert( o.datToDat === 'val', 'not implemented' );
 
-  o.definitionKind = 'definition.named';
+  o.definitionGroup = 'definition.named';
   o.blueprintForm2 = blueprintForm2;
   o.name = null;
   o.constructionInit = null;
@@ -141,35 +88,30 @@ function field( o )
 
   function blueprintForm2( blueprint, key )
   {
-    let handlers = blueprint.constructionHandlers.constructionInit = blueprint.constructionHandlers.constructionInit || [];
+    let handlers = blueprint._InternalRoutinesMap.constructionInit = blueprint._InternalRoutinesMap.constructionInit || [];
 
     if( o.iniToIns === 'val' )
     {
       definition.constructionInit = constructionInitVal;
-      // handlers.push( definition.constructionInit );
     }
     else if( o.iniToIns === 'shallow' )
     {
       definition.constructionInit = constructionInitShallow;
-      // handlers.push( definition.constructionInit );
     }
     else if( o.iniToIns === 'clone' )
     {
       debugger;
       definition.constructionInit = constructionInitClone;
-      // handlers.push( definition.constructionInit );
     }
     else if( o.iniToIns === 'make' )
     {
       debugger;
       definition.constructionInit = constructionInitCall;
-      // handlers.push( definition.constructionInit )
     }
     else if( o.iniToIns === 'construct' )
     {
       debugger;
       definition.constructionInit = constructionInitNew;
-      // handlers.push( definition.constructionInit )
     }
     else _.assert( 0 );
 
@@ -249,7 +191,7 @@ static          : [ 0 , 1 ]                                                     
 enumerable      : [ 0 , 1 ]                                                                                 @default : 1
 configurable    : [ 0 , 1 ]                                                                                 @default : 1
 writable        : [ 0 , 1 ]                                                                                 @default : 1
-valueGenerate : routine                                                                                   @default : null
+valueGenerate   : routine                                                                                   @default : null
 collection      : [ scalar , array , map ]                                                                  @default : scalar
 insToIns        : [ val , shallow , deep ]                                                                  @default : val
 datToIns        : [ val , shallow , deep ]                                                                  @default : val
@@ -275,27 +217,29 @@ function shallow( src )
 
 //
 
-function _amendment( o )
+function _amendment_head( routine, args )
+{
+  let o = _pairArgumentshead( ... arguments );
+  _.assert( _.longHas( [ 'extend', 'supplement' ], o.amending ) );
+  return o;
+}
+
+function _amendment_body( o )
 {
 
-  _.assertRoutineOptions( _amendment, arguments );
-  _.assert( _.longHas( [ 'extend', 'supplement' ], o.amending ) );
+  _.assertRoutineOptions( _amendment_body, arguments );
+  _.assert( _.objectIs( o.val ) );
+  _.assert( _.blueprintIs( o.val ) );
 
-  if( Config.debug )
-  for( let a = 0 ; a < o.args.length ; a++ )
-  {
-    let arg = o.args[ a ];
-    _.assert( _.objectIs( arg ) );
-  }
-
-  o.definitionKind = 'definition.unnamed';
+  o.definitionGroup = 'definition.unnamed';
 
   let definition = new _.Definition( o );
 
   definition.kind = o.amending;
-  definition.amending = o.amending;
   definition.constructionAmend = constructionAmend;
   definition.blueprintAmend = blueprintAmend;
+
+  _.assert( definition.amending === o.amending );
 
   Object.freeze( definition );
   return definition;
@@ -309,56 +253,101 @@ function _amendment( o )
   {
     let definition = this;
     let blueprint = o.blueprint;
+    if( o.blueprintDepth )
+    return;
     return _.blueprint._amend
     ({
-      blueprint,
-      extension : definition.args,
+      ... o,
+      extension : definition.val,
       amending : definition.amending,
+      // amending : o.amending, /* xxx : cover */
       blueprintAction : 'amend',
+      blueprintDepthReserve : definition.blueprintDepthReserve + o.blueprintDepthReserve,
     });
   }
 
 }
 
-_amendment.defaults =
+_amendment_body.defaults =
 {
   amending : null,
-  args : null,
+  val : null,
+  blueprintDepthReserve : 0,
 }
+
+let _amendment = _.routineUnite( _amendment_head, _amendment_body );
 
 //
 
 function extension()
 {
-  return _.define._amendment({ args : arguments, amending : 'extend' });
+  let o = _.define._amendment.head( extension, arguments );
+  return _.define._amendment.body( o );
+}
+
+extension.defaults =
+{
+  ... _amendment.defaults,
+  amending : 'extend',
 }
 
 //
 
 function supplementation()
 {
-  return _.define._amendment({ args : arguments, amending : 'supplement' });
+  let o = _.define._amendment.head( supplementation, arguments );
+  return _.define._amendment.body( o );
+}
+
+supplementation.defaults =
+{
+  ... _amendment.defaults,
+  amending : 'supplement',
 }
 
 //
 
-function _static( field )
+function inherit( o )
+{
+  if( !_.mapIs( o ) )
+  o = { ini : arguments[ 0 ] };
+  _.routineOptions( inherit, o );
+  let result = [];
+  result.push( _.define.extension( o.ini ) );
+  result.push( _.trait.prototype( o.ini ) );
+  result.push( _.trait.typed( true ) );
+  return result;
+}
+
+inherit.defaults =
+{
+  ini : null,
+}
+
+//
+
+function static_head( routine, args )
+{
+  let o = _pairArgumentshead( ... arguments );
+  return o;
+}
+
+function static_body( o )
 {
 
+  _.assertRoutineOptions( static_body, o );
   _.assert( arguments.length === 1 );
 
-  let o = Object.create( null );
-  o.value = field;
-  o.definitionKind = 'definition.named';
+  o.definitionGroup = 'definition.named';
   o.name = null;
-
   let definition = new _.Definition( o );
-
   definition.kind = 'static';
   definition.constructionAmend = constructionAmend;
   definition.blueprintForm2 = blueprintForm2;
-
   Object.preventExtensions( definition );
+
+  _.assert( definition.blueprintDepthReserve >= 0 );
+
   return definition;
 
   function constructionAmend( construction, key )
@@ -369,31 +358,50 @@ function _static( field )
   function blueprintForm2( blueprint, key )
   {
     let definition = this;
-    blueprint.construct.prototype[ key ] = definition.value;
+    blueprint.Construct.prototype[ key ] = definition.val;
   }
 
 }
 
+static_body.defaults =
+{
+  val : null,
+  blueprintDepthLimit : 1,
+  blueprintDepthReserve : 0,
+}
+
+let _static = _.routineUnite( static_head, static_body );
+
 //
 
-function statics( fields )
+function statics_head( routine, args )
+{
+  let o = _pairArgumentshead( ... arguments );
+  return o;
+}
+
+// function statics_body( fields )
+function statics_body( o )
 {
 
   _.assert( arguments.length === 1 );
-  _.assert( _.mapIs( fields ) || _.longIs( fields ), `Expects primitive or routine` );
+  _.assertRoutineOptions( statics_body, o );
+  _.assert( _.mapIs( o.val ) || _.longIs( o.val ), `Expects primitive or routine` );
 
-  let o = Object.create( null );
-  o.value = fields;
-  o.definitionKind = 'definition.named';
+  // let o = Object.create( null );
+  // o.val = val;
+  o.definitionGroup = 'definition.named';
   o.name = null;
 
   let definition = new _.Definition( o );
-
   definition.kind = 'statics';
   definition.constructionAmend = constructionAmend;
   definition.blueprintForm2 = blueprintForm2;
-
+  // definition.blueprintDepthReserve = 1;
   Object.preventExtensions( definition );
+
+  _.assert( definition.blueprintDepthReserve >= 0 );
+
   return definition;
 
   function constructionAmend( construction, key )
@@ -404,8 +412,7 @@ function statics( fields )
   function blueprintForm2( blueprint, key )
   {
     let definition = this;
-    let fieldsArray = _.arrayAs( definition.value );
-
+    let fieldsArray = _.arrayAs( definition.val );
     for( let a = 0 ; a < fieldsArray.length ; a++ )
     {
       let fields = fieldsArray[ a ];
@@ -413,47 +420,25 @@ function statics( fields )
       for( let f in fields )
       {
         let fieldValue = fieldsArray[ a ][ f ];
-        blueprint.construct.prototype[ f ] = fieldValue;
+        blueprint.Construct.prototype[ f ] = fieldValue;
       }
     }
-
   }
 
 }
 
+statics_body.defaults =
+{
+  val : null,
+  blueprintDepthLimit : 1,
+  blueprintDepthReserve : 0,
+}
+
+let statics = _.routineUnite( statics_head, statics_body );
+
 // --
-// define
-// --
-
-let DefinitionKind = [ 'etc', 'trait', 'definition.unnamed', 'definition.named' ];
-
-let KnownFields =
-{
-  valueGenerate : 'routine::valueGenerate( map::o ) -> anything::',
-  constructionAmend : 'routine::constructionAmend( Construction::construction primitive::key ) -> nothing::',
-  blueprintAmend : 'routine::( map::o ) -> nothing::',
-  blueprintForm1 : 'routine::( Blueprint::blueprint ) -> nothing::',
-  blueprintForm2 : 'routine::( Blueprint::blueprint ) -> nothing::',
-  blueprintForm3 : 'routine::( Blueprint::blueprint ) -> nothing::',
-}
-
-let BlueprintHandlers =
-{
-  blueprintAmend : 'routine::( map::o ) -> nothing::',
-  blueprintForm1 : 'routine::( Blueprint::blueprint ) -> nothing::',
-  blueprintForm2 : 'routine::( Blueprint::blueprint ) -> nothing::',
-  blueprintForm3 : 'routine::( Blueprint::blueprint ) -> nothing::',
-}
-
-let ConstructionHandlers =
-{
-  constructionAmend : 'routine::constructionAmend( Construction::construction primitive::key ) -> nothing::',
-  allocate : null,
-  initBegin : null,
-  initEnd : null,
-}
-
 //
+// --
 
 let DefineExtension =
 {
@@ -464,6 +449,7 @@ let DefineExtension =
   _amendment,
   extension,
   supplementation,
+  inherit,
 
   static : _static,
   statics,
@@ -472,45 +458,6 @@ let DefineExtension =
 
 _.define = _.define || Object.create( null );
 _.mapExtend( _.define, DefineExtension );
-
-//
-
-/**
-* Routines to manipulate definitions.
-* @namespace wTools.definition
-* @extends Tools
-* @module Tools/base/Proto
-*/
-
-let DefinitionExtension =
-{
-
-  // routines
-  is : _.definitionIs,
-  _constructionAmendCant,
-  _traitMake,
-
-  // fields
-  DefinitionKind,
-  KnownFields,
-  BlueprintHandlers,
-  ConstructionHandlers,
-
-}
-
-_.definition = _.definition || Object.create( null );
-_.mapExtend( _.definition, DefinitionExtension );
-_.assert( _.routineIs( _.definitionIs ) );
-_.assert( _.definition.is === _.definitionIs );
-
-//
-
-let ToolsExtension =
-{
-  Definition,
-}
-
-_.mapExtend( _, ToolsExtension );
 
 // --
 // export
