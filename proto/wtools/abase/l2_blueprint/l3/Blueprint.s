@@ -101,16 +101,24 @@ function define()
   }
   _.blueprint._supplement( blueprint, defaultSupplement );
 
+  // blueprint.Construct = Construction;
+  // blueprint.Reconstruct = Reconstruct;
+  blueprint.prototype = Object.create( _.Construction.prototype );
+
+  // let construct = Construction;
+  // construct.prototype = blueprint.prototype;
+  // _.assert( _.routineIs( _.Construction ) );
+  // _.assert( _.mapIs( _.Construction.prototype ) );
+
+  _.blueprint._form( blueprint, 'blueprintForm1' );
+  _.blueprint._form( blueprint, 'blueprintForm2' );
+
   let construct = Construction;
-  construct.prototype = Object.create( _.Construction.prototype );
+  construct.prototype = blueprint.prototype;
   _.assert( _.routineIs( _.Construction ) );
   _.assert( _.mapIs( _.Construction.prototype ) );
   blueprint.Construct = Construction;
   blueprint.Reconstruct = Reconstruct;
-  debugger;
-  blueprint.prototype = construct.prototype;
-
-  _.blueprint._blueprintForm( blueprint );
 
   let runtime = Object.create( _.BlueprintRuntime );
   runtime._InternalRoutinesMap = blueprint._InternalRoutinesMap;
@@ -122,12 +130,16 @@ function define()
   blueprint._Runtime = runtime;
   construct._Runtime = runtime;
 
+  _.blueprint._form( blueprint, 'blueprintForm3' );
+
   Object.preventExtensions( blueprint );
   Object.preventExtensions( blueprint._NamedDefinitionsMap );
   Object.preventExtensions( blueprint._UnnamedDefinitionsArray );
   Object.preventExtensions( blueprint.Traits );
   Object.preventExtensions( blueprint.Fields );
   Object.preventExtensions( blueprint._InternalRoutinesMap );
+
+  _.blueprint._validate( blueprint );
 
   return blueprint;
 
@@ -436,12 +448,14 @@ function _extend( blueprint, extension )
 
 //
 
-function _blueprintForm( blueprint )
+function _form( blueprint, stage )
 {
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 2 );
   _.assert( _.blueprint.is( blueprint ) );
+  _.assert( _.longHas( [ 'blueprintForm1', 'blueprintForm2', 'blueprintForm3' ], stage ) );
 
-  let handlersNames = [ 'blueprintForm1', 'blueprintForm2', 'blueprintForm3' ];
+  // let handlersNames = [ 'blueprintForm1', 'blueprintForm2', 'blueprintForm3' ];
+  let handlersNames = [ stage ];
 
   for( let n = 0 ; n < handlersNames.length ; n++ )
   {
@@ -453,10 +467,15 @@ function _blueprintForm( blueprint )
     });
   }
 
+  return blueprint;
+}
+
+//
+
+function _validate( blueprint )
+{
   _.assert( _.routineIs( blueprint._InternalRoutinesMap.allocate ), `Each blueprint should have handler::allocate, but definition::${blueprint.name} does not have` );
   _.assert( _.routineIs( blueprint._InternalRoutinesMap.reconstruct ), `Each blueprint should have handler::reconstruct, but definition::${blueprint.name} does not have` );
-
-  return blueprint;
 }
 
 //
@@ -624,7 +643,8 @@ var BlueprintExtension =
   _amend,
   _supplement,
   _extend,
-  _blueprintForm,
+  _form,
+  _validate,
   eachDefinition,
 
   defineConstructor,

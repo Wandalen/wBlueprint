@@ -2460,7 +2460,7 @@ function blueprintWithConstructor( test )
 
   /* */
 
-  test.case = 'with trait inherit';
+  test.case = 'single blueprint';
 
   let s = _.define.static;
   var Blueprint1 = _.Blueprint
@@ -2472,13 +2472,13 @@ function blueprintWithConstructor( test )
     staticField2 : s( 'b1' ),
   });
 
-  test.description = 'blueprint1'; /* */
+  test.description = 'instance1'; /* */
 
-  var instance = Blueprint1.Construct();
-  test.identical( instance instanceof Blueprint1.Construct, true );
-  test.true( _.routineIs( instance.constructor ) );
+  var instance1 = Blueprint1.Construct();
+  test.identical( instance1 instanceof Blueprint1.Construct, true );
+  test.true( _.routineIs( instance1.constructor ) );
 
-  test.identical( _.prototype.each( instance ).length, 3 );
+  test.identical( _.prototype.each( instance1 ).length, 3 );
   var exp =
   {
     constructor : Blueprint1.prototype.constructor,
@@ -2487,26 +2487,28 @@ function blueprintWithConstructor( test )
     'staticField1' : 'b1',
     'staticField2' : 'b1',
   }
-  test.identical( _.mapAllProperties( instance ), exp );
+  test.identical( _.mapAllProperties( instance1 ), exp );
   var exp =
   {
     'field1' : 'b1',
     'field2' : 'b1',
   }
-  test.identical( _.mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+  test.identical( _.mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
     constructor : Blueprint1.prototype.constructor,
     'staticField1' : 'b1',
     'staticField2' : 'b1',
   }
-  test.identical( _.mapOwnProperties( _.prototype.each( instance )[ 1 ] ), exp );
+  test.identical( _.mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
   }
-  test.identical( _.mapOwnProperties( _.prototype.each( instance )[ 2 ] ), exp );
+  test.identical( _.mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
 
-  var instance2 = instance.constructor;
+  test.description = 'instance2'; /* */
+
+  var instance2 = instance1.constructor();
   test.identical( instance2 instanceof Blueprint1.Construct, true );
   test.true( _.routineIs( instance2.constructor ) );
 
@@ -2537,6 +2539,8 @@ function blueprintWithConstructor( test )
   {
   }
   test.identical( _.mapOwnProperties( _.prototype.each( instance2 )[ 2 ] ), exp );
+
+  debugger;
 
   // xxx
   // test.description = 'blueprint2'; /* */

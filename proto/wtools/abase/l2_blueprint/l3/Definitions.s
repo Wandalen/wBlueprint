@@ -358,7 +358,8 @@ function static_body( o )
   function blueprintForm2( blueprint, key )
   {
     let definition = this;
-    blueprint.Construct.prototype[ key ] = definition.val;
+    _.assert( _.objectIs( blueprint.prototype ) );
+    blueprint.prototype[ key ] = definition.val;
   }
 
 }
@@ -413,6 +414,7 @@ function statics_body( o )
   {
     let definition = this;
     let fieldsArray = _.arrayAs( definition.val );
+    _.assert( _.objectIs( blueprint.prototype ) );
     for( let a = 0 ; a < fieldsArray.length ; a++ )
     {
       let fields = fieldsArray[ a ];
@@ -420,7 +422,7 @@ function statics_body( o )
       for( let f in fields )
       {
         let fieldValue = fieldsArray[ a ][ f ];
-        blueprint.Construct.prototype[ f ] = fieldValue;
+        blueprint.prototype[ f ] = fieldValue;
       }
     }
   }

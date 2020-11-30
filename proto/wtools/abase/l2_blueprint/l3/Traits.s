@@ -39,11 +39,11 @@ function typed( o )
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( _.boolIs( o.typed ) );
 
-  o.blueprintForm2 = blueprintForm2;
+  o.blueprintForm3 = blueprintForm3;
 
   return _.definition._traitMake( typed, o );
 
-  function blueprintForm2( blueprint )
+  function blueprintForm3( blueprint )
   {
 
     _.assert( blueprint._InternalRoutinesMap.allocate === undefined );
@@ -61,9 +61,9 @@ function typed( o )
 
     if( blueprint.Traits.typed.withConstructor )
     {
-      debugger;
       _.assert( blueprint.prototype.constructor === undefined );
       _.assert( _.routineIs( blueprint.Construct ) );
+      _.assert( _.objectIs( blueprint.prototype ) );
       blueprint.prototype.constructor = blueprint.Construct;
     }
 
@@ -152,7 +152,6 @@ function extendable( o )
     blueprint._InternalRoutinesMap.initEnd.push( preventExtensions );
   }
 
-  // function preventExtensions( construction, blueprint )
   function preventExtensions( genesis )
   {
     Object.preventExtensions( genesis.construction );
@@ -175,24 +174,26 @@ function prototype( o )
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( _.blueprint.is( o.val ) );
 
-  o.blueprintForm2 = blueprintForm2;
+  o.blueprintForm1 = blueprintForm1;
 
   return _.definition._traitMake( prototype, o );
 
-  function blueprintForm2( blueprint )
+  function blueprintForm1( blueprint )
   {
     _.assert( _.blueprint.is( blueprint.Traits.prototype.val ) );
     _.assert( blueprint.construct === undefined );
     _.assert( blueprint.Traits.prototype.val.construct === undefined );
     _.assert( _.routineIs( blueprint.Traits.prototype.val.Construct ) );
-    blueprint.Construct.prototype = Object.create( blueprint.Traits.prototype.val.Construct.prototype );
+    _.assert( _.objectIs( blueprint.prototype ) );
+    _.assert( _.objectIs( blueprint.Traits.prototype.val.prototype ) );
+    blueprint.prototype = Object.create( blueprint.Traits.prototype.val.prototype );
   }
 
 }
 
 prototype.defaults =
 {
-  val : true,
+  val : null,
 }
 
 //
@@ -205,11 +206,11 @@ function name( o )
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( o.val ) );
 
-  o.blueprintForm2 = blueprintForm2;
+  o.blueprintForm1 = blueprintForm1;
 
   return _.definition._traitMake( name, o );
 
-  function blueprintForm2( blueprint )
+  function blueprintForm1( blueprint )
   {
     blueprint.Name = o.val;
   }
