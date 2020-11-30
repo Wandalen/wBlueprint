@@ -2506,6 +2506,38 @@ function blueprintWithConstructor( test )
   }
   test.identical( _.mapOwnProperties( _.prototype.each( instance )[ 2 ] ), exp );
 
+  var instance2 = instance.constructor;
+  test.identical( instance2 instanceof Blueprint1.Construct, true );
+  test.true( _.routineIs( instance2.constructor ) );
+
+  test.identical( _.prototype.each( instance2 ).length, 3 );
+  var exp =
+  {
+    constructor : Blueprint1.prototype.constructor,
+    'field1' : 'b1',
+    'field2' : 'b1',
+    'staticField1' : 'b1',
+    'staticField2' : 'b1',
+  }
+  test.identical( _.mapAllProperties( instance2 ), exp );
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b1',
+  }
+  test.identical( _.mapOwnProperties( _.prototype.each( instance2 )[ 0 ] ), exp );
+  var exp =
+  {
+    constructor : Blueprint1.prototype.constructor,
+    'staticField1' : 'b1',
+    'staticField2' : 'b1',
+  }
+  test.identical( _.mapOwnProperties( _.prototype.each( instance2 )[ 1 ] ), exp );
+  var exp =
+  {
+  }
+  test.identical( _.mapOwnProperties( _.prototype.each( instance2 )[ 2 ] ), exp );
+
   // xxx
   // test.description = 'blueprint2'; /* */
   //
