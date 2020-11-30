@@ -1660,6 +1660,355 @@ definitionExtensionOrder.description =
 
 //
 
+function definitionSupplementationOrder( test )
+{
+
+  /* */
+
+  test.case = 'blueprint1'; /* */
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1' ),
+    staticField2 : _.define.static( 'b1' ),
+  });
+
+  var instance = Blueprint1.Construct();
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b1',
+    'staticField1' : 'b1',
+    'staticField2' : 'b1',
+  }
+  test.identical( _.mapAllProperties( instance ), exp );
+
+  /* */
+
+  test.case = 'supplementation before';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1' ),
+    staticField2 : _.define.static( 'b1' ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    supplementation : _.define.supplementation( Blueprint1 ),
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+  });
+
+  var instance = Blueprint2.Construct();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.mapAllProperties( instance ), exp );
+
+  /* */
+
+  test.case = 'supplementation before, supplementation.blueprintDepthReserve:Infinity';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1' ),
+    staticField2 : _.define.static( 'b1' ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    supplementation : _.define.supplementation( Blueprint1, { blueprintDepthReserve : Infinity } ),
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+  });
+
+  var instance = Blueprint2.Construct();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField1' : 'b1',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.mapAllProperties( instance ), exp );
+
+  /* */
+
+  test.case = 'supplementation before, static.blueprintDepthReserve:Infinity';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
+    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    supplementation : _.define.supplementation( Blueprint1 ),
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+  });
+
+  var instance = Blueprint2.Construct();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField1' : 'b1',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.mapAllProperties( instance ), exp );
+
+  /* */
+
+  test.case = 'supplementation after';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1' ),
+    staticField2 : _.define.static( 'b1' ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+    supplementation : _.define.supplementation( Blueprint1 ),
+  });
+
+  var instance = Blueprint2.Construct();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.mapAllProperties( instance ), exp );
+
+  /* */
+
+  test.case = 'supplementation after, field.blueprintDepthLimit:1';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1', { blueprintDepthLimit : 1 } ),
+    staticField2 : _.define.static( 'b1', { blueprintDepthLimit : 1 } ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+    supplementation : _.define.supplementation( Blueprint1 ),
+  });
+
+  var instance = Blueprint2.Construct();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.mapAllProperties( instance ), exp );
+
+  /* */
+
+  test.case = 'supplementation after, field.blueprintDepthReserve:Infinity';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
+    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+    supplementation : _.define.supplementation( Blueprint1 ),
+  });
+
+  var instance = Blueprint2.Construct();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField1' : 'b1',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.mapAllProperties( instance ), exp );
+
+  /* */
+
+  test.case = 'supplementation after, field.blueprintDepthReserve:1';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : 1 } ),
+    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : 1 } ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+    supplementation : _.define.supplementation( Blueprint1 ),
+  });
+
+  var instance = Blueprint2.Construct();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField1' : 'b1',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.mapAllProperties( instance ), exp );
+
+  /* */
+
+  test.case = 'supplementation after, field.blueprintDepthLimit:0';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1', { blueprintDepthLimit : 0 } ),
+    staticField2 : _.define.static( 'b1', { blueprintDepthLimit : 0 } ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+    supplementation : _.define.supplementation( Blueprint1 ),
+  });
+
+  var instance = Blueprint2.Construct();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField1' : 'b1',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.mapAllProperties( instance ), exp );
+
+  /* */
+
+  test.case = 'supplementation after, supplementation.blueprintDepthReserve:Infinity';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1' ),
+    staticField2 : _.define.static( 'b1' ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+    supplementation : _.define.supplementation( Blueprint1, { blueprintDepthReserve : Infinity } ),
+  });
+
+  var instance = Blueprint2.Construct();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField1' : 'b1',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.mapAllProperties( instance ), exp );
+
+  /* */
+
+}
+
+definitionSupplementationOrder.description =
+`
+- order of definition::supplementation makes difference
+`
+
+//
+
 function blueprintStatic( test )
 {
 
@@ -2100,6 +2449,97 @@ function blueprintInheritWithTrait( test )
 }
 
 blueprintInheritWithTrait.description =
+`
+- blueprint inheritance with trait
+`
+
+//
+
+function blueprintWithConstructor( test )
+{
+
+  /* */
+
+  test.case = 'with trait inherit';
+
+  let s = _.define.static;
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed({ typed : true, withConstructor : true }),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : s( 'b1' ),
+    staticField2 : s( 'b1' ),
+  });
+
+  test.description = 'blueprint1'; /* */
+
+  var instance = Blueprint1.Construct();
+  test.identical( instance instanceof Blueprint1.Construct, true );
+  test.true( _.routineIs( instance.constructor ) );
+
+  test.identical( _.prototype.each( instance ).length, 3 );
+  var exp =
+  {
+    constructor : Blueprint1.prototype.constructor,
+    'field1' : 'b1',
+    'field2' : 'b1',
+    'staticField1' : 'b1',
+    'staticField2' : 'b1',
+  }
+  test.identical( _.mapAllProperties( instance ), exp );
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b1',
+  }
+  test.identical( _.mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+  var exp =
+  {
+    constructor : Blueprint1.prototype.constructor,
+    'staticField1' : 'b1',
+    'staticField2' : 'b1',
+  }
+  test.identical( _.mapOwnProperties( _.prototype.each( instance )[ 1 ] ), exp );
+  var exp =
+  {
+  }
+  test.identical( _.mapOwnProperties( _.prototype.each( instance )[ 2 ] ), exp );
+
+  // xxx
+  // test.description = 'blueprint2'; /* */
+  //
+  // var Blueprint2 = _.Blueprint
+  // ({
+  //   inherit : _.define.inherit( Blueprint1 ),
+  //   field2 : 'b2',
+  //   field3 : 'b2',
+  //   staticField2 : s( 'b2' ),
+  //   staticField3 : s( 'b2' ),
+  // });
+  //
+  // var instance = Blueprint2.Construct();
+  //
+  // test.identical( instance instanceof Blueprint1.Construct, true );
+  // test.identical( instance instanceof Blueprint2.Construct, true );
+  //
+  // test.identical( _.prototype.each( instance ).length, 4 );
+  // var exp =
+  // {
+  //   'field1' : 'b1',
+  //   'field2' : 'b2',
+  //   'field3' : 'b2',
+  //   'staticField1' : 'b1',
+  //   'staticField2' : 'b2',
+  //   'staticField3' : 'b2',
+  // }
+  // test.identical( _.mapAllProperties( instance ), exp );
+
+  /* */
+
+}
+
+blueprintWithConstructor.description =
 `
 - blueprint inheritance with trait
 `
@@ -2792,11 +3232,12 @@ let Self =
     definitionExtensionBasic,
     definitionSupplementationBasic,
     definitionExtensionOrder,
+    definitionSupplementationOrder,
 
     blueprintStatic,
     blueprintInheritManually,
     blueprintInheritWithTrait,
-    // blueprintWithConstructor,
+    blueprintWithConstructor,
 
     orderOfDefinitions,
     constructSingleReuse,

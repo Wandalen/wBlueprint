@@ -44,37 +44,6 @@ function each( proto, onEach )
 
 //
 
-// function prototypeEach_deprecated( proto, onEach )
-// {
-//   let result = [];
-//
-//   _.assert( _.routineIs( onEach ) || !onEach );
-//   _.assert( _.objectIs( proto ) );
-//   _.assert( arguments.length === 1 || arguments.length === 2 );
-//
-//   do
-//   {
-//
-//     if( onEach )
-//     onEach.call( this, proto );
-//
-//     result.push( proto );
-//
-//     let parent = _.parentOf( proto );
-//
-//     proto = parent ? parent.prototype : null;
-//
-//     if( proto && proto.constructor === Object )
-//     proto = null;
-//
-//   }
-//   while( proto );
-//
-//   return result;
-// }
-
-//
-
 /**
  * Does srcProto has insProto as prototype.
  * @param {object} srcProto - proto stack to investigate.
@@ -137,7 +106,6 @@ let PrototypeExtension =
 {
 
   each,
-  // prototypeEach_deprecated,
 
   hasProperty,
   hasPrototype,

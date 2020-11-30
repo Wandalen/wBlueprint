@@ -34,10 +34,10 @@ callable.defaults =
 function typed( o )
 {
   if( !_.mapIs( o ) )
-  o = { val : arguments[ 0 ] };
+  o = { typed : arguments[ 0 ] };
   _.routineOptions( typed, o );
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.boolIs( o.val ) );
+  _.assert( _.boolIs( o.typed ) );
 
   o.blueprintForm2 = blueprintForm2;
 
@@ -47,17 +47,25 @@ function typed( o )
   {
 
     _.assert( blueprint._InternalRoutinesMap.allocate === undefined );
-    _.assert( _.boolIs( blueprint.Traits.typed.val ) );
+    _.assert( _.boolIs( blueprint.Traits.typed.typed ) );
 
-    if( blueprint.Traits.typed.val )
+    if( blueprint.Traits.typed.typed )
     blueprint._InternalRoutinesMap.allocate = allocateTyped;
     else
     blueprint._InternalRoutinesMap.allocate = allocateUntyped;
 
-    if( blueprint.Traits.typed.val )
+    if( blueprint.Traits.typed.typed )
     blueprint._InternalRoutinesMap.reconstruct = reconstructTyped;
     else
     blueprint._InternalRoutinesMap.reconstruct = reconstructUntyped;
+
+    if( blueprint.Traits.typed.withConstructor )
+    {
+      debugger;
+      _.assert( blueprint.prototype.constructor === undefined );
+      _.assert( _.routineIs( blueprint.Construct ) );
+      blueprint.prototype.constructor = blueprint.Construct;
+    }
 
   }
 
@@ -117,7 +125,8 @@ function typed( o )
 
 typed.defaults =
 {
-  val : true,
+  typed : true,
+  withConstructor : false,
 }
 
 //
@@ -126,7 +135,7 @@ function extendable( o )
 {
   if( !_.mapIs( o ) )
   o = { val : arguments[ 0 ] };
-  _.routineOptions( typed, o );
+  _.routineOptions( extendable, o );
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( _.boolIs( o.val ) );
 
@@ -162,7 +171,7 @@ function prototype( o )
 {
   if( !_.mapIs( o ) )
   o = { val : arguments[ 0 ] };
-  _.routineOptions( typed, o );
+  _.routineOptions( prototype, o );
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( _.blueprint.is( o.val ) );
 
@@ -192,7 +201,7 @@ function name( o )
 {
   if( !_.mapIs( o ) )
   o = { val : arguments[ 0 ] };
-  _.routineOptions( typed, o );
+  _.routineOptions( name, o );
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( o.val ) );
 

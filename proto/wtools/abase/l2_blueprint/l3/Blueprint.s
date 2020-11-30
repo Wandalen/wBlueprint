@@ -107,6 +107,8 @@ function define()
   _.assert( _.mapIs( _.Construction.prototype ) );
   blueprint.Construct = Construction;
   blueprint.Reconstruct = Reconstruct;
+  debugger;
+  blueprint.prototype = construct.prototype;
 
   _.blueprint._blueprintForm( blueprint );
 
@@ -114,7 +116,7 @@ function define()
   runtime._InternalRoutinesMap = blueprint._InternalRoutinesMap;
   runtime.Fields = blueprint.Fields;
   runtime.construct = construct;
-  runtime.typed = blueprint.Traits.typed.val;
+  runtime.typed = blueprint.Traits.typed.typed;
   Object.preventExtensions( runtime );
 
   blueprint._Runtime = runtime;
@@ -284,7 +286,6 @@ function _amend( o )
 
   function amendWithBlueprint2( ext, k )
   {
-    debugger;
     o.blueprintDepth += 1;
     for( let k in ext.Fields )
     {
