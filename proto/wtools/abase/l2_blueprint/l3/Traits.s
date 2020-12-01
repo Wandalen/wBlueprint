@@ -61,7 +61,7 @@ function typed( o )
 
     if( blueprint.Traits.typed.withConstructor )
     {
-      _.assert( blueprint.prototype.constructor === undefined );
+      _.assert( !_.mapOwnKey( blueprint.prototype, 'constructor' ) );
       _.assert( _.routineIs( blueprint.Make ) );
       _.assert( _.objectIs( blueprint.prototype ) );
       // blueprint.prototype.constructor = blueprint.Make;

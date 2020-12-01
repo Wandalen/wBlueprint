@@ -312,10 +312,14 @@ function inherit( o )
   if( !_.mapIs( o ) )
   o = { ini : arguments[ 0 ] };
   _.routineOptions( inherit, o );
+  _.assert( _.blueprint.is( o.ini ) );
   let result = [];
   result.push( _.define.extension( o.ini ) );
   result.push( _.trait.prototype( o.ini ) );
-  result.push( _.trait.typed( true ) );
+  if( o.ini.Traits.typed )
+  result.push( _.trait.typed({ typed : o.ini.Traits.typed.typed, withConstructor : o.ini.Traits.typed.withConstructor }) );
+  else
+  result.push( _.trait.typed() );
   return result;
 }
 
