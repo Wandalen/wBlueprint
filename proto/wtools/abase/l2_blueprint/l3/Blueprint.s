@@ -54,7 +54,7 @@ function compileSourceCode( blueprint )
 
   generator.import
   ({
-    src : _.construction.constructWithRuntime
+    src : _.construction._construct2
   });
 
   return generator.generateSourceCode();
@@ -77,8 +77,6 @@ function define()
   blueprint._InternalRoutinesMap = Object.create( null );
   blueprint._NamedDefinitionsMap = Object.create( null );
   blueprint._UnnamedDefinitionsArray = [];
-  // blueprint.extensions = []; /* zzz : implement extensions, supplemetations and structure to track order of amending */
-  // blueprint.supplementations = [];
   blueprint.Traits = Object.create( null );
   blueprint.Fields = Object.create( null );
   blueprint.Name = null;
@@ -101,34 +99,42 @@ function define()
   }
   _.blueprint._supplement( blueprint, defaultSupplement );
 
-  // blueprint.Construct = Construction;
-  // blueprint.Reconstruct = Reconstruct;
   blueprint.prototype = Object.create( _.Construction.prototype );
-
-  // let construct = Construction;
-  // construct.prototype = blueprint.prototype;
-  // _.assert( _.routineIs( _.Construction ) );
-  // _.assert( _.mapIs( _.Construction.prototype ) );
 
   _.blueprint._form( blueprint, 'blueprintForm1' );
   _.blueprint._form( blueprint, 'blueprintForm2' );
 
-  let construct = Construction;
-  construct.prototype = blueprint.prototype;
+  let Name = blueprint.Name || 'Construction';
+  let Construction =
+  {
+    [ Name ] : function()
+    {
+      return _.construction._make( this, runtime, arguments );
+    }
+  }
+  let construct = Construction[ Name ];
+
+  blueprint.Make = construct;
+  blueprint.MakeEach = MakeEach;
+  blueprint.From = From;
+  blueprint.Retype = Retype;
+  blueprint.Make.prototype = blueprint.prototype;
   _.assert( _.routineIs( _.Construction ) );
   _.assert( _.mapIs( _.Construction.prototype ) );
-  blueprint.Construct = Construction;
-  blueprint.Reconstruct = Reconstruct;
 
   let runtime = Object.create( _.BlueprintRuntime );
   runtime._InternalRoutinesMap = blueprint._InternalRoutinesMap;
   runtime.Fields = blueprint.Fields;
-  runtime.construct = construct;
-  runtime.typed = blueprint.Traits.typed.typed;
+  runtime.Make = blueprint.Make;
+  runtime.MakeEach = blueprint.MakeEach;
+  runtime.From = blueprint.From;
+  runtime.Retype = blueprint.Retype;
+  runtime.prototype = blueprint.prototype;
+  runtime.Typed = blueprint.Traits.typed.typed;
   Object.preventExtensions( runtime );
 
-  blueprint._Runtime = runtime;
-  construct._Runtime = runtime;
+  blueprint.Runtime = runtime;
+  construct.Runtime = runtime;
 
   _.blueprint._form( blueprint, 'blueprintForm3' );
 
@@ -145,44 +151,23 @@ function define()
 
   /* */
 
-  function Reconstruct( construction )
+  function Retype()
   {
-    _.assert( arguments.length === 1 );
-    _.assert( runtime.makeCompiled === undefined, 'not implemented' );
-    construction = _.construction.reconstructWithRuntime( construction, runtime, arguments );
-    return construction;
+    return _.construction._retype( this, runtime, arguments );
   }
 
   /* */
 
-  function Construction() /* zzz : implement naming trait */
+  function From()
   {
-    let construction = this;
+    return _.construction._from( this, runtime, arguments );
+  }
 
-    if( construction === undefined )
-    {
-      construction = null;
-    }
-    else if( _.blueprint.is( construction ) )
-    {
-      construction = null;
-    }
-    else if( arguments.length === 1 && arguments[ 0 ] === runtime.construct )
-    {
-      /*
-      if argument is its own constructr then typed container is only what needed
-      */
-      return construction;
-    }
+  /* */
 
-    if( runtime.makeCompiled ) /* zzz */
-    debugger;
-    if( runtime.makeCompiled )
-    construction = runtime.makeCompiled( construction, arguments );
-    else
-    construction = _.construction.constructWithRuntime( construction, runtime, arguments );
-
-    return construction;
+  function MakeEach()
+  {
+    return _.construction._makeEach( this, runtime, arguments );
   }
 
   /* */
@@ -475,7 +460,7 @@ function _form( blueprint, stage )
 function _validate( blueprint )
 {
   _.assert( _.routineIs( blueprint._InternalRoutinesMap.allocate ), `Each blueprint should have handler::allocate, but definition::${blueprint.name} does not have` );
-  _.assert( _.routineIs( blueprint._InternalRoutinesMap.reconstruct ), `Each blueprint should have handler::reconstruct, but definition::${blueprint.name} does not have` );
+  _.assert( _.routineIs( blueprint._InternalRoutinesMap.retype ), `Each blueprint should have handler::retype, but definition::${blueprint.name} does not have` );
 }
 
 //
@@ -510,15 +495,15 @@ function eachDefinition( blueprint, onEach )
 function defineConstructor()
 {
   let blueprint = _.blueprint.define( ... arguments );
-  _.assert( _.routineIs( blueprint.Construct ) );
-  return blueprint.Construct;
+  _.assert( _.routineIs( blueprint.Make ) );
+  return blueprint.Make;
 }
 
 //
 
 function constructorOf( blueprint )
 {
-  let result = blueprint.Construct;
+  let result = blueprint.Make;
   _.assert( _.blueprint.is( blueprint ) );
   _.assert( _.routineIs( result ) );
   return result;
@@ -526,9 +511,9 @@ function constructorOf( blueprint )
 
 //
 
-function reconstructorOf( blueprint )
+function retyperOf( blueprint )
 {
-  let result = blueprint.Reconstruct;
+  let result = blueprint.Retype;
   _.assert( _.blueprint.is( blueprint ) );
   _.assert( _.routineIs( result ) );
   return result;
@@ -551,7 +536,7 @@ function construct( blueprint )
 
 //
 
-function reconstruct( blueprint, construction )
+function retype( blueprint, construction )
 {
   _.assert( arguments.length === 2 );
   _.assert( !!construction );
@@ -559,9 +544,9 @@ function reconstruct( blueprint, construction )
   if( !_.blueprint.is( blueprint ) )
   blueprint = _.blueprint.define( blueprint );
 
-  let reconstruct = _.blueprint.reconstructorOf( blueprint );
-  _.assert( _.routineIs( reconstruct ), 'Cant find constructor for blueprint' );
-  let construction2 = reconstruct( construction );
+  let retyper = _.blueprint.retyperOf( blueprint );
+  _.assert( _.routineIs( retyper ), 'Cant find retyped for blueprint' );
+  let construction2 = retyper( construction );
   _.assert( construction === construction2 );
   return construction;
 }
@@ -607,8 +592,6 @@ function definitionQualifiedName( blueprint, definition )
 let BlueprintRuntime = Object.create( null );
 Object.preventExtensions( BlueprintRuntime );
 
-// let Blueprint = Object.create( null );
-
 function Blueprint()
 {
   return _.blueprint.define( ... arguments );
@@ -620,11 +603,6 @@ Blueprint.compileSourceCode = blueprintCompileSourceCode; /* xxx : move out? */
 Object.preventExtensions( Blueprint );
 
 _.blueprint = _.blueprint || Object.create( null );
-// let blueprint = _.blueprint = _.blueprint || Object.create( null );
-// let blueprint = function Blueprint()
-// {
-//   return _.blueprint.define( ... arguments );
-// }
 
 // --
 // define blueprint
@@ -649,9 +627,9 @@ var BlueprintExtension =
 
   defineConstructor,
   constructorOf,
-  reconstructorOf,
+  retyperOf,
   construct,
-  reconstruct,
+  retype,
   definitionQualifiedName,
 
 }
@@ -665,10 +643,6 @@ Object.assign( _.blueprint, BlueprintExtension );
 var ToolsExtension =
 {
 
-  // // routines
-  //
-  // blueprint,
-
   // fields
 
   BlueprintRuntime,
@@ -676,7 +650,6 @@ var ToolsExtension =
 
 }
 
-// _.assert( _.blueprint === undefined );
 Object.assign( _, ToolsExtension );
 
 // --

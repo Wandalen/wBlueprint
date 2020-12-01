@@ -39,7 +39,7 @@ function typed( o )
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( _.boolIs( o.typed ) );
 
-  o.blueprintForm3 = blueprintForm3;
+  o.blueprintForm3 = blueprintForm3; /* xxx */
 
   return _.definition._traitMake( typed, o );
 
@@ -55,70 +55,84 @@ function typed( o )
     blueprint._InternalRoutinesMap.allocate = allocateUntyped;
 
     if( blueprint.Traits.typed.typed )
-    blueprint._InternalRoutinesMap.reconstruct = reconstructTyped;
+    blueprint._InternalRoutinesMap.retype = retypeTyped;
     else
-    blueprint._InternalRoutinesMap.reconstruct = reconstructUntyped;
+    blueprint._InternalRoutinesMap.retype = retypeUntyped;
 
     if( blueprint.Traits.typed.withConstructor )
     {
       _.assert( blueprint.prototype.constructor === undefined );
-      _.assert( _.routineIs( blueprint.Construct ) );
+      _.assert( _.routineIs( blueprint.Make ) );
       _.assert( _.objectIs( blueprint.prototype ) );
-      blueprint.prototype.constructor = blueprint.Construct;
+      // blueprint.prototype.constructor = blueprint.Make;
+      let properties =
+      {
+        value : blueprint.Make,
+        enumerable : false,
+        configurable : true,
+        writable : true,
+      };
+      Object.defineProperty( blueprint.prototype, 'constructor', properties );
     }
 
   }
 
-  function allocateTyped( construction, construct )
+  // function allocateTyped( construction, construct )
+  function allocateTyped( genesis )
   {
-    if( construction === null )
-    construction = new( _.constructorJoin( construct, [ construct ] ) );
-    _.assert( construction === null || construction instanceof construct );
-    return construction;
+    // debugger;
+    if( genesis.construction === null )
+    genesis.construction = new( _.constructorJoin( genesis.runtime.Make, [] ) );
+    // genesis.construction = new( _.constructorJoin( genesis.runtime.Make, [ genesis.runtime.Make ] ) );
+    _.assert( genesis.construction === null || genesis.construction instanceof genesis.runtime.Make );
+    return genesis.construction;
   }
 
-  function allocateUntyped( construction, construct )
+  // function allocateUntyped( construction, construct )
+  function allocateUntyped( genesis )
   {
-    if( construction && construction instanceof construct )
-    construction = Object.create( null );
-    else if( construction === null )
-    construction = Object.create( null );
-    _.assert( construction === null || _.mapIs( construction ) );
-    _.assert( !( construction instanceof construct ) );
-    return construction;
+    if( genesis.construction && genesis.construction instanceof genesis.runtime.Make )
+    genesis.construction = Object.create( null );
+    else if( genesis.construction === null )
+    genesis.construction = Object.create( null );
+    _.assert( genesis.construction === null || _.mapIs( genesis.construction ) );
+    _.assert( !( genesis.construction instanceof genesis.runtime.Make ) );
+    return genesis.construction;
   }
 
-  function reconstructTyped( construction, construct )
+  // function retypeTyped( construction, construct )
+  function retypeTyped( genesis )
   {
-    if( construction )
+    if( genesis.construction )
     {
-      if( !construction || !( construction instanceof construct ) )
-      Object.setPrototypeOf( construction, construct.prototype );
+      if( !genesis.construction || !( genesis.construction instanceof genesis.runtime.Make ) )
+      Object.setPrototypeOf( genesis.construction, genesis.runtime.Make.prototype );
     }
-    else if( construction === null )
+    else if( genesis.construction === null )
     {
-      _.assert( 0, 'not tested' );
-      construction = new( _.constructorJoin( construct, [ construct ] ) );
+      // _.assert( 0, 'not tested' );
+      genesis.construction = new( _.constructorJoin( genesis.runtime.Make, [] ) );
+      // genesis.construction = new( _.constructorJoin( genesis.runtime.Make, [ genesis.runtime.Make ] ) );
     }
-    _.assert( construction instanceof construct );
-    return construction;
+    _.assert( genesis.construction instanceof genesis.runtime.Make );
+    return genesis.construction;
   }
 
-  function reconstructUntyped( construction, construct )
+  // function retypeUntyped( construction, construct )
+  function retypeUntyped( genesis )
   {
-    if( construction )
+    if( genesis.construction )
     {
-      if( Object.getPrototypeOf( construction ) !== null )
-      Object.setPrototypeOf( construction, null );
+      if( Object.getPrototypeOf( genesis.construction ) !== null )
+      Object.setPrototypeOf( genesis.construction, null );
     }
-    else if( construction === null )
+    else if( genesis.construction === null )
     {
-      _.assert( 0, 'not tested' );
-      construction = Object.create( null );
+      genesis.construction = Object.create( null );
     }
-    _.assert( _.mapIs( construction ) );
-    _.assert( !( construction instanceof construct ) );
-    return construction;
+    _.assert( _.mapIs( genesis.construction ) );
+    _.assert( !( genesis.construction instanceof genesis.runtime.Make ) );
+    return genesis.construction;
   }
 
 }
@@ -183,7 +197,7 @@ function prototype( o )
     _.assert( _.blueprint.is( blueprint.Traits.prototype.val ) );
     _.assert( blueprint.construct === undefined );
     _.assert( blueprint.Traits.prototype.val.construct === undefined );
-    _.assert( _.routineIs( blueprint.Traits.prototype.val.Construct ) );
+    _.assert( _.routineIs( blueprint.Traits.prototype.val.Make ) );
     _.assert( _.objectIs( blueprint.prototype ) );
     _.assert( _.objectIs( blueprint.Traits.prototype.val.prototype ) );
     blueprint.prototype = Object.create( blueprint.Traits.prototype.val.prototype );
