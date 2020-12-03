@@ -36,6 +36,13 @@ function _staticBlueprintForm( o )
   _.assert( _.objectIs( o.blueprint.prototype ) );
   _.assert( _.routineIs( o.blueprint.Make ) );
 
+  if( o.writable === null )
+  o.writable = true;
+  if( o.configurable === null )
+  o.configurable = true;
+  if( o.enumerable === null )
+  o.enumerable = false;
+
   let val = o.val;
   let prototype = o.blueprint.prototype;
   let make = o.blueprint.Make;
@@ -47,22 +54,47 @@ function _staticBlueprintForm( o )
       val = src;
       return src;
     },
-    enumerable : true,
-    configurable : true,
+    enumerable : o.enumerable,
+    configurable : o.configurable,
   };
-  if( _.routineIs( val ) )
-  opts.enumerable = false;
-  Object.defineProperty( o.blueprint.Make, o.key, opts );
-  Object.defineProperty( o.blueprint.prototype, o.key, opts );
+
+  if( o.writable )
+  {
+    opts.get = () =>
+    {
+      return val;
+    }
+    opts.set = ( src ) =>
+    {
+      val = src;
+      return src;
+    }
+  }
+  else
+  {
+    opts.writable = false;
+    opts.value = val;
+  }
+
+  // if( _.routineIs( val ) )
+  // opts.enumerable = false;
+  Object.defineProperty( o.blueprint.Make, o.name, opts );
+  Object.defineProperty( o.blueprint.prototype, o.name, opts );
 
   return o.blueprint;
 }
 
 _staticBlueprintForm.defaults =
 {
+
   blueprint : null,
-  key : null,
+  name : null,
   val : null,
+
+  enumerable      : null,
+  configurable    : null,
+  writable        : null,
+
 }
 
 //
@@ -144,8 +176,11 @@ function prop_body( o )
       _.blueprint._staticBlueprintForm
       ({
         blueprint,
-        key : name,
+        name,
         val : definition.valueGenerate(),
+        enumerable : o.enumerable,
+        configurable : o.configurable,
+        writable : o.writable,
       });
     }
     else
@@ -181,9 +216,10 @@ prop_body.defaults =
   before          : null,
   after           : null,
   static          : 0,
-  // enumerable      : 1,
-  // configurable    : 1,
-  // writable        : 1,
+
+  enumerable      : null,
+  configurable    : null,
+  writable        : null,
 
   collection      : 'scalar',
   insToIns        : 'val',
