@@ -1,4 +1,4 @@
-( function _Blueprint_s_() {
+( function _BlueprintNamespace_s_() {
 
 'use strict';
 
@@ -34,39 +34,17 @@ function isRuntime( runtime )
 
 //
 
-function blueprintIsBlueprintOf( construction )
-{
-  let blueprint = this;
-  _.assert( arguments.length === 1 );
-  _.assert( _.blueprint.is( blueprint ) );
-  return _.blueprint.isBlueprintOf( blueprint, construction );
-}
-
-//
-
 function compileSourceCode( blueprint )
 {
-  debugger; /* xxx : ? */
   _.assert( arguments.length === 1 );
+  _.assert( 0, 'not implemented' );
   let generator = _.Generator();
-
   // generator.external( x ); /* zzz : implement */
-
   generator.import
   ({
     src : _.construction._construct2
   });
-
   return generator.generateSourceCode();
-}
-
-//
-
-function blueprintCompileSourceCode()
-{
-  let blueprint = this;
-  _.assert( arguments.length === 0 );
-  return _.blueprint.compileSourceCode( blueprint );
 }
 
 //
@@ -74,12 +52,12 @@ function blueprintCompileSourceCode()
 function define()
 {
   let blueprint = Object.create( _.Blueprint );
+  blueprint.Name = null;
+  blueprint.Traits = Object.create( null );
+  blueprint.Fields = Object.create( null );
   blueprint._InternalRoutinesMap = Object.create( null );
   blueprint._NamedDefinitionsMap = Object.create( null );
   blueprint._UnnamedDefinitionsArray = [];
-  blueprint.Traits = Object.create( null );
-  blueprint.Fields = Object.create( null );
-  blueprint.Name = null;
 
   for( let a = 0 ; a < arguments.length ; a++ )
   {
@@ -102,7 +80,6 @@ function define()
   blueprint.prototype = Object.create( _.Construction.prototype );
 
   _.blueprint._form( blueprint, 'blueprintForm1' );
-  _.blueprint._form( blueprint, 'blueprintForm2' );
 
   let Name = blueprint.Name || 'Construction';
   let Construction =
@@ -112,13 +89,14 @@ function define()
       return _.construction._make( this, runtime, arguments );
     }
   }
-  let construct = Construction[ Name ];
+  let make = Construction[ Name ];
+  Object.setPrototypeOf( make, null );
+  make.prototype = blueprint.prototype;
 
-  blueprint.Make = construct;
+  blueprint.Make = make;
   blueprint.MakeEach = MakeEach;
   blueprint.From = From;
   blueprint.Retype = Retype;
-  blueprint.Make.prototype = blueprint.prototype;
   _.assert( _.routineIs( _.Construction ) );
   _.assert( _.mapIs( _.Construction.prototype ) );
 
@@ -134,7 +112,9 @@ function define()
   Object.preventExtensions( runtime );
 
   blueprint.Runtime = runtime;
-  construct.Runtime = runtime;
+  make.Runtime = runtime;
+
+  _.blueprint._form( blueprint, 'blueprintForm2' );
 
   _.blueprint._form( blueprint, 'blueprintForm3' );
 
@@ -146,6 +126,8 @@ function define()
   Object.preventExtensions( blueprint._InternalRoutinesMap );
 
   _.blueprint._validate( blueprint );
+
+  _.assert( blueprint.Name === null || blueprint.Name === Name );
 
   return blueprint;
 
@@ -188,22 +170,7 @@ function _amend( o )
 
   return o.blueprint;
 
-  /* */
-
-  function _amendAct( src )
-  {
-    if( _.longIs( src ) )
-    amendWithArray( src );
-    else if( _.blueprint.is( src ) )
-    amendWithBlueprint1( src );
-    else if( _.mapIs( src ) )
-    amendWithMap(  src );
-    else if( _.definitionIs( src ) )
-    amendWithDefinition( src );
-    else _.assert( 0, 'Not clear how to amend blueprint' );
-  }
-
-  /*
+  /* -
 
 - amendWithArray
 - amendWithMap
@@ -217,13 +184,25 @@ function _amend( o )
 
   */
 
+  function _amendAct( src )
+  {
+    if( _.longIs( src ) )
+    amendWithArray( src );
+    else if( _.blueprint.is( src ) )
+    amendWithBlueprint1( src );
+    else if( _.mapIs( src ) )
+    amendWithMap(  src );
+    else if( _.definitionIs( src ) )
+    amendWithDefinition( src, null );
+    else _.assert( 0, 'Not clear how to amend blueprint' );
+  }
+
   /* */
 
   function amendWithArray( array )
   {
     for( let e = 0 ; e < array.length ; e++ )
     _amendAct( array[ e ] );
-    // _amendAct({ ... o, extension : array[ e ] });
   }
 
   /* */
@@ -270,7 +249,6 @@ function _amend( o )
         typed : _.trait.typed( true ),
       };
       _amendAct( extension );
-      // _amendAct({ ... o, extension });
     }
     else
     {
@@ -348,19 +326,20 @@ function _amend( o )
 
   /* */
 
-  function amendWithNamedDefinition( ext, key )
+  function amendWithNamedDefinition( ext, name )
   {
     _.assert( ext.definitionGroup === 'definition.named' );
-    _.assert( _.strIs( key ) );
+    _.assert( _.strDefined( name ) || _.strDefined( ext.name ) );
+    _.assert( name === null || ext.name === null || name === ext.name );
 
     if( o.amending === 'supplement' )
-    if( o.blueprint._NamedDefinitionsMap[ key ] !== undefined )
+    if( o.blueprint._NamedDefinitionsMap[ name ] !== undefined )
     return;
 
-    // _.assert( o.blueprint._NamedDefinitionsMap[ key ] === undefined, 'not tested' ); /* zzz : test */
-
-    o.blueprint._NamedDefinitionsMap[ key ] = ext;
-    ext.name = key;
+    if( name && name !== ext.name )
+    ext.name = name;
+    _.assert( _.strDefined( ext.name ) );
+    o.blueprint._NamedDefinitionsMap[ ext.name ] = ext;
 
     if( ext.blueprintAmend )
     ext.blueprintAmend( o );
@@ -385,7 +364,7 @@ function _amend( o )
     (
       _.primitiveIs( ext ) || _.routineIs( ext ),
       () => `Property could be prtimitive or routine, but element ${key} is ${_.strType( key )}.`
-      + `\nUse _.defined.* to defined more complex data structure`
+      + `\nUse _.define.*() to defined more complex data structure`
     );
     if( o.amending === 'supplement' )
     if( o.blueprint.Fields[ key ] !== undefined )
@@ -586,25 +565,6 @@ function definitionQualifiedName( blueprint, definition )
 }
 
 // --
-// declare
-// --
-
-let BlueprintRuntime = Object.create( null );
-Object.preventExtensions( BlueprintRuntime );
-
-function Blueprint()
-{
-  return _.blueprint.define( ... arguments );
-}
-Blueprint.prototype = null; /* yyy */
-Object.setPrototypeOf( Blueprint, null ); /* yyy */
-Blueprint.isBlueprintOf = blueprintIsBlueprintOf; /* xxx : move out? */
-Blueprint.compileSourceCode = blueprintCompileSourceCode; /* xxx : move out? */
-Object.preventExtensions( Blueprint );
-
-_.blueprint = _.blueprint || Object.create( null );
-
-// --
 // define blueprint
 // --
 
@@ -634,6 +594,7 @@ var BlueprintExtension =
 
 }
 
+_.blueprint = _.blueprint || Object.create( null );
 Object.assign( _.blueprint, BlueprintExtension );
 
 // --
@@ -642,12 +603,6 @@ Object.assign( _.blueprint, BlueprintExtension );
 
 var ToolsExtension =
 {
-
-  // fields
-
-  BlueprintRuntime,
-  Blueprint,
-
 }
 
 Object.assign( _, ToolsExtension );

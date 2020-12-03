@@ -30,18 +30,67 @@ function _pairArgumentshead( routine, args )
 
 //
 
-function field( o )
+function _staticBlueprintForm( o )
 {
+  _.assertRoutineOptions( _staticBlueprintForm, o );
+  _.assert( _.objectIs( o.blueprint.prototype ) );
+  _.assert( _.routineIs( o.blueprint.Make ) );
+
+  let val = o.val;
+  let prototype = o.blueprint.prototype;
+  let make = o.blueprint.Make;
+  let opts =
+  {
+    get : () => val,
+    set : ( src ) =>
+    {
+      val = src;
+      return src;
+    },
+    enumerable : true,
+    configurable : true,
+  };
+  if( _.routineIs( val ) )
+  opts.enumerable = false;
+  Object.defineProperty( o.blueprint.Make, o.key, opts );
+  Object.defineProperty( o.blueprint.prototype, o.key, opts );
+
+  return o.blueprint;
+}
+
+_staticBlueprintForm.defaults =
+{
+  blueprint : null,
+  key : null,
+  val : null,
+}
+
+//
+
+let _valueGenerate = Object.create( null );
+_valueGenerate.val = function get() { return this.val }
+_valueGenerate.shallow = function get() { return _.entityMake( this.val ) }
+_valueGenerate.deep = function get() { return _.replicate({ src : this.val }) }
+_valueGenerate.call = function get() { return this.val() }
+_valueGenerate.new = function get() { return new this.val() }
+
+//
+
+function field_head( routine, args )
+{
+  let o = _pairArgumentshead( ... arguments );
 
   _.assert( _.mapIs( o ) );
-  _.assert( o.ini !== undefined );
-  o = _.routineOptions( field, arguments );
-  _.assert( arguments.length === 1 );
+  _.assert( o.val !== undefined );
+
+  if( o.blueprintDepthLimit === null )
+  o.blueprintDepthLimit = o.static ? 1 : 0
+
   _.assert( _.strIs( o.iniToIns ) );
-  _.assert( _.longHas( [ 'scalar' , 'array' , 'map' ], o.collection ) );
+  _.assert( _.longHas( [ 'scalar', 'map', 'enumerable' ], o.collection ) );
   _.assert( 'scalar' === o.collection, 'not implemented' ); /* zzz : implement */
-  _.assert( _.longHas( [ 'val' , 'shallow' , 'clone' , 'call' , 'construct' ], o.iniToIns ) );
-  _.assert( o.ini !== undefined );
+  _.assert( _.longHas( [ 'val' , 'shallow' , 'deep' , 'call' , 'new' ], o.iniToIns ) );
+  _.assert( o.val !== undefined );
 
   _.assert( o.collection === 'scalar', 'not implemented' );
   _.assert( o.insToIns === 'val', 'not implemented' );
@@ -49,131 +98,112 @@ function field( o )
   _.assert( o.insToDat === 'val', 'not implemented' );
   _.assert( o.datToDat === 'val', 'not implemented' );
 
+  return o;
+}
+
+function field_body( o )
+{
+
+  o = _.assertRoutineOptions( field, arguments );
+  _.assert( o.blueprintDepthLimit >= 0 );
+
   o.definitionGroup = 'definition.named';
   o.blueprintForm2 = blueprintForm2;
-  o.name = null;
+  // o.name = null;
   o.constructionInit = null;
 
   let definition = new _.Definition( o );
-  let ini = definition.ini;
+  let val = definition.val;
 
   /* */
 
-  if( o.iniToIns === 'val' )
-  {
-    definition.valueGenerate = function get() { return this.ini }
-  }
-  else if( o.iniToIns === 'shallow' )
-  {
-    definition.valueGenerate = function get() { return _.entityMake( this.ini ) }
-  }
-  else if( o.iniToIns === 'deep' )
-  {
-    debugger;
-    definition.valueGenerate = function get() { return _.cloneJust( this.ini ) }
-  }
-  else if( o.iniToIns === 'make' )
-  {
-    debugger;
-    definition.valueGenerate = function get() { return this.ini() }
-  }
-  else if( o.iniToIns === 'construct' )
-  {
-    debugger;
-    definition.valueGenerate = function get() { return new this.ini() }
-  }
-  else _.assert( 0 );
+  let valueGenerate = definition.valueGenerate = _valueGenerate[ o.iniToIns ];
+  _.assert( _.routineIs( valueGenerate ), () => `Unknown iniToIns::${o.iniToIns}` );
 
   /* */
-
-  function blueprintForm2( blueprint, key )
-  {
-    let handlers = blueprint._InternalRoutinesMap.constructionInit = blueprint._InternalRoutinesMap.constructionInit || [];
-
-    if( o.iniToIns === 'val' )
-    {
-      definition.constructionInit = constructionInitVal;
-    }
-    else if( o.iniToIns === 'shallow' )
-    {
-      definition.constructionInit = constructionInitShallow;
-    }
-    else if( o.iniToIns === 'clone' )
-    {
-      debugger;
-      definition.constructionInit = constructionInitClone;
-    }
-    else if( o.iniToIns === 'make' )
-    {
-      debugger;
-      definition.constructionInit = constructionInitCall;
-    }
-    else if( o.iniToIns === 'construct' )
-    {
-      debugger;
-      definition.constructionInit = constructionInitNew;
-    }
-    else _.assert( 0 );
-
-    _.assert( _.strIs( definition.name ) );
-    handlers.push({ constructionInit : definition.constructionInit, name : definition.name })
-    definition.constructionInit.meta =
-    {
-      extenral : { ini : ini }
-    }
-  }
-
-  /* */
-
-/*
-  common,
-  own,
-  instanceOf,
-  makeWith,
-*/
 
   Object.preventExtensions( definition );
   return definition;
 
-  function constructionInitVal( construction, name )
+  /* */
+
+  function blueprintForm2( blueprint, name )
   {
-    construction[ name ] = ini;
-  }
-  function constructionInitShallow( construction, name )
-  {
-    construction[ name ] = _.entityMake( ini );
-  }
-  function constructionInitClone( construction, name )
-  {
-    construction[ name ] = _.cloneJust( ini );
-  }
-  function constructionInitCall( construction, name )
-  {
-    construction[ name ] = ini()
-  }
-  function constructionInitNew( construction, name )
-  {
-    construction[ name ] = new ini()
+    let handlers = blueprint._InternalRoutinesMap.constructionInit = blueprint._InternalRoutinesMap.constructionInit || [];
+
+    _.assert( _.strDefined( name ) || _.strDefined( ext.name ) );
+    _.assert( name === null || definition.name === null || name === definition.name );
+
+    if( definition.name && definition.name !== name )
+    name = definition.name;
+
+    _.assert( definition.constructionInit === null );
+    _.assert( _.strDefined( definition.name ) );
+
+    if( o.static )
+    {
+      _.blueprint._staticBlueprintForm
+      ({
+        blueprint,
+        key : name,
+        val : definition.valueGenerate(),
+      });
+    }
+    else
+    {
+      if( o.iniToIns === 'val' )
+      {
+        debugger;
+        blueprint.Fields[ name ] = definition.val;
+      }
+      else
+      {
+        definition.constructionInit = function( genesis )
+        {
+          genesis.construction[ this.name ] = valueGenerate.call( this );
+        }
+      }
+      // _.assert( _.strIs( definition.name ) );
+      if( definition.constructionInit !== null )
+      {
+        handlers.push({ constructionInit : definition.constructionInit, name : definition.name, val })
+        definition.constructionInit.meta =
+        {
+          extenral : { val },
+        }
+      }
+    }
   }
 
 }
 
-field.defaults =
+field_body.defaults =
 {
+
   order           : 0,
-  // static          : 0,
+  before          : null,
+  after           : null,
+  static          : 0,
   // enumerable      : 1,
   // configurable    : 1,
-  // writable :      : 1,
+  // writable        : 1,
+
   collection      : 'scalar',
   insToIns        : 'val',
   datToIns        : 'val',
   insToDat        : 'val',
   datToDat        : 'val',
   iniToIns        : 'val',
-  ini             : null,
+  val             : null,
+  name            : null,
   // relation        : null,
+
+  blueprintDepthLimit : null,
+  blueprintDepthReserve : 0,
+
 }
+
+let field = _.routineUnite( field_head, field_body );
 
 /*
 |                | Composes | Aggregates | Associates  |  Restricts  |  Medials  |   Statics   |
@@ -197,23 +227,342 @@ insToIns        : [ val , shallow , deep ]                                      
 datToIns        : [ val , shallow , deep ]                                                                  @default : val
 insToDat        : [ val , shallow , deep ]                                                                  @default : val
 datToDat        : [ val , shallow , deep ]                                                                  @default : val
-iniToIns        : [ val , shallow , deep , make , construct ]                                               @default : val
+iniToIns        : [ val , shallow , deep , call , new ]                                                     @default : val
 relation        : [ null , composes , aggregates , associates , restricts , medials , statics , copiers ]   @default : null
-ini             : *                                                                                         @default : null
+val             : *                                                                                         @default : null
 */
 
 //
 
-function shallow( src )
+function fields_body( o )
 {
-  let o = Object.create( null );
+  let self = this;
 
-  o.ini = src;
-  o.iniToIns = 'shallow';
+  if( _.longIs( o.val ) )
+  {
+    return _.map_( o.val, ( e ) => mapEach( e ) );
+  }
+  else
+  {
+    return mapEach( o.val );
+  }
 
-  // debugger;
-  return _.define.field( o );
+  function mapEach( map )
+  {
+    _.assert( _.mapIs( map ) );
+    let r = _.map_( map, ( e, k ) =>
+    {
+      let o2 = _.mapExtend( null, o );
+      o2.val = e;
+      _.assert( o2.name === null );
+      o2.name = k;
+      let r = _.define.field.body.call( self, o2 );
+      _.assert( r.name === k );
+      return r;
+    });
+    r = _.mapVals( r );
+    return r;
+  }
+
 }
+
+fields_body.defaults =
+{
+  ... field.defaults,
+}
+
+let fields = _.routineUnite( field_head, fields_body );
+
+//
+
+function val_body( o )
+{
+  return _.define.field.body.call( this, o );
+}
+
+val_body.defaults =
+{
+  ... field.defaults,
+  iniToIns : 'val',
+}
+
+let val = _.routineUnite( field_head, val_body );
+
+//
+
+function vals_body( o )
+{
+  return _.define.fields.body.call( this, o );
+}
+
+vals_body.defaults =
+{
+  ... field.defaults,
+  iniToIns : 'val',
+}
+
+let vals = _.routineUnite( field_head, vals_body );
+
+//
+
+function shallow_body( o )
+{
+  return _.define.field.body.call( this, o );
+}
+
+shallow_body.defaults =
+{
+  ... field.defaults,
+  iniToIns : 'shallow',
+}
+
+let shallow = _.routineUnite( field_head, shallow_body );
+
+//
+
+function shallows_body( o )
+{
+  return _.define.fields.body.call( this, o );
+}
+
+shallows_body.defaults =
+{
+  ... field.defaults,
+  iniToIns : 'shallow',
+}
+
+let shallows = _.routineUnite( field_head, shallows_body );
+
+//
+
+function deep_body( o )
+{
+  return _.define.field.body.call( this, o );
+}
+
+deep_body.defaults =
+{
+  ... field.defaults,
+  iniToIns : 'deep',
+}
+
+let deep = _.routineUnite( field_head, deep_body );
+
+//
+
+function deeps_body( o )
+{
+  return _.define.fields.body.call( this, o );
+}
+
+deeps_body.defaults =
+{
+  ... field.defaults,
+  iniToIns : 'deep',
+}
+
+let deeps = _.routineUnite( field_head, deeps_body );
+
+//
+
+function call_body( o )
+{
+  return _.define.field.body.call( this, o );
+}
+
+call_body.defaults =
+{
+  ... field.defaults,
+  iniToIns : 'call',
+}
+
+let call = _.routineUnite( field_head, call_body );
+
+//
+
+function calls_body( o )
+{
+  return _.define.fields.body.calls( this, o );
+}
+
+calls_body.defaults =
+{
+  ... field.defaults,
+  iniToIns : 'call',
+}
+
+let calls = _.routineUnite( field_head, calls_body );
+
+//
+
+function new_body( o )
+{
+  return _.define.field.body.call( this, o );
+}
+
+new_body.defaults =
+{
+  ... field.defaults,
+  iniToIns : 'new',
+}
+
+let _new = _.routineUnite( field_head, new_body );
+
+//
+
+function news_body( o )
+{
+  return _.define.field.body.call( this, o );
+}
+
+news_body.defaults =
+{
+  ... field.defaults,
+  iniToIns : 'new',
+}
+
+let _news = _.routineUnite( field_head, news_body );
+
+//
+
+function static_body( o )
+{
+  return _.define.field.body.call( this, o );
+}
+
+static_body.defaults =
+{
+  ... field.defaults,
+  static : 1,
+}
+
+let _static = _.routineUnite( field_head, static_body );
+
+//
+
+function statics_body( o )
+{
+  return _.define.fields.body.call( this, o );
+}
+
+statics_body.defaults =
+{
+  ... field.defaults,
+  static : 1,
+}
+
+let _statics = _.routineUnite( field_head, statics_body );
+
+// function static_body( o )
+// {
+//
+//   _.assertRoutineOptions( static_body, o );
+//   _.assert( arguments.length === 1 );
+//
+//   o.definitionGroup = 'definition.named';
+//   o.name = null;
+//   let definition = new _.Definition( o );
+//   definition.kind = 'static';
+//   definition.constructionAmend = constructionAmend;
+//   definition.blueprintForm2 = blueprintForm2;
+//   Object.preventExtensions( definition );
+//
+//   _.assert( definition.blueprintDepthReserve >= 0 );
+//
+//   return definition;
+//
+//   function constructionAmend( construction, key )
+//   {
+//     _.assert( 0, 'not implemented' ); /* zzz */
+//   }
+//
+//   function blueprintForm2( blueprint, key )
+//   {
+//     let definition = this;
+//     return _.blueprint._staticBlueprintForm
+//     ({
+//       val : definition.val,
+//       blueprint,
+//       key
+//     });
+//   }
+//
+// }
+//
+// static_body.defaults =
+// {
+//   val : null,
+//   blueprintDepthLimit : 1,
+//   blueprintDepthReserve : 0,
+// }
+//
+// let _static = _.routineUnite( static_head, static_body );
+//
+// //
+//
+// function statics_head( routine, args )
+// {
+//   let o = _pairArgumentshead( ... arguments );
+//   return o;
+// }
+//
+// function statics_body( o )
+// {
+//
+//   _.assert( arguments.length === 1 );
+//   _.assertRoutineOptions( statics_body, o );
+//   _.assert( _.mapIs( o.val ) || _.longIs( o.val ), `Expects primitive or routine` );
+//
+//   o.definitionGroup = 'definition.named';
+//   o.name = null;
+//
+//   let definition = new _.Definition( o );
+//   definition.kind = 'statics';
+//   definition.constructionAmend = constructionAmend;
+//   definition.blueprintForm2 = blueprintForm2;
+//   Object.preventExtensions( definition );
+//
+//   _.assert( definition.blueprintDepthReserve >= 0 );
+//
+//   return definition;
+//
+//   function constructionAmend( construction, key )
+//   {
+//     _.assert( 0, 'not implemented' ); /* zzz */
+//   }
+//
+//   function blueprintForm2( blueprint, key )
+//   {
+//     let definition = this;
+//     let fieldsArray = _.arrayAs( definition.val );
+//     _.assert( _.objectIs( blueprint.prototype ) );
+//     for( let a = 0 ; a < fieldsArray.length ; a++ )
+//     {
+//       let fields = fieldsArray[ a ];
+//       _.assert( _.mapIs( fields ) );
+//       for( let key in fields )
+//       {
+//         let fieldValue = fieldsArray[ a ][ key ];
+//         _.blueprint._staticBlueprintForm
+//         ({
+//           blueprint,
+//           key,
+//           val : fieldValue,
+//         });
+//       }
+//     }
+//   }
+//
+// }
+//
+// statics_body.defaults =
+// {
+//   val : null,
+//   blueprintDepthLimit : 1,
+//   blueprintDepthReserve : 0,
+// }
+//
+// let statics = _.routineUnite( statics_head, statics_body );
 
 //
 
@@ -310,14 +659,14 @@ supplementation.defaults =
 function inherit( o )
 {
   if( !_.mapIs( o ) )
-  o = { ini : arguments[ 0 ] };
+  o = { val : arguments[ 0 ] };
   _.routineOptions( inherit, o );
-  _.assert( _.blueprint.is( o.ini ) );
+  _.assert( _.blueprint.is( o.val ) );
   let result = [];
-  result.push( _.define.extension( o.ini ) );
-  result.push( _.trait.prototype( o.ini ) );
-  if( o.ini.Traits.typed )
-  result.push( _.trait.typed({ typed : o.ini.Traits.typed.typed, withConstructor : o.ini.Traits.typed.withConstructor }) );
+  result.push( _.define.extension( o.val ) );
+  result.push( _.trait.prototype( o.val ) );
+  if( o.val.Traits.typed )
+  result.push( _.trait.typed({ typed : o.val.Traits.typed.typed, withConstructor : o.val.Traits.typed.withConstructor }) );
   else
   result.push( _.trait.typed() );
   return result;
@@ -325,140 +674,47 @@ function inherit( o )
 
 inherit.defaults =
 {
-  ini : null,
-}
-
-//
-
-function static_head( routine, args )
-{
-  let o = _pairArgumentshead( ... arguments );
-  return o;
-}
-
-function static_body( o )
-{
-
-  _.assertRoutineOptions( static_body, o );
-  _.assert( arguments.length === 1 );
-
-  o.definitionGroup = 'definition.named';
-  o.name = null;
-  let definition = new _.Definition( o );
-  definition.kind = 'static';
-  definition.constructionAmend = constructionAmend;
-  definition.blueprintForm2 = blueprintForm2;
-  Object.preventExtensions( definition );
-
-  _.assert( definition.blueprintDepthReserve >= 0 );
-
-  return definition;
-
-  function constructionAmend( construction, key )
-  {
-    _.assert( 0, 'not implemented' ); /* zzz */
-  }
-
-  function blueprintForm2( blueprint, key )
-  {
-    let definition = this;
-    _.assert( _.objectIs( blueprint.prototype ) );
-    blueprint.prototype[ key ] = definition.val;
-  }
-
-}
-
-static_body.defaults =
-{
   val : null,
-  blueprintDepthLimit : 1,
-  blueprintDepthReserve : 0,
 }
-
-let _static = _.routineUnite( static_head, static_body );
-
-//
-
-function statics_head( routine, args )
-{
-  let o = _pairArgumentshead( ... arguments );
-  return o;
-}
-
-// function statics_body( fields )
-function statics_body( o )
-{
-
-  _.assert( arguments.length === 1 );
-  _.assertRoutineOptions( statics_body, o );
-  _.assert( _.mapIs( o.val ) || _.longIs( o.val ), `Expects primitive or routine` );
-
-  // let o = Object.create( null );
-  // o.val = val;
-  o.definitionGroup = 'definition.named';
-  o.name = null;
-
-  let definition = new _.Definition( o );
-  definition.kind = 'statics';
-  definition.constructionAmend = constructionAmend;
-  definition.blueprintForm2 = blueprintForm2;
-  // definition.blueprintDepthReserve = 1;
-  Object.preventExtensions( definition );
-
-  _.assert( definition.blueprintDepthReserve >= 0 );
-
-  return definition;
-
-  function constructionAmend( construction, key )
-  {
-    _.assert( 0, 'not implemented' ); /* zzz */
-  }
-
-  function blueprintForm2( blueprint, key )
-  {
-    let definition = this;
-    let fieldsArray = _.arrayAs( definition.val );
-    _.assert( _.objectIs( blueprint.prototype ) );
-    for( let a = 0 ; a < fieldsArray.length ; a++ )
-    {
-      let fields = fieldsArray[ a ];
-      _.assert( _.mapIs( fields ) );
-      for( let f in fields )
-      {
-        let fieldValue = fieldsArray[ a ][ f ];
-        blueprint.prototype[ f ] = fieldValue;
-      }
-    }
-  }
-
-}
-
-statics_body.defaults =
-{
-  val : null,
-  blueprintDepthLimit : 1,
-  blueprintDepthReserve : 0,
-}
-
-let statics = _.routineUnite( statics_head, statics_body );
 
 // --
 //
 // --
+
+let BlueprintExtension =
+{
+
+  _pairArgumentshead,
+  _staticBlueprintForm,
+  _valueGenerate,
+
+}
+
+_.blueprint = _.blueprint || Object.create( null );
+_.mapExtend( _.blueprint, BlueprintExtension );
 
 let DefineExtension =
 {
 
   field,
+  fields,
+  val,
+  vals,
   shallow,
+  shallows,
+  deep,
+  deeps,
+  call,
+  calls,
+  new : _new,
+  news : _news,
+  static : _static,
+  statics : _statics,
 
   _amendment,
   extension,
   supplementation,
   inherit,
-
-  static : _static,
-  statics,
 
 }
 

@@ -69,7 +69,7 @@ function _traitMake( routine, o )
   _.assert( _.mapIs( o ) );
 
   o.definitionGroup = 'trait';
-  o.ini = null;
+  // o.val = null;
   o.kind = routine.name;
   if( !o.constructionAmend )
   o.constructionAmend = _.definition._constructionAmendCant;

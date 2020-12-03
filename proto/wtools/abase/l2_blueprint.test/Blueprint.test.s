@@ -6,6 +6,7 @@ if( typeof module !== 'undefined' )
 {
   let _ = require( '../../../wtools/Tools.s' );
   require( '../../abase/l2_blueprint/Include.s' );
+  // _.include( 'wReplicator' );
   _.include( 'wTesting' );
 }
 
@@ -26,37 +27,114 @@ function mapOwnProperties( src )
 // test
 // --
 
-function constructions( test )
+function definitions( test )
 {
+
+  /* */
+
+  test.case = 'val / shallow';
 
   var exp =
   {
-    segments : [ 2,2 ],
-    size : [ 2,2 ],
-    axis : 2,
+    shallow1 : [ 2, 2 ],
+    shallow2 : [ [ 2, 2 ], { a : 2 } ],
+    val1 : 2,
+    val2 : [ 2, 2 ],
+    val3 : { a : 2 },
   }
-  var got = _.blueprint
-  .construct
-  ({
-    segments : _.define.shallow([ 2,2 ]),
-    size : _.define.shallow([ 2,2 ]),
-    axis : 2,
-  })
-  var got = test.identical( got, exp );
+  var options =
+  {
+    shallow1 : _.define.shallow([ 2, 2 ]),
+    shallow2 : _.define.shallow([ [ 2, 2 ], { a : 2 } ]),
+    val1 : 2,
+    val2 : _.define.val( [ 2, 2 ] ),
+    val3 : _.define.val( { a : 2 } ),
+  }
+  var got = _.blueprint.construct( options )
+  test.identical( got, exp );
 
+  test.true( got.shallow1 !== options.shallow1.val );
+  test.true( got.shallow2 !== options.shallow2.val );
+  test.true( got.val1 === options.val1 );
+  test.true( got.val2 === options.val2.val );
+  test.true( got.val3 === options.val3.val );
 
-/*
+  test.true( !!options.shallow1.val );
+  test.true( !!options.shallow2.val );
+  test.true( !!options.val1 );
+  test.true( !!options.val2.val );
+  test.true( !!options.val3.val );
 
-var Settings = _.like()
-.also
-({
-  segments : _.define.own([ 2,2 ]),
-  size : _.define.own([ 2,2 ]),
-  axis : 2,
-})
-.end
+  /* */
 
-*/
+  test.case = 'call / new';
+
+  var exp =
+  {
+    call1 : { b : 3 },
+    new1 : { a : 2, b : 3 },
+  }
+  var options =
+  {
+    call1 : _.define.call( constr1 ),
+    new1 : _.define.new( constr1 ),
+  }
+  var got = _.blueprint.construct( options )
+  test.identical( got, exp );
+  test.true( got.call1 !== options.call1.val );
+  test.true( got.new1 !== options.new1.val );
+  test.true( !!options.call1.val );
+  test.true( !!options.new1.val );
+
+  /* */
+
+  test.case = 'deep';
+
+  if( _.replicate )
+  {
+
+    var exp =
+    {
+      deep1 : [ 2, 2 ],
+      deep2 : [ [ 2, 2 ], { a : 2 } ],
+    }
+    var options =
+    {
+      deep1 : _.define.deep([ 2, 2 ]),
+      deep2 : _.define.deep([ [ 2, 2 ], { a : 2 } ]),
+    }
+    var got = _.blueprint.construct( options )
+    test.identical( got, exp );
+    test.true( got.deep1 !== options.deep1.val );
+    test.true( got.deep2 !== options.deep2.val );
+
+    test.true( !!options.deep1.val );
+    test.true( !!options.deep2.val );
+
+  }
+
+  /* */
+
+  test.case = 'throwing';
+
+  if( !Config.debug )
+  return;
+
+  test.shouldThrowErrorSync( () => _.blueprint.construct({ val2 : [ 2, 2 ], }) );
+  test.shouldThrowErrorSync( () => _.blueprint.construct({ val2 : { a : 2 }, }) );
+
+  /* */
+
+  function constr1()
+  {
+    let self = this;
+    if( self instanceof constr1 )
+    self = { a : 2 }
+    else
+    self = Object.create( null );
+    self.b = 3;
+    return self;
+  }
 
 }
 
@@ -3434,7 +3512,7 @@ definitionSupplementationOrder.description =
 
 //
 
-function blueprintStatic( test )
+function definitionStatic( test )
 {
 
   /* */
@@ -3472,23 +3550,11 @@ function blueprintStatic( test )
   });
 
   var instance = Blueprint1.Make();
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b1',
-    'staticField1' : 'sf1',
-    'staticField2' : { 'k' : 'staticField2' },
-    'staticField3' : 'sf3',
-    'staticField4' : { 'k' : 'staticField4' },
-    'staticField5' : { 'k' : 'staticField5' },
-    'staticField6' : { 'k' : 'staticField6' }
-  };
-  test.identical( _.mapFields( instance ), exp );
+  test.identical( instance instanceof Blueprint1.Make, true );
 
   var exp = { 'field1' : 'b1', 'field2' : 'b1' };
   test.identical( _.mapOwnFields( instance ), exp );
 
-  test.identical( instance instanceof Blueprint1.Make, true );
   var exp =
   {
     'field1' : 'b1',
@@ -3503,14 +3569,27 @@ function blueprintStatic( test )
     'staticField5' : { 'k' : 'staticField5' },
     'staticField6' : { 'k' : 'staticField6' }
   }
-  var got = _.mapAllProperties( instance );
-  test.identical( got, exp );
+  test.identical( _.mapAllProperties( instance ), exp );
+
+  var exp =
+  {
+
+    'staticField1' : 'sf1',
+    'staticField2' : { 'k' : 'staticField2' },
+
+    'staticField3' : 'sf3',
+    'staticField4' : { 'k' : 'staticField4' },
+    'staticField5' : { 'k' : 'staticField5' },
+    'staticField6' : { 'k' : 'staticField6' },
+
+  }
+  test.identical( _.mapBut( Blueprint1.Make, [ 'caller', 'callee', 'arguments', 'Runtime' ] ), exp );
 
   /* */
 
 }
 
-blueprintStatic.description =
+definitionStatic.description =
 `
 - static fields added to prototype
 `
@@ -4852,7 +4931,7 @@ let Self =
   tests :
   {
 
-    constructions,
+    definitions,
     constructTyped,
     constructWithoutHelper,
 
@@ -4876,7 +4955,7 @@ let Self =
     definitionExtensionOrder,
     definitionSupplementationOrder,
 
-    blueprintStatic,
+    definitionStatic,
     blueprintInheritManually,
     blueprintInheritWithTrait,
     blueprintWithConstructor,

@@ -86,15 +86,6 @@ function extend( dst, src )
 
 }
 
-// //
-//
-// function constructWithBlueprint( construction, blueprint, args )
-// {
-//   _.assert( arguments.length === 2 || arguments.length === 3 );
-//   _.assert( _.blueprint.isRuntime( blueprint.Runtime ) );
-//   return _.construction._construct2( construction, blueprint.Runtime, args );
-// }
-
 //
 
 function _from( construction, runtime, args )
@@ -324,7 +315,8 @@ function _initDefines( genesis )
   for( let i = 0 ; i < genesis.runtime._InternalRoutinesMap.constructionInit.length ; i++ )
   {
     let constructionInitContext = genesis.runtime._InternalRoutinesMap.constructionInit[ i ];
-    constructionInitContext.constructionInit.call( null, genesis.construction, constructionInitContext.name ); /* xxx : pass genesis? */
+    constructionInitContext.constructionInit( genesis );
+    // constructionInitContext.constructionInit.call( null, genesis.construction, constructionInitContext.name ); /* xxx : pass genesis? */
   }
 
   return genesis.construction;
@@ -396,8 +388,6 @@ var ConstructionExtension =
   isTyped,
   isInstanceOf,
   extend,
-
-  // constructWithBlueprint,
 
   _from,
   _makeEach,

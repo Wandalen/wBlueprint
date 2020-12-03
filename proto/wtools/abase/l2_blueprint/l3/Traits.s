@@ -43,6 +43,8 @@ function typed( o )
 
   return _.definition._traitMake( typed, o );
 
+  /* */
+
   function blueprintForm3( blueprint )
   {
 
@@ -64,7 +66,6 @@ function typed( o )
       _.assert( !_.mapOwnKey( blueprint.prototype, 'constructor' ) );
       _.assert( _.routineIs( blueprint.Make ) );
       _.assert( _.objectIs( blueprint.prototype ) );
-      // blueprint.prototype.constructor = blueprint.Make;
       let properties =
       {
         value : blueprint.Make,
@@ -77,18 +78,14 @@ function typed( o )
 
   }
 
-  // function allocateTyped( construction, construct )
   function allocateTyped( genesis )
   {
-    // debugger;
     if( genesis.construction === null )
     genesis.construction = new( _.constructorJoin( genesis.runtime.Make, [] ) );
-    // genesis.construction = new( _.constructorJoin( genesis.runtime.Make, [ genesis.runtime.Make ] ) );
     _.assert( genesis.construction === null || genesis.construction instanceof genesis.runtime.Make );
     return genesis.construction;
   }
 
-  // function allocateUntyped( construction, construct )
   function allocateUntyped( genesis )
   {
     if( genesis.construction && genesis.construction instanceof genesis.runtime.Make )
@@ -100,7 +97,6 @@ function typed( o )
     return genesis.construction;
   }
 
-  // function retypeTyped( construction, construct )
   function retypeTyped( genesis )
   {
     if( genesis.construction )
@@ -110,15 +106,12 @@ function typed( o )
     }
     else if( genesis.construction === null )
     {
-      // _.assert( 0, 'not tested' );
       genesis.construction = new( _.constructorJoin( genesis.runtime.Make, [] ) );
-      // genesis.construction = new( _.constructorJoin( genesis.runtime.Make, [ genesis.runtime.Make ] ) );
     }
     _.assert( genesis.construction instanceof genesis.runtime.Make );
     return genesis.construction;
   }
 
-  // function retypeUntyped( construction, construct )
   function retypeUntyped( genesis )
   {
     if( genesis.construction )
