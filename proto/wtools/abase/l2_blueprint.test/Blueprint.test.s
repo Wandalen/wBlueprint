@@ -4160,9 +4160,6 @@ function traitName( test )
     staticField2 : s( 'b1' ),
   });
 
-  test.true( Blueprint1.prototype === Blueprint1.Make.prototype );
-  test.true( Blueprint1.Make === Blueprint1.prototype.constructor );
-  test.true( Blueprint1.constructor === undefined );
   test.identical( Blueprint1.Make.name, 'Construction' );
 
   test.description = 'instance1'; /* */
@@ -4193,9 +4190,6 @@ function traitName( test )
     staticField2 : s( 'b1' ),
   });
 
-  test.true( Blueprint1.prototype === Blueprint1.Make.prototype );
-  test.true( Blueprint1.Make === Blueprint1.prototype.constructor );
-  test.true( Blueprint1.constructor === undefined );
   test.identical( Blueprint1.Make.name, 'Blueprint1X' );
 
   test.description = 'instance1'; /* */
@@ -4214,7 +4208,7 @@ function traitName( test )
 
   /* */
 
-  test.case = 'inheritance';
+  test.case = 'inheritance with overriding';
 
   var Blueprint1 = _.Blueprint
   ({
@@ -4236,9 +4230,7 @@ function traitName( test )
     staticField3 : s( 'b2' ),
   });
 
-  test.true( Blueprint2.prototype === Blueprint2.Make.prototype );
-  test.true( Blueprint2.Make === Blueprint2.prototype.constructor );
-  test.true( Blueprint2.constructor === undefined );
+  test.identical( Blueprint1.Make.name, 'Blueprint1X' );
   test.identical( Blueprint2.Make.name, 'Blueprint2X' );
 
   test.description = 'instance1'; /* */
@@ -4254,6 +4246,45 @@ function traitName( test )
   test.identical( instance2 instanceof Blueprint2.Make, true );
   test.true( _.routineIs( instance2.constructor ) );
   test.identical( instance2.constructor.name, 'Blueprint2X' );
+
+  /* */
+
+  test.case = 'inheritance without overriding';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed({ typed : true, withConstructor : true }),
+    name : _.trait.name( 'Blueprint1X' ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : s( 'b1' ),
+    staticField2 : s( 'b1' ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    inherit : _.define.inherit( Blueprint1 ),
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : s( 'b2' ),
+    staticField3 : s( 'b2' ),
+  });
+
+  test.identical( Blueprint2.Make.name, 'Blueprint1X' );
+
+  test.description = 'instance1'; /* */
+
+  var instance1 = Blueprint2.Make();
+  test.identical( instance1 instanceof Blueprint2.Make, true );
+  test.true( _.routineIs( instance1.constructor ) );
+  test.identical( instance1.constructor.name, 'Blueprint1X' );
+
+  test.description = 'instance2'; /* */
+
+  var instance2 = instance1.constructor();
+  test.identical( instance2 instanceof Blueprint2.Make, true );
+  test.true( _.routineIs( instance2.constructor ) );
+  test.identical( instance2.constructor.name, 'Blueprint1X' );
 
   /* */
 
