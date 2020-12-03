@@ -166,7 +166,7 @@ function _amend( o )
   _.assert( _.longHas( [ 'extend', 'supplement' ], o.amending ) );
   _.assert( _.longHas( [ 'throw', 'amend', 'inherit' ], o.blueprintAction ) );
 
-  _amendAct( o.extension );
+  _amendAct( o.extension, null );
 
   return o.blueprint;
 
@@ -184,25 +184,25 @@ function _amend( o )
 
   */
 
-  function _amendAct( src )
+  function _amendAct( src, name )
   {
     if( _.longIs( src ) )
-    amendWithArray( src );
+    amendWithArray( src, name );
     else if( _.blueprint.is( src ) )
-    amendWithBlueprint1( src );
+    amendWithBlueprint1( src, name );
     else if( _.mapIs( src ) )
-    amendWithMap(  src );
+    amendWithMap(  src, name );
     else if( _.definitionIs( src ) )
-    amendWithDefinition( src, null );
-    else _.assert( 0, 'Not clear how to amend blueprint' );
+    amendWithDefinition( src, name );
+    else _.assert( 0, `Not clear how to amend blueprint by the amendment ${_.strType( src )}` );
   }
 
   /* */
 
-  function amendWithArray( array )
+  function amendWithArray( array, name )
   {
     for( let e = 0 ; e < array.length ; e++ )
-    _amendAct( array[ e ] );
+    _amendAct( array[ e ], null );
   }
 
   /* */
@@ -212,20 +212,24 @@ function _amend( o )
 
     _.assert( _.mapIs( map ) );
 
-    for( let k in map )
+    for( let name in map )
     {
-      let ext = map[ k ];
+      let ext = map[ name ];
       if( _.definitionIs( ext ) )
       {
-        amendWithDefinition( ext, k );
+        amendWithDefinition( ext, name );
       }
       else if( _.arrayIs( ext ) )
       {
-        amendWithArray( ext );
+        amendWithArray( ext, name );
+      }
+      else if( _.primitiveIs( ext ) || _.routineIs( ext ) )
+      {
+        amendWithPrimitive( ext, name );
       }
       else
       {
-        amendWithPrimitive( ext, k );
+        _amendAct( ext, name );
       }
     }
 
@@ -418,7 +422,6 @@ function _form( blueprint, stage )
   _.assert( _.blueprint.is( blueprint ) );
   _.assert( _.longHas( [ 'blueprintForm1', 'blueprintForm2', 'blueprintForm3' ], stage ) );
 
-  // let handlersNames = [ 'blueprintForm1', 'blueprintForm2', 'blueprintForm3' ];
   let handlersNames = [ stage ];
 
   for( let n = 0 ; n < handlersNames.length ; n++ )

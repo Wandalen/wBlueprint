@@ -109,7 +109,6 @@ function field_body( o )
 
   o.definitionGroup = 'definition.named';
   o.blueprintForm2 = blueprintForm2;
-  // o.name = null;
   o.constructionInit = null;
 
   let definition = new _.Definition( o );
@@ -153,7 +152,6 @@ function field_body( o )
     {
       if( o.iniToIns === 'val' )
       {
-        debugger;
         blueprint.Fields[ name ] = definition.val;
       }
       else
@@ -163,7 +161,6 @@ function field_body( o )
           genesis.construction[ this.name ] = valueGenerate.call( this );
         }
       }
-      // _.assert( _.strIs( definition.name ) );
       if( definition.constructionInit !== null )
       {
         handlers.push({ constructionInit : definition.constructionInit, name : definition.name, val })
@@ -382,7 +379,7 @@ let call = _.routineUnite( field_head, call_body );
 
 function calls_body( o )
 {
-  return _.define.fields.body.calls( this, o );
+  return _.define.fields.body.call( this, o );
 }
 
 calls_body.defaults =
@@ -412,7 +409,7 @@ let _new = _.routineUnite( field_head, new_body );
 
 function news_body( o )
 {
-  return _.define.field.body.call( this, o );
+  return _.define.fields.body.call( this, o );
 }
 
 news_body.defaults =

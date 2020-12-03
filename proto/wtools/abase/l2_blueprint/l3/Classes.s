@@ -1,4 +1,4 @@
-( function _BlueprintClass_s_() {
+( function _Classes_s_() {
 
 'use strict';
 
