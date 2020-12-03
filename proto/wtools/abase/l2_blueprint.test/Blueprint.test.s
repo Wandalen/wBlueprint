@@ -382,18 +382,15 @@ function definitionStatic( test )
   {
   }
   test.identical( mapOwnProperties( _.prototype.each( instance )[ 2 ] ), exp );
-  var exp =
-  {
-    'staticField1' : 'sf1',
-    'staticField2' : { 'k' : 'staticField2' },
-    'staticField3' : 'sf3',
-    'staticField4' : { 'k' : 'staticField4' },
-    'staticField5' : { 'k' : 'staticField5' },
-    'staticField6' : { 'k' : 'staticField6' },
-  }
-  test.identical( _.mapBut( Blueprint1.Make, [ 'caller', 'callee', 'arguments', 'Runtime' ] ), exp );
+
+  test.true( Blueprint1.Make.staticField1 === Blueprint1.prototype.staticField1 );
   test.true( Blueprint1.Make.staticField2 === Blueprint1.prototype.staticField2 );
+  test.true( Blueprint1.Make.staticField3 === Blueprint1.prototype.staticField3 );
+  test.true( Blueprint1.Make.staticField4 === Blueprint1.prototype.staticField4 );
+  test.true( Blueprint1.Make.staticField5 === Blueprint1.prototype.staticField5 );
+  test.true( Blueprint1.Make.staticField6 === Blueprint1.prototype.staticField6 );
   test.true( Blueprint1.Make.staticMethod1 === Blueprint1.prototype.staticMethod1 );
+  test.true( Blueprint1.Make.staticMethod2 === Blueprint1.prototype.staticMethod2 );
 
   /* */
 
