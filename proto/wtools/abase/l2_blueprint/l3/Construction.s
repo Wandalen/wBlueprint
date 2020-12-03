@@ -60,7 +60,7 @@ function extend( dst, src )
   if( _.blueprint.is( src ) )
   {
     _.assert( !_.blueprint.is( dst ), 'not implemented' ); /* xxx */
-    _.mapExtend( dst, src.Fields );
+    _.mapExtend( dst, src.Props );
     _.assert( 0, 'not implemented' );
   }
   else
@@ -288,9 +288,9 @@ function _initFields( genesis )
   _.assert( arguments.length === 1 );
 
   if( genesis.retyping )
-  _.mapSupplement( genesis.construction, genesis.runtime.Fields );
+  _.mapSupplement( genesis.construction, genesis.runtime.Props );
   else
-  _.mapExtend( genesis.construction, genesis.runtime.Fields );
+  _.mapExtend( genesis.construction, genesis.runtime.Props );
 
   return genesis.construction;
 }

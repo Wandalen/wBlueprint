@@ -54,7 +54,7 @@ function define()
   let blueprint = Object.create( _.Blueprint );
   blueprint.Name = null;
   blueprint.Traits = Object.create( null );
-  blueprint.Fields = Object.create( null );
+  blueprint.Props = Object.create( null );
   blueprint._InternalRoutinesMap = Object.create( null );
   blueprint._NamedDefinitionsMap = Object.create( null );
   blueprint._UnnamedDefinitionsArray = [];
@@ -102,7 +102,7 @@ function define()
 
   let runtime = Object.create( _.BlueprintRuntime );
   runtime._InternalRoutinesMap = blueprint._InternalRoutinesMap;
-  runtime.Fields = blueprint.Fields;
+  runtime.Props = blueprint.Props;
   runtime.Make = blueprint.Make;
   runtime.MakeEach = blueprint.MakeEach;
   runtime.From = blueprint.From;
@@ -122,7 +122,7 @@ function define()
   Object.preventExtensions( blueprint._NamedDefinitionsMap );
   Object.preventExtensions( blueprint._UnnamedDefinitionsArray );
   Object.preventExtensions( blueprint.Traits );
-  Object.preventExtensions( blueprint.Fields );
+  Object.preventExtensions( blueprint.Props );
   Object.preventExtensions( blueprint._InternalRoutinesMap );
 
   _.blueprint._validate( blueprint );
@@ -266,9 +266,9 @@ function _amend( o )
   function amendWithBlueprint2( ext, k )
   {
     o.blueprintDepth += 1;
-    for( let k in ext.Fields )
+    for( let k in ext.Props )
     {
-      amendWithPrimitive( ext.Fields[ k ], k );
+      amendWithPrimitive( ext.Props[ k ], k );
     }
     for( let k in ext._NamedDefinitionsMap )
     {
@@ -371,9 +371,9 @@ function _amend( o )
       + `\nUse _.define.*() to defined more complex data structure`
     );
     if( o.amending === 'supplement' )
-    if( o.blueprint.Fields[ key ] !== undefined )
+    if( o.blueprint.Props[ key ] !== undefined )
     return;
-    o.blueprint.Fields[ key ] = ext;
+    o.blueprint.Props[ key ] = ext;
   }
 
   /* */

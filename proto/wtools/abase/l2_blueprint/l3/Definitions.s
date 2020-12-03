@@ -152,7 +152,7 @@ function prop_body( o )
     {
       if( o.valToIns === 'val' )
       {
-        blueprint.Fields[ name ] = definition.val;
+        blueprint.Props[ name ] = definition.val;
       }
       else
       {

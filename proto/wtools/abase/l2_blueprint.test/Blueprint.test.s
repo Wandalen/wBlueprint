@@ -4298,7 +4298,7 @@ traitName.description =
 
 //
 
-function blueprintWithConstructorAndName( test )
+function traitWithConstructor( test )
 {
   let context = this;
   let s = _.define.static;
@@ -4591,15 +4591,17 @@ function blueprintWithConstructorAndName( test )
 
 }
 
-blueprintWithConstructorAndName.description =
+traitWithConstructor.description =
 `
 - blueprint inheritance with trait make inheritance
 `
 
 //
 
-function constructionMapExtend()
+function constructionMapExtend( test )
 {
+  let context = this;
+  let s = _.define.static;
 
   /* */
 
@@ -4623,98 +4625,78 @@ function constructionMapExtend()
   ({
     inherit : _.define.inherit( Blueprint1 ),
     name : _.trait.name( 'Blueprint2X' ),
-    field1 : 'b1',
-    field2 : 'b1',
-    method1 : function(){},
+    field2 : 'b2',
+    field3 : 'b2',
     method2 : function(){},
-    StaticField1 : s( 'b1' ),
-    StaticField2 : s( 'b1' ),
-    StaticMethod1 : s( function(){} ),
+    method3 : function(){},
+    StaticField2 : s( 'b2' ),
+    StaticField3 : s( 'b2' ),
     StaticMethod2 : s( function(){} ),
+    StaticMethod3 : s( function(){} ),
   });
-
-  test.true( Blueprint2.prototype === Blueprint2.Make.prototype );
-  test.true( Blueprint2.Make === Blueprint2.prototype.constructor );
-  test.true( Blueprint2.constructor === undefined );
-  test.identical( Blueprint2.Make.name, 'Blueprint2X' );
 
   test.description = 'instance1'; /* */
 
   var instance1 = Blueprint2.Make();
+  test.identical( instance1 instanceof Blueprint1.Make, true );
   test.identical( instance1 instanceof Blueprint2.Make, true );
   test.true( _.routineIs( instance1.constructor ) );
   test.identical( instance1.constructor.name, 'Blueprint2X' );
 
+  debugger;
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'method1' : Blueprint1.Props.method1,
+    'method2' : Blueprint2.Props.method2,
+    'method3' : Blueprint2.Props.method3,
+    'StaticField1' : 'b1',
+    'StaticField2' : 'b2',
+    'StaticField3' : 'b2',
+    'StaticMethod1' : Blueprint1.prototype.StaticMethod1,
+    'StaticMethod2' : Blueprint2.prototype.StaticMethod2,
+    'StaticMethod3' : Blueprint2.prototype.StaticMethod3,
+    'constructor' : Blueprint2.Make
+  }
+  test.identical( _.mapAllProperties( instance1 ), exp );
+  debugger;
+
   test.identical( _.prototype.each( instance1 ).length, 4 );
   var exp =
   {
-    constructor : Blueprint2.prototype.constructor,
     'field1' : 'b1',
     'field2' : 'b2',
     'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2',
-    'staticField3' : 'b2',
-  }
-  test.identical( _.mapAllProperties( instance1 ), exp );
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b2',
-    'field3' : 'b2',
+    'method1' : Blueprint1.Props.method1,
+    'method2' : Blueprint2.Props.method2,
+    'method3' : Blueprint2.Props.method3,
   }
   test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
-    constructor : Blueprint2.prototype.constructor,
-    'staticField2' : 'b2',
-    'staticField3' : 'b2',
+    'StaticField2' : 'b2',
+    'StaticField3' : 'b2',
+    'StaticMethod2' : Blueprint2.prototype.StaticMethod2,
+    'StaticMethod3' : Blueprint2.prototype.StaticMethod3,
+    'constructor' : Blueprint2.Make
   }
   test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    'StaticField1' : 'b1',
+    'StaticField2' : 'b1',
+    'StaticMethod1' : Blueprint1.prototype.StaticMethod1,
+    'StaticMethod2' : Blueprint1.prototype.StaticMethod2,
+    'constructor' : Blueprint1.Make
   }
   test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
   var exp =
   {
   }
   test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 3 ] ), exp );
-
-  test.description = 'instance2'; /* */
-
-  var instance2 = instance1.constructor();
-  test.identical( instance2 instanceof Blueprint2.Make, true );
-  test.true( _.routineIs( instance2.constructor ) );
-  test.identical( instance2.constructor.name, 'Blueprint2X' );
-
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b2',
-    'field3' : 'b2',
-  }
-  test.identical( mapOwnProperties( _.prototype.each( instance2 )[ 0 ] ), exp );
-  var exp =
-  {
-    constructor : Blueprint2.prototype.constructor,
-    'staticField2' : 'b2',
-    'staticField3' : 'b2',
-  }
-  test.identical( mapOwnProperties( _.prototype.each( instance2 )[ 1 ] ), exp );
-  var exp =
-  {
-    constructor : Blueprint1.prototype.constructor,
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
-  }
-  test.identical( mapOwnProperties( _.prototype.each( instance2 )[ 2 ] ), exp );
-  var exp =
-  {
-  }
-  test.identical( mapOwnProperties( _.prototype.each( instance2 )[ 3 ] ), exp );
 
   /* */
 
@@ -5423,7 +5405,7 @@ let Self =
     blueprintInheritManually,
     blueprintInheritWithTrait,
     traitName,
-    blueprintWithConstructorAndName,
+    traitWithConstructor,
 
     constructionMapExtend,
 
