@@ -165,9 +165,9 @@ module:
           - ../proto/wtools/abase/l2_blueprint/l1/Proto.s
           - ../proto/wtools/abase/l2_blueprint/l2
           - ../proto/wtools/abase/l2_blueprint/l2/Definition.s
+          - ../proto/wtools/abase/l2_blueprint/l2/Types.s
           - ../proto/wtools/abase/l2_blueprint/l3
           - ../proto/wtools/abase/l2_blueprint/l3/BlueprintNamespace.s
-          - ../proto/wtools/abase/l2_blueprint/l3/Classes.s
           - ../proto/wtools/abase/l2_blueprint/l3/Construction.s
           - ../proto/wtools/abase/l2_blueprint/l3/Definitions.s
           - ../proto/wtools/abase/l2_blueprint/l3/Traits.s
