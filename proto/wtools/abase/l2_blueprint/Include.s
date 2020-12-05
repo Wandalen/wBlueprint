@@ -14,9 +14,9 @@ if( typeof module !== 'undefined' )
   require( './l1/Proto.s' );
 
   require( './l2/Definition.s' );
+  require( './l2/Types.s' );
 
   require( './l3/BlueprintNamespace.s' );
-  require( './l3/Classes.s' );
   require( './l3/Construction.s' );
   require( './l3/Definitions.s' );
   require( './l3/Traits.s' );

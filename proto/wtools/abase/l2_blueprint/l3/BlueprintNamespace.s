@@ -9,18 +9,11 @@ let _ = _global_.wTools;
 // implementation
 // --
 
-function is( blueprint )
+function isDefinitive( blueprint )
 {
-  return _.isPrototypeOf( _.Blueprint, blueprint );
-}
-
-//
-
-function isBlueprintOf( blueprint, construction )
-{
-  _.assert( arguments.length === 2 );
-  _.assert( _.blueprint.is( blueprint ) );
-  return _.construction.isInstanceOf( construction, blueprint );
+  if( !blueprint )
+  return false;
+  return _.isPrototypeOf( _.Blueprint.prototype, blueprint ) && !!blueprint.Traits;
 }
 
 //
@@ -29,7 +22,16 @@ function isRuntime( runtime )
 {
   if( !runtime )
   return false;
-  return Object.getPrototypeOf( runtime ) === _.BlueprintRuntime;
+  return _.isPrototypeOf( _.Blueprint.prototype, runtime ) && !runtime.Traits;
+}
+
+//
+
+function isBlueprintOf( blueprint, construction )
+{
+  _.assert( arguments.length === 2 );
+  _.assert( _.blueprint.isDefinitive( blueprint ) );
+  return _.construction.isInstanceOf( construction, blueprint );
 }
 
 //
@@ -51,13 +53,27 @@ function compileSourceCode( blueprint )
 
 function define()
 {
-  let blueprint = Object.create( _.Blueprint );
-  blueprint.Name = null;
+
+  let runtime = Object.create( _.Blueprint.prototype );
+  runtime._RuntimeRoutinesMap = Object.create( null );
+  runtime.Props = Object.create( null );
+  runtime.prototype = Object.create( _.Construction.prototype );
+  runtime.Name = null;
+  runtime.Typed = null;
+  runtime.Make = null;
+  runtime.MakeEach = MakeEach;
+  runtime.From = From;
+  runtime.FromEach = FromEach;
+  runtime.Retype = Retype;
+  runtime.RetypeEach = RetypeEach;
+  Object.preventExtensions( runtime );
+
+  let blueprint = Object.create( runtime );
   blueprint.Traits = Object.create( null );
-  blueprint.Props = Object.create( null );
-  blueprint._InternalRoutinesMap = Object.create( null );
   blueprint._NamedDefinitionsMap = Object.create( null );
   blueprint._UnnamedDefinitionsArray = [];
+  blueprint.Runtime = runtime;
+  Object.preventExtensions( blueprint );
 
   for( let a = 0 ; a < arguments.length ; a++ )
   {
@@ -77,10 +93,10 @@ function define()
   }
   _.blueprint._supplement( blueprint, defaultSupplement );
 
-  blueprint.prototype = Object.create( _.Construction.prototype );
-
+  _.blueprint._associateDefinitions( blueprint );
   _.blueprint._form( blueprint, 'blueprintForm1' );
 
+  runtime.Typed = blueprint.Traits.typed ? blueprint.Traits.typed.val : false;
   let Name = blueprint.Name || 'Construction';
   let Construction =
   {
@@ -89,42 +105,17 @@ function define()
       return _.construction._make( this, runtime, arguments );
     }
   }
-  let make = Construction[ Name ];
-  Object.setPrototypeOf( make, null );
-  make.prototype = blueprint.prototype;
+  let Make = Construction[ Name ];
+  Object.setPrototypeOf( Make, null );
+  Make.prototype = blueprint.prototype;
 
-  blueprint.Make = make;
-  blueprint.MakeEach = MakeEach;
-  blueprint.From = From;
-  blueprint.Retype = Retype;
-  _.assert( _.routineIs( _.Construction ) );
-  _.assert( _.mapIs( _.Construction.prototype ) );
-
-  let runtime = Object.create( _.BlueprintRuntime );
-  runtime._InternalRoutinesMap = blueprint._InternalRoutinesMap;
-  runtime.Props = blueprint.Props;
-  runtime.Make = blueprint.Make;
-  runtime.MakeEach = blueprint.MakeEach;
-  runtime.From = blueprint.From;
-  runtime.Retype = blueprint.Retype;
-  runtime.prototype = blueprint.prototype;
-  runtime.Typed = blueprint.Traits.typed.typed;
-  Object.preventExtensions( runtime );
-
-  blueprint.Runtime = runtime;
-  make.Runtime = runtime;
+  runtime.Make = Make;
+  Make.Runtime = runtime;
 
   _.blueprint._form( blueprint, 'blueprintForm2' );
-
   _.blueprint._form( blueprint, 'blueprintForm3' );
 
-  Object.preventExtensions( blueprint );
-  Object.preventExtensions( blueprint._NamedDefinitionsMap );
-  Object.preventExtensions( blueprint._UnnamedDefinitionsArray );
-  Object.preventExtensions( blueprint.Traits );
-  Object.preventExtensions( blueprint.Props );
-  Object.preventExtensions( blueprint._InternalRoutinesMap );
-
+  _.blueprint._preventExtensions( blueprint );
   _.blueprint._validate( blueprint );
 
   _.assert( blueprint.Name === null || blueprint.Name === Name );
@@ -133,9 +124,9 @@ function define()
 
   /* */
 
-  function Retype()
+  function MakeEach()
   {
-    return _.construction._retype( this, runtime, arguments );
+    return _.construction._makeEach( this, runtime, arguments );
   }
 
   /* */
@@ -147,9 +138,23 @@ function define()
 
   /* */
 
-  function MakeEach()
+  function FromEach()
   {
-    return _.construction._makeEach( this, runtime, arguments );
+    return _.construction._fromEach( this, runtime, arguments );
+  }
+
+  /* */
+
+  function Retype()
+  {
+    return _.construction._retype( this, runtime, arguments );
+  }
+
+  /* */
+
+  function RetypeEach()
+  {
+    return _.construction._retypeEach( this, runtime, arguments );
   }
 
   /* */
@@ -177,10 +182,12 @@ function _amend( o )
 - amendWithBlueprint1
 - amendWithBlueprint2
 - amendWithDefinition
-- amendWithTrait
 - amendWithNamedDefinition
+- amendWithTrait
 - amendWithUnnamedDefinition
 - amendWithPrimitive
+- definitionCloneMaybe
+- definitionDepthCheck
 
   */
 
@@ -188,7 +195,7 @@ function _amend( o )
   {
     if( _.longIs( src ) )
     amendWithArray( src, name );
-    else if( _.blueprint.is( src ) )
+    else if( _.blueprint.isDefinitive( src ) )
     amendWithBlueprint1( src, name );
     else if( _.mapIs( src ) )
     amendWithMap(  src, name );
@@ -293,15 +300,6 @@ function _amend( o )
 
   /* */
 
-  function definitionDepthCheck( definition )
-  {
-    if( !definition.blueprintDepthLimit )
-    return true;
-    return definition.blueprintDepthLimit + definition.blueprintDepthReserve + o.blueprintDepthReserve > o.blueprintDepth;
-  }
-
-  /* */
-
   function amendWithDefinition( definition, name )
   {
     if( _.traitIs( definition ) )
@@ -314,49 +312,54 @@ function _amend( o )
 
   /* */
 
-  function amendWithTrait( ext, key )
+  function amendWithNamedDefinition( definition, name )
   {
-    _.assert( _.strIs( ext.kind ) );
-
-    if( o.amending === 'supplement' )
-    if( o.blueprint.Traits[ ext.kind ] !== undefined )
-    return;
-
-    o.blueprint.Traits[ ext.kind ] = ext;
-
-    if( ext.blueprintAmend )
-    ext.blueprintAmend( o );
-  }
-
-  /* */
-
-  function amendWithNamedDefinition( ext, name )
-  {
-    _.assert( ext.definitionGroup === 'definition.named' );
-    _.assert( _.strDefined( name ) || _.strDefined( ext.name ) );
-    _.assert( name === null || ext.name === null || name === ext.name );
+    _.assert( definition.definitionGroup === 'definition.named' );
+    _.assert( _.strDefined( name ) || _.strDefined( definition.name ) );
+    _.assert( name === null || definition.name === null || name === definition.name );
 
     if( o.amending === 'supplement' )
     if( o.blueprint._NamedDefinitionsMap[ name ] !== undefined )
     return;
 
-    if( name && name !== ext.name )
-    ext.name = name;
-    _.assert( _.strDefined( ext.name ) );
-    o.blueprint._NamedDefinitionsMap[ ext.name ] = ext;
+    definition = definitionCloneMaybe( definition );
 
-    if( ext.blueprintAmend )
-    ext.blueprintAmend( o );
+    if( name && name !== definition.name )
+    definition.name = name;
+    _.assert( _.strDefined( definition.name ) );
+    o.blueprint._NamedDefinitionsMap[ definition.name ] = definition;
+
+    if( definition.blueprintAmend )
+    definition.blueprintAmend( o );
   }
 
   /* */
 
-  function amendWithUnnamedDefinition( ext )
+  function amendWithUnnamedDefinition( definition )
   {
-    _.assert( ext.definitionGroup === 'definition.unnamed' );
-    o.blueprint._UnnamedDefinitionsArray.push( ext );
-    if( ext.blueprintAmend )
-    ext.blueprintAmend( o );
+    _.assert( definition.definitionGroup === 'definition.unnamed' );
+    definition = definitionCloneMaybe( definition );
+    o.blueprint._UnnamedDefinitionsArray.push( definition );
+    if( definition.blueprintAmend )
+    definition.blueprintAmend( o );
+  }
+
+  /* */
+
+  function amendWithTrait( definition, key )
+  {
+    _.assert( _.strIs( definition.kind ) );
+
+    if( o.amending === 'supplement' )
+    if( o.blueprint.Traits[ definition.kind ] !== undefined )
+    return;
+
+    definition = definitionCloneMaybe( definition );
+
+    o.blueprint.Traits[ definition.kind ] = definition;
+
+    if( definition.blueprintAmend )
+    definition.blueprintAmend( o );
   }
 
   /* */
@@ -374,6 +377,31 @@ function _amend( o )
     if( o.blueprint.Props[ key ] !== undefined )
     return;
     o.blueprint.Props[ key ] = ext;
+  }
+
+  /* */
+
+  function definitionCloneMaybe( defenition )
+  {
+    if( defenition.blueprint )
+    {
+      defenition = defenition.clone();
+      if( defenition.blueprint )
+      defenition.blueprint = null;
+      if( defenition._ )
+      defenition._ = Object.create( null );
+    }
+    _.assert( defenition.blueprint === null || defenition.blueprint === false );
+    return defenition;
+  }
+
+  /* */
+
+  function definitionDepthCheck( definition )
+  {
+    if( !definition.blueprintDepthLimit )
+    return true;
+    return definition.blueprintDepthLimit + definition.blueprintDepthReserve + o.blueprintDepthReserve > o.blueprintDepth;
   }
 
   /* */
@@ -416,10 +444,31 @@ function _extend( blueprint, extension )
 
 //
 
+function _associateDefinitions( blueprint )
+{
+  _.assert( arguments.length === 1 );
+  _.assert( _.blueprint.isDefinitive( blueprint ) );
+
+  _.blueprint.eachDefinition( blueprint, ( blueprint, definition, key ) =>
+  {
+    if( definition.blueprint === false )
+    return;
+    _.assert( definition.blueprint === null || definition.blueprint === false );
+    if( definition.kind === 'extend' )
+    debugger;
+    _.assert( !Object.isFrozen( definition ) );
+    definition.blueprint = blueprint;
+  });
+
+  return blueprint;
+}
+
+//
+
 function _form( blueprint, stage )
 {
   _.assert( arguments.length === 2 );
-  _.assert( _.blueprint.is( blueprint ) );
+  _.assert( _.blueprint.isDefinitive( blueprint ) );
   _.assert( _.longHas( [ 'blueprintForm1', 'blueprintForm2', 'blueprintForm3' ], stage ) );
 
   let handlersNames = [ stage ];
@@ -439,10 +488,58 @@ function _form( blueprint, stage )
 
 //
 
+function _preventExtensions( blueprint )
+{
+  _.assert( _.blueprint.isDefinitive( blueprint ) );
+
+  Object.preventExtensions( blueprint );
+  Object.preventExtensions( blueprint._NamedDefinitionsMap );
+  Object.preventExtensions( blueprint._UnnamedDefinitionsArray );
+  Object.preventExtensions( blueprint.Traits );
+  Object.preventExtensions( blueprint.Props );
+  Object.preventExtensions( blueprint._RuntimeRoutinesMap );
+
+}
+
+//
+
 function _validate( blueprint )
 {
-  _.assert( _.routineIs( blueprint._InternalRoutinesMap.allocate ), `Each blueprint should have handler::allocate, but definition::${blueprint.name} does not have` );
-  _.assert( _.routineIs( blueprint._InternalRoutinesMap.retype ), `Each blueprint should have handler::retype, but definition::${blueprint.name} does not have` );
+  _.assert( _.blueprint.isDefinitive( blueprint ) );
+  _.assert
+  (
+    _.routineIs( blueprint._RuntimeRoutinesMap.allocate )
+    , `Each blueprint should have handler::allocate, but definition::${blueprint.name} does not have`
+  );
+  _.assert
+  (
+    _.routineIs( blueprint._RuntimeRoutinesMap.retype )
+    , `Each blueprint should have handler::retype, but definition::${blueprint.name} does not have`
+  );
+  _.assert( blueprint.Traits.typed ? blueprint.Typed === !!blueprint.Traits.typed.val : true );
+}
+
+//
+
+function _routineAdd( blueprint, name, routine )
+{
+
+  _.assert( _.routineIs( routine ) );
+  _.assert( _.mapIs( _.definition.ConstructionRuntimeRoutines[ name ] ), `Unknown runtime routine::${name}` );
+
+  let descriptor = _.definition.ConstructionRuntimeRoutines[ name ];
+
+  if( descriptor.multiple )
+  {
+    blueprint._RuntimeRoutinesMap[ name ] = blueprint._RuntimeRoutinesMap[ name ] || [];
+    blueprint._RuntimeRoutinesMap[ name ].push( routine );
+  }
+  else
+  {
+    _.assert( blueprint._RuntimeRoutinesMap[ name ] === undefined, `Blueprint already have runtime routine::${name}` );
+    blueprint._RuntimeRoutinesMap[ name ] = routine;
+  }
+
 }
 
 //
@@ -450,7 +547,7 @@ function _validate( blueprint )
 function eachDefinition( blueprint, onEach )
 {
   _.assert( arguments.length === 2 );
-  _.assert( _.blueprint.is( blueprint ) );
+  _.assert( _.blueprint.isDefinitive( blueprint ) );
 
   for( let k in blueprint.Traits )
   {
@@ -486,7 +583,7 @@ function defineConstructor()
 function constructorOf( blueprint )
 {
   let result = blueprint.Make;
-  _.assert( _.blueprint.is( blueprint ) );
+  _.assert( _.blueprint.isDefinitive( blueprint ) );
   _.assert( _.routineIs( result ) );
   return result;
 }
@@ -496,7 +593,7 @@ function constructorOf( blueprint )
 function retyperOf( blueprint )
 {
   let result = blueprint.Retype;
-  _.assert( _.blueprint.is( blueprint ) );
+  _.assert( _.blueprint.isDefinitive( blueprint ) );
   _.assert( _.routineIs( result ) );
   return result;
 }
@@ -507,7 +604,7 @@ function construct( blueprint )
 {
   _.assert( arguments.length === 1 );
 
-  if( !_.blueprint.is( blueprint ) )
+  if( !_.blueprint.isDefinitive( blueprint ) )
   blueprint = _.blueprint.define( blueprint );
 
   let construct = _.blueprint.constructorOf( blueprint );
@@ -523,7 +620,7 @@ function retype( blueprint, construction )
   _.assert( arguments.length === 2 );
   _.assert( !!construction );
 
-  if( !_.blueprint.is( blueprint ) )
+  if( !_.blueprint.isDefinitive( blueprint ) )
   blueprint = _.blueprint.define( blueprint );
 
   let retyper = _.blueprint.retyperOf( blueprint );
@@ -539,7 +636,7 @@ function definitionQualifiedName( blueprint, definition )
 {
 
   _.assert( arguments.length === 2 );
-  _.assert( _.blueprint.is( blueprint ) );
+  _.assert( _.blueprint.isDefinitive( blueprint ) );
   _.assert( _.definition.is( definition ) );
 
   if( _.definition.trait.is( definition ) )
@@ -576,16 +673,21 @@ var BlueprintExtension =
 
   // routines
 
-  is,
-  isBlueprintOf,
+  isDefinitive,
   isRuntime,
+  isBlueprintOf,
   compileSourceCode,
   define,
   _amend,
   _supplement,
   _extend,
+  _associateDefinitions,
   _form,
+  _preventExtensions,
   _validate,
+
+  _routineAdd,
+
   eachDefinition,
 
   defineConstructor,

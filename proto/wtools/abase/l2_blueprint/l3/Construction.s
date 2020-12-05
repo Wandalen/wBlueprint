@@ -35,7 +35,7 @@ function isTyped( construction )
 function isInstanceOf( construction, runtime )
 {
 
-  if( _.blueprint.is( runtime ) )
+  if( _.blueprint.isDefinitive( runtime ) )
   runtime = runtime.Runtime;
 
   _.assert( arguments.length === 2 );
@@ -52,38 +52,130 @@ function isInstanceOf( construction, runtime )
 
 //
 
-function extend( dst, src )
+function amend( o )
 {
-  if( dst === null )
-  dst = Object.create( null );
+  o = _.routineOptions( amend, arguments );
+  if( o.dstConstruction === null )
+  o.dstConstruction = Object.create( null );
+  return constructionExtend( o.dstConstruction, o.src, null );
 
-  if( _.blueprint.is( src ) )
+  /* */
+
+  function constructionExtend( dstConstruction, src, name )
   {
-    _.assert( !_.blueprint.is( dst ), 'not implemented' ); /* xxx */
-    _.mapExtend( dst, src.Props );
-    _.assert( 0, 'not implemented' );
+    if( _.mapIs( src ) )
+    return constructionMapExtend( dstConstruction, src, name );
+    else if( _.definitionIs( src ) )
+    return constructionDefinitionExtend( dstConstruction, src, name );
+    else if( _.blueprintIs( src ) )
+    return constructionBlueprintExtend( dstConstruction, src, name );
+  }
+
+  function constructionMapExtend( dstConstruction, map, name )
+  {
+    _.assert( _.mapIs( map ) );
+    for( let name2 in map )
+    {
+      let def = map[ name2 ];
+      if( _.definitionIs( def ) )
+      constructionDefinitionExtend( dstConstruction, def, name2 );
+      else
+      dstConstruction[ name2 ] = def;
+    }
+    return dstConstruction;
+  }
+
+  function constructionDefinitionExtend( dstConstruction, def, name )
+  {
+    _.assert( _.definitionIs( def ) );
+    def.constructionAmend( dstConstruction, name, o.amending );
+    return dstConstruction;
+  }
+
+  function constructionBlueprintExtend( dstConstruction, blueprint, name )
+  {
+    _.assert( !_.blueprint.isDefinitive( dst ) );
+    _.assert( !_.blueprint.isRuntime( dst ) );
+    _.assert( 0, 'not tested' );
+    return blueprint.Retype( dstConstruction );
+  }
+
+  /* */
+
+}
+
+amend.defaults =
+{
+  dstConstruction : null,
+  src : null,
+  amending : 'extend',
+}
+
+//
+
+/* xxx : cover and extend */
+function extend( dstConstruction, src )
+{
+  return _.construction.amend
+  ({
+    dstConstruction,
+    src,
+    amending : 'extend'
+  });
+}
+
+//
+
+/* xxx : cover and extend */
+function supplement( dstConstruction, src )
+{
+  return _.construction.amend
+  ({
+    dstConstruction,
+    src,
+    amending : 'supplement'
+  });
+}
+
+//
+
+function _make( construction, runtime, args )
+{
+
+  _.assert( arguments.length === 3 );
+
+  if( !runtime.Typed && construction instanceof runtime.Make )
+  {
+    construction = null;
+  }
+  else if( _.construction.isInstanceOf( construction, runtime ) )
+  {
   }
   else
   {
-
-    for( let s in src )
-    {
-      let def = src[ s ];
-      if( _.definitionIs( def ) )
-      definitionExtend( def, dst, s );
-      else
-      dst[ s ] = def;
-    }
-
+    construction = null;
   }
 
-  return dst;
+  _.assert( !runtime.makeCompiled, 'not tested' );
 
-  function definitionExtend( def, dst, s )
+  construction = _.construction._make2( construction, runtime, args );
+
+  return construction;
+}
+
+//
+
+function _makeEach( construction, runtime, args )
+{
+  let result = [];
+  _.assert( arguments.length === 3 );
+  for( let a = 0 ; a < args.length ; a++ )
   {
-    def.constructionAmend( dst, s, 'extend' );
+    let construction = runtime.Make( args[ a ] );
+    if( construction !== undefined )
+    result.push( construction );
   }
-
+  return result;
 }
 
 //
@@ -112,65 +204,24 @@ function _from( construction, runtime, args )
   }
 
   _.assert( !runtime.makeCompiled, 'not tested' );
-  construction = _.construction._construct2( construction, runtime, args );
+  construction = _.construction._make2( construction, runtime, args );
 
   return construction;
 }
 
 //
 
-function _makeEach( construction, runtime, args )
+function _fromEach( construction, runtime, args )
 {
   let result = [];
   _.assert( arguments.length === 3 );
   for( let a = 0 ; a < args.length ; a++ )
   {
-    let construction = runtime.Make( args[ a ] );
+    let construction = runtime.From( args[ a ] );
     if( construction !== undefined )
     result.push( construction );
   }
   return result;
-}
-
-//
-
-function _make( construction, runtime, args )
-{
-
-  _.assert( arguments.length === 3 );
-
-  if( !runtime.Typed && construction instanceof runtime.Make )
-  {
-    construction = null;
-  }
-  else if( _.construction.isInstanceOf( construction, runtime ) )
-  {
-  }
-  else
-  {
-    construction = null;
-  }
-
-  _.assert( !runtime.makeCompiled, 'not tested' );
-
-  construction = _.construction._construct2( construction, runtime, args );
-
-  return construction;
-}
-
-//
-
-function _construct2( construction, runtime, args )
-{
-  _.assert( arguments.length === 2 || arguments.length === 3 );
-
-  let genesis = Object.create( null );
-  genesis.construction = construction;
-  genesis.args = args;
-  genesis.runtime = runtime;
-  genesis.retyping = 0;
-
-  return _.construction._construct3( genesis );
 }
 
 //
@@ -200,18 +251,48 @@ function _retype( construction, runtime, args )
   genesis.runtime = runtime;
   genesis.retyping = 1;
 
-  return _.construction._construct3( genesis );
+  return _.construction._make3( genesis );
 }
 
 //
 
-function _construct3( genesis )
+function _retypeEach( construction, runtime, args )
+{
+  let result = [];
+  _.assert( arguments.length === 3 );
+  for( let a = 0 ; a < args.length ; a++ )
+  {
+    let construction = runtime.Retype( args[ a ] );
+    if( construction !== undefined )
+    result.push( construction );
+  }
+  return result;
+}
+
+//
+
+function _make2( construction, runtime, args )
+{
+  _.assert( arguments.length === 2 || arguments.length === 3 );
+
+  let genesis = Object.create( null );
+  genesis.construction = construction;
+  genesis.args = args;
+  genesis.runtime = runtime;
+  genesis.retyping = 0;
+
+  return _.construction._make3( genesis );
+}
+
+//
+
+function _make3( genesis )
 {
 
   if( genesis.args === undefined || genesis.args === null )
   genesis.args = [];
 
-  _.assertRoutineOptions( _construct3, arguments );
+  _.assertRoutineOptions( _make3, arguments );
   _.assert( genesis.construction === null || _.objectIs( genesis.construction ) );
   _.assert( _.arrayLike( genesis.args ) );
   _.assert( genesis.args.length === 0 || genesis.args.length === 1 );
@@ -226,7 +307,6 @@ function _construct3( genesis )
   _.assert( !( genesis.construction instanceof genesis.runtime.Make ) );
 
   _.construction._init( genesis );
-  if( !genesis.retyping )
   _.construction._extendArguments( genesis );
 
   return genesis.construction;
@@ -236,14 +316,14 @@ function _construct3( genesis )
   function constructAct()
   {
     if( genesis.retyping )
-    return genesis.runtime._InternalRoutinesMap.retype( genesis );
+    return genesis.runtime._RuntimeRoutinesMap.retype( genesis );
     else
-    return genesis.runtime._InternalRoutinesMap.allocate( genesis );
+    return genesis.runtime._RuntimeRoutinesMap.allocate( genesis );
   }
 
 }
 
-_construct3.defaults =
+_make3.defaults =
 {
   construction : null,
   args : null,
@@ -257,16 +337,16 @@ function _init( genesis )
 {
   _.assert( arguments.length === 1 );
 
-  if( genesis.runtime._InternalRoutinesMap.initBegin )
-  for( let i = 0 ; i < genesis.runtime._InternalRoutinesMap.initBegin.length ; i++ )
-  genesis.runtime._InternalRoutinesMap.initBegin[ i ]( genesis );
+  if( genesis.runtime._RuntimeRoutinesMap.initBegin )
+  for( let i = 0 ; i < genesis.runtime._RuntimeRoutinesMap.initBegin.length ; i++ )
+  genesis.runtime._RuntimeRoutinesMap.initBegin[ i ]( genesis );
 
   _.construction._initFields( genesis );
   _.construction._initDefines( genesis );
 
-  if( genesis.runtime._InternalRoutinesMap.initEnd )
-  for( let i = 0 ; i < genesis.runtime._InternalRoutinesMap.initEnd.length ; i++ )
-  genesis.runtime._InternalRoutinesMap.initEnd[ i ]( genesis );
+  if( genesis.runtime._RuntimeRoutinesMap.initEnd )
+  for( let i = 0 ; i < genesis.runtime._RuntimeRoutinesMap.initEnd.length ; i++ )
+  genesis.runtime._RuntimeRoutinesMap.initEnd[ i ]( genesis );
 
   return genesis;
 }
@@ -311,12 +391,11 @@ function _initDefines( genesis )
   _.assert( _.blueprint.isRuntime( genesis.runtime ) );
   _.assert( arguments.length === 1 );
 
-  if( genesis.runtime._InternalRoutinesMap.constructionInit )
-  for( let i = 0 ; i < genesis.runtime._InternalRoutinesMap.constructionInit.length ; i++ )
+  if( genesis.runtime._RuntimeRoutinesMap.constructionInit )
+  for( let i = 0 ; i < genesis.runtime._RuntimeRoutinesMap.constructionInit.length ; i++ )
   {
-    let constructionInitContext = genesis.runtime._InternalRoutinesMap.constructionInit[ i ];
-    constructionInitContext.constructionInit( genesis );
-    // constructionInitContext.constructionInit.call( null, genesis.construction, constructionInitContext.name ); /* xxx : pass genesis? */
+    let constructionInitContext = genesis.runtime._RuntimeRoutinesMap.constructionInit[ i ];
+    constructionInitContext( genesis );
   }
 
   return genesis.construction;
@@ -387,14 +466,19 @@ var ConstructionExtension =
 
   isTyped,
   isInstanceOf,
+  amend,
   extend,
+  supplement,
 
-  _from,
-  _makeEach,
   _make,
-  _construct2,
+  _makeEach,
+  _from,
+  _fromEach,
   _retype,
-  _construct3,
+  _retypeEach,
+
+  _make2,
+  _make3,
   _init,
   _initFields,
   _initDefines,

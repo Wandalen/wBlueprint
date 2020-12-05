@@ -10,7 +10,24 @@ let _ = _global_.wTools;
 // collection
 // --
 
-function _pairArgumentshead( routine, args )
+function _singleArgumentHead( routine, args )
+{
+  let o = args[ 0 ];
+  if( !o )
+  o = Object.create( null );
+
+  o = _.routineOptions( routine, o );
+
+  _.assert( arguments.length === 2 );
+  _.assert( args.length === 1 );
+  _.assert( _.mapIs( args[ 0 ] ) );
+
+  return o;
+}
+
+//
+
+function _pairArgumentsHead( routine, args )
 {
   let o = args[ 1 ];
 
@@ -48,12 +65,6 @@ function _staticBlueprintForm( o )
   let make = o.blueprint.Make;
   let opts =
   {
-    get : () => val,
-    set : ( src ) =>
-    {
-      val = src;
-      return src;
-    },
     enumerable : o.enumerable,
     configurable : o.configurable,
   };
@@ -76,8 +87,6 @@ function _staticBlueprintForm( o )
     opts.value = val;
   }
 
-  // if( _.routineIs( val ) )
-  // opts.enumerable = false;
   Object.defineProperty( o.blueprint.Make, o.name, opts );
   Object.defineProperty( o.blueprint.prototype, o.name, opts );
 
@@ -100,23 +109,20 @@ _staticBlueprintForm.defaults =
 //
 
 let _valueGenerate = Object.create( null );
-_valueGenerate.val = function get() { return this.val }
-_valueGenerate.shallow = function get() { return _.entityMake( this.val ) }
-_valueGenerate.deep = function get() { return _.replicate({ src : this.val }) }
-_valueGenerate.call = function get() { return this.val() }
-_valueGenerate.new = function get() { return new this.val() }
+_valueGenerate.val = function val( val ) { return val }
+_valueGenerate.shallow = function shallow( val ) { return _.entityMake( val ) }
+_valueGenerate.deep = function deep( val ) { return _.replicate({ src : val }) }
+_valueGenerate.call = function call( val ) { return val() }
+_valueGenerate.new = function nw( val ) { return new val() }
 
 //
 
 function prop_head( routine, args )
 {
-  let o = _pairArgumentshead( ... arguments );
+  let o = _pairArgumentsHead( ... arguments );
 
   _.assert( _.mapIs( o ) );
   _.assert( o.val !== undefined );
-
-  if( o.blueprintDepthLimit === null )
-  o.blueprintDepthLimit = o.static ? 1 : 0
 
   _.assert( _.strIs( o.valToIns ) );
   _.assert( _.longHas( [ 'scalar', 'map', 'enumerable' ], o.collection ) );
@@ -137,30 +143,52 @@ function prop_body( o )
 {
 
   o = _.assertRoutineOptions( prop_body, arguments );
-  _.assert( o.blueprintDepthLimit >= 0 );
+
+  if( o.blueprintDepthLimit === null )
+  o.blueprintDepthLimit = o.static ? 1 : 0
+
+  if( o.writable === null )
+  o.writable = true;
+  else
+  o.writable = !!o.writable;
+  if( o.configurable === null )
+  o.configurable = true;
+  else
+  o.configurable = !!o.configurable;
+  if( o.enumerable === null )
+  o.enumerable = !o.static;
+  else
+  o.enumerable = !!o.enumerable;
 
   o.definitionGroup = 'definition.named';
   o.blueprintForm2 = blueprintForm2;
-  o.constructionInit = null;
 
-  let definition = new _.Definition( o );
-  let val = definition.val;
+  o.blueprint = false;
 
   /* */
 
-  let valueGenerate = definition.valueGenerate = _valueGenerate[ o.valToIns ];
-  _.assert( _.routineIs( valueGenerate ), () => `Unknown valToIns::${o.valToIns}` );
+  _.assert( o.blueprintDepthLimit >= 0 );
+  _.assert( _.boolIs( o.writable ) );
+  _.assert( _.boolIs( o.configurable ) );
+  _.assert( _.boolIs( o.enumerable ) );
 
   /* */
 
-  Object.preventExtensions( definition );
+  let val = o.val;
+  let valueGenerate = o.valueGenerate = _valueGenerate[ o.valToIns ];
+  let definition = _.definition._definitionMake( 'prop', o );
+  _.assert( _.routineIs( valueGenerate ), () => `Unknown valToIns::${definition.valToIns}` );
+
+  /* */
+
+  Object.preventExtensions( definition ); /* xxx */
   return definition;
 
   /* */
 
   function blueprintForm2( blueprint, name )
   {
-    let handlers = blueprint._InternalRoutinesMap.constructionInit = blueprint._InternalRoutinesMap.constructionInit || [];
+    let constructionInit = null;
 
     _.assert( _.strDefined( name ) || _.strDefined( ext.name ) );
     _.assert( name === null || definition.name === null || name === definition.name );
@@ -168,44 +196,68 @@ function prop_body( o )
     if( definition.name && definition.name !== name )
     name = definition.name;
 
-    _.assert( definition.constructionInit === null );
-    _.assert( _.strDefined( definition.name ) );
-
-    if( o.static )
+    if( definition.static )
     {
       _.blueprint._staticBlueprintForm
       ({
         blueprint,
         name,
-        val : definition.valueGenerate(),
-        enumerable : o.enumerable,
-        configurable : o.configurable,
-        writable : o.writable,
+        val : definition.valueGenerate( definition.val ),
+        enumerable : definition.enumerable,
+        configurable : definition.configurable,
+        writable : definition.writable,
       });
     }
     else
     {
-      if( o.valToIns === 'val' )
-      {
-        blueprint.Props[ name ] = definition.val;
-      }
+      if( definition.valToIns === 'val' && definition.enumerable && definition.configurable && definition.writable )
+      blueprint.Props[ name ] = definition.val;
+      else if( definition.enumerable && definition.configurable && definition.writable )
+      constructionInit = constructionInitOrdinary_functor( definition );
       else
-      {
-        definition.constructionInit = function( genesis )
-        {
-          genesis.construction[ this.name ] = valueGenerate.call( this );
-        }
-      }
-      if( definition.constructionInit !== null )
-      {
-        handlers.push({ constructionInit : definition.constructionInit, name : definition.name, val })
-        definition.constructionInit.meta =
-        {
-          extenral : { val },
-        }
-      }
+      constructionInit = constructionInitVal_functor( definition );
+      if( constructionInit !== null )
+      _.blueprint._routineAdd( blueprint, 'constructionInit', constructionInit );
     }
   }
+
+  /* */
+
+  function constructionInitOrdinary_functor( definition )
+  {
+    let valueGenerate = definition.valueGenerate;
+    let name = definition.name;
+    let val = definition.val;
+    return function constructionInit( genesis )
+    {
+      genesis.construction[ name ] = valueGenerate( val );
+    }
+  }
+
+  /* */
+
+  function constructionInitVal_functor( definition )
+  {
+    let enumerable = definition.enumerable;
+    let configurable = definition.configurable;
+    let writable = definition.writable;
+    let valueGenerate = definition.valueGenerate;
+    let name = definition.name;
+    let val = definition.val;
+    return function constructionInit( genesis )
+    {
+      let opts =
+      {
+        value : valueGenerate( val ),
+        enumerable,
+        configurable,
+        writable,
+      };
+      Object.defineProperty( genesis.construction, name, opts );
+    }
+  }
+
+  /* */
 
 }
 
@@ -215,8 +267,8 @@ prop_body.defaults =
   order           : 0,
   before          : null,
   after           : null,
-  static          : 0,
 
+  static          : 0,
   enumerable      : null,
   configurable    : null,
   writable        : null,
@@ -230,6 +282,12 @@ prop_body.defaults =
   val             : null,
   name            : null,
   // relation        : null,
+  accessor        : null,
+
+  // grab            : null,
+  // get             : null,
+  // put             : null,
+  // set             : null,
 
   blueprintDepthLimit : null,
   blueprintDepthReserve : 0,
@@ -237,6 +295,7 @@ prop_body.defaults =
 }
 
 let prop = _.routineUnite( prop_head, prop_body );
+_.routineEr( prop, _singleArgumentHead );
 
 /*
 |                | Composes | Aggregates | Associates  |  Restricts  |  Medials  |   Statics   |
@@ -305,6 +364,7 @@ props_body.defaults =
 }
 
 let props = _.routineUnite( prop_head, props_body );
+_.routineEr( props, _singleArgumentHead );
 
 //
 
@@ -320,6 +380,7 @@ val_body.defaults =
 }
 
 let val = _.routineUnite( prop_head, val_body );
+_.routineEr( val, _singleArgumentHead );
 
 //
 
@@ -335,6 +396,7 @@ vals_body.defaults =
 }
 
 let vals = _.routineUnite( prop_head, vals_body );
+_.routineEr( vals, _singleArgumentHead );
 
 //
 
@@ -350,6 +412,7 @@ shallow_body.defaults =
 }
 
 let shallow = _.routineUnite( prop_head, shallow_body );
+_.routineEr( shallow, _singleArgumentHead );
 
 //
 
@@ -365,6 +428,7 @@ shallows_body.defaults =
 }
 
 let shallows = _.routineUnite( prop_head, shallows_body );
+_.routineEr( shallows, _singleArgumentHead );
 
 //
 
@@ -380,6 +444,7 @@ deep_body.defaults =
 }
 
 let deep = _.routineUnite( prop_head, deep_body );
+_.routineEr( deep, _singleArgumentHead );
 
 //
 
@@ -395,6 +460,7 @@ deeps_body.defaults =
 }
 
 let deeps = _.routineUnite( prop_head, deeps_body );
+_.routineEr( deeps, _singleArgumentHead );
 
 //
 
@@ -410,6 +476,7 @@ call_body.defaults =
 }
 
 let call = _.routineUnite( prop_head, call_body );
+_.routineEr( call, _singleArgumentHead );
 
 //
 
@@ -425,6 +492,7 @@ calls_body.defaults =
 }
 
 let calls = _.routineUnite( prop_head, calls_body );
+_.routineEr( calls, _singleArgumentHead );
 
 //
 
@@ -440,6 +508,7 @@ new_body.defaults =
 }
 
 let _new = _.routineUnite( prop_head, new_body );
+_.routineEr( _new, _singleArgumentHead );
 
 //
 
@@ -455,6 +524,7 @@ news_body.defaults =
 }
 
 let _news = _.routineUnite( prop_head, news_body );
+_.routineEr( _news, _singleArgumentHead );
 
 //
 
@@ -470,6 +540,7 @@ static_body.defaults =
 }
 
 let _static = _.routineUnite( prop_head, static_body );
+_.routineEr( _static, _singleArgumentHead );
 
 //
 
@@ -485,12 +556,13 @@ statics_body.defaults =
 }
 
 let _statics = _.routineUnite( prop_head, statics_body );
+_.routineEr( _statics, _singleArgumentHead );
 
 //
 
 function _amendment_head( routine, args )
 {
-  let o = _pairArgumentshead( ... arguments );
+  let o = _pairArgumentsHead( ... arguments );
   _.assert( _.longHas( [ 'extend', 'supplement' ], o.amending ) );
   return o;
 }
@@ -500,15 +572,14 @@ function _amendment_body( o )
 
   _.assertRoutineOptions( _amendment_body, arguments );
   _.assert( _.objectIs( o.val ) );
-  _.assert( _.blueprintIs( o.val ) );
+  _.assert( _.blueprintIsDefinitive( o.val ) );
 
   o.definitionGroup = 'definition.unnamed';
+  o.constructionAmend = constructionAmend;
+  o.blueprintAmend = blueprintAmend;
+  o.blueprint = false;
 
-  let definition = new _.Definition( o );
-
-  definition.kind = o.amending;
-  definition.constructionAmend = constructionAmend;
-  definition.blueprintAmend = blueprintAmend;
+  let definition = _.definition._definitionMake( o.amending, o );
 
   _.assert( definition.amending === o.amending );
 
@@ -520,18 +591,18 @@ function _amendment_body( o )
     _.assert( 0, 'not implemented' ); /* zzz */
   }
 
-  function blueprintAmend( o )
+  function blueprintAmend( op )
   {
     let definition = this;
-    let blueprint = o.blueprint;
-    if( o.blueprintDepth )
+    let blueprint = op.blueprint;
+    if( op.blueprintDepth )
     return;
     return _.blueprint._amend
     ({
-      ... o,
+      ... op,
       extension : definition.val,
       amending : definition.amending,
-      // amending : o.amending, /* xxx : cover */
+      // amending : op.amending, /* xxx : ? */
       blueprintAction : 'amend',
       blueprintDepthReserve : definition.blueprintDepthReserve + o.blueprintDepthReserve,
     });
@@ -550,11 +621,7 @@ let _amendment = _.routineUnite( _amendment_head, _amendment_body );
 
 //
 
-function extension()
-{
-  let o = _.define._amendment.head( extension, arguments );
-  return _.define._amendment.body( o );
-}
+let extension = _.routineUnite( _amendment_head, _amendment_body );
 
 extension.defaults =
 {
@@ -562,19 +629,19 @@ extension.defaults =
   amending : 'extend',
 }
 
+_.routineEr( extension, _singleArgumentHead );
+
 //
 
-function supplementation()
-{
-  let o = _.define._amendment.head( supplementation, arguments );
-  return _.define._amendment.body( o );
-}
+let supplementation = _.routineUnite( _amendment_head, _amendment_body );
 
 supplementation.defaults =
 {
   ... _amendment.defaults,
   amending : 'supplement',
 }
+
+_.routineEr( supplementation, _singleArgumentHead );
 
 //
 
@@ -583,14 +650,14 @@ function inherit( o )
   if( !_.mapIs( o ) )
   o = { val : arguments[ 0 ] };
   _.routineOptions( inherit, o );
-  _.assert( _.blueprint.is( o.val ) );
+  _.assert( _.blueprint.isDefinitive( o.val ) );
   let result = [];
   result.push( _.define.extension( o.val ) );
   result.push( _.trait.prototype( o.val ) );
-  if( o.val.Traits.typed )
-  result.push( _.trait.typed({ typed : o.val.Traits.typed.typed, withConstructor : o.val.Traits.typed.withConstructor }) );
-  else
+
+  if( !o.val.Traits.typed )
   result.push( _.trait.typed() );
+
   return result;
 }
 
@@ -599,6 +666,61 @@ inherit.defaults =
   val : null,
 }
 
+//
+
+function alias_body( o ) /* xxx */
+{
+
+  _.assertRoutineOptions( alias_body, arguments );
+
+  o.definitionGroup = 'definition.named';
+  o.constructionAmend = constructionAmend;
+  o.blueprintForm2 = blueprintForm2;
+  o.blueprint = false;
+
+  let originalContainer = o.originalContainer;
+  let originalName = o.originalName;
+
+  _.assert( originalContainer === null || !!originalContainer );
+  _.assert( _.strDefined( originalName ) );
+
+  let definition = _.definition._definitionMake( o.amending, o );
+  Object.freeze( definition ); /* xxx */
+  return definition;
+
+  function constructionInit( genesis )
+  {
+    let originalContainer2 = originalContainer || genesis.construction;
+
+    Object.defineProperty( o.blueprint.Make, o.name, opts );
+
+    debugger;
+    _.assert( 0, 'not implemented' ); /* zzz */
+  }
+
+  function constructionAmend( construction, key )
+  {
+    _.assert( 0, 'not implemented' ); /* zzz */
+  }
+
+  function blueprintForm2( blueprint, name )
+  {
+    let definition = this;
+    blueprint = op.blueprint;
+    _.blueprint._routineAdd( blueprint, 'constructionInit', constructionInit );
+  }
+
+}
+
+alias_body.defaults =
+{
+  originalContainer : null,
+  originalName : null,
+}
+
+let alias = _.routineUnite( _singleArgumentHead, alias_body );
+_.routineEr( alias );
+
 // --
 //
 // --
@@ -606,7 +728,8 @@ inherit.defaults =
 let BlueprintExtension =
 {
 
-  _pairArgumentshead,
+  _singleArgumentHead,
+  _pairArgumentsHead,
   _staticBlueprintForm,
   _valueGenerate,
 
@@ -637,6 +760,8 @@ let DefineExtension =
   extension,
   supplementation,
   inherit,
+
+  alias,
 
 }
 

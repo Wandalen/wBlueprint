@@ -39,14 +39,16 @@ function Definition( o )
   else
   return new( _.constructorJoin( Definition, arguments ) );
   _.mapExtend( this, o );
-  _.assert( _.longHas( _.definition.DefinitionKind, o.definitionGroup ) );
+  _.assert( _.longHas( _.definition.DefinitionGroup, o.definitionGroup ) );
   return this;
 }
 
+Object.setPrototypeOf( Definition, null );
 Definition.prototype = Object.create( null );
 Definition.prototype.clone = function()
 {
-  return new Definition( this );
+  let result = new Definition( this );
+  return result;
 }
 
 //
@@ -60,59 +62,59 @@ function _constructionAmendCant( construction, key )
 
 //
 
-function _traitMake( routine, o )
+function _traitMake( kind, o )
 {
 
   _.assert( arguments.length === 2 );
-  _.assert( _.routineIs( routine ) );
-  _.assert( _.strDefined( routine.name ) );
+  _.assert( _.strDefined( kind ) );
   _.assert( _.mapIs( o ) );
+  _.assert( o.blueprint === undefined || o.blueprint === false );
 
+  if( !o.definitionGroup )
   o.definitionGroup = 'trait';
-  o.kind = routine.name;
+  if( !o.kind )
+  o.kind = kind;
   if( !o.constructionAmend )
   o.constructionAmend = _.definition._constructionAmendCant;
+  if( o.blueprint === undefined )
+  o.blueprint = null;
 
   let definition = new _.Definition( o );
+
+  Object.preventExtensions( definition );
+  if( definition.blueprint === false )
   Object.freeze( definition );
+  return definition;
+}
+
+//
+
+function _definitionMake( kind, o )
+{
+
+  _.assert( arguments.length === 2 );
+  _.assert( _.strDefined( kind ) );
+  _.assert( _.mapIs( o ) );
+  _.assert( o.blueprint === undefined || o.blueprint === false );
+
+  if( !o.definitionGroup )
+  o.definitionGroup = 'definition.unnamed';
+  if( !o.kind )
+  o.kind = kind;
+  if( !o.constructionAmend )
+  o.constructionAmend = _.definition._constructionAmendCant;
+  if( o.blueprint === undefined )
+  o.blueprint = null;
+
+  let definition = new _.Definition( o );
+
+  Object.preventExtensions( definition );
   return definition;
 }
 
 // --
 // define
 // --
-
-let DefinitionKind = [ 'etc', 'trait', 'definition.unnamed', 'definition.named' ];
-
-let KnownFields =
-{
-  valueGenerate : 'routine::valueGenerate( map::o ) -> anything::',
-  constructionAmend : 'routine::constructionAmend( Construction::construction primitive::key ) -> nothing::',
-  blueprintAmend : 'routine::( map::o ) -> nothing::',
-  blueprintForm1 : 'routine::( Blueprint::blueprint ) -> nothing::',
-  blueprintForm2 : 'routine::( Blueprint::blueprint ) -> nothing::',
-  blueprintForm3 : 'routine::( Blueprint::blueprint ) -> nothing::',
-}
-
-let BlueprintInternalRoutines =
-{
-  blueprintAmend : 'routine::( map::o ) -> nothing::',
-  blueprintForm1 : 'routine::( Blueprint::blueprint ) -> nothing::',
-  blueprintForm2 : 'routine::( Blueprint::blueprint ) -> nothing::',
-  blueprintForm3 : 'routine::( Blueprint::blueprint ) -> nothing::',
-}
-
-let ConstructionInternalRoutines =
-{
-  constructionInit : null,
-  constructionAmend : 'routine::constructionAmend( Construction::construction primitive::key ) -> nothing::',
-  allocate : null,
-  reconstruct : null,
-  initBegin : null,
-  initEnd : null,
-}
-
-//
 
 /**
 * Routines to manipulate definitions.
@@ -125,15 +127,13 @@ let DefinitionExtension =
 {
 
   // routines
+
   is : _.definitionIs,
   _constructionAmendCant,
   _traitMake,
+  _definitionMake,
 
   // fields
-  DefinitionKind,
-  KnownFields,
-  BlueprintInternalRoutines,
-  ConstructionInternalRoutines,
 
 }
 

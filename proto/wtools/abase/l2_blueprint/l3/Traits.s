@@ -21,7 +21,9 @@ function callable( o )
   _.assert( arguments.length === 1 );
   _.assert( _.routineIs( o.val ) );
 
-  return _.definition._traitMake( callable, o );
+  o.blueprint = false;
+
+  return _.definition._traitMake( 'callable', o );
 }
 
 callable.defaults =
@@ -34,47 +36,25 @@ callable.defaults =
 function typed( o )
 {
   if( !_.mapIs( o ) )
-  o = { typed : arguments[ 0 ] };
+  o = { val : arguments[ 0 ] };
   _.routineOptions( typed, o );
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.boolIs( o.typed ) );
+  _.assert( _.boolIs( o.val ) );
 
-  o.blueprintForm3 = blueprintForm3; /* xxx */
+  o.blueprintForm2 = blueprintForm2;
+  o.blueprint = false;
 
-  return _.definition._traitMake( typed, o );
+  return _.definition._traitMake( 'typed', o );
 
   /* */
 
-  function blueprintForm3( blueprint )
+  function blueprintForm2( blueprint )
   {
 
-    _.assert( blueprint._InternalRoutinesMap.allocate === undefined );
-    _.assert( _.boolIs( blueprint.Traits.typed.typed ) );
+    _.assert( _.boolIs( blueprint.Traits.typed.val ) );
 
-    if( blueprint.Traits.typed.typed )
-    blueprint._InternalRoutinesMap.allocate = allocateTyped;
-    else
-    blueprint._InternalRoutinesMap.allocate = allocateUntyped;
-
-    if( blueprint.Traits.typed.typed )
-    blueprint._InternalRoutinesMap.retype = retypeTyped;
-    else
-    blueprint._InternalRoutinesMap.retype = retypeUntyped;
-
-    if( blueprint.Traits.typed.withConstructor )
-    {
-      _.assert( !_.mapOwnKey( blueprint.prototype, 'constructor' ) );
-      _.assert( _.routineIs( blueprint.Make ) );
-      _.assert( _.objectIs( blueprint.prototype ) );
-      let properties =
-      {
-        value : blueprint.Make,
-        enumerable : false,
-        configurable : true,
-        writable : true,
-      };
-      Object.defineProperty( blueprint.prototype, 'constructor', properties );
-    }
+    _.blueprint._routineAdd( blueprint, 'allocate', blueprint.Traits.typed.val ? allocateTyped : allocateUntyped );
+    _.blueprint._routineAdd( blueprint, 'retype', blueprint.Traits.typed.val ? retypeTyped : retypeUntyped );
 
   }
 
@@ -132,8 +112,51 @@ function typed( o )
 
 typed.defaults =
 {
-  typed : true,
-  withConstructor : false,
+  val : true
+}
+
+//
+
+function withConstructor( o )
+{
+  if( !_.mapIs( o ) )
+  o = { val : arguments[ 0 ] };
+  _.routineOptions( withConstructor, o );
+  _.assert( arguments.length === 0 || arguments.length === 1 );
+  _.assert( _.boolIs( o.val ) );
+
+  o.blueprintForm2 = blueprintForm2;
+  o.blueprint = false;
+
+  return _.definition._traitMake( 'withConstructor', o );
+
+  /* */
+
+  function blueprintForm2( blueprint )
+  {
+
+    _.assert( !_.mapOwnKey( blueprint.prototype, 'constructor' ) );
+    if( blueprint.Traits.withConstructor.val )
+    {
+      _.assert( _.routineIs( blueprint.Make ) );
+      _.assert( _.objectIs( blueprint.prototype ) );
+      let properties =
+      {
+        value : blueprint.Make,
+        enumerable : false,
+        configurable : false,
+        writable : false,
+      };
+      Object.defineProperty( blueprint.prototype, 'constructor', properties );
+    }
+
+  }
+
+}
+
+withConstructor.defaults =
+{
+  val : true,
 }
 
 //
@@ -147,16 +170,16 @@ function extendable( o )
   _.assert( _.boolIs( o.val ) );
 
   o.blueprintForm2 = blueprintForm2;
+  o.blueprint = false;
 
-  return _.definition._traitMake( extendable, o );
+  return _.definition._traitMake( 'extendable', o );
 
   function blueprintForm2( blueprint )
   {
     _.assert( _.boolIs( blueprint.Traits.extendable.val ) );
     if( blueprint.Traits.extendable.val )
     return;
-    blueprint._InternalRoutinesMap.initEnd = blueprint._InternalRoutinesMap.initEnd || [];
-    blueprint._InternalRoutinesMap.initEnd.push( preventExtensions );
+    _.blueprint._routineAdd( blueprint, 'initEnd', preventExtensions );
   }
 
   function preventExtensions( genesis )
@@ -179,21 +202,30 @@ function prototype( o )
   o = { val : arguments[ 0 ] };
   _.routineOptions( prototype, o );
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.blueprint.is( o.val ) );
+  _.assert( _.blueprint.isDefinitive( o.val ) );
 
   o.blueprintForm1 = blueprintForm1;
+  o.blueprintForm2 = blueprintForm2;
+  o.blueprint = false;
 
-  return _.definition._traitMake( prototype, o );
+  return _.definition._traitMake( 'prototype', o );
 
   function blueprintForm1( blueprint )
   {
-    _.assert( _.blueprint.is( blueprint.Traits.prototype.val ) );
-    _.assert( blueprint.construct === undefined );
-    _.assert( blueprint.Traits.prototype.val.construct === undefined );
+    _.assert( _.blueprint.isDefinitive( blueprint.Traits.prototype.val ) );
+    _.assert( blueprint.Make === null );
     _.assert( _.routineIs( blueprint.Traits.prototype.val.Make ) );
     _.assert( _.objectIs( blueprint.prototype ) );
     _.assert( _.objectIs( blueprint.Traits.prototype.val.prototype ) );
-    blueprint.prototype = Object.create( blueprint.Traits.prototype.val.prototype );
+    blueprint.Runtime.prototype = Object.create( blueprint.Traits.prototype.val.prototype );
+  }
+
+  function blueprintForm2( blueprint )
+  {
+    _.assert( _.blueprint.isDefinitive( blueprint.Traits.prototype.val ) );
+    _.assert( _.routineIs( blueprint.Make ) );
+    _.assert( _.routineIs( blueprint.Traits.prototype.val.Make ) );
+    Object.setPrototypeOf( blueprint.Make, blueprint.Traits.prototype.val.Make );
   }
 
 }
@@ -214,12 +246,14 @@ function name( o )
   _.assert( _.strIs( o.val ) );
 
   o.blueprintForm1 = blueprintForm1;
+  o.blueprint = false;
 
-  return _.definition._traitMake( name, o );
+  return _.definition._traitMake( 'name', o );
 
   function blueprintForm1( blueprint )
   {
-    blueprint.Name = o.val;
+    _.assert( blueprint.Make === null );
+    blueprint.Runtime.Name = o.val;
   }
 
 }
@@ -245,6 +279,7 @@ let TraitExtension =
 
   callable,
   typed,
+  withConstructor,
   extendable,
   prototype,
   name,
@@ -266,7 +301,6 @@ _.mapExtend( _.trait, TraitExtension );
 let DefinitionTraitExtension =
 {
 
-  // routines
   is : _.traitIs,
 
 }
