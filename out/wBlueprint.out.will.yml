@@ -162,8 +162,11 @@ module:
           - ../proto/wtools/abase/l2_blueprint
           - ../proto/wtools/abase/l2_blueprint/Include.s
           - ../proto/wtools/abase/l2_blueprint/l1
+          - ../proto/wtools/abase/l2_blueprint/l1/Class.s
+          - ../proto/wtools/abase/l2_blueprint/l1/Property.s
           - ../proto/wtools/abase/l2_blueprint/l1/Proto.s
           - ../proto/wtools/abase/l2_blueprint/l2
+          - ../proto/wtools/abase/l2_blueprint/l2/Accessor.s
           - ../proto/wtools/abase/l2_blueprint/l2/Definition.s
           - ../proto/wtools/abase/l2_blueprint/l2/Types.s
           - ../proto/wtools/abase/l2_blueprint/l3
@@ -172,8 +175,9 @@ module:
           - ../proto/wtools/abase/l2_blueprint/l3/Definitions.s
           - ../proto/wtools/abase/l2_blueprint/l3/Traits.s
           - ../proto/wtools/abase/l2_blueprint.test
+          - ../proto/wtools/abase/l2_blueprint.test/Accessor.test.s
           - ../proto/wtools/abase/l2_blueprint.test/Blueprint.test.s
-          - ../proto/wtools/abase/l2_blueprint.test/Prototype.test.s
+          - ../proto/wtools/abase/l2_blueprint.test/Etc.test.s
           - ../proto/wtools/amid
           - ../proto/wtools/atop
     submodule:
