@@ -98,6 +98,71 @@ function hasProperty( srcPrototype, names ) /* xxx qqq : names could be only str
   return null;
 }
 
+//
+
+function isSubPrototypeOf( sub, parent )
+{
+
+  _.assert( !!parent );
+  _.assert( !!sub );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
+
+  if( parent === sub )
+  return true;
+
+  return Object.isPrototypeOf.call( parent, sub );
+}
+
+function propertyDescriptorActiveGet( object, name )
+{
+  let result = Object.create( null );
+  result.object = null;
+  result.descriptor = null;
+
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
+
+  do
+  {
+    let descriptor = Object.getOwnPropertyDescriptor( object, name );
+    if( descriptor && !( 'value' in descriptor ) )
+    {
+      result.descriptor = descriptor;
+      result.object = object;
+      return result;
+    }
+    object = Object.getPrototypeOf( object );
+  }
+  while( object );
+
+  return result;
+}
+
+//
+
+function propertyDescriptorGet( object, name )
+{
+  let result = Object.create( null );
+  result.object = null;
+  result.descriptor = null;
+
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
+
+  do
+  {
+    let descriptor = Object.getOwnPropertyDescriptor( object, name );
+    if( descriptor )
+    {
+      result.descriptor = descriptor;
+      result.object = object;
+      return result;
+    }
+    object = Object.getPrototypeOf( object );
+  }
+  while( object );
+
+  return result;
+}
+
 // --
 // define
 // --
@@ -109,6 +174,11 @@ let PrototypeExtension =
 
   hasProperty,
   hasPrototype,
+
+  isSubPrototypeOf,
+
+  propertyDescriptorActiveGet,
+  propertyDescriptorGet,
 
 }
 

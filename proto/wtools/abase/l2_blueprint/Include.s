@@ -11,8 +11,11 @@ if( typeof module !== 'undefined' )
 {
   let _ = require( '../../../wtools/Tools.s' );
 
+  require( './l1/Class.s' );
+  require( './l1/Property.s' );
   require( './l1/Proto.s' );
 
+  require( './l2/Accessor.s' );
   require( './l2/Definition.s' );
   require( './l2/Types.s' );
 

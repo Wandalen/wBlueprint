@@ -8562,7 +8562,7 @@ function retypeExtendable( test )
 let Self =
 {
 
-  name : 'Tools.l2.Blueprint.blueprint',
+  name : 'Tools.l2.blueprint.Blueprint',
   silencing : 1,
 
   context :
