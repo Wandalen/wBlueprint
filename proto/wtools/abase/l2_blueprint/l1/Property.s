@@ -127,6 +127,96 @@ function _constant( dstPrototype, name, value )
 
 }
 
+//
+
+function declare_head( routine, args )
+{
+
+  _.assert( arguments.length === 2 );
+  _.assert( args.length === 1 || args.length === 2 );
+
+  if( args.length === 2 )
+  {
+    o = args[ 1 ];
+    _.assert( !o.object );
+    o.object = args[ 0 ];
+  }
+  else
+  {
+    o = args[ 0 ];
+  }
+
+  _.routineOptions( routine, o );
+  _.assert( !_.primitiveIs( o.object ), 'Expects object as argument but got', o.object );
+  _.assert( _.strIs( o.name ) || _.symbolIs( o.name ) );
+
+  return o;
+}
+
+//
+
+function declare_body( o )
+{
+
+  // if( o.name === 'qualifiedName' && o.object[ 'qualifiedName' ] !== undefined )
+  // debugger;
+
+  if( _.definitionIs( o.get ) )
+  {
+    _.assert( _.routineIs( o.get.valueGenerate ) );
+    _.assert( o.get.val !== undefined );
+    o.get = o.get.valueGenerate( o.get.val );
+    // o.get = o.get.val; /* xxx */
+  }
+
+  _.assert( _.boolIs( o.enumerable ) );
+  _.assert( _.boolIs( o.configurable ) );
+  _.assert( _.boolIs( o.writable ) );
+
+  let o2 =
+  {
+    enumerable : !!o.enumerable,
+    configurable : !!o.configurable,
+  }
+
+  if( o.get === false )
+  {
+    if( o.set )
+    o2.set = o.set;
+  }
+  else if( _.routineIs( o.get ) )
+  {
+    if( o.set )
+    o2.set = o.set;
+    o2.get = o.get;
+  }
+  else
+  {
+    _.assert( o.set === false );
+    o2.value = o.get;
+    o2.writable = !!o.writable;
+  }
+
+  _.assert( !o.writable || o.set !== false );
+  _.assert( o.writable || !o.set );
+
+  Object.defineProperty( o.object, o.name, o2 );
+}
+
+declare_body.defaults =
+{
+  object : null,
+  name : null,
+  enumerable : null,
+  configurable : null,
+  writable : null,
+  get : null,
+  set : null,
+}
+
+let declare = _.routineUnite( declare_head, declare_body );
+_.routineEr( declare ); /* qqq : cover */
+
 // --
 // define
 // --
@@ -136,9 +226,11 @@ let PropertyExtension =
 
   hide,
   constant : _constant,
+  declare,
 
 }
 
+/* xxx : introduce namespace _.property in module::Tools */
 _.property = _.property || Object.create( null );
 _.mapExtend( _.property, PropertyExtension );
 

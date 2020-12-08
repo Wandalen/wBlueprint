@@ -181,7 +181,8 @@ function prop_body( o )
 
   /* */
 
-  Object.preventExtensions( definition ); /* xxx */
+  // Object.preventExtensions( definition );
+  _.assert( !Object.isExtensible( definition ) );
   return definition;
 
   /* */
@@ -282,8 +283,8 @@ prop_body.defaults =
   val             : null,
   name            : null,
   // relation        : null,
-  accessor        : null,
 
+  accessor        : null,
   // grab            : null,
   // get             : null,
   // put             : null,
@@ -685,7 +686,7 @@ function alias_body( o ) /* xxx */
   _.assert( _.strDefined( originalName ) );
 
   let definition = _.definition._definitionMake( o.amending, o );
-  Object.freeze( definition ); /* xxx */
+  Object.freeze( definition );
   return definition;
 
   function constructionInit( genesis )

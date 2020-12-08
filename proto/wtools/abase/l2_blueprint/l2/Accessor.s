@@ -24,7 +24,7 @@ let _ = _global_.wTools;
  * @property {Boolean} [ preservingValue=1 ]
  * @property {Boolean} [ prime=1 ]
  * @property {String} [ combining=null ]
- * @property {Boolean} [ readOnly=0 ]
+ * @property {Boolean} [ writable=true ]
  * @property {Boolean} [ readOnlyProduct=0 ]
  * @property {Boolean} [ enumerable=1 ]
  * @property {Boolean} [ configurable=0 ]
@@ -63,15 +63,16 @@ let AccessorDefaults =
   ... AccessorTypeMap,
   suite : null,
 
-  strict : 1, /* xxx : deprecated */
+  strict : 1, /* zzz : deprecated */
   preservingValue : null,
   prime : null,
   combining : null,
   addingMethods : null,
   enumerable : null,
   configurable : null,
+  writable : null,
 
-  readOnly : 0, /* xxx : use writable instead */
+  // readOnly : 0, /* yyy : use writable instead */
   // readOnlyProduct : 0,
 
 }
@@ -89,8 +90,9 @@ let AccessorPreferences =
   addingMethods : 0,
   enumerable : 1,
   configurable : 0,
+  writable : 1,
 
-  readOnly : 0,
+  // writable : 1,
   // readOnlyProduct : 0,
 
 }
@@ -141,7 +143,6 @@ function _optionsNormalize( o )
 
 function _asuiteForm( o )
 {
-  // let result = Object.create( null );
   let result = o.asuite;
 
   _.assert( arguments.length === 1 );
@@ -164,36 +165,27 @@ function _asuiteForm( o )
     fieldSymbol = Symbol.for( o.name );
   }
 
-  // o.suite = _.accessor._amethodUnfunct
-  // ({
-  //   amethod : o.suite,
-  //   accessor : o,
-  //   kind : 'suite',
-  // });
   if( o.suite )
   _.assertMapHasOnly( o.suite, _.accessor.AccessorType );
 
   for( let k in o.asuite, _.accessor.AsuiteFields )
   methodNormalize( k );
 
-  // o.asuite = _.accessor._asuiteUnfunct({ accessor : o, asuite : o.asuite });
-
   /* grab */
 
   if( !result.grab || result.grab === true )
   if( o.asuite.grab === null || o.asuite.grab === true || o.asuite.grab === 1 )
   {
-    let move = result.move;
-    if( move )
+    if( result.move )
     result.grab = function grab()
     {
-      let it = _.accessor.moveItMake
+      let it = _.accessor._moveItMake
       ({
         srcInstance : this,
         instanceKey : fieldName,
         accessorKind : 'grab',
       });
-      move.call( this, it );
+      result.move.call( this, it );
       return it.value;
     }
     else if( _.routineIs( result.get ) )
@@ -210,17 +202,16 @@ function _asuiteForm( o )
   if( !result.get || result.get === true )
   if( o.asuite.get === null || o.asuite.get === true || o.asuite.get === 1 )
   {
-    let move = result.move;
-    if( move )
+    if( result.move )
     result.get = function get()
     {
-      let it = _.accessor.moveItMake
+      let it = _.accessor._moveItMake
       ({
         srcInstance : this,
         instanceKey : fieldName,
         accessorKind : 'get',
       });
-      move.call( this, it );
+      result.move.call( this, it );
       return it.value;
     }
     else if( _.routineIs( result.grab ) )
@@ -237,18 +228,17 @@ function _asuiteForm( o )
   if( !result.put || result.put === true )
   if( o.asuite.put === null || o.asuite.put === true || o.asuite.put === 1 )
   {
-    let move = result.move;
-    if( move )
+    if( result.move )
     result.put = function put( src )
     {
-      let it = _.accessor.moveItMake
+      let it = _.accessor._moveItMake
       ({
         dstInstance : this,
         instanceKey : fieldName,
         value : src,
         accessorKind : 'put',
       });
-      move.call( this, it );
+      result.move.call( this, it );
       return it.value;
     }
     else if( _.routineIs( result.set ) )
@@ -266,18 +256,17 @@ function _asuiteForm( o )
   if( !result.set || result.set === true )
   if( o.asuite.set === null || o.asuite.set === true || o.asuite.set === 1 )
   {
-    let move = result.move;
-    if( move )
+    if( result.move )
     result.set = function set( src )
     {
-      let it = _.accessor.moveItMake
+      let it = _.accessor._moveItMake
       ({
         dstInstance : this,
         instanceKey : fieldName,
         value : src,
         accessorKind : 'set',
       });
-      move.call( this, it );
+      result.move.call( this, it );
       return it.value;
     }
     else if( _.routineIs( result.put ) )
@@ -328,83 +317,15 @@ function _asuiteForm( o )
 
   /* validation */
 
-  _.assert
-  (
-    result.grab === false || o.asuite.grab !== false,
-    () => `Field "${fieldName}" is read only, but grabr found in ${_.toStrShort( o.methods )}`
-  );
-  _.assert
-  (
-    result.get === false || o.asuite.get !== false,
-    () => `Field "${fieldName}" is read only, but getter found in ${_.toStrShort( o.methods )}`
-  );
-  _.assert
-  (
-    result.put === false || o.asuite.put !== false,
-    () => `Field "${fieldName}" is read only, but putter found in ${_.toStrShort( o.methods )}`
-  );
-  _.assert
-  (
-    result.set === false || o.asuite.set !== false,
-    () => `Field "${fieldName}" is read only, but setter found in ${_.toStrShort( o.methods )}`
-  );
-  _.assert
-  (
-    result.move === false || o.asuite.move !== false,
-    () => `Field "${fieldName}" is read only, but mover found in ${_.toStrShort( o.methods )}`
-  );
-
-  _.assert
-  (
-    _.definitionIs( result.set ) || _.routineIs( result.set ) || o.asuite.set === false,
-    () => `Field "${fieldName}" is not read only, but setter not found in ${_.toStrShort( o.methods )}`
-  );
-  _.assert
-  (
-    _.definitionIs( result.get ) || _.routineIs( result.get ) || o.asuite.get === false,
-    () => `Field "${fieldName}" is not read only, but getter not found in ${_.toStrShort( o.methods )}`
-  );
-  _.assert
-  (
-    _.definitionIs( result.grab ) || _.routineIs( result.grab ) || o.asuite.grab === false,
-    () => `Field "${fieldName}" is not read only, but graber not found in ${_.toStrShort( o.methods )}`
-  );
-  _.assert
-  (
-    _.definitionIs( result.put ) || _.routineIs( result.put ) || o.asuite.put === false,
-    () => `Field "${fieldName}" putter not found in ${_.toStrShort( o.methods )}`
-  );
-  _.assert
-  (
-    _.routineIs( result.move ) || o.asuite.move === false,
-    () => `Field "${fieldName}" mover not found in ${_.toStrShort( o.methods )}`
-  );
-
-  _.assert
-  (
-    result.grab === false || _.routineIs( result.grab ),
-    () =>  `Expects routine, but grab-accessor of field "${fieldName}" is ${_.toStrShort( o.asuite.grab )}`
-  );
-  _.assert
-  (
-    result.get === false || _.routineIs( result.get ) || _.definitionIs( result.get ),
-    () =>  `Expects routine, but get-accessor of field "${fieldName}" is ${_.toStrShort( o.asuite.get )}`
-  );
-  _.assert
-  (
-    result.put === false || _.routineIs( result.put ),
-    () =>  `Expects routine, but put-accessor of field "${fieldName}" is ${_.toStrShort( o.asuite.put )}`
-  );
-  _.assert
-  (
-    result.set === false || _.routineIs( result.set ),
-    () =>  `Expects routine, but set-accessor of field "${fieldName}" is ${_.toStrShort( o.asuite.set )}`
-  );
-  _.assert
-  (
-    result.move === false || _.routineIs( result.move ),
-    () =>  `Expects routine, but move-accessor of field "${fieldName}" is ${_.toStrShort( o.asuite.move )}`
-  );
+  if( Config.debug )
+  {
+    for( let k in AsuiteFields )
+    _.assert
+    (
+      _.definitionIs( result[ k ] ) || _.routineIs( result[ k ] ) || result[ k ] === false,
+      () => `Field "${fieldName}" is not read only, but setter not found ${_.toStrShort( o.methods )}`
+    );
+  }
 
   return result;
 
@@ -426,13 +347,6 @@ function _asuiteForm( o )
       result[ name ] = o.methods[ '_' + fieldName + capitalName ];
       else if( o.methods && o.methods[ '__' + fieldName + capitalName ] )
       result[ name ] = o.methods[ '__' + fieldName + capitalName ];
-      // _.assert
-      // (
-      //      _.routineIs( result[ name ] )
-      //   || _.definitionIs( o.asuite[ name ] )
-      //   || result[ name ] === null
-      //   || result[ name ] === undefined
-      // );
     }
   }
 
@@ -473,7 +387,14 @@ function _asuiteUnfunct( o )
     if( !o.asuite[ kind ] )
     return;
     let amethod = o.asuite[ kind ];
-    let r = _.accessor._amethodUnfunct({ amethod, kind, accessor : o.accessor });
+    let r = _.accessor._amethodUnfunct
+    ({
+      amethod,
+      kind,
+      accessor : o.accessor,
+      withDefinition : o.withDefinition,
+      withFunctor : o.withFunctor,
+    });
     o.asuite[ kind ] = r;
     return r;
   }
@@ -484,6 +405,8 @@ var defaults = _asuiteUnfunct.defaults =
 {
   accessor : null,
   asuite : null,
+  withDefinition : false,
+  withFunctor : true,
 }
 
 //
@@ -492,10 +415,10 @@ function _amethodUnfunct( o )
 {
 
   _.assert( arguments.length === 1 );
-  if( !_.routineIs( o.amethod ) )
+  if( !o.amethod )
   return o.amethod;
 
-  if( o.amethod && o.amethod.identity && _.longHas( o.amethod.identity, 'functor' ) )
+  if( o.withFunctor && o.amethod.identity && _.longHas( o.amethod.identity, 'functor' ) )
   {
     let o2 = Object.create( null );
     if( o.amethod.defaults )
@@ -509,7 +432,15 @@ function _amethodUnfunct( o )
     }
     o.amethod = o.amethod( o2 );
   }
+  // else if( o.withDefinition && _.definitionIs( o.amethod ) )
+  // {
+  //   _.assert( _.routineIs( o.amethod.valueGenerate ) );
+  //   _.assert( o.amethod.val !== undefined );
+  //   o.amethod = o.amethod.valueGenerate( o.amethod.val );
+  // }
+  // xxx
 
+  _.assert( o.amethod !== undefined );
   return o.amethod;
 }
 
@@ -518,14 +449,16 @@ _amethodUnfunct.defaults =
   amethod : null,
   accessor : null,
   kind : null,
+  withDefinition : false,
+  withFunctor : true,
 }
 
 //
 
-function _methodsNames( o )
+function _objectMethodsNamesGet( o )
 {
 
-  _.routineOptions( _methodsNames, o );
+  _.routineOptions( _objectMethodsNamesGet, o );
 
   if( o.anames === null )
   o.anames = Object.create( null );
@@ -553,7 +486,7 @@ function _methodsNames( o )
   return o.anames;
 }
 
-_methodsNames.defaults =
+_objectMethodsNamesGet.defaults =
 {
   object : null,
   asuite : null,
@@ -563,7 +496,7 @@ _methodsNames.defaults =
 
 //
 
-function _methodsRetrieve( object, propertyName )
+function _objectMethodsGet( object, propertyName )
 {
   let result = Object.create( null );
 
@@ -588,7 +521,7 @@ function _methodsRetrieve( object, propertyName )
 
 //
 
-function _methodsValidate( o )
+function _objectMethodsValidate( o )
 {
 
   if( !Config.debug )
@@ -596,7 +529,7 @@ function _methodsValidate( o )
 
   _.assert( _.strIs( o.name ) || _.symbolIs( o.name ) );
   _.assert( !!o.object );
-  _.routineOptions( _methodsValidate, o );
+  _.routineOptions( _objectMethodsValidate, o );
 
   if( _.symbolIs( o.name ) )
   debugger;
@@ -625,7 +558,7 @@ function _methodsValidate( o )
   return true;
 }
 
-_methodsValidate.defaults =
+_objectMethodsValidate.defaults =
 {
   object : null,
   asuite : null,
@@ -634,7 +567,7 @@ _methodsValidate.defaults =
 
 //
 
-function _methodMoveGet( srcInstance, name )
+function _objectMethodMoveGet( srcInstance, name )
 {
   _.assert( arguments.length === 2 );
   _.assert( _.strIs( name ) );
@@ -654,12 +587,12 @@ function _methodMoveGet( srcInstance, name )
 
 //
 
-function moveItMake( o )
+function _moveItMake( o )
 {
-  return _.routineOptions( moveItMake, arguments );
+  return _.routineOptions( _moveItMake, arguments );
 }
 
-moveItMake.defaults =
+_moveItMake.defaults =
 {
   dstInstance : null,
   srcInstance : null,
@@ -787,6 +720,7 @@ function declareSingle_body( o )
 
   _.assertRoutineOptions( declareSingle_body, arguments );
   _.assert( arguments.length === 1 );
+  _.assert( _.boolLike( o.writable ) || o.writable === null );
 
   _.accessor._optionsNormalize( o );
 
@@ -805,27 +739,8 @@ function declareSingle_body( o )
 
   /* */
 
-  let propertyDescriptor = _.prototype.propertyDescriptorActiveGet( o.object, o.name );
-  if( propertyDescriptor.descriptor )
-  {
-
-    _.assert
-    (
-      _.strIs( o.combining ), () =>
-      'overriding of property ' + o.name + '\n' +
-      '{-o.combining-} suppose to be ' + _.strQuote( _.accessor.Combining ) + ' if accessor overided, ' +
-      'but it is ' + _.strQuote( o.combining )
-    );
-
-    _.assert( o.combining === 'rewrite' || o.combining === 'append' || o.combining === 'supplement', 'not implemented' );
-
-    if( o.combining === 'supplement' )
-    return;
-
-    _.assert( o.combining === 'rewrite', 'not implemented' );
-    _.assert( propertyDescriptor.object !== o.object, () => `Attempt to redefine own accessor "${o.name}" of ${_.toStrShort( o.object )}` );
-
-  }
+  if( !needed() )
+  return false;
 
   /* */
 
@@ -834,6 +749,8 @@ function declareSingle_body( o )
     amethod : o.suite,
     accessor : o,
     kind : 'suite',
+    withDefinition : true,
+    withFunctor : true,
   });
 
   o.asuite = _.accessor._asuiteForm
@@ -846,18 +763,28 @@ function declareSingle_body( o )
       grab : o.grab,
       get : o.get,
       put : o.put,
-      set : o.readOnly ? false : o.set,
+      set : o.writable || o.writable === null ? o.set : false, /* xxx */
       move : o.move,
     },
   });
 
-  o.asuite = _.accessor._asuiteUnfunct({ accessor : o, asuite : o.asuite });
+  o.asuite = _.accessor._asuiteUnfunct
+  ({
+    accessor : o,
+    asuite : o.asuite,
+    withDefinition : false,
+    withFunctor : true,
+  });
+
+  if( o.writable === null )
+  o.writable = !!o.asuite.set;
+  _.assert( _.boolLike( o.writable ) );
 
   defaultsApply();
 
   let anames;
   if( o.prime || o.addingMethods )
-  anames = _.accessor._methodsNames
+  anames = _.accessor._objectMethodsNamesGet
   ({
     object : o.object,
     asuite : o.asuite,
@@ -867,30 +794,7 @@ function declareSingle_body( o )
   /* */
 
   if( o.prime )
-  {
-
-    let o2 = _.mapExtend( null, o );
-    o2.names = o.name;
-    // if( o2.methods === o2.object ) /* yyy */
-    o2.methods = Object.create( null );
-    o2.object = null;
-    delete o2.name;
-    delete o2.asuite;
-
-    for( let k in o.asuite )
-    if( o.asuite[ k ] )
-    o2.methods[ anames[ k ] ] = o.asuite[ k ];
-
-    _.accessor._register
-    ({
-      proto : o.object,
-      name : o.name,
-      declaratorName : 'accessor',
-      declaratorArgs : [ o2 ],
-      combining : o.combining,
-    });
-
-  }
+  register();
 
   /* preservingValue */
 
@@ -918,67 +822,56 @@ function declareSingle_body( o )
   _.assert( o.asuite.get === false || _.routineIs( o.asuite.get ) || _.definitionIs( o.asuite.get ) );
   _.assert( o.asuite.set === false || _.routineIs( o.asuite.set ) );
 
-  let o2 =
-  {
+  _.property.declare.body
+  ({
+    object : o.object,
+    name : o.name,
     enumerable : !!o.enumerable,
     configurable : !!o.configurable,
-  }
-  if( o.asuite.get === false )
-  {
-    if( o.asuite.set )
-    o2.set = o.asuite.set;
-  }
-  else if( _.routineIs( o.asuite.get ) )
-  {
-    if( o.asuite.set )
-    o2.set = o.asuite.set;
-    o2.get = o.asuite.get;
-  }
-  else
-  {
-    _.assert( o.asuite.set === false );
-    if( _.definitionIs( o.asuite.get ) )
-    o2.value = o.asuite.get.val;
-    else
-    o2.value = o.asuite.get;
-  }
-
-  Object.defineProperty( o.object, o.name, o2 );
+    writable : !!o.writable,
+    get : o.asuite.get,
+    set : o.asuite.set,
+  });
 
   /* validate */
 
   if( Config.debug )
-  _.accessor._methodsValidate({ object : o.object, name : o.name, asuite : o.asuite });
-
-  /* forbid underscore field */
-
-  // if( o.strict && !propertyDescriptor.descriptor )
-  // forbid();
+  validate();
 
   return o;
 
   /* - */
 
-  // function forbid()
-  // {
-  //   let forbiddenName = '_' + fieldName;
-  //   let m =
-  //   [
-  //     'Use Symbol.for( \'' + fieldName + '\' ) ',
-  //     'to get direct access to property value, ',
-  //     'not ' + forbiddenName,
-  //   ].join( '' );
-  //
-  //   if( _.workpiece && !_.workpiece.prototypeIsStandard( o.object ) || !_.workpiece.prototypeHasField( o.object, forbiddenName ) )
-  //   _.accessor.forbid
-  //   ({
-  //     object : o.object,
-  //     names : forbiddenName,
-  //     message : [ m ],
-  //     prime : 0,
-  //     strict : 0,
-  //   });
-  // }
+  function needed()
+  {
+    let propertyDescriptor = _.prototype.propertyDescriptorActiveGet( o.object, o.name );
+    if( propertyDescriptor.descriptor )
+    {
+
+      _.assert
+      (
+        _.strIs( o.combining ), () =>
+          `Option::overriding of property ${o.name}`
+        + ` supposed to be any of ${_.accessor.Combining }`
+        + ` but it is ${o.combining}`
+      );
+      _.assert( o.combining === 'rewrite' || o.combining === 'append' || o.combining === 'supplement', 'not implemented' );
+
+      if( o.combining === 'supplement' )
+      return false;
+
+      _.assert( propertyDescriptor.object !== o.object, () => `Attempt to redefine own accessor "${o.name}" of ${_.toStrShort( o.object )}` );
+
+    }
+    return true;
+  }
+
+  /* */
+
+  function validate()
+  {
+    _.accessor._objectMethodsValidate({ object : o.object, name : o.name, asuite : o.asuite });
+  }
 
   /* */
 
@@ -999,6 +892,33 @@ function declareSingle_body( o )
     _.assert( _.boolLike( o.enumerable ) );
     _.assert( _.boolLike( o.addingMethods ) );
     _.assert( _.boolLike( o.preservingValue ) );
+
+  }
+
+  /* */
+
+  function register()
+  {
+
+    let o2 = _.mapExtend( null, o );
+    o2.names = o.name;
+    o2.methods = Object.create( null );
+    o2.object = null;
+    delete o2.name;
+    delete o2.asuite;
+
+    for( let k in o.asuite )
+    if( o.asuite[ k ] )
+    o2.methods[ anames[ k ] ] = o.asuite[ k ];
+
+    _.accessor._register
+    ({
+      proto : o.object,
+      name : o.name,
+      declaratorName : 'accessor',
+      declaratorArgs : [ o2 ],
+      combining : o.combining,
+    });
 
   }
 
@@ -1032,8 +952,7 @@ let declareSingle = _.routineUnite( declareSingle_head, declareSingle_body );
  * @property {Boolean} [ preservingValue=true ] - saves values of existing object properties.
  * @property {Boolean} [ prime=true ]
  * @property {String} [ combining=null ]
- * @property {Boolean} [ readOnly=false ] - if true function doesn't define setter to property.
- * @property {Boolean} [ readOnlyProduct=false ]
+ * @property {Boolean} [ writable=true ] - if false function doesn't define setter to property.
  * @property {Boolean} [ configurable=false ]
  * @property {Function} [ get=null ]
  * @property {Function} [ set=null ]
@@ -1072,7 +991,7 @@ function ClassName( o ) { };
  * @throws {exception} If( o.message ) is not a Array.
  * @throws {exception} If( o ) is extented by unknown property.
  * @throws {exception} If( o.strict ) is true and object doesn't have own constructor.
- * @throws {exception} If( o.readOnly ) is true and property has own setter.
+ * @throws {exception} If( o.writable ) is false and property has own setter.
  * @function declare
  * @namespace Tools.accessor
  */
@@ -1105,6 +1024,10 @@ function declareMultiple_head( routine, args )
   o.names = { [ o.names ] : o.names }
 
   _.routineOptions( routine, o );
+
+  // if( o.writable === null )
+  // o.writable = true;
+
   _.assert( !_.primitiveIs( o.object ), 'Expects object as argument but got', o.object );
   _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ), 'Expects object names as argument but got', o.names );
 
@@ -1160,10 +1083,15 @@ function declareMultiple_body( o )
       _.mapExtend( o2, extension );
       _.assert( !!o2.object );
     }
-    else if( _.definitionIs( extension ) && extension.subKind === 'constant' )
+    else if( _.definitionIs( extension ) )
     {
-      _.mapExtend( o2, { get : extension, set : false, put : false } );
+      o2.suite = extension;
     }
+    // yyy xxx
+    // else if( _.definitionIs( extension ) && extension.subKind === 'constant' )
+    // {
+    //   _.mapExtend( o2, { get : extension, set : false, put : false } );
+    // }
     else if( _.routineIs( extension ) && extension.identity && _.longHas( extension.identity, 'functor' ) )
     {
       _.mapExtend( o2, { suite : extension } );
@@ -1173,7 +1101,7 @@ function declareMultiple_body( o )
     o2.name = name;
     delete o2.names;
 
-    return _.accessor.declareSingle( o2 );
+    return _.accessor.declareSingle.body( o2 );
   }
 
 }
@@ -1238,7 +1166,6 @@ function forbid_body( o )
 
   let _constructor = o.object.constructor || null;
   _.assert( _.routineIs( _constructor ) || _constructor === null );
-  // _.assert( _constructor === null || _.strIs( _constructor.name ) || _.strIs( _constructor._name ), 'object should have name' );
   if( !o.protoName )
   o.protoName = ( _constructor ? ( _constructor.name || _constructor._name || '' ) : '' ) + '.';
   if( !o.message )
@@ -1289,13 +1216,6 @@ function forbid_body( o )
     return result;
   }
 
-  // _.assert( !o.strict );
-  // _.assert( !o.prime );
-  //
-  // o.strict = 0;
-  // o.prime = 0;
-  //
-  // return _.accessor.declare.body( _.mapOnly( o, _.accessor.declare.body.defaults ) );
 }
 
 var defaults = forbid_body.defaults =
@@ -1320,8 +1240,6 @@ let forbid = _.routineUnite( declareMultiple_head, forbid_body );
 function _forbidSingle()
 {
   let o = _.routineOptions( _forbidSingle, arguments );
-  // let setterName = '_' + o.fieldName + 'Set';
-  // let getterName = '_' + o.fieldName + 'Get';
   let messageLine = o.protoName + o.fieldName + ' : ' + o.message;
 
   _.assert( _.strIs( o.protoName ) );
@@ -1341,40 +1259,12 @@ function _forbidSingle()
 
   }
 
-  // /* check fields */
-  //
-  // if( o.strict )
-  // if( propertyDescriptor.object === o.object )
-  // {
-  //   if( _.accessor.ownForbid( o.object, o.fieldName ) )
-  //   {
-  //     return false;
-  //   }
-  //   else
-  //   {
-  //     forbidden();
-  //   }
-  // }
-  //
-  // /* check fields group */
-  //
-  // if( o.strict && _.workpiece && _.workpiece.prototypeIsStandard( o.object ) )
-  // if( _.workpiece.prototypeHasField( o.object, o.fieldName ) )
-  // {
-  //   forbidden();
-  // }
-
   /* */
 
   if( !Object.isExtensible( o.object ) )
   {
     return false;
   }
-
-  /* xxx : dont use methods */
-
-  // o.methods[ setterName ] = forbidden;
-  // o.methods[ getterName ] = forbidden;
 
   o.methods = null;
   o.suite = Object.create( null );
@@ -1416,12 +1306,7 @@ function _forbidSingle()
   let o2 = _.mapOnly( o, _.accessor.declare.body.defaults );
   o2.name = o.fieldName;
   delete o2.names;
-  // o2.methods = null;
   return _.accessor.declareSingle.body( o2 );
-
-  /* */
-
-  // return true;
 
   /* */
 
@@ -1433,10 +1318,12 @@ function _forbidSingle()
 
 }
 
-var defaults = _forbidSingle.defaults = Object.create( forbid.defaults );
-
-defaults.fieldName = null;
-defaults.protoName = null;
+var defaults = _forbidSingle.defaults =
+{
+  ... forbid.defaults,
+  fieldName : null,
+  protoName : null,
+}
 
 //
 
@@ -1501,246 +1388,15 @@ function ownForbid( object, name )
 function readOnly_body( o )
 {
   _.assertRoutineOptions( readOnly_body, arguments );
-  _.assert( o.readOnly );
+  _.assert( _.boolLikeFalse( o.writable ) );
   return _.accessor.declare.body( o );
 }
 
 var defaults = readOnly_body.defaults = _.mapExtend( null, declareMultiple.body.defaults );
-defaults.readOnly = true;
+defaults.writable = false;
+// defaults.readOnly = true;
 
 let readOnly = _.routineUnite( declareMultiple_head, readOnly_body );
-
-// //
-//
-// /**
-//  * @summary Supplements target object( dst ) with accessors from source object( src ).
-//  *
-//  * @description
-//  * Both objects should have accessorts map defined.
-//  * Ignores accessor that is already declared on destination object( dst ).
-//  *
-//  * @param {Object} src - source object
-//  * @param {Object} dst - destination object
-//  *
-//  * @throws {Exception} If number of arguments is not supported.
-//  * @throws {Exception} If combining method of source accessor is unknown.
-//  * @throws {Exception} If accessor.declaratorArgs is not a Array.
-//  * @throws {Exception} If one of object doesn't have _Accessors map
-//  * @function supplement
-//  *
-//  * @namespace Tools.accessor
-//  */
-//
-// function supplement( dst, src )
-// {
-//
-//   _.workpiece.fieldsGroupFor( dst, '_Accessors' );
-//
-//   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-//   _.assert( Object.hasOwnProperty.call( dst, '_Accessors' ), 'supplement : dst should has _Accessors map' );
-//   _.assert( Object.hasOwnProperty.call( src, '_Accessors' ), 'supplement : src should has _Accessors map' );
-//
-//   /* */
-//
-//   for( let a in src._Accessors )
-//   {
-//
-//     let accessor = src._Accessors[ a ];
-//
-//     if( _.objectIs( accessor ) )
-//     supplement( a, accessor );
-//     else for( let i = 0 ; i < accessor.length ; i++ )
-//     supplement( a, accessor[ i ] );
-//
-//   }
-//
-//   /* */
-//
-//   function supplement( name, accessor )
-//   {
-//
-//     _.assert( _.arrayIs( accessor.declaratorArgs ) );
-//     _.assert( !accessor.combining || accessor.combining === 'rewrite' || accessor.combining === 'supplement' || accessor.combining === 'append', 'not implemented' );
-//
-//     if( _.objectIs( dst._Accessors[ name ] ) )
-//     return;
-//
-//     if( accessor.declaratorName !== 'accessor' )
-//     {
-//       _.assert( _.routineIs( dst[ accessor.declaratorName ] ), 'dst does not have accessor maker', accessor.declaratorName );
-//       dst[ accessor.declaratorName ].apply( dst, accessor.declaratorArgs );
-//     }
-//     else
-//     {
-//       _.assert( accessor.declaratorArgs.length === 1 );
-//       let optionsForAccessor = _.mapExtend( null, accessor.declaratorArgs[ 0 ] );
-//       optionsForAccessor.object = dst;
-//       if( !optionsForAccessor.methods )
-//       optionsForAccessor.methods = dst;
-//       _.accessor.declare( optionsForAccessor );
-//     }
-//
-//   }
-//
-// }
-
-// --
-// etc
-// --
-
-// /**
-//  * Returns true if source object( proto ) has accessor with name( name ).
-//  * @param {Object} proto - target object
-//  * @param {String} name - name of accessor
-//  * @function has
-//  * @namespace Tools.accessor
-//  */
-//
-// function has( proto, name )
-// {
-//   let accessors = proto._Accessors;
-//   if( !accessors )
-//   return false;
-//   return !!accessors[ name ];
-// }
-
-//
-
-// function suiteMakerFrom_functor( fop )
-// {
-//
-//   if( arguments.length === 2 )
-//   fop = { getterFunctor : arguments[ 0 ], setterFunctor : arguments[ 1 ] }
-//
-//   _.routineOptions( suiteMakerFrom_functor, fop );
-//
-//   let defaults;
-//   if( fop.getterFunctor )
-//   defaults = _.mapExtend( null, fop.getterFunctor.defaults );
-//   else
-//   defaults = _.mapExtend( null, fop.setterFunctor.defaults );
-//
-//   if( fop.getterFunctor && _.entityIdentical )
-//   _.assert( _.entityIdentical( defaults, _.mapExtend( null, fop.getterFunctor.defaults ) ) );
-//   if( fop.setterFunctor && _.entityIdentical )
-//   _.assert( _.entityIdentical( defaults, _.mapExtend( null, fop.setterFunctor.defaults ) ) );
-//
-//   let _head = fop.getterFunctor.head || fop.setterFunctor.head;
-//   if( _head )
-//   accessorMaker.head = head;
-//
-//   accessorMaker.defaults = defaults;
-//
-//   return accessorMaker;
-//
-//   /* */
-//
-//   function head( routine, args )
-//   {
-//     let o2 = _head( routine, args );
-//     return o2;
-//   }
-//
-//   /* */
-//
-//   function accessorMaker( o )
-//   {
-//     let r = Object.create( null );
-//
-//     if( _head )
-//     o = head( accessorMaker, arguments );
-//     else
-//     o = _.routineOptions( accessorMaker, arguments );
-//
-//     if( fop.setterFunctor )
-//     if( fop.setterFunctor.body )
-//     r.set = fop.setterFunctor.body( o );
-//     else
-//     r.set = fop.setterFunctor( o );
-//
-//     if( fop.getterFunctor )
-//     if( fop.getterFunctor.body )
-//     r.get = fop.getterFunctor.body( o );
-//     else
-//     r.get = fop.getterFunctor( o );
-//
-//     return r;
-//   }
-//
-// }
-//
-// suiteMakerFrom_functor.defaults =
-// {
-//   getterFunctor : null,
-//   setterFunctor : null,
-// }
-//
-// // --
-// // meta
-// // --
-//
-// function _DefinesGenerate( dst, src, kind )
-// {
-//   if( dst === null )
-//   dst = Object.create( null );
-//
-//   _.assert( arguments.length === 3 );
-//
-//   for( let s in src )
-//   {
-//     dst[ s ] = _DefineGenerate( src[ s ], kind );
-//   }
-//
-//   return dst;
-// }
-//
-// //
-//
-// function _DefineGenerate( original, kind )
-// {
-//   _.assert( _.routineIs( original ) );
-//
-//   let r =
-//   {
-//     [ original.name ] : function()
-//     {
-//       let definition = _.define[ kind ]({ val : arguments, routine : original });
-//       _.assert( _.definitionIs( definition ) );
-//       return definition;
-//     }
-//   }
-//
-//   let routine = r[ original.name ];
-//
-//   _.routineExtend( routine, original );
-//   _.assert( arguments.length === 2 );
-//
-//   routine.originalFunctor = original;
-//
-//   _.assert( _.routineIs( _.define[ kind ] ) );
-//
-//   return routine;
-// }
-
-// --
-// relations
-// --
-
-// let DefaultAccessorsMap = Object.create( null );
-// DefaultAccessorsMap.Accessors = declare;
-// DefaultAccessorsMap.Forbids = forbid;
-// DefaultAccessorsMap.AccessorsForbid = forbid;
-// DefaultAccessorsMap.AccessorsReadOnly = readOnly;
-
-// let Forbids =
-// {
-//   _ArrayDescriptor : '_ArrayDescriptor',
-//   ArrayDescriptor : 'ArrayDescriptor',
-//   _ArrayDescriptors : '_ArrayDescriptors',
-//   ArrayDescriptors : 'ArrayDescriptors',
-//   arrays : 'arrays',
-//   arrayOf : 'arrayOf',
-// }
 
 //
 
@@ -1754,14 +1410,15 @@ let AccessorExtension =
   _asuiteForm,
   _asuiteUnfunct,
   _amethodUnfunct,
-  _methodsNames,
-  _methodsRetrieve,
-  _methodsValidate,
-  _methodMoveGet,
+  _objectMethodsNamesGet,
+  _objectMethodsGet,
+  _objectMethodsValidate,
+  _objectMethodMoveGet,
 
   _objectPreserveValue,
   _objectAddMethods,
-  moveItMake,
+
+  _moveItMake,
 
   // declare
 
@@ -1776,18 +1433,9 @@ let AccessorExtension =
   _forbidSingle,
   ownForbid,
 
-  // supplement,
-
   // etc
 
   readOnly,
-  // has,
-
-  // meta
-
-  // suiteMakerFrom_functor,
-  // _DefinesGenerate,
-  // _DefineGenerate,
 
   // fields
 
@@ -1797,7 +1445,6 @@ let AccessorExtension =
   AccessorTypeMap,
   AccessorDefaults,
   AccessorPreferences,
-  // DefaultAccessorsMap,
 
 }
 

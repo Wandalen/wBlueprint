@@ -16,6 +16,83 @@ let _ = _global_.wTools;
 // test
 // --
 
+function declareConstant( test )
+{
+
+  /* */
+
+  test.case = 'read only explicitly, get is definitition';
+
+  var dst =
+  {
+  };
+
+  var exp = { 'a' : 'a1' };
+  _.accessor.declare
+  ({
+    object : dst,
+    names : { a : { writable : 0, get : () => 'a1' } },
+    prime : 0,
+  });
+  test.identical( dst, exp );
+  test.shouldThrowErrorSync( () => dst.a = 'a2' );
+
+  /* */
+
+  test.case = 'read only implicitly, value in descriptor';
+
+  var dst =
+  {
+  };
+
+  var exp = { 'a' : 'a1' }
+  _.accessor.declare
+  ({
+    object : dst,
+    names : { a : { set : false, get : () => 'a1' } },
+    prime : 0,
+  });
+  test.identical( dst, exp );
+  test.shouldThrowErrorSync( () => dst.a = 'a2' );
+
+  /* */
+
+}
+
+//
+
+function declareConstantSymbol( test )
+{
+
+  /* */
+
+  test.case = 'read only implicitly, value in descriptor';
+
+  var dst =
+  {
+  };
+
+  var exp = {}
+  _.accessor.declare
+  ({
+    object : dst,
+    names : { [ Symbol.for( 'a' ) ] : { set : false, get : () => 'a1' } },
+    prime : 0,
+  });
+  test.identical( dst, exp );
+  test.identical( dst[ Symbol.for( 'a' ) ], 'a1' );
+  test.shouldThrowErrorSync( () => dst[ Symbol.for( 'a' ) ] = 'a2' );
+  var exp = { a : 'a3' };
+  dst.a = 'a3';
+  test.identical( dst, exp );
+  test.identical( dst[ Symbol.for( 'a' ) ], 'a1' );
+
+  /* */
+
+}
+
+//
+
 function accessorMethodsDeducing( test )
 {
 
@@ -774,7 +851,7 @@ function accessorOptionReadOnly( test )
   _.accessor.declare
   ({
     object : dst,
-    names : { a : { readOnly : 1 } },
+    names : { a : { writable : 0 } },
     prime : 0,
   });
   test.identical( dst, exp );
@@ -2154,7 +2231,8 @@ let Self =
   tests :
   {
 
-    //
+    declareConstant,
+    declareConstantSymbol,
 
     accessorMethodsDeducing,
     accessorOptionReadOnly,
