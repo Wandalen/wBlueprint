@@ -13,6 +13,7 @@ if( typeof module !== 'undefined' )
 
   require( './l1/Class.s' );
   require( './l1/Property.s' );
+  require( './l1/PropertyTransformers.s' );
   require( './l1/Proto.s' );
 
   require( './l2/Accessor.s' );

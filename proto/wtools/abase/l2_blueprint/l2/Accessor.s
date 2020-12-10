@@ -143,7 +143,6 @@ function _optionsNormalize( o )
 
 function _asuiteForm( o )
 {
-  let result = o.asuite;
 
   _.assert( arguments.length === 1 );
   _.assert( o.methods === null || !_.primitiveIs( o.methods ) );
@@ -173,11 +172,10 @@ function _asuiteForm( o )
 
   /* grab */
 
-  if( !result.grab || result.grab === true )
-  if( o.asuite.grab === null || o.asuite.grab === true || o.asuite.grab === 1 )
+  if( o.asuite.grab === null || o.asuite.grab === true )
   {
-    if( result.move )
-    result.grab = function grab()
+    if( o.asuite.move )
+    o.asuite.grab = function grab()
     {
       let it = _.accessor._moveItMake
       ({
@@ -185,13 +183,13 @@ function _asuiteForm( o )
         instanceKey : fieldName,
         accessorKind : 'grab',
       });
-      result.move.call( this, it );
+      o.asuite.move.call( this, it );
       return it.value;
     }
-    else if( _.routineIs( result.get ) )
-    result.grab = result.get;
+    else if( _.routineIs( o.asuite.get ) )
+    o.asuite.grab = o.asuite.get;
     else
-    result.grab = function grab()
+    o.asuite.grab = function grab()
     {
       return this[ fieldSymbol ];
     }
@@ -199,11 +197,10 @@ function _asuiteForm( o )
 
   /* get */
 
-  if( !result.get || result.get === true )
-  if( o.asuite.get === null || o.asuite.get === true || o.asuite.get === 1 )
+  if( o.asuite.get === null || o.asuite.get === true )
   {
-    if( result.move )
-    result.get = function get()
+    if( o.asuite.move )
+    o.asuite.get = function get()
     {
       let it = _.accessor._moveItMake
       ({
@@ -211,13 +208,13 @@ function _asuiteForm( o )
         instanceKey : fieldName,
         accessorKind : 'get',
       });
-      result.move.call( this, it );
+      o.asuite.move.call( this, it );
       return it.value;
     }
-    else if( _.routineIs( result.grab ) )
-    result.get = result.grab;
+    else if( _.routineIs( o.asuite.grab ) )
+    o.asuite.get = o.asuite.grab;
     else
-    result.get = function get()
+    o.asuite.get = function get()
     {
       return this[ fieldSymbol ];
     }
@@ -225,11 +222,10 @@ function _asuiteForm( o )
 
   /* put */
 
-  if( !result.put || result.put === true )
-  if( o.asuite.put === null || o.asuite.put === true || o.asuite.put === 1 )
+  if( o.asuite.put === null || o.asuite.put === true )
   {
-    if( result.move )
-    result.put = function put( src )
+    if( o.asuite.move )
+    o.asuite.put = function put( src )
     {
       let it = _.accessor._moveItMake
       ({
@@ -238,13 +234,13 @@ function _asuiteForm( o )
         value : src,
         accessorKind : 'put',
       });
-      result.move.call( this, it );
+      o.asuite.move.call( this, it );
       return it.value;
     }
-    else if( _.routineIs( result.set ) )
-    result.put = result.set;
+    else if( _.routineIs( o.asuite.set ) )
+    o.asuite.put = o.asuite.set;
     else
-    result.put = function put( src )
+    o.asuite.put = function put( src )
     {
       this[ fieldSymbol ] = src;
       return src;
@@ -253,11 +249,10 @@ function _asuiteForm( o )
 
   /* set */
 
-  if( !result.set || result.set === true )
-  if( o.asuite.set === null || o.asuite.set === true || o.asuite.set === 1 )
+  if( o.asuite.set === null || o.asuite.set === true )
   {
-    if( result.move )
-    result.set = function set( src )
+    if( o.asuite.move )
+    o.asuite.set = function set( src )
     {
       let it = _.accessor._moveItMake
       ({
@@ -266,13 +261,13 @@ function _asuiteForm( o )
         value : src,
         accessorKind : 'set',
       });
-      result.move.call( this, it );
+      o.asuite.move.call( this, it );
       return it.value;
     }
-    else if( _.routineIs( result.put ) )
-    result.set = result.put;
+    else if( _.routineIs( o.asuite.put ) )
+    o.asuite.set = o.asuite.put;
     else if( o.asuite.put !== false || o.asuite.set )
-    result.set = function set( src )
+    o.asuite.set = function set( src )
     {
       this[ fieldSymbol ] = src;
       return src;
@@ -283,35 +278,33 @@ function _asuiteForm( o )
 
   /* move */
 
-  if( !result.move || result.move === true )
+  if( o.asuite.move === true )
   {
-    if( o.asuite.move === true || o.asuite.move === 1 )
+    o.asuite.move = function move( it )
     {
-      result.move = function move( it )
-      {
-        _.assert( 0, 'not tested' ); /* xxx */
-        debugger;
-        return it.src;
-      }
+      _.assert( 0, 'not tested' ); /* xxx */
+      debugger;
+      return it.src;
     }
-    else
-    {
-      result.move = false;
-    }
+  }
+  else if( !o.asuite.move )
+  {
+    o.asuite.move = false;
+    _.assert( o.asuite.move === false );
   }
 
   // /* readOnlyProduct */
   //
-  // if( o.readOnlyProduct && result.get )
+  // if( o.readOnlyProduct && o.asuite.get )
   // {
-  //   let get = result.get;
-  //   result.get = function get()
+  //   let get = o.asuite.get;
+  //   o.asuite.get = function get()
   //   {
   //     debugger;
-  //     let result = get.apply( this, arguments );
-  //     if( !_.primitiveIs( result ) )
-  //     result = _.proxyReadOnly( result );
-  //     return result;
+  //     let o.asuite = get.apply( this, arguments );
+  //     if( !_.primitiveIs( o.asuite ) )
+  //     o.asuite = _.proxyReadOnly( o.asuite );
+  //     return o.asuite;
   //   }
   // }
 
@@ -322,12 +315,12 @@ function _asuiteForm( o )
     for( let k in AsuiteFields )
     _.assert
     (
-      _.definitionIs( result[ k ] ) || _.routineIs( result[ k ] ) || result[ k ] === false,
+      _.definitionIs( o.asuite[ k ] ) || _.routineIs( o.asuite[ k ] ) || o.asuite[ k ] === false,
       () => `Field "${fieldName}" is not read only, but setter not found ${_.toStrShort( o.methods )}`
     );
   }
 
-  return result;
+  return o.asuite;
 
   /* */
 
@@ -335,18 +328,32 @@ function _asuiteForm( o )
   {
     let capitalName = _.strCapitalize( name );
     _.assert( o.asuite[ name ] === null || _.boolLike( o.asuite[ name ] ) || _.routineIs( o.asuite[ name ] ) || _.definitionIs( o.asuite[ name ] ) );
-    if( o.asuite[ name ] !== false && o.asuite[ name ] !== 0 )
+
+    if( o.suite && _.boolLikeFalse( o.suite[ name ] ) )
+    {
+      _.assert( !o.asuite[ name ] );
+      o.asuite[ name ] = false;
+      o.suite[ name ] = false;
+    }
+    else if( _.boolLikeFalse( o.asuite[ name ] ) )
+    {
+      o.asuite[ name ] = false;
+    }
+    else if( _.boolLikeTrue( o.asuite[ name ] ) )
+    {
+      o.asuite[ name ] = true;
+    }
+
+    if( o.asuite[ name ] !== false )
     {
       if( _.routineIs( o.asuite[ name ] ) || _.definitionIs( o.asuite[ name ] ) )
-      result[ name ] = o.asuite[ name ];
+      o.asuite[ name ] = o.asuite[ name ];
       else if( o.suite && ( _.routineIs( o.suite[ name ] ) || _.definitionIs( o.suite[ name ] ) ) )
-      result[ name ] = o.suite[ name ];
+      o.asuite[ name ] = o.suite[ name ];
       else if( o.methods && o.methods[ '' + fieldName + capitalName ] )
-      result[ name ] = o.methods[ fieldName + capitalName ];
+      o.asuite[ name ] = o.methods[ fieldName + capitalName ];
       else if( o.methods && o.methods[ '_' + fieldName + capitalName ] )
-      result[ name ] = o.methods[ '_' + fieldName + capitalName ];
-      else if( o.methods && o.methods[ '__' + fieldName + capitalName ] )
-      result[ name ] = o.methods[ '__' + fieldName + capitalName ];
+      o.asuite[ name ] = o.methods[ '_' + fieldName + capitalName ];
     }
   }
 
@@ -420,6 +427,22 @@ function _amethodUnfunct( o )
 
   if( o.withFunctor && o.amethod.identity && _.longHas( o.amethod.identity, 'functor' ) )
   {
+    functorUnfunct();
+    if( o.kind === 'suite' && o.withDefinition && _.definitionIs( o.amethod ) )
+    definitionUnfunct();
+  }
+  else if( o.kind === 'suite' && o.withDefinition && _.definitionIs( o.amethod ) )
+  {
+    definitionUnfunct();
+    if( o.withFunctor && o.amethod.identity && _.longHas( o.amethod.identity, 'functor' ) )
+    functorUnfunct();
+  }
+
+  _.assert( o.amethod !== undefined );
+  return o.amethod;
+
+  function functorUnfunct()
+  {
     let o2 = Object.create( null );
     if( o.amethod.defaults )
     {
@@ -432,16 +455,14 @@ function _amethodUnfunct( o )
     }
     o.amethod = o.amethod( o2 );
   }
-  // else if( o.withDefinition && _.definitionIs( o.amethod ) )
-  // {
-  //   _.assert( _.routineIs( o.amethod.valueGenerate ) );
-  //   _.assert( o.amethod.val !== undefined );
-  //   o.amethod = o.amethod.valueGenerate( o.amethod.val );
-  // }
-  // xxx
 
-  _.assert( o.amethod !== undefined );
-  return o.amethod;
+  function definitionUnfunct()
+  {
+    _.assert( _.routineIs( o.amethod.asAccessorSuite ) );
+    o.amethod = o.amethod.asAccessorSuite( o );
+    _.assert( o.amethod !== undefined );
+  }
+
 }
 
 _amethodUnfunct.defaults =
@@ -531,12 +552,8 @@ function _objectMethodsValidate( o )
   _.assert( !!o.object );
   _.routineOptions( _objectMethodsValidate, o );
 
-  if( _.symbolIs( o.name ) )
-  debugger;
-
   let name = _.symbolIs( o.name ) ? Symbol.keyFor( o.name ) : o.name;
-  let AccessorType = _.accessor.AccessorType; /* yyy : ? */
-  // let AccessorType = [ 'get', 'set' ];
+  let AccessorType = _.accessor.AccessorType;
 
   for( let t = 0 ; t < AccessorType.length ; t++ )
   {
@@ -545,13 +562,8 @@ function _objectMethodsValidate( o )
     {
       let name1 = name + _.strCapitalize( type );
       let name2 = '_' + name + _.strCapitalize( type );
-      let name3 = '__' + name + _.strCapitalize( type );
-      if( name1 in o.object )
-      throw _.err( `Object should not have method ${name1}, if accessor has it disabled` );
-      if( name2 in o.object )
-      throw _.err( `Object should not have method ${name2}, if accessor has it disabled` );
-      if( name3 in o.object )
-      throw _.err( `Object should not have method ${name2}, if accessor has it disabled` );
+      _.assert( !( name1 in o.object ), `Object should not have method ${name1}, if accessor has it disabled` );
+      _.assert( !( name2 in o.object ), `Object should not have method ${name2}, if accessor has it disabled` );
     }
   }
 
@@ -579,8 +591,6 @@ function _objectMethodMoveGet( srcInstance, name )
   return srcInstance[ name + 'Move' ];
   else if( srcInstance[ '_' + name + 'Move' ] )
   return srcInstance[ '_' + name + 'Move' ];
-  else if( srcInstance[ '__' + name + 'Move' ] )
-  return srcInstance[ '__' + name + 'Move' ];
 
   return null;
 }

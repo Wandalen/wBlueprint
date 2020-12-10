@@ -99,8 +99,6 @@ function _constant( dstPrototype, name, value )
   if( _.containerIs( name ) )
   {
     if( !_.objectIs( name ) )
-    debugger;
-    if( !_.objectIs( name ) )
     name = _.indexExtending( name, ( e ) => { return { [ e ] : undefined } } );
     _.each( name, ( v, n ) =>
     {
@@ -158,15 +156,12 @@ function declare_head( routine, args )
 function declare_body( o )
 {
 
-  // if( o.name === 'qualifiedName' && o.object[ 'qualifiedName' ] !== undefined )
-  // debugger;
-
   if( _.definitionIs( o.get ) )
   {
     _.assert( _.routineIs( o.get.valueGenerate ) );
     _.assert( o.get.val !== undefined );
     o.get = o.get.valueGenerate( o.get.val );
-    // o.get = o.get.val; /* xxx */
+    // o.get = o.get.val; /* yyy */
   }
 
   _.assert( _.boolIs( o.enumerable ) );

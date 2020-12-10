@@ -16,6 +16,390 @@ let _ = _global_.wTools;
 // test
 // --
 
+function _asuiteForm( test )
+{
+
+  /* */
+
+  test.case = 'suite.*:null asuite.*:null methods.*:routine';
+
+  var options =
+  {
+    name : 'a',
+    methods :
+    {
+      aGrab : () => null,
+      aGet : () => null,
+      aPut : () => null,
+      aSet : () => null,
+      aMove : () => null,
+    },
+    suite :
+    {
+      grab : null,
+      get : null,
+      put : null,
+      set : null,
+      move : null,
+    },
+    asuite :
+    {
+      grab : null,
+      get : null,
+      put : null,
+      set : null,
+      move : null,
+    },
+  }
+  var got = _.accessor._asuiteForm( options );
+  var exp =
+  {
+    'grab' : got.grab,
+    'get' : got.get,
+    'put' : got.put,
+    'set' : got.set,
+    'move' : got.move,
+  }
+  test.identical( got, exp );
+  test.true( got === options.asuite );
+  test.true( _.routineIs( got.grab ) );
+  test.true( _.routineIs( got.get ) );
+  test.true( _.routineIs( got.put ) );
+  test.true( _.routineIs( got.set ) );
+  test.true( _.routineIs( got.move ) );
+
+  /* */
+
+  test.case = 'suite.*:null asuite.*:null';
+
+  var options =
+  {
+    name : 'a',
+    methods : {},
+    suite :
+    {
+      grab : null,
+      get : null,
+      put : null,
+      set : null,
+      move : null,
+    },
+    asuite :
+    {
+      grab : null,
+      get : null,
+      put : null,
+      set : null,
+      move : null,
+    },
+  }
+  var got = _.accessor._asuiteForm( options );
+  var exp =
+  {
+    'grab' : got.grab,
+    'get' : got.get,
+    'put' : got.put,
+    'set' : got.set,
+    'move' : false,
+  }
+  test.identical( got, exp );
+  test.true( got === options.asuite );
+  test.true( _.routineIs( got.grab ) );
+  test.true( _.routineIs( got.get ) );
+  test.true( _.routineIs( got.put ) );
+  test.true( _.routineIs( got.set ) );
+  test.true( _.boolIs( got.move ) );
+
+  /* */
+
+  test.case = 'suite.*:false';
+
+  var options =
+  {
+    name : 'a',
+    methods :
+    {
+      aGrab : () => null,
+      aGet : () => null,
+      aPut : () => null,
+      aSet : () => null,
+      aMove : () => null,
+    },
+    suite :
+    {
+      grab : false,
+      get : false,
+      put : false,
+      set : false,
+      move : false,
+    },
+    asuite :
+    {
+      grab : null,
+      get : null,
+      put : null,
+      set : null,
+      move : null,
+    },
+  }
+  var got = _.accessor._asuiteForm( options );
+  var exp =
+  {
+    'grab' : false,
+    'get' : false,
+    'put' : false,
+    'set' : false,
+    'move' : false,
+  }
+  test.identical( got, exp );
+  test.true( got === options.asuite );
+
+  /* */
+
+  test.case = 'asuite.*:false';
+
+  var options =
+  {
+    name : 'a',
+    methods :
+    {
+      aGrab : () => null,
+      aGet : () => null,
+      aPut : () => null,
+      aSet : () => null,
+      aMove : () => null,
+    },
+    suite :
+    {
+      grab : null,
+      get : null,
+      put : null,
+      set : null,
+      move : null,
+    },
+    asuite :
+    {
+      grab : false,
+      get : false,
+      put : false,
+      set : false,
+      move : false,
+    },
+  }
+  var got = _.accessor._asuiteForm( options );
+  var exp =
+  {
+    'grab' : false,
+    'get' : false,
+    'put' : false,
+    'set' : false,
+    'move' : false,
+  }
+  test.identical( got, exp );
+  test.true( got === options.asuite );
+
+  /* */
+
+  test.case = 'suite.grab:false';
+
+  var options =
+  {
+    name : 'a',
+    methods :
+    {
+      aGrab : () => null,
+      aGet : () => null,
+      aPut : () => null,
+      aSet : () => null,
+      aMove : () => null,
+    },
+    suite :
+    {
+      grab : false,
+      get : null,
+      put : null,
+      set : null,
+      move : null,
+    },
+    asuite :
+    {
+      grab : null,
+      get : null,
+      put : null,
+      set : null,
+      move : null,
+    },
+  }
+  var got = _.accessor._asuiteForm( options );
+  var exp =
+  {
+    'grab' : false,
+    'get' : got.get,
+    'put' : got.put,
+    'set' : got.set,
+    'move' : got.move,
+  }
+  test.identical( got, exp );
+  test.true( got === options.asuite );
+  test.true( _.boolIs( got.grab ) );
+  test.true( _.routineIs( got.get ) );
+  test.true( _.routineIs( got.put ) );
+  test.true( _.routineIs( got.set ) );
+  test.true( _.routineIs( got.move ) );
+
+  /* */
+
+  test.case = 'suite.get:false';
+
+  var options =
+  {
+    name : 'a',
+    methods :
+    {
+      aGrab : () => null,
+      aGet : () => null,
+      aPut : () => null,
+      aSet : () => null,
+      aMove : () => null,
+    },
+    suite :
+    {
+      grab : null,
+      get : false,
+      put : null,
+      set : null,
+      move : null,
+    },
+    asuite :
+    {
+      grab : null,
+      get : null,
+      put : null,
+      set : null,
+      move : null,
+    },
+  }
+  var got = _.accessor._asuiteForm( options );
+  var exp =
+  {
+    'grab' : got.grab,
+    'get' : false,
+    'put' : got.put,
+    'set' : got.set,
+    'move' : got.move,
+  }
+  test.identical( got, exp );
+  test.true( got === options.asuite );
+  test.true( _.routineIs( got.grab ) );
+  test.true( _.boolIs( got.get ) );
+  test.true( _.routineIs( got.put ) );
+  test.true( _.routineIs( got.set ) );
+  test.true( _.routineIs( got.move ) );
+
+  /* */
+
+  test.case = 'suite.put:false';
+
+  var options =
+  {
+    name : 'a',
+    methods :
+    {
+      aGrab : () => null,
+      aGet : () => null,
+      aPut : () => null,
+      aSet : () => null,
+      aMove : () => null,
+    },
+    suite :
+    {
+      grab : null,
+      get : null,
+      put : null,
+      set : false,
+      move : null,
+    },
+    asuite :
+    {
+      grab : null,
+      get : null,
+      put : null,
+      set : null,
+      move : null,
+    },
+  }
+  var got = _.accessor._asuiteForm( options );
+  var exp =
+  {
+    'grab' : got.grab,
+    'get' : got.get,
+    'put' : got.put,
+    'set' : false,
+    'move' : got.move,
+  }
+  test.identical( got, exp );
+  test.true( got === options.asuite );
+  test.true( _.routineIs( got.grab ) );
+  test.true( _.routineIs( got.get ) );
+  test.true( _.routineIs( got.put ) );
+  test.true( _.boolIs( got.set ) );
+  test.true( _.routineIs( got.move ) );
+
+  /* */
+
+  test.case = 'suite.move:false';
+
+  var options =
+  {
+    name : 'a',
+    methods :
+    {
+      aGrab : () => null,
+      aGet : () => null,
+      aPut : () => null,
+      aSet : () => null,
+      aMove : () => null,
+    },
+    suite :
+    {
+      grab : null,
+      get : null,
+      put : null,
+      set : null,
+      move : false,
+    },
+    asuite :
+    {
+      grab : null,
+      get : null,
+      put : null,
+      set : null,
+      move : null,
+    },
+  }
+  var got = _.accessor._asuiteForm( options );
+  var exp =
+  {
+    'grab' : got.grab,
+    'get' : got.get,
+    'put' : got.put,
+    'set' : got.set,
+    'move' : false,
+  }
+  test.identical( got, exp );
+  test.true( got === options.asuite );
+  test.true( _.routineIs( got.grab ) );
+  test.true( _.routineIs( got.get ) );
+  test.true( _.routineIs( got.put ) );
+  test.true( _.routineIs( got.set ) );
+  test.true( _.boolIs( got.move ) );
+
+  /* */
+
+}
+
+//
+
 function declareConstant( test )
 {
 
@@ -100,12 +484,12 @@ function accessorMethodsDeducing( test )
 
   test.case = 'not, only grab';
   var symbol = Symbol.for( 'a' );
-  var events = [];
+  var track = [];
   var ins1 =
   {
     aGrab : function()
     {
-      events.push( 'aGrab' );
+      track.push( 'aGrab' );
       return this[ symbol ];
     },
     a : 10,
@@ -118,23 +502,23 @@ function accessorMethodsDeducing( test )
     prime : 0,
   });
 
-  test.identical( events, [] );
+  test.identical( track, [] );
   test.identical( ins1.a, 10 );
-  test.identical( events, [] );
+  test.identical( track, [] );
   test.identical( ins1.aGrab(), 10 );
-  test.identical( events, [ 'aGrab' ] );
+  test.identical( track, [ 'aGrab' ] );
   test.shouldThrowErrorSync( () => dst.a = 30 );
 
   /* */
 
   test.case = 'not, only get';
   var symbol = Symbol.for( 'a' );
-  var events = [];
+  var track = [];
   var ins1 =
   {
     aGet : function()
     {
-      events.push( 'aGet' );
+      track.push( 'aGet' );
       return this[ symbol ];
     },
     a : 10,
@@ -147,21 +531,21 @@ function accessorMethodsDeducing( test )
     prime : 0,
   });
 
-  test.identical( events, [] );
+  test.identical( track, [] );
   test.identical( ins1.a, 10 );
-  test.identical( events, [ 'aGet' ] );
+  test.identical( track, [ 'aGet' ] );
   test.shouldThrowErrorSync( () => dst.a = 30 );
 
   /* */
 
   test.case = 'not, only put';
   var symbol = Symbol.for( 'a' );
-  var events = [];
+  var track = [];
   var ins1 =
   {
     aPut : function()
     {
-      events.push( 'aPut' );
+      track.push( 'aPut' );
       return this[ symbol ];
     },
     a : 10,
@@ -174,24 +558,24 @@ function accessorMethodsDeducing( test )
     prime : 0,
   });
 
-  test.identical( events, [ 'aPut' ] );
+  test.identical( track, [ 'aPut' ] );
   test.identical( ins1.a, 10 );
-  test.identical( events, [ 'aPut' ] );
+  test.identical( track, [ 'aPut' ] );
   ins1.aPut( 20 );
   test.identical( ins1.a, 10 );
-  test.identical( events, [ 'aPut', 'aPut' ] );
+  test.identical( track, [ 'aPut', 'aPut' ] );
   test.shouldThrowErrorSync( () => dst.a = 30 );
 
   /* */
 
   test.case = 'not, only set';
   var symbol = Symbol.for( 'a' );
-  var events = [];
+  var track = [];
   var ins1 =
   {
     aSet : function()
     {
-      events.push( 'aSet' );
+      track.push( 'aSet' );
       return this[ symbol ];
     },
     a : 10,
@@ -204,70 +588,72 @@ function accessorMethodsDeducing( test )
     prime : 0,
   });
 
-  test.identical( events, [] );
+  test.identical( track, [] );
   test.identical( ins1.a, undefined );
-  test.identical( events, [] );
+  test.identical( track, [] );
   ins1.aSet( 20 );
   test.identical( ins1.a, undefined );
-  test.identical( events, [ 'aSet' ] );
+  test.identical( track, [ 'aSet' ] );
 
   ins1.a = 30;
   test.identical( ins1.a, undefined );
-  test.identical( events, [ 'aSet', 'aSet' ] );
+  test.identical( track, [ 'aSet', 'aSet' ] );
 
-  /* xxx : consider such case */
+  /* */
 
-  // test.case = 'aGrab defined, despite options';
-  // var symbol = Symbol.for( 'a' );
-  // var events = [];
-  // var ins1 =
-  // {
-  //   aGrab : function()
-  //   {
-  //     events.push( 'aGrab' );
-  //     return this[ symbol ];
-  //   },
-  //   a : 10,
-  // };
-  //
-  // test.shouldThrowErrorSync( () =>
-  // {
-  //   debugger;
-  //   _global_.debugger = 1;
-  //   _.accessor.declare
-  //   ({
-  //     object : ins1,
-  //     names : { a : { grab : 0 } },
-  //     prime : 0,
-  //   });
-  //   debugger;
-  // });
+  test.case = 'aGrab defined, despite options';
+  var symbol = Symbol.for( 'a' );
+  var track = [];
+  var ins1 =
+  {
+    aGrab : function()
+    {
+      track.push( 'aGrab' );
+      return this[ symbol ];
+    },
+    a : 10,
+  };
+
+  test.shouldThrowErrorSync( () =>
+  {
+    _.accessor.declare
+    ({
+      object : ins1,
+      names : { a : { grab : 0 } },
+      prime : 0,
+    });
+  }
+  , ( err ) =>
+  {
+    test.true( _.errIs( err ) );
+    test.identical( err.originalMessage, `Object should not have method aGrab, if accessor has it disabled` );
+  });
 
   /* */
 
   test.case = 'only underscored';
   var symbol = Symbol.for( 'a' );
-  var events = [];
+  var track = [];
   var ins1 =
   {
     _aGrab : function()
     {
-      events.push( '_aGrab' );
+      track.push( '_aGrab' );
       return this[ symbol ]
     },
     _aGet : function()
     {
-      events.push( '_aGet' );
+      track.push( '_aGet' );
       return this[ symbol ]
     },
     _aPut : function( src )
     {
-      events.push( '_aPut' );
+      track.push( '_aPut' );
       this[ symbol ] = src;
     },
     _aSet : function( src )
     {
-      events.push( '_aSet' );
+      track.push( '_aSet' );
       this[ symbol ] = src;
     },
     a : 10,
@@ -280,39 +666,39 @@ function accessorMethodsDeducing( test )
     prime : 0,
   });
 
-  test.identical( events, [ '_aPut' ] );
+  test.identical( track, [ '_aPut' ] );
   test.identical( ins1.a, 10 );
-  test.identical( events, [ '_aPut', '_aGet' ] );
+  test.identical( track, [ '_aPut', '_aGet' ] );
   ins1.a = 20;
-  test.identical( events, [ '_aPut', '_aGet', '_aSet' ] );
+  test.identical( track, [ '_aPut', '_aGet', '_aSet' ] );
   test.identical( ins1.a, 20 );
-  test.identical( events, [ '_aPut', '_aGet', '_aSet', '_aGet' ] );
+  test.identical( track, [ '_aPut', '_aGet', '_aSet', '_aGet' ] );
 
   /* */
 
   test.case = 'only not-underscored';
   var symbol = Symbol.for( 'a' );
-  var events = [];
+  var track = [];
   var ins1 =
   {
     aGrab : function()
     {
-      events.push( 'aGrab' );
+      track.push( 'aGrab' );
       return this[ symbol ]
     },
     aGet : function()
     {
-      events.push( 'aGet' );
+      track.push( 'aGet' );
       return this[ symbol ]
     },
     aPut : function( src )
     {
-      events.push( 'aPut' );
+      track.push( 'aPut' );
       this[ symbol ] = src;
     },
     aSet : function( src )
     {
-      events.push( 'aSet' );
+      track.push( 'aSet' );
       this[ symbol ] = src;
     },
     a : 10,
@@ -325,59 +711,59 @@ function accessorMethodsDeducing( test )
     prime : 0,
   });
 
-  test.identical( events, [ 'aPut' ] );
+  test.identical( track, [ 'aPut' ] );
   test.identical( ins1.a, 10 );
-  test.identical( events, [ 'aPut', 'aGet' ] );
+  test.identical( track, [ 'aPut', 'aGet' ] );
   ins1.a = 20;
-  test.identical( events, [ 'aPut', 'aGet', 'aSet' ] );
+  test.identical( track, [ 'aPut', 'aGet', 'aSet' ] );
   test.identical( ins1.a, 20 );
-  test.identical( events, [ 'aPut', 'aGet', 'aSet', 'aGet' ] );
+  test.identical( track, [ 'aPut', 'aGet', 'aSet', 'aGet' ] );
 
   /* */
 
   test.case = 'underscored and not-underscored';
   var symbol = Symbol.for( 'a' );
-  var events = [];
+  var track = [];
   var ins1 =
   {
     _aGrab : function()
     {
-      events.push( '_aGrab' );
+      track.push( '_aGrab' );
       return this[ symbol ]
     },
     _aGet : function()
     {
-      events.push( '_aGet' );
+      track.push( '_aGet' );
       return this[ symbol ]
     },
     _aPut : function( src )
     {
-      events.push( '_aPut' );
+      track.push( '_aPut' );
       this[ symbol ] = src;
     },
     _aSet : function( src )
     {
-      events.push( '_aSet' );
+      track.push( '_aSet' );
       this[ symbol ] = src;
     },
     aGrab : function()
     {
-      events.push( 'aGrab' );
+      track.push( 'aGrab' );
       return this[ symbol ]
     },
     aGet : function()
     {
-      events.push( 'aGet' );
+      track.push( 'aGet' );
       return this[ symbol ]
     },
     aPut : function( src )
     {
-      events.push( 'aPut' );
+      track.push( 'aPut' );
       this[ symbol ] = src;
     },
     aSet : function( src )
     {
-      events.push( 'aSet' );
+      track.push( 'aSet' );
       this[ symbol ] = src;
     },
     a : 10,
@@ -390,39 +776,39 @@ function accessorMethodsDeducing( test )
     prime : 0,
   });
 
-  test.identical( events, [ 'aPut' ] );
+  test.identical( track, [ 'aPut' ] );
   test.identical( ins1.a, 10 );
-  test.identical( events, [ 'aPut', 'aGet' ] );
+  test.identical( track, [ 'aPut', 'aGet' ] );
   ins1.a = 20;
-  test.identical( events, [ 'aPut', 'aGet', 'aSet' ] );
+  test.identical( track, [ 'aPut', 'aGet', 'aSet' ] );
   test.identical( ins1.a, 20 );
-  test.identical( events, [ 'aPut', 'aGet', 'aSet', 'aGet' ] );
+  test.identical( track, [ 'aPut', 'aGet', 'aSet', 'aGet' ] );
 
   /* */
 
   test.case = 'only underscored and explicit true';
   var symbol = Symbol.for( 'a' );
-  var events = [];
+  var track = [];
   var ins1 =
   {
     _aGrab : function()
     {
-      events.push( '_aGrab' );
+      track.push( '_aGrab' );
       return this[ symbol ]
     },
     _aGet : function()
     {
-      events.push( '_aGet' );
+      track.push( '_aGet' );
       return this[ symbol ]
     },
     _aPut : function( src )
     {
-      events.push( '_aPut' );
+      track.push( '_aPut' );
       this[ symbol ] = src;
     },
     _aSet : function( src )
     {
-      events.push( '_aSet' );
+      track.push( '_aSet' );
       this[ symbol ] = src;
     },
     a : 10,
@@ -435,59 +821,59 @@ function accessorMethodsDeducing( test )
     prime : 0,
   });
 
-  test.identical( events, [ '_aPut' ] );
+  test.identical( track, [ '_aPut' ] );
   test.identical( ins1.a, 10 );
-  test.identical( events, [ '_aPut', '_aGet' ] );
+  test.identical( track, [ '_aPut', '_aGet' ] );
   ins1.a = 20;
-  test.identical( events, [ '_aPut', '_aGet', '_aSet' ] );
+  test.identical( track, [ '_aPut', '_aGet', '_aSet' ] );
   test.identical( ins1.a, 20 );
-  test.identical( events, [ '_aPut', '_aGet', '_aSet', '_aGet' ] );
+  test.identical( track, [ '_aPut', '_aGet', '_aSet', '_aGet' ] );
 
   /* */
 
   test.case = 'only not underscored and explicit true';
   var symbol = Symbol.for( 'a' );
-  var events = [];
+  var track = [];
   var ins1 =
   {
     _aGrab : function()
     {
-      events.push( '_aGrab' );
+      track.push( '_aGrab' );
       return this[ symbol ]
     },
     _aGet : function()
     {
-      events.push( '_aGet' );
+      track.push( '_aGet' );
       return this[ symbol ]
     },
     _aPut : function( src )
     {
-      events.push( '_aPut' );
+      track.push( '_aPut' );
       this[ symbol ] = src;
     },
     _aSet : function( src )
     {
-      events.push( '_aSet' );
+      track.push( '_aSet' );
       this[ symbol ] = src;
     },
     aGrab : function()
     {
-      events.push( 'aGrab' );
+      track.push( 'aGrab' );
       return this[ symbol ]
     },
     aGet : function()
     {
-      events.push( 'aGet' );
+      track.push( 'aGet' );
       return this[ symbol ]
     },
     aPut : function( src )
     {
-      events.push( 'aPut' );
+      track.push( 'aPut' );
       this[ symbol ] = src;
     },
     aSet : function( src )
     {
-      events.push( 'aSet' );
+      track.push( 'aSet' );
       this[ symbol ] = src;
     },
     a : 10,
@@ -500,39 +886,39 @@ function accessorMethodsDeducing( test )
     prime : 0,
   });
 
-  test.identical( events, [ 'aPut' ] );
+  test.identical( track, [ 'aPut' ] );
   test.identical( ins1.a, 10 );
-  test.identical( events, [ 'aPut', 'aGet' ] );
+  test.identical( track, [ 'aPut', 'aGet' ] );
   ins1.a = 20;
-  test.identical( events, [ 'aPut', 'aGet', 'aSet' ] );
+  test.identical( track, [ 'aPut', 'aGet', 'aSet' ] );
   test.identical( ins1.a, 20 );
-  test.identical( events, [ 'aPut', 'aGet', 'aSet', 'aGet' ] );
+  test.identical( track, [ 'aPut', 'aGet', 'aSet', 'aGet' ] );
 
   /* */
 
   test.case = 'only not underscored and explicit true';
   var symbol = Symbol.for( 'a' );
-  var events = [];
+  var track = [];
   var ins1 =
   {
     aGrab : function()
     {
-      events.push( 'aGrab' );
+      track.push( 'aGrab' );
       return this[ symbol ]
     },
     aGet : function()
     {
-      events.push( 'aGet' );
+      track.push( 'aGet' );
       return this[ symbol ]
     },
     aPut : function( src )
     {
-      events.push( 'aPut' );
+      track.push( 'aPut' );
       this[ symbol ] = src;
     },
     aSet : function( src )
     {
-      events.push( 'aSet' );
+      track.push( 'aSet' );
       this[ symbol ] = src;
     },
     a : 10,
@@ -545,24 +931,24 @@ function accessorMethodsDeducing( test )
     prime : 0,
   });
 
-  test.identical( events, [ 'aPut' ] );
+  test.identical( track, [ 'aPut' ] );
   test.identical( ins1.a, 10 );
-  test.identical( events, [ 'aPut', 'aGet' ] );
+  test.identical( track, [ 'aPut', 'aGet' ] );
   ins1.a = 20;
-  test.identical( events, [ 'aPut', 'aGet', 'aSet' ] );
+  test.identical( track, [ 'aPut', 'aGet', 'aSet' ] );
   test.identical( ins1.a, 20 );
-  test.identical( events, [ 'aPut', 'aGet', 'aSet', 'aGet' ] );
+  test.identical( track, [ 'aPut', 'aGet', 'aSet', 'aGet' ] );
 
   /* */
 
   test.case = '_aGrab only';
   var symbol = Symbol.for( 'a' );
-  var events = [];
+  var track = [];
   var ins1 =
   {
     _aGrab : function()
     {
-      events.push( '_aGrab' );
+      track.push( '_aGrab' );
       return this[ symbol ]
     },
     a : 10,
@@ -575,24 +961,24 @@ function accessorMethodsDeducing( test )
     prime : 0,
   });
 
-  test.identical( events, [] );
+  test.identical( track, [] );
   test.identical( ins1.a, 10 );
-  test.identical( events, [ '_aGrab' ] );
+  test.identical( track, [ '_aGrab' ] );
   ins1.a = 20;
-  test.identical( events, [ '_aGrab' ] );
+  test.identical( track, [ '_aGrab' ] );
   test.identical( ins1.a, 20 );
-  test.identical( events, [ '_aGrab', '_aGrab' ] );
+  test.identical( track, [ '_aGrab', '_aGrab' ] );
 
   /* */
 
   test.case = 'aGrab only';
   var symbol = Symbol.for( 'a' );
-  var events = [];
+  var track = [];
   var ins1 =
   {
     aGrab : function()
     {
-      events.push( 'aGrab' );
+      track.push( 'aGrab' );
       return this[ symbol ]
     },
     a : 10,
@@ -605,24 +991,24 @@ function accessorMethodsDeducing( test )
     prime : 0,
   });
 
-  test.identical( events, [] );
+  test.identical( track, [] );
   test.identical( ins1.a, 10 );
-  test.identical( events, [ 'aGrab' ] );
+  test.identical( track, [ 'aGrab' ] );
   ins1.a = 20;
-  test.identical( events, [ 'aGrab' ] );
+  test.identical( track, [ 'aGrab' ] );
   test.identical( ins1.a, 20 );
-  test.identical( events, [ 'aGrab', 'aGrab' ] );
+  test.identical( track, [ 'aGrab', 'aGrab' ] );
 
   /* */
 
   test.case = '_aGet only';
   var symbol = Symbol.for( 'a' );
-  var events = [];
+  var track = [];
   var ins1 =
   {
     _aGet : function()
     {
-      events.push( '_aGet' );
+      track.push( '_aGet' );
       return this[ symbol ]
     },
     a : 10,
@@ -635,24 +1021,24 @@ function accessorMethodsDeducing( test )
     prime : 0,
   });
 
-  test.identical( events, [] );
+  test.identical( track, [] );
   test.identical( ins1.a, 10 );
-  test.identical( events, [ '_aGet' ] );
+  test.identical( track, [ '_aGet' ] );
   ins1.a = 20;
-  test.identical( events, [ '_aGet' ] );
+  test.identical( track, [ '_aGet' ] );
   test.identical( ins1.a, 20 );
-  test.identical( events, [ '_aGet', '_aGet' ] );
+  test.identical( track, [ '_aGet', '_aGet' ] );
 
   /* */
 
   test.case = 'aGet only';
   var symbol = Symbol.for( 'a' );
-  var events = [];
+  var track = [];
   var ins1 =
   {
     aGet : function()
     {
-      events.push( 'aGet' );
+      track.push( 'aGet' );
       return this[ symbol ]
     },
     a : 10,
@@ -665,24 +1051,24 @@ function accessorMethodsDeducing( test )
     prime : 0,
   });
 
-  test.identical( events, [] );
+  test.identical( track, [] );
   test.identical( ins1.a, 10 );
-  test.identical( events, [ 'aGet' ] );
+  test.identical( track, [ 'aGet' ] );
   ins1.a = 20;
-  test.identical( events, [ 'aGet' ] );
+  test.identical( track, [ 'aGet' ] );
   test.identical( ins1.a, 20 );
-  test.identical( events, [ 'aGet', 'aGet' ] );
+  test.identical( track, [ 'aGet', 'aGet' ] );
 
   /* */
 
   test.case = '_aSet only';
   var symbol = Symbol.for( 'a' );
-  var events = [];
+  var track = [];
   var ins1 =
   {
     _aSet : function( src )
     {
-      events.push( '_aSet' );
+      track.push( '_aSet' );
       this[ symbol ] = src;
     },
     a : 10,
@@ -695,24 +1081,24 @@ function accessorMethodsDeducing( test )
     prime : 0,
   });
 
-  test.identical( events, [ '_aSet' ] );
+  test.identical( track, [ '_aSet' ] );
   test.identical( ins1.a, 10 );
-  test.identical( events, [ '_aSet' ] );
+  test.identical( track, [ '_aSet' ] );
   ins1.a = 20;
-  test.identical( events, [ '_aSet', '_aSet' ] );
+  test.identical( track, [ '_aSet', '_aSet' ] );
   test.identical( ins1.a, 20 );
-  test.identical( events, [ '_aSet', '_aSet' ] );
+  test.identical( track, [ '_aSet', '_aSet' ] );
 
   /* */
 
   test.case = '_aPut only';
   var symbol = Symbol.for( 'a' );
-  var events = [];
+  var track = [];
   var ins1 =
   {
     _aPut : function( src )
     {
-      events.push( '_aPut' );
+      track.push( '_aPut' );
       this[ symbol ] = src;
     },
     a : 10,
@@ -725,24 +1111,24 @@ function accessorMethodsDeducing( test )
     prime : 0,
   });
 
-  test.identical( events, [ '_aPut' ] );
+  test.identical( track, [ '_aPut' ] );
   test.identical( ins1.a, 10 );
-  test.identical( events, [ '_aPut' ] );
+  test.identical( track, [ '_aPut' ] );
   ins1.a = 20;
-  test.identical( events, [ '_aPut', '_aPut' ] );
+  test.identical( track, [ '_aPut', '_aPut' ] );
   test.identical( ins1.a, 20 );
-  test.identical( events, [ '_aPut', '_aPut' ] );
+  test.identical( track, [ '_aPut', '_aPut' ] );
 
   /* */
 
   test.case = 'aPut only';
   var symbol = Symbol.for( 'a' );
-  var events = [];
+  var track = [];
   var ins1 =
   {
     aPut : function( src )
     {
-      events.push( 'aPut' );
+      track.push( 'aPut' );
       this[ symbol ] = src;
     },
     a : 10,
@@ -755,24 +1141,24 @@ function accessorMethodsDeducing( test )
     prime : 0,
   });
 
-  test.identical( events, [ 'aPut' ] );
+  test.identical( track, [ 'aPut' ] );
   test.identical( ins1.a, 10 );
-  test.identical( events, [ 'aPut' ] );
+  test.identical( track, [ 'aPut' ] );
   ins1.a = 20;
-  test.identical( events, [ 'aPut', 'aPut' ] );
+  test.identical( track, [ 'aPut', 'aPut' ] );
   test.identical( ins1.a, 20 );
-  test.identical( events, [ 'aPut', 'aPut' ] );
+  test.identical( track, [ 'aPut', 'aPut' ] );
 
   /* */
 
   test.case = 'aSet only';
   var symbol = Symbol.for( 'a' );
-  var events = [];
+  var track = [];
   var ins1 =
   {
     aSet : function( src )
     {
-      events.push( 'aSet' );
+      track.push( 'aSet' );
       this[ symbol ] = src;
     },
     a : 10,
@@ -785,13 +1171,13 @@ function accessorMethodsDeducing( test )
     prime : 0,
   });
 
-  test.identical( events, [ 'aSet' ] );
+  test.identical( track, [ 'aSet' ] );
   test.identical( ins1.a, 10 );
-  test.identical( events, [ 'aSet' ] );
+  test.identical( track, [ 'aSet' ] );
   ins1.a = 20;
-  test.identical( events, [ 'aSet', 'aSet' ] );
+  test.identical( track, [ 'aSet', 'aSet' ] );
   test.identical( ins1.a, 20 );
-  test.identical( events, [ 'aSet', 'aSet' ] );
+  test.identical( track, [ 'aSet', 'aSet' ] );
 
   /* */
 
@@ -969,7 +1355,7 @@ function accessorOptionAddingMethods( test )
     strict : 0,
     addingMethods : 1,
   });
-  test.identical( _.mapOwnProperties( dst, { enumerable : 0 } ), exp );
+  test.identical( _.property.own( dst, { onlyEnumerable : 0 } ), exp );
   test.true( _.routineIs( dst.aGrab ) );
   test.true( _.routineIs( dst.aGet ) );
   test.true( _.routineIs( dst.aPut ) );
@@ -1012,7 +1398,7 @@ function accessorOptionAddingMethods( test )
     strict : 0,
     addingMethods : 1,
   });
-  test.identical( _.mapOwnProperties( dst, { enumerable : 0 } ), exp );
+  test.identical( _.property.own( dst, { onlyEnumerable : 0 } ), exp );
 
   var exp =
   {
@@ -1055,7 +1441,7 @@ function accessorOptionAddingMethods( test )
     strict : 0,
     addingMethods : 1,
   });
-  test.identical( _.mapOwnProperties( dst, { enumerable : 0 } ), exp );
+  test.identical( _.property.own( dst, { onlyEnumerable : 0 } ), exp );
 
   var exp =
   {
@@ -1267,7 +1653,7 @@ function accessorDeducingMethods( test )
     fieldName : null,
   }
 
-  symbolPut_functor.identity = [ 'accessor', 'put', 'functor' ];
+  symbolPut_functor.identity = [ 'accessor', 'put', 'functor' ]; /* xxx : modernize */
 
   /* */
 
@@ -1539,12 +1925,12 @@ function accessorUnfunct( test )
   var counter = 0;
   function setter_functor( fop )
   {
-    counter += 1; debugger;
+    counter += 1;
     var exp = { fieldName : 'a' };
     test.identical( fop, exp );
     return function set( src )
     {
-      counter += 1; debugger;
+      counter += 1;
       return this.b = src;
     }
   }
@@ -2074,25 +2460,16 @@ function accessorForbid( test )
   test.case = 'accessor forbid getter&setter';
   var Alpha = { };
   _.accessor.forbid( Alpha, { a : 'a' } );
-  try
-  {
-    Alpha.a = 5;
-  }
-  catch( err )
+  test.true( _.objectIs( Alpha ) );
+  test.shouldThrowErrorSync( () => Alpha.a = 5, ( err, arg, ok ) =>
   {
     Alpha[ Symbol.for( 'a' ) ] = 5;
-  }
+  });
   var got;
-  try
-  {
-    got = Alpha.a;
-  }
-  catch( err )
+  test.shouldThrowErrorSync( () => got = Alpha.a, ( err, arg, ok ) =>
   {
     got = Alpha[ Symbol.for( 'a' ) ];
-  }
-  var expected = 5;
-  test.identical( got, expected );
+  });
 
   if( !Config.debug ) /* */
   return;
@@ -2173,14 +2550,13 @@ function accessorMoveBasic( test )
 
   test.case = 'basic';
 
-  var events = [];
+  var track = [];
   var ins1 =
   {
     aMove : function( it )
     {
-      debugger;
       console.log( 'accessorKind', it.accessorKind );
-      events.push( it.accessorKind );
+      track.push( it.accessorKind );
       if( it.accessorKind === 'set' || it.accessorKind === 'put' )
       {
         it.value += 1;
@@ -2202,17 +2578,17 @@ function accessorMoveBasic( test )
     prime : 0,
   });
 
-  test.identical( events, [ 'put' ] );
+  test.identical( track, [ 'put' ] );
   var exp = { 'a' : 11, 'b' : 20, 'aMove' : ins1.aMove }
   test.identical( ins1, exp );
-  test.identical( events, [ 'put', 'get' ] );
+  test.identical( track, [ 'put', 'get' ] );
 
   ins1.a = 30;
 
-  test.identical( events, [ 'put', 'get', 'set' ] );
+  test.identical( track, [ 'put', 'get', 'set' ] );
   var exp = { 'a' : 31, 'b' : 20, 'aMove' : ins1.aMove }
   test.identical( ins1, exp );
-  test.identical( events, [ 'put', 'get', 'set', 'get' ] );
+  test.identical( track, [ 'put', 'get', 'set', 'get' ] );
 
   /* */
 
@@ -2230,6 +2606,8 @@ let Self =
 
   tests :
   {
+
+    _asuiteForm,
 
     declareConstant,
     declareConstantSymbol,
