@@ -164,6 +164,7 @@ module:
           - ../proto/wtools/abase/l2_blueprint/l1
           - ../proto/wtools/abase/l2_blueprint/l1/Class.s
           - ../proto/wtools/abase/l2_blueprint/l1/Property.s
+          - ../proto/wtools/abase/l2_blueprint/l1/PropertyTransformers.s
           - ../proto/wtools/abase/l2_blueprint/l1/Proto.s
           - ../proto/wtools/abase/l2_blueprint/l2
           - ../proto/wtools/abase/l2_blueprint/l2/Accessor.s
