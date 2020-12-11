@@ -113,7 +113,7 @@ amend.defaults =
 
 //
 
-/* xxx : cover and extend */
+/* xxx qqq : cover and extend */
 function extend( dstConstruction, src )
 {
   return _.construction.amend
@@ -126,7 +126,7 @@ function extend( dstConstruction, src )
 
 //
 
-/* xxx : cover and extend */
+/* xxx qqq : cover and extend */
 function supplement( dstConstruction, src )
 {
   return _.construction.amend

@@ -193,7 +193,7 @@ function declare_body( o )
   }
 
   _.assert( !o.writable || o.set !== false );
-  _.assert( o.writable || !o.set );
+  _.assert( o.writable || !o.set ); /* yyy : uncomment */
 
   Object.defineProperty( o.object, o.name, o2 );
 }
@@ -225,7 +225,6 @@ let PropertyExtension =
 
 }
 
-/* xxx : introduce namespace _.property in module::Tools */
 _.property = _.property || Object.create( null );
 _.mapExtend( _.property, PropertyExtension );
 

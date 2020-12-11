@@ -603,7 +603,7 @@ function _amendment_body( o )
       ... op,
       extension : definition.val,
       amending : definition.amending,
-      // amending : op.amending, /* xxx : ? */
+      // amending : op.amending, /* zzz : ? */
       blueprintAction : 'amend',
       blueprintDepthReserve : definition.blueprintDepthReserve + o.blueprintDepthReserve,
     });

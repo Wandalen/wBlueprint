@@ -148,8 +148,12 @@ function _asuiteForm( o )
   _.assert( o.methods === null || !_.primitiveIs( o.methods ) );
   _.assert( _.strIs( o.name ) || _.symbolIs( o.name ) );
   _.assert( _.mapIs( o.asuite ) );
+  _.assert( o.writable === null || _.boolIs( o.writable ) );
   _.assertMapHasOnly( o.asuite, _.accessor.AsuiteFields );
   _.assertRoutineOptions( _asuiteForm, o );
+
+  if( o.name === 'a' )
+  debugger;
 
   let fieldName;
   let fieldSymbol;
@@ -169,6 +173,8 @@ function _asuiteForm( o )
 
   for( let k in o.asuite, _.accessor.AsuiteFields )
   methodNormalize( k );
+
+  _.assert( o.writable !== false || !o.asuite.set );
 
   /* grab */
 
@@ -251,7 +257,12 @@ function _asuiteForm( o )
 
   if( o.asuite.set === null || o.asuite.set === true )
   {
-    if( o.asuite.move )
+    if( o.writable === false )
+    {
+      _.assert( o.asuite.set === null );
+      o.asuite.set = false;
+    }
+    else if( o.asuite.move )
     o.asuite.set = function set( src )
     {
       let it = _.accessor._moveItMake
@@ -366,6 +377,7 @@ _asuiteForm.defaults =
   suite : null,
   asuite : null,
   methods : null,
+  writable : null,
   name : null,
 }
 
@@ -425,7 +437,9 @@ function _amethodUnfunct( o )
   if( !o.amethod )
   return o.amethod;
 
-  if( o.withFunctor && o.amethod.identity && _.longHas( o.amethod.identity, 'functor' ) )
+  _.assert( !_.routineIs( o.amethod ) || !o.amethod.identity || _.mapIs( o.amethod.identity ) );
+
+  if( o.withFunctor && o.amethod.identity && o.amethod.identity.functor )
   {
     functorUnfunct();
     if( o.kind === 'suite' && o.withDefinition && _.definitionIs( o.amethod ) )
@@ -434,7 +448,8 @@ function _amethodUnfunct( o )
   else if( o.kind === 'suite' && o.withDefinition && _.definitionIs( o.amethod ) )
   {
     definitionUnfunct();
-    if( o.withFunctor && o.amethod.identity && _.longHas( o.amethod.identity, 'functor' ) )
+    // if( o.withFunctor && o.amethod.identity && _.longHas( o.amethod.identity, 'functor' ) )
+    if( o.withFunctor && o.amethod.identity && o.amethod.identity.functor )
     functorUnfunct();
   }
 
@@ -722,15 +737,21 @@ function declareSingle_head( routine, args )
   _.assert( _.strIs( o.name ) || _.symbolIs( o.name ) );
   _.assert( _.longHas( [ null, 0, false, 'rewrite', 'supplement' ], o.combining ), 'not tested' );
 
+  if( _.boolLike( o.writable ) )
+  o.writable = !!o.writable;
+
   return o;
 }
 
 function declareSingle_body( o )
 {
 
+  if( _.boolLike( o.writable ) )
+  o.writable = !!o.writable;
+
   _.assertRoutineOptions( declareSingle_body, arguments );
   _.assert( arguments.length === 1 );
-  _.assert( _.boolLike( o.writable ) || o.writable === null );
+  _.assert( _.boolIs( o.writable ) || o.writable === null );
 
   _.accessor._optionsNormalize( o );
 
@@ -768,12 +789,14 @@ function declareSingle_body( o )
     name : o.name,
     methods : o.methods,
     suite : o.suite,
+    writable : o.writable,
     asuite :
     {
       grab : o.grab,
       get : o.get,
       put : o.put,
-      set : o.writable || o.writable === null ? o.set : false, /* xxx */
+      // set : o.writable || o.writable === null ? o.set : false, /* yyy */
+      set : o.set,
       move : o.move,
     },
   });
@@ -1038,6 +1061,9 @@ function declareMultiple_head( routine, args )
   // if( o.writable === null )
   // o.writable = true;
 
+  if( _.boolLike( o.writable ) )
+  o.writable = !!o.writable;
+
   _.assert( !_.primitiveIs( o.object ), 'Expects object as argument but got', o.object );
   _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ), 'Expects object names as argument but got', o.names );
 
@@ -1087,6 +1113,8 @@ function declareMultiple_body( o )
   {
     let o2 = Object.assign( Object.create( null ), o );
 
+    _.assert( !_.routineIs( extension ) || !extension.identity || _.mapIs( extension.identity ) );
+
     if( _.mapIs( extension ) )
     {
       _.assertMapHasOnly( extension, _.accessor.AccessorDefaults );
@@ -1097,12 +1125,13 @@ function declareMultiple_body( o )
     {
       o2.suite = extension;
     }
-    // yyy xxx
+    // yyy
     // else if( _.definitionIs( extension ) && extension.subKind === 'constant' )
     // {
     //   _.mapExtend( o2, { get : extension, set : false, put : false } );
     // }
-    else if( _.routineIs( extension ) && extension.identity && _.longHas( extension.identity, 'functor' ) )
+    // else if( _.routineIs( extension ) && extension.identity && _.longHas( extension.identity, 'functor' ) )
+    else if( _.routineIs( extension ) && extension.identity && extension.identity.functor )
     {
       _.mapExtend( o2, { suite : extension } );
     }
@@ -1236,6 +1265,7 @@ var defaults = forbid_body.defaults =
   preservingValue : 0,
   enumerable : 0,
   combining : 'rewrite',
+  writable : true,
   message : null,
 
   prime : 0,

@@ -26,6 +26,7 @@ function _asuiteForm( test )
   var options =
   {
     name : 'a',
+    writable : true,
     methods :
     {
       aGrab : () => null,
@@ -75,6 +76,7 @@ function _asuiteForm( test )
   var options =
   {
     name : 'a',
+    writable : true,
     methods : {},
     suite :
     {
@@ -117,6 +119,7 @@ function _asuiteForm( test )
   var options =
   {
     name : 'a',
+    writable : true,
     methods :
     {
       aGrab : () => null,
@@ -161,6 +164,7 @@ function _asuiteForm( test )
   var options =
   {
     name : 'a',
+    writable : true,
     methods :
     {
       aGrab : () => null,
@@ -205,6 +209,7 @@ function _asuiteForm( test )
   var options =
   {
     name : 'a',
+    writable : true,
     methods :
     {
       aGrab : () => null,
@@ -254,6 +259,7 @@ function _asuiteForm( test )
   var options =
   {
     name : 'a',
+    writable : true,
     methods :
     {
       aGrab : () => null,
@@ -303,6 +309,7 @@ function _asuiteForm( test )
   var options =
   {
     name : 'a',
+    writable : true,
     methods :
     {
       aGrab : () => null,
@@ -352,6 +359,7 @@ function _asuiteForm( test )
   var options =
   {
     name : 'a',
+    writable : true,
     methods :
     {
       aGrab : () => null,
@@ -1653,7 +1661,8 @@ function accessorDeducingMethods( test )
     fieldName : null,
   }
 
-  symbolPut_functor.identity = [ 'accessor', 'put', 'functor' ]; /* xxx : modernize */
+  symbolPut_functor.identity = { 'accessor' : true, 'put' : true, 'functor' : true };
+  // symbolPut_functor.identity = [ 'accessor', 'put', 'functor' ]; /* yyy : modernize */
 
   /* */
 
@@ -1892,7 +1901,8 @@ function accessorUnfunct( test )
       return this.b;
     }
   }
-  getter_functor.identity = [ 'accessor', 'getter', 'functor' ];
+  getter_functor.identity = { 'accessor' : true, 'get' : true, 'functor' : true };
+  // getter_functor.identity = [ 'accessor', 'getter', 'functor' ];
   getter_functor.defaults =
   {
     fieldName : null,
@@ -1934,7 +1944,8 @@ function accessorUnfunct( test )
       return this.b = src;
     }
   }
-  setter_functor.identity = [ 'accessor', 'setter', 'functor' ];
+  setter_functor.identity = { 'accessor' : true, 'set' : true, 'functor' : true };
+  // setter_functor.identity = [ 'accessor', 'setter', 'functor' ];
   setter_functor.defaults =
   {
     fieldName : null,
@@ -1989,7 +2000,8 @@ function accessorUnfunct( test )
       return this.b = src;
     }
   }
-  putter_functor.identity = [ 'accessor', 'put', 'functor' ];
+  putter_functor.identity = { 'accessor' : true, 'put' : true, 'functor' : true };
+  // putter_functor.identity = [ 'accessor', 'put', 'functor' ];
   putter_functor.defaults =
   {
     fieldName : null,
@@ -2047,7 +2059,8 @@ function accessorUnfunct( test )
       }
     }
   }
-  accessor_functor.identity = [ 'accessor', 'functor' ];
+  accessor_functor.identity = { 'accessor' : true, 'functor' : true };
+  // accessor_functor.identity = [ 'accessor', 'functor' ];
   accessor_functor.defaults =
   {
     fieldName : null,
@@ -2143,7 +2156,8 @@ function accessorUnfunctGetSuite( test )
     accessorKind : null,
   }
 
-  get_functor.identity = [ 'accessor', 'suite', 'getter', 'functor' ];
+  get_functor.identity = { 'accessor' : true, 'suite' : true, 'get' : true, 'functor' : true };
+  // get_functor.identity = [ 'accessor', 'suite', 'getter', 'functor' ];
 
   /* - */
 

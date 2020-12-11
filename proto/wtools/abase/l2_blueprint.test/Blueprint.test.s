@@ -15,8 +15,6 @@ let _ = _global_.wTools;
 
 /* xxx qqq
 
- - cover definition::inherit + trait::typed( false ) in parent
-
  - cover construction.extend() + definition::*
 
  - allow for _.blueprint.define to have in blueprint other bluprints
@@ -4717,7 +4715,7 @@ function blueprintInheritWithTrait( test )
 
   /* */
 
-  test.case = 'with trait inherit';
+  test.case = 'typed';
 
   let s = _.define.static;
   var Blueprint1 = _.Blueprint
@@ -4880,6 +4878,267 @@ function blueprintInheritWithTrait( test )
   {
   }
   test.identical( mapOwnProperties( _.prototype.each( instance )[ 4 ] ), exp );
+
+  /* */
+
+  test.case = 'untyped';
+
+  let s = _.define.static;
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( false ),
+    field1 : 'b1',
+    field2 : 'b1',
+  });
+
+  test.description = 'blueprint2'; /* */
+
+  var Blueprint2 = _.Blueprint
+  ({
+    inherit : _.define.inherit( Blueprint1 ),
+    field2 : 'b2',
+    field3 : 'b2',
+  });
+
+  var instance = Blueprint2.Make();
+
+  test.identical( instance instanceof Blueprint1.Make, false );
+  test.identical( instance instanceof Blueprint2.Make, false );
+  test.identical( _.construction.isInstanceOf( instance, Blueprint1 ), _.maybe );
+  test.identical( _.construction.isInstanceOf( instance, Blueprint2 ), _.maybe );
+
+  test.identical( _.prototype.each( instance ).length, 1 );
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+  }
+  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+
+  test.description = 'blueprint3'; /* */
+
+  var Blueprint3 = _.Blueprint
+  ({
+    inherit : _.define.inherit( Blueprint2 ),
+    'field3' : 'b3',
+    'field4' : 'b3',
+  });
+
+  var instance = Blueprint3.Make();
+
+  test.identical( instance instanceof Blueprint1.Make, false );
+  test.identical( instance instanceof Blueprint2.Make, false );
+  test.identical( instance instanceof Blueprint3.Make, false );
+  test.identical( _.construction.isInstanceOf( instance, Blueprint1 ), _.maybe );
+  test.identical( _.construction.isInstanceOf( instance, Blueprint2 ), _.maybe );
+  test.identical( _.construction.isInstanceOf( instance, Blueprint3 ), _.maybe );
+
+  test.identical( _.prototype.each( instance ).length, 1 );
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b3',
+    'field4' : 'b3',
+  }
+  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+
+  /* */
+
+  test.case = 'implicit untyped';
+
+  let s = _.define.static;
+  var Blueprint1 = _.Blueprint
+  ({
+    field1 : 'b1',
+    field2 : 'b1',
+  });
+
+  test.description = 'blueprint2'; /* */
+
+  var Blueprint2 = _.Blueprint
+  ({
+    inherit : _.define.inherit( Blueprint1 ),
+    field2 : 'b2',
+    field3 : 'b2',
+  });
+
+  var instance = Blueprint2.Make();
+
+  test.identical( instance instanceof Blueprint1.Make, false );
+  test.identical( instance instanceof Blueprint2.Make, false );
+  test.identical( _.construction.isInstanceOf( instance, Blueprint1 ), _.maybe );
+  test.identical( _.construction.isInstanceOf( instance, Blueprint2 ), _.maybe );
+
+  test.identical( _.prototype.each( instance ).length, 1 );
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+  }
+  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+
+  test.description = 'blueprint3'; /* */
+
+  var Blueprint3 = _.Blueprint
+  ({
+    inherit : _.define.inherit( Blueprint2 ),
+    'field3' : 'b3',
+    'field4' : 'b3',
+  });
+
+  var instance = Blueprint3.Make();
+
+  test.identical( instance instanceof Blueprint1.Make, false );
+  test.identical( instance instanceof Blueprint2.Make, false );
+  test.identical( instance instanceof Blueprint3.Make, false );
+  test.identical( _.construction.isInstanceOf( instance, Blueprint1 ), _.maybe );
+  test.identical( _.construction.isInstanceOf( instance, Blueprint2 ), _.maybe );
+  test.identical( _.construction.isInstanceOf( instance, Blueprint3 ), _.maybe );
+
+  test.identical( _.prototype.each( instance ).length, 1 );
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b3',
+    'field4' : 'b3',
+  }
+  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+
+  /* */
+
+  test.case = 'typed -> untyped';
+
+  let s = _.define.static;
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+  });
+
+  test.description = 'blueprint2'; /* */
+
+  var Blueprint2 = _.Blueprint
+  ({
+    inherit : _.define.inherit( Blueprint1 ),
+    typed : _.trait.typed( false ),
+    field2 : 'b2',
+    field3 : 'b2',
+  });
+
+  var instance = Blueprint2.Make();
+
+  test.identical( instance instanceof Blueprint1.Make, false );
+  test.identical( instance instanceof Blueprint2.Make, false );
+  test.identical( _.construction.isInstanceOf( instance, Blueprint1 ), false );
+  test.identical( _.construction.isInstanceOf( instance, Blueprint2 ), _.maybe );
+
+  test.identical( _.prototype.each( instance ).length, 1 );
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+  }
+  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+
+  test.description = 'blueprint3'; /* */
+
+  var Blueprint3 = _.Blueprint
+  ({
+    inherit : _.define.inherit( Blueprint2 ),
+    'field3' : 'b3',
+    'field4' : 'b3',
+  });
+
+  var instance = Blueprint3.Make();
+
+  test.identical( instance instanceof Blueprint1.Make, false );
+  test.identical( instance instanceof Blueprint2.Make, false );
+  test.identical( instance instanceof Blueprint3.Make, false );
+  test.identical( _.construction.isInstanceOf( instance, Blueprint1 ), false );
+  test.identical( _.construction.isInstanceOf( instance, Blueprint2 ), _.maybe );
+  test.identical( _.construction.isInstanceOf( instance, Blueprint3 ), _.maybe );
+
+  test.identical( _.prototype.each( instance ).length, 1 );
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b3',
+    'field4' : 'b3',
+  }
+  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+
+  /* */
+
+  test.case = 'typed -> untyped, but before';
+
+  let s = _.define.static;
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+  });
+
+  test.description = 'blueprint2'; /* */
+
+  var Blueprint2 = _.Blueprint
+  ({
+    typed : _.trait.typed( false ),
+    inherit : _.define.inherit( Blueprint1 ),
+    field2 : 'b2',
+    field3 : 'b2',
+  });
+
+  var instance = Blueprint2.Make();
+
+  test.identical( instance instanceof Blueprint1.Make, true );
+  test.identical( instance instanceof Blueprint2.Make, true );
+  test.identical( _.construction.isInstanceOf( instance, Blueprint1 ), true );
+  test.identical( _.construction.isInstanceOf( instance, Blueprint2 ), true );
+
+  test.identical( _.prototype.each( instance ).length, 4 );
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+  }
+  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+
+  test.description = 'blueprint3'; /* */
+
+  var Blueprint3 = _.Blueprint
+  ({
+    inherit : _.define.inherit( Blueprint2 ),
+    'field3' : 'b3',
+    'field4' : 'b3',
+  });
+
+  var instance = Blueprint3.Make();
+
+  test.identical( instance instanceof Blueprint1.Make, true );
+  test.identical( instance instanceof Blueprint2.Make, true );
+  test.identical( instance instanceof Blueprint3.Make, true );
+  test.identical( _.construction.isInstanceOf( instance, Blueprint1 ), true );
+  test.identical( _.construction.isInstanceOf( instance, Blueprint2 ), true );
+  test.identical( _.construction.isInstanceOf( instance, Blueprint3 ), true );
+
+  test.identical( _.prototype.each( instance ).length, 5 );
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b3',
+    'field4' : 'b3',
+  }
+  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
 
   /* */
 
