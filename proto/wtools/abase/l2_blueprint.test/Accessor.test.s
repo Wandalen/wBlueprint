@@ -588,16 +588,16 @@ function accessorMethodsDeducing( test )
     prime : 0,
   });
 
-  test.identical( track, [] );
-  test.identical( ins1.a, undefined );
-  test.identical( track, [] );
-  ins1.aSet( 20 );
+  test.identical( track, [ 'aSet' ] );
   test.identical( ins1.a, undefined );
   test.identical( track, [ 'aSet' ] );
+  ins1.aSet( 20 );
+  test.identical( ins1.a, undefined );
+  test.identical( track, [ 'aSet', 'aSet' ] );
 
   ins1.a = 30;
   test.identical( ins1.a, undefined );
-  test.identical( track, [ 'aSet', 'aSet' ] );
+  test.identical( track, [ 'aSet', 'aSet', 'aSet' ] );
 
   /* */
 
@@ -2611,21 +2611,113 @@ function accessorStoringStrategyUnderscoreBasic( test )
 
   var ins1 =
   {
-    r1 : function(){},
     f1 : 1,
   }
 
-  debugger;
-  _.accessor.declare( ins1, { f2 : _.define.val( 2 ) } );
-  // _.accessor.declare( ins1, { f2 : { get : 2 } } );
-  debugger;
+  _.accessor.declare( ins1, { f2 : { storingStrategy : 'underscore' } } );
 
-  var got =
+  var exp =
   {
-    r1 : function(){},
+    f1 : 1,
+    f2 : undefined,
+    _ : {}
+  }
+  test.identical( _.property.own( ins1, { onlyEnumerable : 0 } ), exp );
+
+  var exp =
+  {
+    f1 : 1,
+    f2 : 3,
+    _ : { f2 : 3 }
+  }
+  ins1.f2 = 3;
+  test.identical( _.property.own( ins1, { onlyEnumerable : 0 } ), exp );
+
+  /* */
+
+  test.case = 'val from accessor';
+
+  var ins1 =
+  {
     f1 : 1,
   }
-  test.identical( _.property.own( ins1, { onlyEnumerable : 0 } ) );
+
+  _.accessor.declare( ins1, { f2 : { val : 2, storingStrategy : 'underscore' } } );
+
+  var exp =
+  {
+    f1 : 1,
+    f2 : 2,
+    _ : { f2 : 2 }
+  }
+  test.identical( _.property.own( ins1, { onlyEnumerable : 0 } ), exp );
+
+  var exp =
+  {
+    f1 : 1,
+    f2 : 3,
+    _ : { f2 : 3 }
+  }
+  ins1.f2 = 3;
+  test.identical( _.property.own( ins1, { onlyEnumerable : 0 } ), exp );
+
+  /* */
+
+  test.case = 'val from object';
+
+  var ins1 =
+  {
+    f1 : 1,
+    f2 : 2,
+  }
+
+  _.accessor.declare( ins1, { f2 : { storingStrategy : 'underscore' } } );
+
+  var exp =
+  {
+    f1 : 1,
+    f2 : 2,
+    _ : { f2 : 2 }
+  }
+  test.identical( _.property.own( ins1, { onlyEnumerable : 0 } ), exp );
+
+  var exp =
+  {
+    f1 : 1,
+    f2 : 3,
+    _ : { f2 : 3 }
+  }
+  ins1.f2 = 3;
+  test.identical( _.property.own( ins1, { onlyEnumerable : 0 } ), exp );
+
+  /* */
+
+  test.case = 'val from accesor, but object has val too';
+
+  var ins1 =
+  {
+    f1 : 1,
+    f2 : 22,
+  }
+
+  _.accessor.declare( ins1, { f2 : { val : 2, storingStrategy : 'underscore' } } );
+
+  var exp =
+  {
+    f1 : 1,
+    f2 : 2,
+    _ : { f2 : 2 }
+  }
+  test.identical( _.property.own( ins1, { onlyEnumerable : 0 } ), exp );
+
+  var exp =
+  {
+    f1 : 1,
+    f2 : 3,
+    _ : { f2 : 3 }
+  }
+  ins1.f2 = 3;
+  test.identical( _.property.own( ins1, { onlyEnumerable : 0 } ), exp );
 
   /* */
 

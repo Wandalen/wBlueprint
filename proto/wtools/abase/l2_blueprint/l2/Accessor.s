@@ -585,11 +585,11 @@ function _amethodFunctor( propName, amethodType, storingStrategy )
     if( amethodType === 'grab' )
     return grabWithUnderscore;
     else if( amethodType === 'get' )
-    return getWithSymbol;
+    return getWithUnderscore;
     else if( amethodType === 'put' )
-    return putWithSymbol;
+    return putWithUnderscore;
     else if( amethodType === 'set' )
-    return setWithSymbol;
+    return setWithUnderscore;
     else _.assert( 0 );
   }
   else _.assert( 0 );
@@ -805,7 +805,6 @@ function _objectAddMethods( o )
       writable : true,
       configurable : true,
     });
-    // o.object[ o.anames[ n ] ] = o.asuite[ n ];
   }
 
 }
@@ -890,16 +889,13 @@ function declareSingle_body( o )
   _.accessor._optionsNormalize( o );
 
   let propName;
-  // let fieldSymbol;
   if( _.symbolIs( o.name ) )
   {
     propName = Symbol.keyFor( o.name );
-    // fieldSymbol = o.name;
   }
   else
   {
     propName = o.name;
-    // fieldSymbol = Symbol.for( o.name );
   }
 
   /* */
@@ -949,8 +945,6 @@ function declareSingle_body( o )
   o.writable = !!o.asuite.set;
   _.assert( _.boolLike( o.writable ) );
 
-  // defaultsApply(); /* yyy : move up maybe? */
-
   let anames;
   if( o.prime || o.addingMethods )
   anames = _.accessor._objectMethodsNamesGet
@@ -964,6 +958,30 @@ function declareSingle_body( o )
 
   if( o.prime )
   register();
+
+  /* addingMethods */
+
+  if( o.addingMethods )
+  _.accessor._objectAddMethods
+  ({
+    object : o.object,
+    asuite : o.asuite,
+    anames,
+  });
+
+  /* init storage */
+
+  if( o.storingStrategy === 'underscore' )
+  {
+    if( !o.object[ '_' ] )
+    Object.defineProperty( o.object, '_',
+    {
+      value : Object.create( null ),
+      enumerable : false,
+      writable : false,
+      configurable : false,
+    });
+  }
 
   /* value */
 
@@ -990,16 +1008,6 @@ function declareSingle_body( o )
       val : o.object[ o.name ],
     });
   }
-
-  /* addingMethods */
-
-  if( o.addingMethods )
-  _.accessor._objectAddMethods
-  ({
-    object : o.object,
-    asuite : o.asuite,
-    anames,
-  });
 
   /* define accessor */
 
@@ -1067,7 +1075,6 @@ function declareSingle_body( o )
 
     for( let k in o )
     {
-      // if( o[ k ] === null && _.boolLike( _.accessor.AccessorPreferences[ k ] ) )
       if( o[ k ] === null && _.accessor.AccessorPreferences[ k ] !== undefined )
       o[ k ] = _.accessor.AccessorPreferences[ k ];
     }
