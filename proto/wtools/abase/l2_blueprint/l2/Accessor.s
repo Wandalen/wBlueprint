@@ -68,6 +68,7 @@ let AccessorDefaults =
   configurable : null,
   writable : null,
   storingStrategy : null,
+  storingIniting : null,
 
   strict : true, /* zzz : deprecate */
   // storingStrategy : 'symbol', /* yyy */
@@ -90,6 +91,7 @@ let AccessorPreferences =
   configurable : true,
   writable : null,
   storingStrategy : 'symbol',
+  storingIniting : true,
 
   strict : true,
   // writable : 1,
@@ -161,16 +163,13 @@ function _asuiteForm_body( o )
   _.assertRoutineOptions( _asuiteForm_body, o );
 
   let propName;
-  // let fieldSymbol;
   if( _.symbolIs( o.name ) )
   {
     propName = Symbol.keyFor( o.name );
-    // fieldSymbol = o.name;
   }
   else
   {
     propName = o.name;
-    // fieldSymbol = Symbol.for( o.name );
   }
 
   if( o.suite )
@@ -816,6 +815,24 @@ _objectAddMethods.defaults =
   anames : null,
 }
 
+//
+
+function _objectInitStorage( object, storingStrategy )
+{
+
+  if( storingStrategy === 'underscore' )
+  {
+    if( !Object.hasOwnProperty.call( object, '_' ) )
+    Object.defineProperty( object, '_',
+    {
+      value : Object.create( null ),
+      enumerable : false,
+      writable : false,
+      configurable : false,
+    });
+  }
+
+}
 
 // --
 // declare
@@ -872,6 +889,9 @@ function declareSingle_head( routine, args )
 
   if( _.boolLike( o.writable ) )
   o.writable = !!o.writable;
+
+  if( _.boolLikeTrue( o.suite ) )
+  o.suite = Object.create( null );
 
   return o;
 }
@@ -971,48 +991,61 @@ function declareSingle_body( o )
 
   /* init storage */
 
-  if( o.storingStrategy === 'underscore' )
+  if( o.storingIniting )
+  _.accessor._objectInitStorage( o.object, o.storingStrategy );
+  // if( o.storingStrategy === 'underscore' )
+  // {
+  //   if( !o.object[ '_' ] )
+  //   Object.defineProperty( o.object, '_',
+  //   {
+  //     value : Object.create( null ),
+  //     enumerable : false,
+  //     writable : false,
+  //     configurable : false,
+  //   });
+  // }
+
+  /* cache value */
+
+  if( _.definitionIs( o.asuite.get ) )
   {
-    if( !o.object[ '_' ] )
-    Object.defineProperty( o.object, '_',
-    {
-      value : Object.create( null ),
-      enumerable : false,
-      writable : false,
-      configurable : false,
-    });
+    if( o.val === _.nothing )
+    o.val = _.definition.toVal( o.asuite.get );
+    o.asuite.get = null;
   }
 
-  /* value */
+  if( o.val === _.nothing )
+  if( o.preservingValue && Object.hasOwnProperty.call( o.object, o.name ) )
+  o.val = o.object[ o.name ];
 
-  if( o.val !== _.nothing )
-  {
-    _.accessor._objectSetValue
-    ({
-      object : o.object,
-      asuite : o.asuite,
-      storingStrategy : o.storingStrategy,
-      name : o.name,
-      val : o.val,
-    });
-  }
-  else if( o.preservingValue )
-  {
-    if( Object.hasOwnProperty.call( o.object, o.name ) )
-    _.accessor._objectSetValue
-    ({
-      object : o.object,
-      asuite : o.asuite,
-      storingStrategy : o.storingStrategy,
-      name : o.name,
-      val : o.object[ o.name ],
-    });
-  }
+  // if( o.val !== _.nothing )
+  // {
+  //   _.accessor._objectSetValue
+  //   ({
+  //     object : o.object,
+  //     asuite : o.asuite,
+  //     storingStrategy : o.storingStrategy,
+  //     name : o.name,
+  //     val : o.val,
+  //   });
+  // }
+  // else if( o.preservingValue )
+  // {
+  //   if( Object.hasOwnProperty.call( o.object, o.name ) )
+  //   _.accessor._objectSetValue
+  //   ({
+  //     object : o.object,
+  //     asuite : o.asuite,
+  //     storingStrategy : o.storingStrategy,
+  //     name : o.name,
+  //     val : o.object[ o.name ],
+  //   });
+  // }
 
   /* define accessor */
 
-  _.assert( o.asuite.get === false || _.routineIs( o.asuite.get ) || _.definitionIs( o.asuite.get ) ); /* xxx */
-  _.assert( o.asuite.set === false || _.routineIs( o.asuite.set ) );
+  // _.assert( o.asuite.get === false || _.routineIs( o.asuite.get ) || _.definitionIs( o.asuite.get ) ); /* yyy */
+  // _.assert( o.asuite.set === false || _.routineIs( o.asuite.set ) );
 
   _.property.declare.body
   ({
@@ -1023,6 +1056,19 @@ function declareSingle_body( o )
     writable : !!o.writable,
     get : o.asuite.get,
     set : o.asuite.set,
+    val : o.asuite.get === null ? o.val : _.nothing,
+  });
+
+  /* set value */
+
+  if( o.val !== _.nothing && o.asuite.get !== null )
+  _.accessor._objectSetValue
+  ({
+    object : o.object,
+    asuite : o.asuite,
+    storingStrategy : o.storingStrategy,
+    name : o.name,
+    val : o.val,
   });
 
   /* validate */
@@ -1617,6 +1663,7 @@ let AccessorExtension =
   // _objectPreserveValue,
   _objectSetValue,
   _objectAddMethods,
+  _objectInitStorage,
 
   _amethodFunctor,
   _amethodFromMove,

@@ -17,7 +17,7 @@ let DefinitionGroup = [ 'etc', 'trait', 'definition.unnamed', 'definition.named'
 
 let DefinitionKnownFields =
 {
-  valueGenerate : 'routine::valueGenerate( map::o ) -> anything::',
+  toVal : 'routine::toVal( map::o ) -> anything::',
   constructionAmend : 'routine::constructionAmend( Construction::construction Primitive::key ) -> Nothing::',
   blueprintAmend : 'routine::( map::o ) -> Nothing::',
   blueprintForm1 : 'routine::( Blueprint::blueprint ) -> Nothing::',

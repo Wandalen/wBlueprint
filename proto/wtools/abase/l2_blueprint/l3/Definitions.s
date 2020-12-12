@@ -60,62 +60,44 @@ function _blueprintStaticForm( o )
   if( o.enumerable === null )
   o.enumerable = false;
 
-  let asuite;
-
-  if( o.accessor )
-  {
-    asuite = _.accessor._asuiteForm
-    ({
-      name : o.name,
-      methods : o.methods,
-      suite : o.accessor,
-      writable : o.writable,
-      asuite :
-      {
-        ... _.accessor.AmethodTypesMap,
-      },
-    });
-  }
-
   let val = o.val;
   let prototype = o.blueprint.prototype;
   let make = o.blueprint.Make;
+  let name = o.name
   let opts =
   {
     enumerable : o.enumerable,
     configurable : o.configurable,
   };
 
-  if( asuite )
+  if( o.accessor )
   {
-    // if( o.writable )
-    // {
-    //   if( asuite.get )
-    //   opts.get = asuite.get;
-    //   else
-    //   opts.get = () =>
-    //   {
-    //     return val;
-    //   }
-    //   let _set = ( asuite.set ) ? asuite.set : null;
-    //   if( _set )
-    //   opts.set = ( src ) =>
-    //   {
-    //     val = src;
-    //     return asuite.set.apply( this, arguments );
-    //   }
-    //   else
-    //   opts.set = ( src ) =>
-    //   {
-    //     val = src;
-    //     return src;
-    //   }
-    // }
-    // else
-    // {
-    //   opts.writable = false;
-    //   opts.value = val;
-    // }
+
+    _.accessor.declareSingle
+    ({
+      name : o.name,
+      object : prototype,
+      methods : o.methods,
+      suite : o.accessor,
+      val : o.val,
+      storingStrategy : o.storingStrategy,
+    });
+
+    opts.get = () =>
+    {
+      return prototype[ name ];
+    }
+
+    if( o.writable )
+    {
+      opts.set = ( src ) =>
+      {
+        prototype[ name ] = src;
+      }
+    }
+
+    Object.defineProperty( o.blueprint.Make, o.name, opts );
+    debugger;
   }
   else
   {
@@ -136,10 +118,9 @@ function _blueprintStaticForm( o )
       opts.writable = false;
       opts.value = val;
     }
+    Object.defineProperty( o.blueprint.Make, o.name, opts );
+    Object.defineProperty( o.blueprint.prototype, o.name, opts );
   }
-
-  Object.defineProperty( o.blueprint.Make, o.name, opts );
-  Object.defineProperty( o.blueprint.prototype, o.name, opts );
 
   return o.blueprint;
 }
@@ -150,8 +131,11 @@ _blueprintStaticForm.defaults =
   blueprint : null,
   name : null,
   val : null,
+
+  // asuite : null,
   accessor : null,
   methods : null,
+  storingStrategy : null,
 
   enumerable      : null,
   configurable    : null,
@@ -161,12 +145,12 @@ _blueprintStaticForm.defaults =
 
 //
 
-let _valueGenerate = Object.create( null );
-_valueGenerate.val = function val( val ) { return val }
-_valueGenerate.shallow = function shallow( val ) { return _.entityMake( val ) }
-_valueGenerate.deep = function deep( val ) { return _.replicate({ src : val }) }
-_valueGenerate.call = function call( val ) { return val() }
-_valueGenerate.new = function nw( val ) { return new val() }
+let _toVal = Object.create( null );
+_toVal.val = function val( val ) { return val }
+_toVal.shallow = function shallow( val ) { return _.entityMake( val ) }
+_toVal.deep = function deep( val ) { return _.replicate({ src : val }) }
+_toVal.call = function call( val ) { return val() }
+_toVal.new = function nw( val ) { return new val() }
 
 //
 
@@ -228,9 +212,9 @@ function prop_body( o )
   /* */
 
   let val = o.val;
-  let valueGenerate = o.valueGenerate = _valueGenerate[ o.valToIns ];
+  let toVal = o.toVal = _toVal[ o.valToIns ];
   let definition = _.definition._definitionMake( 'prop', o );
-  _.assert( _.routineIs( valueGenerate ), () => `Unknown valToIns::${definition.valToIns}` );
+  _.assert( _.routineIs( toVal ), () => `Unknown toVal::${definition.valToIns} )` );
 
   /* */
 
@@ -242,6 +226,7 @@ function prop_body( o )
   function blueprintForm2( blueprint, name )
   {
     let constructionInit = null;
+    // let asuite = null;
 
     _.assert( _.strDefined( name ) || _.strDefined( ext.name ) );
     _.assert( name === null || definition.name === null || name === definition.name );
@@ -249,28 +234,50 @@ function prop_body( o )
     if( definition.name && definition.name !== name )
     name = definition.name;
 
+    // if( o.accessor )
+    // {
+    //   if( _.boolLikeTrue( definition.accessor ) )
+    //   definition.accessor = Object.create( null );
+    //   asuite = _.accessor._asuiteForm.body
+    //   ({
+    //     name : definition.name,
+    //     methods : definition.methods || blueprint.prototype,
+    //     suite : definition.accessor,
+    //     writable : definition.writable,
+    //     storingStrategy : definition.storingStrategy,
+    //     asuite :
+    //     {
+    //       ... _.accessor.AmethodTypesMap,
+    //     },
+    //   });
+    // }
+
     if( definition.static )
     {
       _.blueprint._blueprintStaticForm
       ({
         blueprint,
         name,
-        val : definition.valueGenerate( definition.val ),
+        val : definition.toVal( definition.val ),
         enumerable : definition.enumerable,
         configurable : definition.configurable,
         writable : definition.writable,
         accessor : definition.accessor,
         methods : definition.methods,
+        storingStrategy : definition.storingStrategy,
+        // asuite,
       });
     }
     else
     {
-      if( definition.valToIns === 'val' && definition.enumerable && definition.configurable && definition.writable )
+      if( definition.accessor )
+      constructionInit = constructionInitAccessor_functor( blueprint, definition );
+      else if( definition.valToIns === 'val' && definition.enumerable && definition.configurable && definition.writable )
       blueprint.Props[ name ] = definition.val;
       else if( definition.enumerable && definition.configurable && definition.writable )
-      constructionInit = constructionInitOrdinary_functor( definition );
+      constructionInit = constructionInitOrdinary_functor( blueprint, definition );
       else
-      constructionInit = constructionInitUnordinary_functor( definition );
+      constructionInit = constructionInitUnordinary_functor( blueprint, definition );
       if( constructionInit !== null )
       _.blueprint._routineAdd( blueprint, 'constructionInit', constructionInit );
     }
@@ -278,32 +285,81 @@ function prop_body( o )
 
   /* */
 
-  function constructionInitOrdinary_functor( definition )
+  function constructionInitAccessor_functor( blueprint, definition )
   {
-    let valueGenerate = definition.valueGenerate;
-    let name = definition.name;
-    let val = definition.val;
+    const toVal = definition.toVal;
+    const name = definition.name;
+    const methods = definition.methods;
+    const accessor = _.boolLikeTrue( definition.accessor ) ? Object.create( null ) : definition.accessor;
+    const val = definition.val;
+    const storingStrategy = definition.storingStrategy;
+
+    let o2 = _.accessor.declareSingle
+    ({
+      name : name,
+      object : blueprint.prototype,
+      methods : methods,
+      suite : _.mapExtend( null, accessor ),
+      // val : toVal( val ),
+      storingStrategy : storingStrategy,
+      storingIniting : false,
+    });
+
+    const asuite = o2.asuite;
+
     return function constructionInit( genesis )
     {
-      genesis.construction[ name ] = valueGenerate( val );
+      debugger;
+      _.accessor._objectInitStorage( genesis.construction, storingStrategy );
+      _.accessor._objectSetValue
+      ({
+        object : genesis.construction,
+        asuite : asuite,
+        storingStrategy : storingStrategy,
+        name : name,
+        val : toVal( val ),
+      });
+
+      // _.accessor.declareSingle
+      // ({
+      //   name : name,
+      //   object : genesis.construction,
+      //   methods : methods,
+      //   suite : _.mapExtend( null, accessor ),
+      //   val : toVal( val ),
+      //   storingStrategy : storingStrategy,
+      // });
     }
   }
 
   /* */
 
-  function constructionInitUnordinary_functor( definition )
+  function constructionInitOrdinary_functor( blueprint, definition )
   {
-    let enumerable = definition.enumerable;
-    let configurable = definition.configurable;
-    let writable = definition.writable;
-    let valueGenerate = definition.valueGenerate;
-    let name = definition.name;
-    let val = definition.val;
+    const toVal = definition.toVal;
+    const name = definition.name;
+    const val = definition.val;
     return function constructionInit( genesis )
     {
-      let opts =
+      genesis.construction[ name ] = toVal( val );
+    }
+  }
+
+  /* */
+
+  function constructionInitUnordinary_functor( blueprint, definition )
+  {
+    const enumerable = definition.enumerable;
+    const configurable = definition.configurable;
+    const writable = definition.writable;
+    const toVal = definition.toVal;
+    const name = definition.name;
+    const val = definition.val;
+    return function constructionInit( genesis )
+    {
+      const opts =
       {
-        value : valueGenerate( val ),
+        value : toVal( val ),
         enumerable,
         configurable,
         writable,
@@ -340,6 +396,7 @@ prop_body.defaults =
 
   accessor        : null,
   methods         : null,
+  storingStrategy : 'underscore',
   // grab            : null,
   // get             : null,
   // put             : null,
@@ -369,7 +426,7 @@ static          : [ 0 , 1 ]                                                     
 enumerable      : [ 0 , 1 ]                                                                                 @default : 1
 configurable    : [ 0 , 1 ]                                                                                 @default : 1
 writable        : [ 0 , 1 ]                                                                                 @default : 1
-valueGenerate   : routine                                                                                   @default : null
+toVal   : routine                                                                                   @default : null
 collection      : [ scalar , array , map ]                                                                  @default : scalar
 insToIns        : [ val , shallow , deep ]                                                                  @default : val
 datToIns        : [ val , shallow , deep ]                                                                  @default : val
@@ -724,6 +781,122 @@ inherit.defaults =
 
 //
 
+function _constant_functor()
+{
+  let prototype = Object.create( null );
+  prototype.definitionGroup = 'definition.named';
+  prototype.subKind = 'constant';
+  prototype.asAccessorSuite = asAccessorSuite;
+  prototype.toVal = toVal;
+  prototype.constructionAmend = constructionAmend;
+  _.property.hide( prototype, 'asAccessorSuite' );
+  _.property.hide( prototype, 'toVal' );
+  _.property.hide( prototype, 'constructionAmend' );
+  _.definition.retype( prototype );
+  Object.freeze( prototype );
+
+  _constant.defaults =
+  {
+    val : null,
+  }
+
+  return _constant;
+
+  /* */
+
+  function _constant( val )
+  {
+    let o = Object.create( prototype );
+    o.val = val;
+    _.assert( arguments.length === 1 );
+    _.assert( o.val !== undefined );
+    return o;
+  }
+
+  /* */
+
+  function asAccessorSuite( op )
+  {
+    _.assert( _.definitionIs( op.amethod ) );
+    return { get : op.amethod, set : false, put : false };
+  }
+
+  /* */
+
+  function toVal( val )
+  {
+    _.assert( val !== undefined );
+    return val;
+  }
+
+  /* */
+
+  function constructionAmend( dst, key, amend )
+  {
+    let instanceIsStandard = _.workpiece.instanceIsStandard( dst );
+    _.assert( arguments.length === 3 );
+    _.assert( 0, 'not implemented' );
+  }
+
+}
+
+let _constant = _constant_functor();
+
+//
+
+// function _constant( val )
+// {
+//   let o = { val }
+//
+//   _.routineOptions( _constant, o );
+//
+//   o.definitionGroup = 'definition.named';
+//   o.subKind = 'constant';
+//   o.constructionAmend = constructionAmend;
+//   o.toVal = toVal;
+//   o.asAccessorSuite = asAccessorSuite;
+//
+//   _.assert( arguments.length === 1 );
+//
+//   let definition = new _.Definition( o );
+//   _.property.hide( definition, 'constructionAmend' );
+//   _.assert( definition.val !== undefined );
+//   return definition;
+//
+//   /* */
+//
+//   function asAccessorSuite( op )
+//   {
+//     _.assert( _.definitionIs( op.amethod ) );
+//     return { get : op.amethod, set : false, put : false };
+//   }
+//
+//   /* */
+//
+//   function toVal( val )
+//   {
+//     _.assert( val !== undefined );
+//     return val;
+//   }
+//
+//   /* */
+//
+//   function constructionAmend( dst, key, amend )
+//   {
+//     let instanceIsStandard = _.workpiece.instanceIsStandard( dst );
+//     _.assert( arguments.length === 3 );
+//     _.assert( 0, 'not implemented' );
+//   }
+//
+// }
+//
+// _constant.defaults =
+// {
+//   val : null,
+// }
+
+//
+
 function alias_body( o ) /* xxx */
 {
 
@@ -787,7 +960,7 @@ let BlueprintExtension =
   _singleArgumentHead,
   _pairArgumentsHead,
   _blueprintStaticForm,
-  _valueGenerate,
+  _toVal,
 
 }
 
@@ -817,6 +990,7 @@ let DefineExtension =
   supplementation,
   inherit,
 
+  constant : _constant,
   alias,
 
 }

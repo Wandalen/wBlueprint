@@ -53,6 +53,25 @@ Definition.prototype.clone = function()
 
 //
 
+function retype( o )
+{
+  _.assert( _.mapIs( o ) );
+  Object.setPrototypeOf( o, Definition.prototype );
+  return o;
+}
+
+//
+
+function toVal( definition )
+{
+  _.assert( _.definitionIs( definition ) );
+  _.assert( _.routineIs( definition.toVal ) );
+  _.assert( definition.val !== undefined );
+  return definition.toVal( definition.val );
+}
+
+//
+
 function _constructionAmendCant( construction, key )
 {
   let trait = this;
@@ -129,6 +148,8 @@ let DefinitionExtension =
   // routines
 
   is : _.definitionIs,
+  retype,
+  toVal,
   _constructionAmendCant,
   _traitMake,
   _definitionMake,

@@ -133,6 +133,8 @@ function declare_head( routine, args )
   _.assert( arguments.length === 2 );
   _.assert( args.length === 1 || args.length === 2 );
 
+  let o;
+
   if( args.length === 2 )
   {
     o = args[ 1 ];
@@ -145,6 +147,10 @@ function declare_head( routine, args )
   }
 
   _.routineOptions( routine, o );
+
+  if( o.writable === null )
+  o.writable = o.set === false ? false : true;
+
   _.assert( !_.primitiveIs( o.object ), 'Expects object as argument but got', o.object );
   _.assert( _.strIs( o.name ) || _.symbolIs( o.name ) );
 
@@ -156,13 +162,19 @@ function declare_head( routine, args )
 function declare_body( o )
 {
 
-  if( _.definitionIs( o.get ) )
-  {
-    _.assert( _.routineIs( o.get.valueGenerate ) );
-    _.assert( o.get.val !== undefined );
-    o.get = o.get.valueGenerate( o.get.val );
-    // o.get = o.get.val; /* yyy */
-  }
+  // if( _.definitionIs( o.get ) )
+  // {
+  //   _.assert( _.routineIs( o.get.toVal ) );
+  //   _.assert( o.get.val !== undefined );
+  //   o.get = o.get.toVal( o.get.val );
+  //   // o.get = o.get.val; /* yyy */
+  // }
+
+  // _.assert( o.get === false || _.routineIs( o.get ) || _.definitionIs( o.get ) ); /* yyy */
+  // _.assert( o.set === false || _.routineIs( o.set ) );
+
+  _.assert( o.get === false || o.get === null || _.routineIs( o.get ) );
+  _.assert( o.set === false || o.set === null || _.routineIs( o.set ) );
 
   _.assert( _.boolIs( o.enumerable ) );
   _.assert( _.boolIs( o.configurable ) );
@@ -178,19 +190,30 @@ function declare_body( o )
   {
     if( o.set )
     o2.set = o.set;
+    _.assert( o.val === _.nothing );
   }
   else if( _.routineIs( o.get ) )
   {
     if( o.set )
     o2.set = o.set;
     o2.get = o.get;
+    _.assert( o.val === _.nothing );
   }
-  else
+  else if( o.get === null )
   {
-    _.assert( o.set === false );
-    o2.value = o.get;
+    _.assert( o.set === false || o.set === null );
+    o2.value = o.val;
     o2.writable = !!o.writable;
   }
+  else _.assert( 0 );
+
+  // else if( _.definitionIs( o.get ) )
+  // {
+  //   _.assert( o.set === false );
+  //   o2.value = _.definition.toVal( o.get );
+  //   o2.writable = !!o.writable;
+  // }
+  // else _.assert( 0 );
 
   _.assert( !o.writable || o.set !== false );
   _.assert( o.writable || !o.set ); /* yyy : uncomment */
@@ -202,11 +225,13 @@ declare_body.defaults =
 {
   object : null,
   name : null,
-  enumerable : null,
-  configurable : null,
+  enumerable : true,
+  configurable : true,
   writable : null,
   get : null,
   set : null,
+  // val : null,
+  val : _.nothing,
 }
 
 let declare = _.routineUnite( declare_head, declare_body );
