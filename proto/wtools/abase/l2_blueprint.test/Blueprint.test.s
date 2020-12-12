@@ -25,7 +25,7 @@ let _ = _global_.wTools;
 // helper
 // --
 
-function mapOwnProperties( src )
+function propertyOwn( src )
 {
   _.assert( arguments.length === 1 );
   return _.property.own( src, { onlyEnumerable : 0 } );
@@ -481,7 +481,7 @@ function definitionPropStaticBasic( test )
 
   test.identical( _.prototype.each( instance ).length, 3 );
   var exp = { 'field1' : 'b1', 'field2' : 'b1', 'method1' : m1 }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 0 ] ), exp );
   var exp =
   {
     'staticMethod1' : sm1,
@@ -493,11 +493,11 @@ function definitionPropStaticBasic( test )
     'staticField5' : { 'k' : 'staticField5' },
     'staticField6' : { 'k' : 'staticField6' }
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 1 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 2 ] ), exp );
 
   test.true( Blueprint1.Make.staticField1 === Blueprint1.prototype.staticField1 );
   test.true( Blueprint1.Make.staticField2 === Blueprint1.prototype.staticField2 );
@@ -624,7 +624,7 @@ function definitionPropStaticInheritance( test )
     'method2' : Blueprint2.Props.method2,
     'method3' : Blueprint2.Props.method3,
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
     'StaticField2' : 'b2',
@@ -633,7 +633,7 @@ function definitionPropStaticInheritance( test )
     'StaticMethod3' : Blueprint2.prototype.StaticMethod3,
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
     'StaticField1' : 'b1',
@@ -642,11 +642,11 @@ function definitionPropStaticInheritance( test )
     'StaticMethod2' : Blueprint1.prototype.StaticMethod2,
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 3 ] ), exp );
 
   test.description = '_.mapExtend( null, instance1 )'; /* */
 
@@ -698,7 +698,7 @@ function definitionPropStaticInheritance( test )
     'method2' : 'new',
     'method3' : Blueprint2.Props.method3,
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
     'StaticField2' : 'new',
@@ -707,7 +707,7 @@ function definitionPropStaticInheritance( test )
     'StaticMethod3' : Blueprint2.prototype.StaticMethod3,
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
     'StaticField1' : 'new',
@@ -716,11 +716,11 @@ function definitionPropStaticInheritance( test )
     'StaticMethod2' : Blueprint1.prototype.StaticMethod2,
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 3 ] ), exp );
 
   test.description = 'StaticField1';
   test.true( instance1.StaticField1 === src.StaticField1 );
@@ -918,25 +918,25 @@ function definitionPropEnumerable( test )
     'field2' : 'b2',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
     'StaticField2' : 'b2',
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
     'StaticField1' : 'b1',
     'StaticField2' : 'b1',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 3 ] ), exp );
 
   test.description = '_.mapExtend( null, instance1 )'; /* */
   var exp =
@@ -1109,25 +1109,25 @@ function definitionPropEnumerable( test )
     'field2' : 'b2',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
     'StaticField2' : 'b2',
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
     'StaticField1' : 'b1',
     'StaticField2' : 'b1',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 3 ] ), exp );
 
   test.description = '_.mapExtend( null, instance1 )'; /* */
   var exp =
@@ -1299,25 +1299,25 @@ function definitionPropEnumerable( test )
     'field2' : 'b2',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
     'StaticField2' : 'b2',
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
     'StaticField1' : 'b1',
     'StaticField2' : 'b1',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 3 ] ), exp );
 
   test.description = '_.mapExtend( null, instance1 )'; /* */
   var exp =
@@ -1506,25 +1506,25 @@ function definitionPropWritable( test )
     'field2' : 'b2',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
     'StaticField2' : 'b2',
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
     'StaticField1' : 'b1',
     'StaticField2' : 'b1',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 3 ] ), exp );
 
   test.description = '_.mapExtend( null, instance1 )'; /* */
   var exp =
@@ -1750,25 +1750,25 @@ function definitionPropWritable( test )
     'field2' : 'b2',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
     'StaticField2' : 'b2',
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
     'StaticField1' : 'b1',
     'StaticField2' : 'b1',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 3 ] ), exp );
 
   test.description = '_.mapExtend( null, instance1 )'; /* */
   var exp =
@@ -1994,25 +1994,25 @@ function definitionPropWritable( test )
     'field2' : 'b2',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
     'StaticField2' : 'b2',
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
     'StaticField1' : 'b1',
     'StaticField2' : 'b1',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 3 ] ), exp );
 
   test.description = '_.mapExtend( null, instance1 )'; /* */
   var exp =
@@ -2250,25 +2250,25 @@ function definitionPropConfigurable( test )
     'field2' : 'b2',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
     'StaticField2' : 'b2',
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
     'StaticField1' : 'b1',
     'StaticField2' : 'b1',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 3 ] ), exp );
 
   test.description = '_.mapExtend( null, instance1 )'; /* */
   var exp =
@@ -2402,25 +2402,25 @@ function definitionPropConfigurable( test )
     'field1' : 'b1',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
     'StaticField2' : 'b2',
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
     'StaticField1' : 'b1',
     'StaticField2' : 'b1',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 3 ] ), exp );
   test.true( Blueprint1.Make.StaticField1 === 'b1' );
   test.true( Blueprint1.Make.StaticField2 === 'b1' );
   test.true( Blueprint1.Make.StaticField3 === undefined );
@@ -2438,13 +2438,13 @@ function definitionPropConfigurable( test )
   {
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( Blueprint2.prototype ), exp );
+  test.identical( propertyOwn( Blueprint2.prototype ), exp );
   var exp =
   {
     'StaticField2' : 'b1',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( Blueprint1.prototype ), exp );
+  test.identical( propertyOwn( Blueprint1.prototype ), exp );
 
   test.true( Blueprint1.Make.StaticField1 === 'b1' );
   test.true( Blueprint1.Make.StaticField2 === 'b1' );
@@ -2463,13 +2463,13 @@ function definitionPropConfigurable( test )
   {
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( Blueprint2.prototype ), exp );
+  test.identical( propertyOwn( Blueprint2.prototype ), exp );
   var exp =
   {
     'StaticField2' : 'b1',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( Blueprint1.prototype ), exp );
+  test.identical( propertyOwn( Blueprint1.prototype ), exp );
 
   test.true( Blueprint1.Make.StaticField1 === undefined );
   test.true( Blueprint1.Make.StaticField2 === 'b1' );
@@ -2488,13 +2488,13 @@ function definitionPropConfigurable( test )
   {
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( Blueprint2.prototype ), exp );
+  test.identical( propertyOwn( Blueprint2.prototype ), exp );
   var exp =
   {
     'StaticField2' : 'new',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( Blueprint1.prototype ), exp );
+  test.identical( propertyOwn( Blueprint1.prototype ), exp );
 
   test.true( Blueprint1.Make.StaticField1 === undefined );
   test.true( Blueprint1.Make.StaticField2 === 'new' );
@@ -2632,25 +2632,25 @@ function definitionPropConfigurable( test )
     'field2' : 'b2',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
     'StaticField2' : 'b2',
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
     'StaticField1' : 'b1',
     'StaticField2' : 'b1',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 3 ] ), exp );
 
   test.description = '_.mapExtend( null, instance1 )'; /* */
   var exp =
@@ -2784,25 +2784,25 @@ function definitionPropConfigurable( test )
     'field1' : 'b1',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
     'StaticField2' : 'b2',
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
     'StaticField1' : 'b1',
     'StaticField2' : 'b1',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 3 ] ), exp );
   test.true( Blueprint1.Make.StaticField1 === 'b1' );
   test.true( Blueprint1.Make.StaticField2 === 'b1' );
   test.true( Blueprint1.Make.StaticField3 === undefined );
@@ -2820,13 +2820,13 @@ function definitionPropConfigurable( test )
   {
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( Blueprint2.prototype ), exp );
+  test.identical( propertyOwn( Blueprint2.prototype ), exp );
   var exp =
   {
     'StaticField2' : 'b1',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( Blueprint1.prototype ), exp );
+  test.identical( propertyOwn( Blueprint1.prototype ), exp );
 
   test.true( Blueprint1.Make.StaticField1 === 'b1' );
   test.true( Blueprint1.Make.StaticField2 === 'b1' );
@@ -2845,13 +2845,13 @@ function definitionPropConfigurable( test )
   {
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( Blueprint2.prototype ), exp );
+  test.identical( propertyOwn( Blueprint2.prototype ), exp );
   var exp =
   {
     'StaticField2' : 'b1',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( Blueprint1.prototype ), exp );
+  test.identical( propertyOwn( Blueprint1.prototype ), exp );
 
   test.true( Blueprint1.Make.StaticField1 === undefined );
   test.true( Blueprint1.Make.StaticField2 === 'b1' );
@@ -2870,13 +2870,13 @@ function definitionPropConfigurable( test )
   {
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( Blueprint2.prototype ), exp );
+  test.identical( propertyOwn( Blueprint2.prototype ), exp );
   var exp =
   {
     'StaticField2' : 'new',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( Blueprint1.prototype ), exp );
+  test.identical( propertyOwn( Blueprint1.prototype ), exp );
 
   test.true( Blueprint1.Make.StaticField1 === undefined );
   test.true( Blueprint1.Make.StaticField2 === 'new' );
@@ -3014,25 +3014,25 @@ function definitionPropConfigurable( test )
     'field2' : 'b2',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
     'StaticField2' : 'b2',
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
     'StaticField1' : 'b1',
     'StaticField2' : 'b1',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 3 ] ), exp );
 
   test.description = '_.mapExtend( null, instance1 )'; /* */
   var exp =
@@ -3167,25 +3167,25 @@ function definitionPropConfigurable( test )
     'field2' : 'b2',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
     'StaticField2' : 'b2',
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
     'StaticField1' : 'b1',
     'StaticField2' : 'b1',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 3 ] ), exp );
   test.true( Blueprint1.Make.StaticField1 === 'b1' );
   test.true( Blueprint1.Make.StaticField2 === 'b1' );
   test.true( Blueprint1.Make.StaticField3 === undefined );
@@ -3205,14 +3205,14 @@ function definitionPropConfigurable( test )
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( Blueprint2.prototype ), exp );
+  test.identical( propertyOwn( Blueprint2.prototype ), exp );
   var exp =
   {
     'StaticField1' : 'b1',
     'StaticField2' : 'b1',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( Blueprint1.prototype ), exp );
+  test.identical( propertyOwn( Blueprint1.prototype ), exp );
 
   test.true( Blueprint1.Make.StaticField1 === 'b1' );
   test.true( Blueprint1.Make.StaticField2 === 'b1' );
@@ -3233,14 +3233,14 @@ function definitionPropConfigurable( test )
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( Blueprint2.prototype ), exp );
+  test.identical( propertyOwn( Blueprint2.prototype ), exp );
   var exp =
   {
     'StaticField1' : 'b1',
     'StaticField2' : 'b1',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( Blueprint1.prototype ), exp );
+  test.identical( propertyOwn( Blueprint1.prototype ), exp );
 
   test.true( Blueprint1.Make.StaticField1 === 'b1' );
   test.true( Blueprint1.Make.StaticField2 === 'b1' );
@@ -3303,25 +3303,25 @@ function definitionProper( test )
     'field2' : 'b2',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
     'StaticField2' : 'b2',
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
     'StaticField1' : 'b1',
     'StaticField2' : 'b1',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 3 ] ), exp );
 
   /* */
 
@@ -3373,25 +3373,25 @@ function definitionProper( test )
     'field2' : 'b2',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
     'StaticField2' : 'b2',
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
     'StaticField1' : 'b1',
     'StaticField2' : 'b1',
     'constructor' : Blueprint1.Make
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 3 ] ), exp );
 
   /* */
 
@@ -4564,16 +4564,16 @@ function blueprintInheritManually( test )
     'field1' : 'b1',
     'field2' : 'b1',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 0 ] ), exp );
   var exp =
   {
     'staticField1' : 'b1', 'staticField2' : 'b1'
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 1 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 2 ] ), exp );
 
   test.description = 'blueprint2'; /* */
 
@@ -4609,21 +4609,21 @@ function blueprintInheritManually( test )
     'field3' : 'b2',
   }
   test.identical( _.prototype.each( instance ).length, 4 );
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 0 ] ), exp );
   var exp =
   {
     'staticField2' : 'b2', 'staticField3' : 'b2'
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 1 ] ), exp );
   var exp =
   {
     'staticField1' : 'b1', 'staticField2' : 'b1'
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 2 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 3 ] ), exp );
 
   test.description = 'control blueprint1'; /* */
 
@@ -4678,26 +4678,26 @@ function blueprintInheritManually( test )
     'field3' : 'b3',
     'field4' : 'b3',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 0 ] ), exp );
   var exp =
   {
     'staticField3' : 'b3', 'staticField4' : 'b3'
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 1 ] ), exp );
   var exp =
   {
     'staticField2' : 'b2', 'staticField3' : 'b2'
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 2 ] ), exp );
   var exp =
   {
     'staticField1' : 'b1', 'staticField2' : 'b1'
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 3 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 4 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 4 ] ), exp );
 
   /* */
 
@@ -4717,7 +4717,7 @@ function blueprintInheritWithTrait( test )
 
   test.case = 'typed';
 
-  let s = _.define.static;
+  var s = _.define.static;
   var Blueprint1 = _.Blueprint
   ({
     typed : _.trait.typed( true ),
@@ -4746,16 +4746,16 @@ function blueprintInheritWithTrait( test )
     'field1' : 'b1',
     'field2' : 'b1',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 0 ] ), exp );
   var exp =
   {
     'staticField1' : 'b1', 'staticField2' : 'b1'
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 1 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 2 ] ), exp );
 
   test.description = 'blueprint2'; /* */
 
@@ -4790,21 +4790,21 @@ function blueprintInheritWithTrait( test )
     'field2' : 'b2',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 0 ] ), exp );
   var exp =
   {
     'staticField2' : 'b2', 'staticField3' : 'b2'
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 1 ] ), exp );
   var exp =
   {
     'staticField1' : 'b1', 'staticField2' : 'b1'
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 2 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 3 ] ), exp );
 
   test.description = 'control blueprint1'; /* */
 
@@ -4858,32 +4858,32 @@ function blueprintInheritWithTrait( test )
     'field3' : 'b3',
     'field4' : 'b3',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 0 ] ), exp );
   var exp =
   {
     'staticField3' : 'b3', 'staticField4' : 'b3'
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 1 ] ), exp );
   var exp =
   {
     'staticField2' : 'b2', 'staticField3' : 'b2'
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 2 ] ), exp );
   var exp =
   {
     'staticField1' : 'b1', 'staticField2' : 'b1'
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 3 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 4 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 4 ] ), exp );
 
   /* */
 
   test.case = 'untyped';
 
-  let s = _.define.static;
+  var s = _.define.static;
   var Blueprint1 = _.Blueprint
   ({
     typed : _.trait.typed( false ),
@@ -4914,7 +4914,7 @@ function blueprintInheritWithTrait( test )
     'field2' : 'b2',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 0 ] ), exp );
 
   test.description = 'blueprint3'; /* */
 
@@ -4942,13 +4942,13 @@ function blueprintInheritWithTrait( test )
     'field3' : 'b3',
     'field4' : 'b3',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 0 ] ), exp );
 
   /* */
 
   test.case = 'implicit untyped';
 
-  let s = _.define.static;
+  var s = _.define.static;
   var Blueprint1 = _.Blueprint
   ({
     field1 : 'b1',
@@ -4978,7 +4978,7 @@ function blueprintInheritWithTrait( test )
     'field2' : 'b2',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 0 ] ), exp );
 
   test.description = 'blueprint3'; /* */
 
@@ -5006,13 +5006,13 @@ function blueprintInheritWithTrait( test )
     'field3' : 'b3',
     'field4' : 'b3',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 0 ] ), exp );
 
   /* */
 
   test.case = 'typed -> untyped';
 
-  let s = _.define.static;
+  var s = _.define.static;
   var Blueprint1 = _.Blueprint
   ({
     typed : _.trait.typed( true ),
@@ -5044,7 +5044,7 @@ function blueprintInheritWithTrait( test )
     'field2' : 'b2',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 0 ] ), exp );
 
   test.description = 'blueprint3'; /* */
 
@@ -5072,13 +5072,13 @@ function blueprintInheritWithTrait( test )
     'field3' : 'b3',
     'field4' : 'b3',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 0 ] ), exp );
 
   /* */
 
   test.case = 'typed -> untyped, but before';
 
-  let s = _.define.static;
+  var s = _.define.static;
   var Blueprint1 = _.Blueprint
   ({
     typed : _.trait.typed( true ),
@@ -5110,7 +5110,7 @@ function blueprintInheritWithTrait( test )
     'field2' : 'b2',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 0 ] ), exp );
 
   test.description = 'blueprint3'; /* */
 
@@ -5138,7 +5138,7 @@ function blueprintInheritWithTrait( test )
     'field3' : 'b3',
     'field4' : 'b3',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance )[ 0 ] ), exp );
 
   /* */
 
@@ -5466,18 +5466,18 @@ function traitWithConstructor( test )
     'field1' : 'b1',
     'field2' : 'b1',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
     constructor : Blueprint1.prototype.constructor,
     'staticField1' : 'b1',
     'staticField2' : 'b1',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
 
   test.description = 'instance2'; /* */
 
@@ -5501,18 +5501,18 @@ function traitWithConstructor( test )
     'field1' : 'b1',
     'field2' : 'b1',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance2 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 0 ] ), exp );
   var exp =
   {
     constructor : Blueprint1.prototype.constructor,
     'staticField1' : 'b1',
     'staticField2' : 'b1',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance2 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 1 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance2 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 2 ] ), exp );
 
   /* */
 
@@ -5556,18 +5556,18 @@ function traitWithConstructor( test )
     'field1' : 'b1',
     'field2' : 'b1',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
     constructor : Blueprint1.prototype.constructor,
     'staticField1' : 'b1',
     'staticField2' : 'b1',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
 
   test.description = 'instance2'; /* */
 
@@ -5591,18 +5591,18 @@ function traitWithConstructor( test )
     'field1' : 'b1',
     'field2' : 'b1',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance2 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 0 ] ), exp );
   var exp =
   {
     constructor : Blueprint1.prototype.constructor,
     'staticField1' : 'b1',
     'staticField2' : 'b1',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance2 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 1 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance2 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 2 ] ), exp );
 
   /* */
 
@@ -5681,25 +5681,25 @@ function traitWithConstructor( test )
     'field2' : 'b2',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
     constructor : Blueprint2.prototype.constructor,
     'staticField2' : 'b2',
     'staticField3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
     constructor : Blueprint1.prototype.constructor,
     'staticField1' : 'b1',
     'staticField2' : 'b1',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance1 )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 3 ] ), exp );
 
   test.description = 'instance2'; /* */
 
@@ -5714,25 +5714,25 @@ function traitWithConstructor( test )
     'field2' : 'b2',
     'field3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance2 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 0 ] ), exp );
   var exp =
   {
     constructor : Blueprint2.prototype.constructor,
     'staticField2' : 'b2',
     'staticField3' : 'b2',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance2 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 1 ] ), exp );
   var exp =
   {
     constructor : Blueprint1.prototype.constructor,
     'staticField1' : 'b1',
     'staticField2' : 'b1',
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance2 )[ 2 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 2 ] ), exp );
   var exp =
   {
   }
-  test.identical( mapOwnProperties( _.prototype.each( instance2 )[ 3 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 3 ] ), exp );
 
   /* */
 
@@ -8662,7 +8662,7 @@ function retypeBasic( test )
     a : 'a2',
     b : '3',
   }
-  test.identical( _.property.all( got ), mapOwnProperties( exp ) );
+  test.identical( _.property.all( got ), propertyOwn( exp ) );
 
   /* */
 
@@ -8685,7 +8685,7 @@ function retypeBasic( test )
     a : 'a2',
     b : '3',
   }
-  test.identical( _.property.all( got ), mapOwnProperties( exp ) );
+  test.identical( _.property.all( got ), propertyOwn( exp ) );
 
   /* */
 
@@ -8709,7 +8709,7 @@ function retypeBasic( test )
     a : 'a2',
     b : '3',
   }
-  test.identical( _.property.all( got ), mapOwnProperties( exp ) );
+  test.identical( _.property.all( got ), propertyOwn( exp ) );
 
   /* */
 
@@ -8733,7 +8733,7 @@ function retypeBasic( test )
     a : 'a2',
     b : '3',
   }
-  test.identical( _.property.all( got ), mapOwnProperties( exp ) );
+  test.identical( _.property.all( got ), propertyOwn( exp ) );
 
   /* */
 
@@ -8757,7 +8757,7 @@ function retypeBasic( test )
     a : 'a2',
     b : '3',
   }
-  test.identical( _.property.all( got ), mapOwnProperties( exp ) );
+  test.identical( _.property.all( got ), propertyOwn( exp ) );
 
   /* */
 
@@ -8829,7 +8829,7 @@ let Self =
   context :
   {
 
-    mapOwnProperties,
+    propertyOwn,
 
   },
 

@@ -210,7 +210,7 @@ declare_body.defaults =
 }
 
 let declare = _.routineUnite( declare_head, declare_body );
-_.routineEr( declare ); /* qqq : cover */
+_.routineEr( declare );
 
 // --
 // define
@@ -221,7 +221,7 @@ let PropertyExtension =
 
   hide,
   constant : _constant,
-  declare,
+  declare, /* qqq : cover */
 
 }
 

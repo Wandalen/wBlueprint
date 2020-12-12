@@ -36,9 +36,10 @@ let _ = _global_.wTools;
  **/
 
 let Combining = [ 'rewrite', 'supplement', 'apppend', 'prepend' ];
-let AccessorType = [ 'grab', 'get', 'put', 'set', 'move' ];
+let StoringStrategy = [ 'symbol', 'underscore' ];
+let AmethodTypes = [ 'grab', 'get', 'put', 'set', 'move' ];
 
-let AsuiteFields =
+let AmethodTypesMap =
 {
   grab : null,
   get : null,
@@ -47,23 +48,18 @@ let AsuiteFields =
   move : null,
 }
 
-let AccessorTypeMap =
+let AccessorFieldsMap =
 {
-  grab : null,
-  get : null,
-  put : null,
-  set : null,
-  move : null,
+  ... AmethodTypesMap,
   suite : null,
+  val : _.nothing,
 }
 
 let AccessorDefaults =
 {
 
-  ... AccessorTypeMap,
-  suite : null,
+  ... AccessorFieldsMap,
 
-  strict : 1, /* zzz : deprecated */
   preservingValue : null,
   prime : null,
   combining : null,
@@ -71,7 +67,10 @@ let AccessorDefaults =
   enumerable : null,
   configurable : null,
   writable : null,
+  storingStrategy : null,
 
+  strict : true, /* zzz : deprecate */
+  // storingStrategy : 'symbol', /* yyy */
   // readOnly : 0, /* yyy : use writable instead */
   // readOnlyProduct : 0,
 
@@ -80,18 +79,19 @@ let AccessorDefaults =
 let AccessorPreferences =
 {
 
-  ... AccessorTypeMap,
+  ... AccessorFieldsMap,
   suite : null,
 
-  strict : 1,
-  preservingValue : 1,
+  preservingValue : true,
   prime : null,
   combining : null,
-  addingMethods : 0,
-  enumerable : 1,
-  configurable : 0,
-  writable : 1,
+  addingMethods : false,
+  enumerable : true,
+  configurable : true,
+  writable : null,
+  storingStrategy : 'symbol',
 
+  strict : true,
   // writable : 1,
   // readOnlyProduct : 0,
 
@@ -141,7 +141,15 @@ function _optionsNormalize( o )
 
 //
 
-function _asuiteForm( o )
+function _asuiteForm_head( routine, args )
+{
+  _.assert( arguments.length === 2 );
+  _.assert( args.length === 1 );
+  let o = _.routineOptions( routine, args );
+  return o;
+}
+
+function _asuiteForm_body( o )
 {
 
   _.assert( arguments.length === 1 );
@@ -149,29 +157,26 @@ function _asuiteForm( o )
   _.assert( _.strIs( o.name ) || _.symbolIs( o.name ) );
   _.assert( _.mapIs( o.asuite ) );
   _.assert( o.writable === null || _.boolIs( o.writable ) );
-  _.assertMapHasOnly( o.asuite, _.accessor.AsuiteFields );
-  _.assertRoutineOptions( _asuiteForm, o );
+  _.assertMapHasOnly( o.asuite, _.accessor.AmethodTypesMap );
+  _.assertRoutineOptions( _asuiteForm_body, o );
 
-  if( o.name === 'a' )
-  debugger;
-
-  let fieldName;
-  let fieldSymbol;
+  let propName;
+  // let fieldSymbol;
   if( _.symbolIs( o.name ) )
   {
-    fieldName = Symbol.keyFor( o.name );
-    fieldSymbol = o.name;
+    propName = Symbol.keyFor( o.name );
+    // fieldSymbol = o.name;
   }
   else
   {
-    fieldName = o.name;
-    fieldSymbol = Symbol.for( o.name );
+    propName = o.name;
+    // fieldSymbol = Symbol.for( o.name );
   }
 
   if( o.suite )
-  _.assertMapHasOnly( o.suite, _.accessor.AccessorType );
+  _.assertMapHasOnly( o.suite, _.accessor.AmethodTypes );
 
-  for( let k in o.asuite, _.accessor.AsuiteFields )
+  for( let k in o.asuite, _.accessor.AmethodTypesMap )
   methodNormalize( k );
 
   _.assert( o.writable !== false || !o.asuite.set );
@@ -181,24 +186,11 @@ function _asuiteForm( o )
   if( o.asuite.grab === null || o.asuite.grab === true )
   {
     if( o.asuite.move )
-    o.asuite.grab = function grab()
-    {
-      let it = _.accessor._moveItMake
-      ({
-        srcInstance : this,
-        instanceKey : fieldName,
-        accessorKind : 'grab',
-      });
-      o.asuite.move.call( this, it );
-      return it.value;
-    }
+    o.asuite.grab = _.accessor._amethodFromMove( propName, 'grab', o.asuite.move );
     else if( _.routineIs( o.asuite.get ) )
     o.asuite.grab = o.asuite.get;
     else
-    o.asuite.grab = function grab()
-    {
-      return this[ fieldSymbol ];
-    }
+    o.asuite.grab = _.accessor._amethodFunctor( propName, 'grab', o.storingStrategy );
   }
 
   /* get */
@@ -206,24 +198,11 @@ function _asuiteForm( o )
   if( o.asuite.get === null || o.asuite.get === true )
   {
     if( o.asuite.move )
-    o.asuite.get = function get()
-    {
-      let it = _.accessor._moveItMake
-      ({
-        srcInstance : this,
-        instanceKey : fieldName,
-        accessorKind : 'get',
-      });
-      o.asuite.move.call( this, it );
-      return it.value;
-    }
+    o.asuite.get = _.accessor._amethodFromMove( propName, 'get', o.asuite.move );
     else if( _.routineIs( o.asuite.grab ) )
     o.asuite.get = o.asuite.grab;
     else
-    o.asuite.get = function get()
-    {
-      return this[ fieldSymbol ];
-    }
+    o.asuite.get = _.accessor._amethodFunctor( propName, 'get', o.storingStrategy );
   }
 
   /* put */
@@ -231,26 +210,11 @@ function _asuiteForm( o )
   if( o.asuite.put === null || o.asuite.put === true )
   {
     if( o.asuite.move )
-    o.asuite.put = function put( src )
-    {
-      let it = _.accessor._moveItMake
-      ({
-        dstInstance : this,
-        instanceKey : fieldName,
-        value : src,
-        accessorKind : 'put',
-      });
-      o.asuite.move.call( this, it );
-      return it.value;
-    }
+    o.asuite.put = _.accessor._amethodFromMove( propName, 'put', o.asuite.move );
     else if( _.routineIs( o.asuite.set ) )
     o.asuite.put = o.asuite.set;
     else
-    o.asuite.put = function put( src )
-    {
-      this[ fieldSymbol ] = src;
-      return src;
-    }
+    o.asuite.put = _.accessor._amethodFunctor( propName, 'put', o.storingStrategy );
   }
 
   /* set */
@@ -263,26 +227,11 @@ function _asuiteForm( o )
       o.asuite.set = false;
     }
     else if( o.asuite.move )
-    o.asuite.set = function set( src )
-    {
-      let it = _.accessor._moveItMake
-      ({
-        dstInstance : this,
-        instanceKey : fieldName,
-        value : src,
-        accessorKind : 'set',
-      });
-      o.asuite.move.call( this, it );
-      return it.value;
-    }
+    o.asuite.set = _.accessor._amethodFromMove( propName, 'set', o.asuite.move );
     else if( _.routineIs( o.asuite.put ) )
     o.asuite.set = o.asuite.put;
     else if( o.asuite.put !== false || o.asuite.set )
-    o.asuite.set = function set( src )
-    {
-      this[ fieldSymbol ] = src;
-      return src;
-    }
+    o.asuite.set = _.accessor._amethodFunctor( propName, 'set', o.storingStrategy );
     else
     o.asuite.set = false;
   }
@@ -293,7 +242,7 @@ function _asuiteForm( o )
   {
     o.asuite.move = function move( it )
     {
-      _.assert( 0, 'not tested' ); /* xxx */
+      _.assert( 0, 'not tested' ); /* zzz */
       debugger;
       return it.src;
     }
@@ -323,11 +272,11 @@ function _asuiteForm( o )
 
   if( Config.debug )
   {
-    for( let k in AsuiteFields )
+    for( let k in AmethodTypesMap )
     _.assert
     (
       _.definitionIs( o.asuite[ k ] ) || _.routineIs( o.asuite[ k ] ) || o.asuite[ k ] === false,
-      () => `Field "${fieldName}" is not read only, but setter not found ${_.toStrShort( o.methods )}`
+      () => `Field "${propName}" is not read only, but setter not found ${_.toStrShort( o.methods )}`
     );
   }
 
@@ -355,16 +304,16 @@ function _asuiteForm( o )
       o.asuite[ name ] = true;
     }
 
-    if( o.asuite[ name ] !== false )
+    if( o.asuite[ name ] === null || o.asuite[ name ] === true )
     {
       if( _.routineIs( o.asuite[ name ] ) || _.definitionIs( o.asuite[ name ] ) )
       o.asuite[ name ] = o.asuite[ name ];
       else if( o.suite && ( _.routineIs( o.suite[ name ] ) || _.definitionIs( o.suite[ name ] ) ) )
       o.asuite[ name ] = o.suite[ name ];
-      else if( o.methods && o.methods[ '' + fieldName + capitalName ] )
-      o.asuite[ name ] = o.methods[ fieldName + capitalName ];
-      else if( o.methods && o.methods[ '_' + fieldName + capitalName ] )
-      o.asuite[ name ] = o.methods[ '_' + fieldName + capitalName ];
+      else if( o.methods && o.methods[ '' + propName + capitalName ] )
+      o.asuite[ name ] = o.methods[ propName + capitalName ];
+      else if( o.methods && o.methods[ '_' + propName + capitalName ] )
+      o.asuite[ name ] = o.methods[ '_' + propName + capitalName ];
     }
   }
 
@@ -372,14 +321,17 @@ function _asuiteForm( o )
 
 }
 
-_asuiteForm.defaults =
+_asuiteForm_body.defaults =
 {
   suite : null,
   asuite : null,
   methods : null,
   writable : null,
+  storingStrategy : 'symbol',
   name : null,
 }
+
+let _asuiteForm = _.routineUnite( _asuiteForm_head, _asuiteForm_body );
 
 //
 
@@ -448,7 +400,6 @@ function _amethodUnfunct( o )
   else if( o.kind === 'suite' && o.withDefinition && _.definitionIs( o.amethod ) )
   {
     definitionUnfunct();
-    // if( o.withFunctor && o.amethod.identity && _.longHas( o.amethod.identity, 'functor' ) )
     if( o.withFunctor && o.amethod.identity && o.amethod.identity.functor )
     functorUnfunct();
   }
@@ -461,8 +412,8 @@ function _amethodUnfunct( o )
     let o2 = Object.create( null );
     if( o.amethod.defaults )
     {
-      if( o.amethod.defaults.fieldName !== undefined )
-      o2.fieldName = o.accessor.name;
+      if( o.amethod.defaults.propName !== undefined )
+      o2.propName = o.accessor.name;
       if( o.amethod.defaults.accessor !== undefined )
       o2.accessor = o.accessor;
       if( o.amethod.defaults.accessorKind !== undefined )
@@ -504,9 +455,9 @@ function _objectMethodsNamesGet( o )
   _.assert( _.strIs( o.name ) );
   _.assert( !!o.object );
 
-  for( let t = 0 ; t < _.accessor.AccessorType.length ; t++ )
+  for( let t = 0 ; t < _.accessor.AmethodTypes.length ; t++ )
   {
-    let type = _.accessor.AccessorType[ t ];
+    let type = _.accessor.AmethodTypes[ t ];
     if( o.asuite[ type ] && !o.anames[ type ] )
     {
       let type2 = _.strCapitalize( type );
@@ -568,11 +519,11 @@ function _objectMethodsValidate( o )
   _.routineOptions( _objectMethodsValidate, o );
 
   let name = _.symbolIs( o.name ) ? Symbol.keyFor( o.name ) : o.name;
-  let AccessorType = _.accessor.AccessorType;
+  let AmethodTypes = _.accessor.AmethodTypes;
 
-  for( let t = 0 ; t < AccessorType.length ; t++ )
+  for( let t = 0 ; t < AmethodTypes.length ; t++ )
   {
-    let type = AccessorType[ t ];
+    let type = AmethodTypes[ t ];
     if( !o.asuite[ type ] )
     {
       let name1 = name + _.strCapitalize( type );
@@ -612,6 +563,160 @@ function _objectMethodMoveGet( srcInstance, name )
 
 //
 
+function _amethodFunctor( propName, amethodType, storingStrategy )
+{
+  let fieldSymbol;
+
+  if( storingStrategy === 'symbol' )
+  {
+    fieldSymbol = Symbol.for( propName );
+    if( amethodType === 'grab' )
+    return grabWithSymbol;
+    else if( amethodType === 'get' )
+    return getWithSymbol;
+    else if( amethodType === 'put' )
+    return putWithSymbol;
+    else if( amethodType === 'set' )
+    return setWithSymbol;
+    else _.assert( 0 );
+  }
+  else if( storingStrategy === 'underscore' )
+  {
+    if( amethodType === 'grab' )
+    return grabWithUnderscore;
+    else if( amethodType === 'get' )
+    return getWithSymbol;
+    else if( amethodType === 'put' )
+    return putWithSymbol;
+    else if( amethodType === 'set' )
+    return setWithSymbol;
+    else _.assert( 0 );
+  }
+  else _.assert( 0 );
+
+  /* */
+
+  function grabWithSymbol()
+  {
+    return this[ fieldSymbol ];
+  }
+
+  function getWithSymbol()
+  {
+    return this[ fieldSymbol ];
+  }
+
+  function putWithSymbol( src )
+  {
+    this[ fieldSymbol ] = src;
+    return src;
+  }
+
+  function setWithSymbol( src )
+  {
+    this[ fieldSymbol ] = src;
+    return src;
+  }
+
+  /* */
+
+  function grabWithUnderscore()
+  {
+    return this._[ propName ];
+  }
+
+  function getWithUnderscore()
+  {
+    return this._[ propName ];
+  }
+
+  function putWithUnderscore( src )
+  {
+    this._[ propName ] = src;
+    return src;
+  }
+
+  function setWithUnderscore( src )
+  {
+    this._[ propName ] = src;
+    return src;
+  }
+
+  /* */
+
+}
+
+//
+
+function _amethodFromMove( propName, amethodType, move )
+{
+
+  if( amethodType === 'grab' )
+  return grab;
+  else if( amethodType === 'get' )
+  return get;
+  else if( amethodType === 'put' )
+  return put;
+  else if( amethodType === 'set' )
+  return set;
+  else _.assert( 0 );
+
+  /* */
+
+  function grab()
+  {
+    let it = _.accessor._moveItMake
+    ({
+      srcInstance : this,
+      instanceKey : propName,
+      accessorKind : 'grab',
+    });
+    move.call( this, it );
+    return it.value;
+  }
+
+  function get()
+  {
+    let it = _.accessor._moveItMake
+    ({
+      srcInstance : this,
+      instanceKey : propName,
+      accessorKind : 'get',
+    });
+    move.call( this, it );
+    return it.value;
+  }
+
+  function put( src )
+  {
+    let it = _.accessor._moveItMake
+    ({
+      dstInstance : this,
+      instanceKey : propName,
+      value : src,
+      accessorKind : 'put',
+    });
+    move.call( this, it );
+    return it.value;
+  }
+
+  function set( src )
+  {
+    let it = _.accessor._moveItMake
+    ({
+      dstInstance : this,
+      instanceKey : propName,
+      value : src,
+      accessorKind : 'set',
+    });
+    move.call( this, it );
+    return it.value;
+  }
+
+}
+
+//
+
 function _moveItMake( o )
 {
   return _.routineOptions( _moveItMake, arguments );
@@ -631,27 +736,56 @@ _moveItMake.defaults =
 
 //
 
-function _objectPreserveValue( o )
+// function _objectPreserveValue( o )
+// {
+//
+//   _.assertMapHasAll( o, _objectPreserveValue.defaults );
+//
+//   if( Object.hasOwnProperty.call( o.object, o.name ) )
+//   {
+//     o.val = o.object[ o.name ];
+//     _.accessor._objectSetValue( o );
+//   }
+//
+// }
+//
+// _objectPreserveValue.defaults =
+// {
+//   object : null,
+//   name : null,
+//   asuite : null,
+// }
+
+//
+
+function _objectSetValue( o )
 {
 
-  _.assertRoutineOptions( _objectPreserveValue, o );
+  _.assertMapHasAll( o, _objectSetValue.defaults );
 
-  if( Object.hasOwnProperty.call( o.object, o.name ) )
+  if( o.asuite.put )
   {
-    if( o.asuite.put )
-    o.asuite.put.call( o.object, o.object[ o.name ] );
-    else
-    o.object[ o.fieldSymbol ] = o.object[ o.name ];
+    o.asuite.put.call( o.object, o.val );
+  }
+  else if( o.asuite.set )
+  {
+    o.asuite.set.call( o.object, o.val );
+  }
+  else
+  {
+    let put = _.accessor._amethodFunctor( o.name, 'put', o.storingStrategy );
+    put.call( o.object, o.val );
   }
 
 }
 
-_objectPreserveValue.defaults =
+_objectSetValue.defaults =
 {
   object : null,
-  name : null,
-  fieldSymbol : null,
   asuite : null,
+  storingStrategy : null,
+  name : null,
+  val : null,
 }
 
 //
@@ -755,23 +889,25 @@ function declareSingle_body( o )
 
   _.accessor._optionsNormalize( o );
 
-  let fieldName;
-  let fieldSymbol;
+  let propName;
+  // let fieldSymbol;
   if( _.symbolIs( o.name ) )
   {
-    fieldName = Symbol.keyFor( o.name );
-    fieldSymbol = o.name;
+    propName = Symbol.keyFor( o.name );
+    // fieldSymbol = o.name;
   }
   else
   {
-    fieldName = o.name;
-    fieldSymbol = Symbol.for( o.name );
+    propName = o.name;
+    // fieldSymbol = Symbol.for( o.name );
   }
 
   /* */
 
   if( !needed() )
   return false;
+
+  defaultsApply();
 
   /* */
 
@@ -784,24 +920,24 @@ function declareSingle_body( o )
     withFunctor : true,
   });
 
-  o.asuite = _.accessor._asuiteForm
+  o.asuite = _.accessor._asuiteForm.body
   ({
     name : o.name,
     methods : o.methods,
     suite : o.suite,
     writable : o.writable,
+    storingStrategy : o.storingStrategy,
     asuite :
     {
       grab : o.grab,
       get : o.get,
       put : o.put,
-      // set : o.writable || o.writable === null ? o.set : false, /* yyy */
       set : o.set,
       move : o.move,
     },
   });
 
-  o.asuite = _.accessor._asuiteUnfunct
+  _.accessor._asuiteUnfunct
   ({
     accessor : o,
     asuite : o.asuite,
@@ -813,7 +949,7 @@ function declareSingle_body( o )
   o.writable = !!o.asuite.set;
   _.assert( _.boolLike( o.writable ) );
 
-  defaultsApply();
+  // defaultsApply(); /* yyy : move up maybe? */
 
   let anames;
   if( o.prime || o.addingMethods )
@@ -829,16 +965,31 @@ function declareSingle_body( o )
   if( o.prime )
   register();
 
-  /* preservingValue */
+  /* value */
 
-  if( o.preservingValue )
-  _.accessor._objectPreserveValue
-  ({
-    object : o.object,
-    name : o.name,
-    asuite : o.asuite,
-    fieldSymbol,
-  });
+  if( o.val !== _.nothing )
+  {
+    _.accessor._objectSetValue
+    ({
+      object : o.object,
+      asuite : o.asuite,
+      storingStrategy : o.storingStrategy,
+      name : o.name,
+      val : o.val,
+    });
+  }
+  else if( o.preservingValue )
+  {
+    if( Object.hasOwnProperty.call( o.object, o.name ) )
+    _.accessor._objectSetValue
+    ({
+      object : o.object,
+      asuite : o.asuite,
+      storingStrategy : o.storingStrategy,
+      name : o.name,
+      val : o.object[ o.name ],
+    });
+  }
 
   /* addingMethods */
 
@@ -852,7 +1003,7 @@ function declareSingle_body( o )
 
   /* define accessor */
 
-  _.assert( o.asuite.get === false || _.routineIs( o.asuite.get ) || _.definitionIs( o.asuite.get ) );
+  _.assert( o.asuite.get === false || _.routineIs( o.asuite.get ) || _.definitionIs( o.asuite.get ) ); /* xxx */
   _.assert( o.asuite.set === false || _.routineIs( o.asuite.set ) );
 
   _.property.declare.body
@@ -916,7 +1067,8 @@ function declareSingle_body( o )
 
     for( let k in o )
     {
-      if( o[ k ] === null && _.boolLike( _.accessor.AccessorPreferences[ k ] ) )
+      // if( o[ k ] === null && _.boolLike( _.accessor.AccessorPreferences[ k ] ) )
+      if( o[ k ] === null && _.accessor.AccessorPreferences[ k ] !== undefined )
       o[ k ] = _.accessor.AccessorPreferences[ k ];
     }
 
@@ -1222,7 +1374,7 @@ function forbid_body( o )
     {
       let name = o.names[ n ];
       let o2 = _.mapExtend( null, o );
-      o2.fieldName = name;
+      o2.propName = name;
       _.assert( n === name, () => 'Key and value should be the same, but ' + _.strQuote( n ) + ' and ' + _.strQuote( name ) + ' are not' );
       let declared = _.accessor._forbidSingle( o2 );
       if( declared )
@@ -1243,7 +1395,7 @@ function forbid_body( o )
     {
       let name = namesArray[ n ];
       let o2 = _.mapExtend( null, o );
-      o2.fieldName = name;
+      o2.propName = name;
       let delcared = _.accessor._forbidSingle( o2 );
       if( declared )
       {
@@ -1280,14 +1432,14 @@ let forbid = _.routineUnite( declareMultiple_head, forbid_body );
 function _forbidSingle()
 {
   let o = _.routineOptions( _forbidSingle, arguments );
-  let messageLine = o.protoName + o.fieldName + ' : ' + o.message;
+  let messageLine = o.protoName + o.propName + ' : ' + o.message;
 
   _.assert( _.strIs( o.protoName ) );
   _.assert( _.objectIs( o.methods ) );
 
   /* */
 
-  let propertyDescriptor = _.prototype.propertyDescriptorActiveGet( o.object, o.fieldName );
+  let propertyDescriptor = _.prototype.propertyDescriptorActiveGet( o.object, o.propName );
   if( propertyDescriptor.descriptor )
   {
     _.assert( _.strIs( o.combining ), 'forbid : if accessor overided expect ( o.combining ) is', _.accessor.Combining.join() );
@@ -1321,15 +1473,15 @@ function _forbidSingle()
 
     _.assert( 0, 'not tested' );
     let o2 = _.mapExtend( null, o );
-    o2.names = o.fieldName;
+    o2.names = o.propName;
     o2.object = null;
     delete o2.protoName;
-    delete o2.fieldName;
+    delete o2.propName;
 
     _.accessor._register
     ({
       proto : o.object,
-      name : o.fieldName,
+      name : o.propName,
       declaratorName : 'forbid',
       declaratorArgs : [ o2 ],
       combining : o.combining,
@@ -1344,7 +1496,7 @@ function _forbidSingle()
   o.prime = 0;
 
   let o2 = _.mapOnly( o, _.accessor.declare.body.defaults );
-  o2.name = o.fieldName;
+  o2.name = o.propName;
   delete o2.names;
   return _.accessor.declareSingle.body( o2 );
 
@@ -1361,7 +1513,7 @@ function _forbidSingle()
 var defaults = _forbidSingle.defaults =
 {
   ... forbid.defaults,
-  fieldName : null,
+  propName : null,
   protoName : null,
 }
 
@@ -1455,9 +1607,12 @@ let AccessorExtension =
   _objectMethodsValidate,
   _objectMethodMoveGet,
 
-  _objectPreserveValue,
+  // _objectPreserveValue,
+  _objectSetValue,
   _objectAddMethods,
 
+  _amethodFunctor,
+  _amethodFromMove,
   _moveItMake,
 
   // declare
@@ -1480,9 +1635,9 @@ let AccessorExtension =
   // fields
 
   Combining,
-  AccessorType,
-  AsuiteFields,
-  AccessorTypeMap,
+  AmethodTypes,
+  AmethodTypesMap,
+  AccessorFieldsMap,
   AccessorDefaults,
   AccessorPreferences,
 

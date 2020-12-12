@@ -26,7 +26,6 @@ function _asuiteForm( test )
   var options =
   {
     name : 'a',
-    writable : true,
     methods :
     {
       aGrab : () => null,
@@ -76,7 +75,6 @@ function _asuiteForm( test )
   var options =
   {
     name : 'a',
-    writable : true,
     methods : {},
     suite :
     {
@@ -119,7 +117,6 @@ function _asuiteForm( test )
   var options =
   {
     name : 'a',
-    writable : true,
     methods :
     {
       aGrab : () => null,
@@ -164,7 +161,6 @@ function _asuiteForm( test )
   var options =
   {
     name : 'a',
-    writable : true,
     methods :
     {
       aGrab : () => null,
@@ -209,7 +205,6 @@ function _asuiteForm( test )
   var options =
   {
     name : 'a',
-    writable : true,
     methods :
     {
       aGrab : () => null,
@@ -259,7 +254,6 @@ function _asuiteForm( test )
   var options =
   {
     name : 'a',
-    writable : true,
     methods :
     {
       aGrab : () => null,
@@ -309,7 +303,6 @@ function _asuiteForm( test )
   var options =
   {
     name : 'a',
-    writable : true,
     methods :
     {
       aGrab : () => null,
@@ -359,7 +352,6 @@ function _asuiteForm( test )
   var options =
   {
     name : 'a',
-    writable : true,
     methods :
     {
       aGrab : () => null,
@@ -1648,7 +1640,7 @@ function accessorDeducingMethods( test )
   function symbolPut_functor( o )
   {
     o = _.routineOptions( symbolPut_functor, arguments );
-    let symbol = Symbol.for( o.fieldName );
+    let symbol = Symbol.for( o.propName );
     return function put( val )
     {
       this[ symbol ] = val;
@@ -1658,7 +1650,7 @@ function accessorDeducingMethods( test )
 
   symbolPut_functor.defaults =
   {
-    fieldName : null,
+    propName : null,
   }
 
   symbolPut_functor.identity = { 'accessor' : true, 'put' : true, 'functor' : true };
@@ -1893,7 +1885,7 @@ function accessorUnfunct( test )
   function getter_functor( fop )
   {
     counter += 1;
-    var exp = { fieldName : 'a' };
+    var exp = { propName : 'a' };
     test.identical( fop, exp );
     return function get()
     {
@@ -1905,7 +1897,7 @@ function accessorUnfunct( test )
   // getter_functor.identity = [ 'accessor', 'getter', 'functor' ];
   getter_functor.defaults =
   {
-    fieldName : null,
+    propName : null,
   }
   var object =
   {
@@ -1936,7 +1928,7 @@ function accessorUnfunct( test )
   function setter_functor( fop )
   {
     counter += 1;
-    var exp = { fieldName : 'a' };
+    var exp = { propName : 'a' };
     test.identical( fop, exp );
     return function set( src )
     {
@@ -1948,7 +1940,7 @@ function accessorUnfunct( test )
   // setter_functor.identity = [ 'accessor', 'setter', 'functor' ];
   setter_functor.defaults =
   {
-    fieldName : null,
+    propName : null,
   }
   var object =
   {
@@ -1992,7 +1984,7 @@ function accessorUnfunct( test )
   function putter_functor( fop )
   {
     counter += 1;
-    var exp = { fieldName : 'a' };
+    var exp = { propName : 'a' };
     test.identical( fop, exp );
     return function set( src )
     {
@@ -2004,7 +1996,7 @@ function accessorUnfunct( test )
   // putter_functor.identity = [ 'accessor', 'put', 'functor' ];
   putter_functor.defaults =
   {
-    fieldName : null,
+    propName : null,
   }
   var object =
   {
@@ -2048,7 +2040,7 @@ function accessorUnfunct( test )
   function accessor_functor( fop )
   {
     counter += 1;
-    var exp = { fieldName : 'a' };
+    var exp = { propName : 'a' };
     test.identical( fop, exp );
     return {
       get : function() { return this.b },
@@ -2063,7 +2055,7 @@ function accessorUnfunct( test )
   // accessor_functor.identity = [ 'accessor', 'functor' ];
   accessor_functor.defaults =
   {
-    fieldName : null,
+    propName : null,
   }
   var object =
   {
@@ -2111,7 +2103,7 @@ function accessorUnfunctGetSuite( test )
 
     _.assert( arguments.length === 1, 'Expects single argument' );
     _.routineOptions( get_functor, o );
-    _.assert( _.strDefined( o.fieldName ) );
+    _.assert( _.strDefined( o.propName ) );
 
     if( o.accessor.configurable === null )
     o.accessor.configurable = 1;
@@ -2141,7 +2133,7 @@ function accessorUnfunctGetSuite( test )
           configurable : false,
           value : 'abc3',
         }
-        Object.defineProperty( this, o.fieldName, o2 );
+        Object.defineProperty( this, o.propName, o2 );
         return 'abc2'
       }
       return 'abc1';
@@ -2151,7 +2143,7 @@ function accessorUnfunctGetSuite( test )
 
   get_functor.defaults =
   {
-    fieldName : null,
+    propName : null,
     accessor : null,
     accessorKind : null,
   }
@@ -2608,6 +2600,37 @@ function accessorMoveBasic( test )
 
 }
 
+//
+
+function accessorStoringStrategyUnderscoreBasic( test )
+{
+
+  /* */
+
+  test.case = 'basic';
+
+  var ins1 =
+  {
+    r1 : function(){},
+    f1 : 1,
+  }
+
+  debugger;
+  _.accessor.declare( ins1, { f2 : _.define.val( 2 ) } );
+  // _.accessor.declare( ins1, { f2 : { get : 2 } } );
+  debugger;
+
+  var got =
+  {
+    r1 : function(){},
+    f1 : 1,
+  }
+  test.identical( _.property.own( ins1, { onlyEnumerable : 0 } ) );
+
+  /* */
+
+}
+
 // --
 // declare
 // --
@@ -2638,6 +2661,7 @@ let Self =
     forbidWithoutConstructor,
 
     accessorMoveBasic,
+    accessorStoringStrategyUnderscoreBasic,
 
   },
 

@@ -47,9 +47,9 @@ function _pairArgumentsHead( routine, args )
 
 //
 
-function _staticBlueprintForm( o )
+function _blueprintStaticForm( o )
 {
-  _.assertRoutineOptions( _staticBlueprintForm, o );
+  _.assertRoutineOptions( _blueprintStaticForm, o );
   _.assert( _.objectIs( o.blueprint.prototype ) );
   _.assert( _.routineIs( o.blueprint.Make ) );
 
@@ -60,6 +60,23 @@ function _staticBlueprintForm( o )
   if( o.enumerable === null )
   o.enumerable = false;
 
+  let asuite;
+
+  if( o.accessor )
+  {
+    asuite = _.accessor._asuiteForm
+    ({
+      name : o.name,
+      methods : o.methods,
+      suite : o.accessor,
+      writable : o.writable,
+      asuite :
+      {
+        ... _.accessor.AmethodTypesMap,
+      },
+    });
+  }
+
   let val = o.val;
   let prototype = o.blueprint.prototype;
   let make = o.blueprint.Make;
@@ -69,22 +86,56 @@ function _staticBlueprintForm( o )
     configurable : o.configurable,
   };
 
-  if( o.writable )
+  if( asuite )
   {
-    opts.get = () =>
-    {
-      return val;
-    }
-    opts.set = ( src ) =>
-    {
-      val = src;
-      return src;
-    }
+    // if( o.writable )
+    // {
+    //   if( asuite.get )
+    //   opts.get = asuite.get;
+    //   else
+    //   opts.get = () =>
+    //   {
+    //     return val;
+    //   }
+    //   let _set = ( asuite.set ) ? asuite.set : null;
+    //   if( _set )
+    //   opts.set = ( src ) =>
+    //   {
+    //     val = src;
+    //     return asuite.set.apply( this, arguments );
+    //   }
+    //   else
+    //   opts.set = ( src ) =>
+    //   {
+    //     val = src;
+    //     return src;
+    //   }
+    // }
+    // else
+    // {
+    //   opts.writable = false;
+    //   opts.value = val;
+    // }
   }
   else
   {
-    opts.writable = false;
-    opts.value = val;
+    if( o.writable )
+    {
+      opts.get = () =>
+      {
+        return val;
+      }
+      opts.set = ( src ) =>
+      {
+        val = src;
+        return src;
+      }
+    }
+    else
+    {
+      opts.writable = false;
+      opts.value = val;
+    }
   }
 
   Object.defineProperty( o.blueprint.Make, o.name, opts );
@@ -93,12 +144,14 @@ function _staticBlueprintForm( o )
   return o.blueprint;
 }
 
-_staticBlueprintForm.defaults =
+_blueprintStaticForm.defaults =
 {
 
   blueprint : null,
   name : null,
   val : null,
+  accessor : null,
+  methods : null,
 
   enumerable      : null,
   configurable    : null,
@@ -181,7 +234,6 @@ function prop_body( o )
 
   /* */
 
-  // Object.preventExtensions( definition );
   _.assert( !Object.isExtensible( definition ) );
   return definition;
 
@@ -199,7 +251,7 @@ function prop_body( o )
 
     if( definition.static )
     {
-      _.blueprint._staticBlueprintForm
+      _.blueprint._blueprintStaticForm
       ({
         blueprint,
         name,
@@ -207,6 +259,8 @@ function prop_body( o )
         enumerable : definition.enumerable,
         configurable : definition.configurable,
         writable : definition.writable,
+        accessor : definition.accessor,
+        methods : definition.methods,
       });
     }
     else
@@ -216,7 +270,7 @@ function prop_body( o )
       else if( definition.enumerable && definition.configurable && definition.writable )
       constructionInit = constructionInitOrdinary_functor( definition );
       else
-      constructionInit = constructionInitVal_functor( definition );
+      constructionInit = constructionInitUnordinary_functor( definition );
       if( constructionInit !== null )
       _.blueprint._routineAdd( blueprint, 'constructionInit', constructionInit );
     }
@@ -237,7 +291,7 @@ function prop_body( o )
 
   /* */
 
-  function constructionInitVal_functor( definition )
+  function constructionInitUnordinary_functor( definition )
   {
     let enumerable = definition.enumerable;
     let configurable = definition.configurable;
@@ -285,6 +339,7 @@ prop_body.defaults =
   // relation        : null,
 
   accessor        : null,
+  methods         : null,
   // grab            : null,
   // get             : null,
   // put             : null,
@@ -731,7 +786,7 @@ let BlueprintExtension =
 
   _singleArgumentHead,
   _pairArgumentsHead,
-  _staticBlueprintForm,
+  _blueprintStaticForm,
   _valueGenerate,
 
 }
