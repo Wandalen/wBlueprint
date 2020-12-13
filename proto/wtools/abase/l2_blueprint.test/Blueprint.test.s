@@ -4855,47 +4855,58 @@ function definePropAccessorBasic( test )
 
   test.case = 'accessor : true, typed : true';
 
-  debugger;
   var blueprint = _.blueprint.define
   ({
     typed : _.trait.typed( true ),
     f1 : _.define.prop( 1, { accessor : true } ),
   });
-  debugger;
   var instance1 = blueprint.Make();
-  debugger;
 
   test.description = 'instance'; /* */
+
+  test.identical( instance1.f1, 1 );
+  // test.identical( blueprint.prototype.f1, undefined );
+  test.identical( blueprint.Make.f1, undefined );
 
   test.identical( _.prototype.each( instance1 ).length, 3 );
   var exp =
   {
     '_' : { 'f1' : 1 },
-    'f1' : 1,
+    // 'f1' : 1,
   }
-  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( _.prototype.each( instance1 ).length, 3 );
   var exp =
   {
+    '_' : { 'f1' : 1 },
+    // 'f1' : 1,
   }
-  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
+  // var exp =
+  // {
+  // }
+  // test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
   }
   test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
+  var exp =
+  {
+    '_' : { 'f1' : 1 },
+    'f1' : 1,
+  }
+  test.identical( propertyOwn( _.property.all( instance1 ) ), exp );
 
   test.description = 'instance set'; /* */
 
-  debugger;
   instance1.f1 = 2;
 
   test.identical( instance1.f1, 2 );
-  test.identical( blueprint.prototype.f1, undefined );
+  // test.identical( blueprint.prototype.f1, undefined );
   test.identical( blueprint.Make.f1, undefined );
 
   var exp =
   {
     '_' : { 'f1' : 2 },
-    'f1' : 2,
   }
   test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
 

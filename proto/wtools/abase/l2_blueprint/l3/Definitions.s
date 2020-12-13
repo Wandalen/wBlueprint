@@ -309,7 +309,6 @@ function prop_body( o )
 
     return function constructionInit( genesis )
     {
-      debugger;
       _.accessor._objectInitStorage( genesis.construction, storingStrategy );
       _.accessor._objectSetValue
       ({
