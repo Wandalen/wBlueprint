@@ -294,20 +294,31 @@ function prop_body( o )
     const val = definition.val;
     const storingStrategy = definition.storingStrategy;
 
-    let o2 = _.accessor.declareSingle
-    ({
-      name : name,
-      object : blueprint.prototype,
-      methods : methods,
-      suite : _.mapExtend( null, accessor ),
-      // val : toVal( val ),
-      storingStrategy : storingStrategy,
-      storingIniting : false,
-    });
+    _.assert( _.boolLike( blueprint.Typed ) );
 
-    const asuite = o2.asuite;
+    let o2;
+    let asuite;
 
-    return function constructionInit( genesis )
+    if( blueprint.Typed )
+    {
+      o2 = _.accessor.declareSingle
+      ({
+        name : name,
+        object : blueprint.prototype,
+        methods : methods,
+        suite : _.mapExtend( null, accessor ),
+        storingStrategy : storingStrategy,
+        storingIniting : false,
+      });
+      asuite = o2.asuite;
+    }
+
+    if( blueprint.Typed )
+    return constructionInitTyped;
+    else
+    return constructionInitUntyped;
+
+    function constructionInitTyped( genesis )
     {
       _.accessor._objectInitStorage( genesis.construction, storingStrategy );
       _.accessor._objectSetValue
@@ -318,17 +329,22 @@ function prop_body( o )
         name : name,
         val : toVal( val ),
       });
-
-      // _.accessor.declareSingle
-      // ({
-      //   name : name,
-      //   object : genesis.construction,
-      //   methods : methods,
-      //   suite : _.mapExtend( null, accessor ),
-      //   val : toVal( val ),
-      //   storingStrategy : storingStrategy,
-      // });
     }
+
+    function constructionInitUntyped( genesis )
+    {
+      _.accessor.declareSingle
+      ({
+        object : genesis.construction,
+        methods : methods,
+        suite : _.mapExtend( null, accessor ),
+        storingStrategy : storingStrategy,
+        name : name,
+        val : toVal( val ),
+      });
+    }
+
+
   }
 
   /* */

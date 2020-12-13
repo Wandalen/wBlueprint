@@ -180,6 +180,12 @@ function declare_body( o )
   _.assert( _.boolIs( o.configurable ) );
   _.assert( _.boolIs( o.writable ) );
 
+  if( o.get !== null && o.set === null )
+  {
+    debugger;
+    o.set = function noSetter() { throw _.err( 'No setter defined' ) }
+  }
+
   let o2 =
   {
     enumerable : !!o.enumerable,
