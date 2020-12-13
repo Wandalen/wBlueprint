@@ -181,16 +181,13 @@ function declare_body( o )
   {
     if( o.set )
     o2.set = o.set;
-    else
-    o2.set = noSetter;
+    o2.get = noGet;
     _.assert( o.val === _.nothing );
   }
   else if( _.routineIs( o.get ) )
   {
     if( o.set )
     o2.set = o.set;
-    else
-    o2.set = noSetter;
     o2.get = o.get;
     _.assert( o.val === _.nothing );
   }
@@ -207,9 +204,9 @@ function declare_body( o )
 
   Object.defineProperty( o.object, o.name, o2 );
 
-  function noSetter()
+  function noGet()
   {
-    throw _.err( 'No setter defined' );
+    throw _.err( 'No getter defined' );
   }
 
 }

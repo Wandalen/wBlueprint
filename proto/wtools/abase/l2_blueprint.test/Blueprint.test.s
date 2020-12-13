@@ -4853,164 +4853,163 @@ function definePropAccessorBasic( test )
 
   /* */
 
-  // test.case = 'accessor : true, typed : true';
-  //
-  // var blueprint = _.blueprint.define
-  // ({
-  //   typed : _.trait.typed( true ),
-  //   f1 : _.define.prop( 1, { accessor : true } ),
-  // });
-  // var instance1 = blueprint.Make();
-  //
-  // test.description = 'instance'; /* */
-  //
-  // test.identical( instance1.f1, 1 );
-  // test.shouldThrowErrorSync( () => blueprint.prototype.f1 );
-  // test.identical( blueprint.Make.f1, undefined );
-  //
-  // test.identical( _.prototype.each( instance1 ).length, 3 );
-  // var exp =
-  // {
-  //   '_' : { 'f1' : 1 },
-  //   'f1' : 1,
-  // }
-  // test.identical( propertyOwn( _.property.all( instance1 ) ), exp );
-  //
-  // test.description = 'instance set'; /* */
-  //
-  // instance1.f1 = 2;
-  //
-  // test.identical( instance1.f1, 2 );
-  // test.shouldThrowErrorSync( () => blueprint.prototype.f1 );
-  // test.identical( blueprint.Make.f1, undefined );
-  //
-  // var exp =
-  // {
-  //   '_' : { 'f1' : 2 },
-  // }
-  // test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
-  //
-  // /* */
-  //
-  // test.case = 'accessor : true, typed : false';
-  //
-  // var blueprint = _.blueprint.define
-  // ({
-  //   typed : _.trait.typed( false ),
-  //   f1 : _.define.prop( 1, { accessor : true } ),
-  // });
-  // var instance1 = blueprint.Make();
-  //
-  // test.description = 'instance'; /* */
-  //
-  // test.identical( instance1.f1, 1 );
-  // test.identical( blueprint.prototype.f1, undefined );
-  // test.identical( blueprint.Make.f1, undefined );
-  //
-  // test.identical( _.prototype.each( instance1 ).length, 1 );
-  // var exp =
-  // {
-  //   '_' : { 'f1' : 1 },
-  //   'f1' : 1,
-  // }
-  // test.identical( propertyOwn( _.property.all( instance1 ) ), exp );
-  //
-  // test.description = 'instance set'; /* */
-  //
-  // instance1.f1 = 2;
-  //
-  // test.identical( instance1.f1, 2 );
-  // test.identical( blueprint.prototype.f1, undefined );
-  // test.identical( blueprint.Make.f1, undefined );
-  //
-  // var exp =
-  // {
-  //   '_' : { 'f1' : 2 },
-  //   'f1' : 2,
-  // }
-  // test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
-  //
-  // /* */
-  //
-  // test.case = 'accessor.set : false, typed : true';
-  //
-  // var blueprint = _.blueprint.define
-  // ({
-  //   typed : _.trait.typed( true ),
-  //   f1 : _.define.prop( 1, { accessor : { set : false } } ),
-  // });
-  // var instance1 = blueprint.Make();
-  //
-  // test.description = 'instance'; /* */
-  //
-  // test.identical( instance1.f1, 1 );
-  // test.shouldThrowErrorSync( () => blueprint.prototype.f1 );
-  // test.identical( blueprint.Make.f1, undefined );
-  //
-  // test.identical( _.prototype.each( instance1 ).length, 3 );
-  // var exp =
-  // {
-  //   '_' : { 'f1' : 1 },
-  //   'f1' : 1,
-  // }
-  // test.identical( propertyOwn( _.property.all( instance1 ) ), exp );
-  //
-  // test.description = 'instance set'; /* */
-  //
-  // instance1._.f1 = 2;
-  // test.shouldThrowErrorSync( () => instance1.f1 = 3 );
-  //
-  // test.identical( instance1.f1, 2 );
-  // test.shouldThrowErrorSync( () => blueprint.prototype.f1 );
-  // test.identical( blueprint.Make.f1, undefined );
-  //
-  // var exp =
-  // {
-  //   '_' : { 'f1' : 2 },
-  // }
-  // test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
-  //
-  // /* */
-  //
-  // test.case = 'accessor.set : false, typed : false';
-  //
-  // var blueprint = _.blueprint.define
-  // ({
-  //   typed : _.trait.typed( false ),
-  //   f1 : _.define.prop( 1, { accessor : { set : false } } ),
-  // });
-  // var instance1 = blueprint.Make();
-  //
-  // test.description = 'instance'; /* */
-  //
-  // test.identical( instance1.f1, 1 );
-  // test.identical( blueprint.prototype.f1, undefined );
-  // test.identical( blueprint.Make.f1, undefined );
-  //
-  // test.identical( _.prototype.each( instance1 ).length, 1 );
-  // var exp =
-  // {
-  //   '_' : { 'f1' : 1 },
-  //   'f1' : 1,
-  // }
-  // test.identical( propertyOwn( _.property.all( instance1 ) ), exp );
-  //
-  // test.description = 'instance set'; /* */
-  //
-  // instance1._.f1 = 2;
-  // test.shouldThrowErrorSync( () => instance1.f1 = 3 );
-  //
-  // test.identical( instance1.f1, 2 );
-  // test.identical( blueprint.prototype.f1, undefined );
-  // test.identical( blueprint.Make.f1, undefined );
-  //
-  // var exp =
-  // {
-  //   '_' : { 'f1' : 2 },
-  //   'f1' : 2,
-  // }
-  // test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
-  // xxx
+  test.case = 'accessor : true, typed : true';
+
+  var blueprint = _.blueprint.define
+  ({
+    typed : _.trait.typed( true ),
+    f1 : _.define.prop( 1, { accessor : true } ),
+  });
+  var instance1 = blueprint.Make();
+
+  test.description = 'instance'; /* */
+
+  test.identical( instance1.f1, 1 );
+  test.shouldThrowErrorSync( () => blueprint.prototype.f1 );
+  test.identical( blueprint.Make.f1, undefined );
+
+  test.identical( _.prototype.each( instance1 ).length, 3 );
+  var exp =
+  {
+    '_' : { 'f1' : 1 },
+    'f1' : 1,
+  }
+  test.identical( propertyOwn( _.property.all( instance1 ) ), exp );
+
+  test.description = 'instance set'; /* */
+
+  instance1.f1 = 2;
+
+  test.identical( instance1.f1, 2 );
+  test.shouldThrowErrorSync( () => blueprint.prototype.f1 );
+  test.identical( blueprint.Make.f1, undefined );
+
+  var exp =
+  {
+    '_' : { 'f1' : 2 },
+  }
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
+
+  /* */
+
+  test.case = 'accessor : true, typed : false';
+
+  var blueprint = _.blueprint.define
+  ({
+    typed : _.trait.typed( false ),
+    f1 : _.define.prop( 1, { accessor : true } ),
+  });
+  var instance1 = blueprint.Make();
+
+  test.description = 'instance'; /* */
+
+  test.identical( instance1.f1, 1 );
+  test.identical( blueprint.prototype.f1, undefined );
+  test.identical( blueprint.Make.f1, undefined );
+
+  test.identical( _.prototype.each( instance1 ).length, 1 );
+  var exp =
+  {
+    '_' : { 'f1' : 1 },
+    'f1' : 1,
+  }
+  test.identical( propertyOwn( _.property.all( instance1 ) ), exp );
+
+  test.description = 'instance set'; /* */
+
+  instance1.f1 = 2;
+
+  test.identical( instance1.f1, 2 );
+  test.identical( blueprint.prototype.f1, undefined );
+  test.identical( blueprint.Make.f1, undefined );
+
+  var exp =
+  {
+    '_' : { 'f1' : 2 },
+    'f1' : 2,
+  }
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
+
+  /* */
+
+  test.case = 'accessor.set : false, typed : true';
+
+  var blueprint = _.blueprint.define
+  ({
+    typed : _.trait.typed( true ),
+    f1 : _.define.prop( 1, { accessor : { set : false } } ),
+  });
+  var instance1 = blueprint.Make();
+
+  test.description = 'instance'; /* */
+
+  test.identical( instance1.f1, 1 );
+  test.shouldThrowErrorSync( () => blueprint.prototype.f1 );
+  test.identical( blueprint.Make.f1, undefined );
+
+  test.identical( _.prototype.each( instance1 ).length, 3 );
+  var exp =
+  {
+    '_' : { 'f1' : 1 },
+    'f1' : 1,
+  }
+  test.identical( propertyOwn( _.property.all( instance1 ) ), exp );
+
+  test.description = 'instance set'; /* */
+
+  instance1._.f1 = 2;
+  test.shouldThrowErrorSync( () => instance1.f1 = 3 );
+
+  test.identical( instance1.f1, 2 );
+  test.shouldThrowErrorSync( () => blueprint.prototype.f1 );
+  test.identical( blueprint.Make.f1, undefined );
+
+  var exp =
+  {
+    '_' : { 'f1' : 2 },
+  }
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
+
+  /* */
+
+  test.case = 'accessor.set : false, typed : false';
+
+  var blueprint = _.blueprint.define
+  ({
+    typed : _.trait.typed( false ),
+    f1 : _.define.prop( 1, { accessor : { set : false } } ),
+  });
+  var instance1 = blueprint.Make();
+
+  test.description = 'instance'; /* */
+
+  test.identical( instance1.f1, 1 );
+  test.identical( blueprint.prototype.f1, undefined );
+  test.identical( blueprint.Make.f1, undefined );
+
+  test.identical( _.prototype.each( instance1 ).length, 1 );
+  var exp =
+  {
+    '_' : { 'f1' : 1 },
+    'f1' : 1,
+  }
+  test.identical( propertyOwn( _.property.all( instance1 ) ), exp );
+
+  test.description = 'instance set'; /* */
+
+  instance1._.f1 = 2;
+  test.shouldThrowErrorSync( () => instance1.f1 = 3 );
+
+  test.identical( instance1.f1, 2 );
+  test.identical( blueprint.prototype.f1, undefined );
+  test.identical( blueprint.Make.f1, undefined );
+
+  var exp =
+  {
+    '_' : { 'f1' : 2 },
+    'f1' : 2,
+  }
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
 
   /* */
 
@@ -5025,24 +5024,23 @@ function definePropAccessorBasic( test )
 
   test.description = 'instance'; /* */
 
-  test.identical( instance1.f1, undefined );
-  test.identical( blueprint.prototype.f1, undefined );
+  test.shouldThrowErrorSync( () => instance1.f1 );
+  test.shouldThrowErrorSync( () => blueprint.prototype.f1 );
   test.identical( blueprint.Make.f1, undefined );
 
   test.identical( _.prototype.each( instance1 ).length, 3 );
   var exp =
   {
     '_' : { 'f1' : 1 },
-    'f1' : undefined,
   }
-  test.identical( propertyOwn( _.property.all( instance1 ) ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
 
   test.description = 'instance set'; /* */
 
   instance1.f1 = 2;
 
-  test.identical( instance1.f1, undefined );
-  test.identical( blueprint.prototype.f1, undefined );
+  test.shouldThrowErrorSync( () => instance1.f1 );
+  test.shouldThrowErrorSync( () => blueprint.prototype.f1 );
   test.identical( blueprint.Make.f1, undefined );
 
   var exp =
@@ -5050,6 +5048,35 @@ function definePropAccessorBasic( test )
     '_' : { 'f1' : 2 },
   }
   test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
+
+  /* */
+
+  test.case = 'accessor.get : false, typed : false';
+
+  var blueprint = _.blueprint.define
+  ({
+    typed : _.trait.typed( false ),
+    f1 : _.define.prop( 1, { accessor : { get : false } } ),
+  });
+  var instance1 = blueprint.Make();
+
+  test.description = 'instance'; /* */
+
+  test.shouldThrowErrorSync( () => instance1.f1 );
+  test.identical( blueprint.prototype.f1, undefined );
+  test.identical( blueprint.Make.f1, undefined );
+
+  test.identical( _.prototype.each( instance1 ).length, 1 );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ]._ ), { 'f1' : 1 } );
+
+  test.description = 'instance set'; /* */
+
+  instance1.f1 = 2;
+
+  test.shouldThrowErrorSync( () => instance1.f1 );
+  test.identical( blueprint.prototype.f1, undefined );
+  test.identical( blueprint.Make.f1, undefined );
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ]._ ), { 'f1' : 2 } );
 
   /* */
 
