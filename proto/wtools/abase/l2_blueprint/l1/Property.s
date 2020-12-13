@@ -162,29 +162,11 @@ function declare_head( routine, args )
 function declare_body( o )
 {
 
-  // if( _.definitionIs( o.get ) )
-  // {
-  //   _.assert( _.routineIs( o.get.toVal ) );
-  //   _.assert( o.get.val !== undefined );
-  //   o.get = o.get.toVal( o.get.val );
-  //   // o.get = o.get.val; /* yyy */
-  // }
-
-  // _.assert( o.get === false || _.routineIs( o.get ) || _.definitionIs( o.get ) ); /* yyy */
-  // _.assert( o.set === false || _.routineIs( o.set ) );
-
   _.assert( o.get === false || o.get === null || _.routineIs( o.get ) );
   _.assert( o.set === false || o.set === null || _.routineIs( o.set ) );
-
   _.assert( _.boolIs( o.enumerable ) );
   _.assert( _.boolIs( o.configurable ) );
   _.assert( _.boolIs( o.writable ) );
-
-  if( o.get !== null && o.set === null )
-  {
-    debugger;
-    o.set = function noSetter() { throw _.err( 'No setter defined' ) }
-  }
 
   let o2 =
   {
@@ -192,16 +174,23 @@ function declare_body( o )
     configurable : !!o.configurable,
   }
 
+  if( o.name === 'f1' )
+  debugger;
+
   if( o.get === false )
   {
     if( o.set )
     o2.set = o.set;
+    else
+    o2.set = noSetter;
     _.assert( o.val === _.nothing );
   }
   else if( _.routineIs( o.get ) )
   {
     if( o.set )
     o2.set = o.set;
+    else
+    o2.set = noSetter;
     o2.get = o.get;
     _.assert( o.val === _.nothing );
   }
@@ -213,18 +202,16 @@ function declare_body( o )
   }
   else _.assert( 0 );
 
-  // else if( _.definitionIs( o.get ) )
-  // {
-  //   _.assert( o.set === false );
-  //   o2.value = _.definition.toVal( o.get );
-  //   o2.writable = !!o.writable;
-  // }
-  // else _.assert( 0 );
-
   _.assert( !o.writable || o.set !== false );
-  _.assert( o.writable || !o.set ); /* yyy : uncomment */
+  _.assert( o.writable || !o.set );
 
   Object.defineProperty( o.object, o.name, o2 );
+
+  function noSetter()
+  {
+    throw _.err( 'No setter defined' );
+  }
+
 }
 
 declare_body.defaults =
@@ -236,7 +223,6 @@ declare_body.defaults =
   writable : null,
   get : null,
   set : null,
-  // val : null,
   val : _.nothing,
 }
 
