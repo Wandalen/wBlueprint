@@ -3,13 +3,13 @@ let _ = require( 'wblueprint' );
 
 /**/
 
-var Blueprint1 = _.blueprint
+var Blueprint1 = _.Blueprint
 ({
   field1 : 1,
   field2 : 2,
 });
 
-var Blueprint2 = _.blueprint
+var Blueprint2 = _.Blueprint
 ({
   field2 : 22,
   field3 : 33,
