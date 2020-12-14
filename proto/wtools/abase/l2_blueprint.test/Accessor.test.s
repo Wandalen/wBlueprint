@@ -622,7 +622,9 @@ function accessorMethodsDeducing( test )
   });
 
   test.identical( track, [] );
-  test.identical( ins1.a, 10 );
+  // test.identical( ins1.a, 10 );
+  test.shouldThrowErrorSync( () => ins1.a );
+
   test.identical( track, [] );
   test.identical( ins1.aGrab(), 10 );
   test.identical( track, [ 'aGrab' ] );
@@ -678,10 +680,12 @@ function accessorMethodsDeducing( test )
   });
 
   test.identical( track, [ 'aPut' ] );
-  test.identical( ins1.a, 10 );
+  // test.identical( ins1.a, 10 );
+  test.shouldThrowErrorSync( () => ins1.a );
   test.identical( track, [ 'aPut' ] );
   ins1.aPut( 20 );
-  test.identical( ins1.a, 10 );
+  // test.identical( ins1.a, 10 );
+  test.shouldThrowErrorSync( () => ins1.a );
   test.identical( track, [ 'aPut', 'aPut' ] );
   test.shouldThrowErrorSync( () => dst.a = 30 );
 
@@ -708,14 +712,17 @@ function accessorMethodsDeducing( test )
   });
 
   test.identical( track, [ 'aSet' ] );
-  test.identical( ins1.a, undefined );
+  // test.identical( ins1.a, undefined );
+  test.shouldThrowErrorSync( () => ins1.a );
   test.identical( track, [ 'aSet' ] );
   ins1.aSet( 20 );
-  test.identical( ins1.a, undefined );
+  // test.identical( ins1.a, undefined );
+  test.shouldThrowErrorSync( () => ins1.a );
   test.identical( track, [ 'aSet', 'aSet' ] );
 
   ins1.a = 30;
-  test.identical( ins1.a, undefined );
+  // test.identical( ins1.a, undefined );
+  test.shouldThrowErrorSync( () => ins1.a );
   test.identical( track, [ 'aSet', 'aSet', 'aSet' ] );
 
   /* */
