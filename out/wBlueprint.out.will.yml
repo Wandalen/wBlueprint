@@ -179,6 +179,7 @@ module:
           - ../proto/wtools/abase/l2_blueprint.test/Accessor.test.s
           - ../proto/wtools/abase/l2_blueprint.test/Blueprint.test.s
           - ../proto/wtools/abase/l2_blueprint.test/Etc.test.s
+          - ../proto/wtools/abase/l2_blueprint.test/Property.test.s
           - ../proto/wtools/amid
           - ../proto/wtools/atop
     submodule:
