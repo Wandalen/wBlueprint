@@ -16,7 +16,7 @@ var Blueprint2 = _.Blueprint
   extend : _.define.extension( Blueprint1 ),
 });
 
-var instance = Blueprint2.construct();
+var instance = Blueprint2.Make();
 console.log( instance );
 
 /* log :
