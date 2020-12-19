@@ -16,12 +16,12 @@ let _ = _global_.wTools;
 // test
 // --
 
-function _asuiteForm( test )
+function _normalizedAsuiteForm( test )
 {
 
   /* */
 
-  test.case = 'suite.*:null asuite.*:null methods.*:routine';
+  test.case = 'suite.*:null normalizedAsuite.*:null methods.*:routine';
 
   var options =
   {
@@ -42,7 +42,7 @@ function _asuiteForm( test )
       set : null,
       move : null,
     },
-    asuite :
+    normalizedAsuite :
     {
       grab : null,
       get : null,
@@ -51,7 +51,7 @@ function _asuiteForm( test )
       move : null,
     },
   }
-  var got = _.accessor._asuiteForm( options );
+  var got = _.accessor._normalizedAsuiteForm( options );
   var exp =
   {
     'grab' : got.grab,
@@ -61,7 +61,7 @@ function _asuiteForm( test )
     'move' : got.move,
   }
   test.identical( got, exp );
-  test.true( got === options.asuite );
+  test.true( got === options.normalizedAsuite );
   test.true( _.routineIs( got.grab ) );
   test.true( _.routineIs( got.get ) );
   test.true( _.routineIs( got.put ) );
@@ -70,7 +70,7 @@ function _asuiteForm( test )
 
   /* */
 
-  test.case = 'suite.*:null asuite.*:null';
+  test.case = 'suite.*:null normalizedAsuite.*:null';
 
   var options =
   {
@@ -84,7 +84,7 @@ function _asuiteForm( test )
       set : null,
       move : null,
     },
-    asuite :
+    normalizedAsuite :
     {
       grab : null,
       get : null,
@@ -93,7 +93,7 @@ function _asuiteForm( test )
       move : null,
     },
   }
-  var got = _.accessor._asuiteForm( options );
+  var got = _.accessor._normalizedAsuiteForm( options );
   var exp =
   {
     'grab' : got.grab,
@@ -103,7 +103,7 @@ function _asuiteForm( test )
     'move' : false,
   }
   test.identical( got, exp );
-  test.true( got === options.asuite );
+  test.true( got === options.normalizedAsuite );
   test.true( _.routineIs( got.grab ) );
   test.true( _.routineIs( got.get ) );
   test.true( _.routineIs( got.put ) );
@@ -133,7 +133,7 @@ function _asuiteForm( test )
       set : false,
       move : false,
     },
-    asuite :
+    normalizedAsuite :
     {
       grab : null,
       get : null,
@@ -142,7 +142,7 @@ function _asuiteForm( test )
       move : null,
     },
   }
-  var got = _.accessor._asuiteForm( options );
+  var got = _.accessor._normalizedAsuiteForm( options );
   var exp =
   {
     'grab' : false,
@@ -152,11 +152,11 @@ function _asuiteForm( test )
     'move' : false,
   }
   test.identical( got, exp );
-  test.true( got === options.asuite );
+  test.true( got === options.normalizedAsuite );
 
   /* */
 
-  test.case = 'asuite.*:false';
+  test.case = 'normalizedAsuite.*:false';
 
   var options =
   {
@@ -177,7 +177,7 @@ function _asuiteForm( test )
       set : null,
       move : null,
     },
-    asuite :
+    normalizedAsuite :
     {
       grab : false,
       get : false,
@@ -186,7 +186,7 @@ function _asuiteForm( test )
       move : false,
     },
   }
-  var got = _.accessor._asuiteForm( options );
+  var got = _.accessor._normalizedAsuiteForm( options );
   var exp =
   {
     'grab' : false,
@@ -196,7 +196,7 @@ function _asuiteForm( test )
     'move' : false,
   }
   test.identical( got, exp );
-  test.true( got === options.asuite );
+  test.true( got === options.normalizedAsuite );
 
   /* */
 
@@ -221,7 +221,7 @@ function _asuiteForm( test )
       set : null,
       move : null,
     },
-    asuite :
+    normalizedAsuite :
     {
       grab : null,
       get : null,
@@ -230,7 +230,7 @@ function _asuiteForm( test )
       move : null,
     },
   }
-  var got = _.accessor._asuiteForm( options );
+  var got = _.accessor._normalizedAsuiteForm( options );
   var exp =
   {
     'grab' : false,
@@ -240,7 +240,7 @@ function _asuiteForm( test )
     'move' : got.move,
   }
   test.identical( got, exp );
-  test.true( got === options.asuite );
+  test.true( got === options.normalizedAsuite );
   test.true( _.boolIs( got.grab ) );
   test.true( _.routineIs( got.get ) );
   test.true( _.routineIs( got.put ) );
@@ -270,7 +270,7 @@ function _asuiteForm( test )
       set : null,
       move : null,
     },
-    asuite :
+    normalizedAsuite :
     {
       grab : null,
       get : null,
@@ -279,7 +279,7 @@ function _asuiteForm( test )
       move : null,
     },
   }
-  var got = _.accessor._asuiteForm( options );
+  var got = _.accessor._normalizedAsuiteForm( options );
   var exp =
   {
     'grab' : got.grab,
@@ -289,7 +289,7 @@ function _asuiteForm( test )
     'move' : got.move,
   }
   test.identical( got, exp );
-  test.true( got === options.asuite );
+  test.true( got === options.normalizedAsuite );
   test.true( _.routineIs( got.grab ) );
   test.true( _.boolIs( got.get ) );
   test.true( _.routineIs( got.put ) );
@@ -319,7 +319,7 @@ function _asuiteForm( test )
       set : false,
       move : null,
     },
-    asuite :
+    normalizedAsuite :
     {
       grab : null,
       get : null,
@@ -328,7 +328,7 @@ function _asuiteForm( test )
       move : null,
     },
   }
-  var got = _.accessor._asuiteForm( options );
+  var got = _.accessor._normalizedAsuiteForm( options );
   var exp =
   {
     'grab' : got.grab,
@@ -338,7 +338,7 @@ function _asuiteForm( test )
     'move' : got.move,
   }
   test.identical( got, exp );
-  test.true( got === options.asuite );
+  test.true( got === options.normalizedAsuite );
   test.true( _.routineIs( got.grab ) );
   test.true( _.routineIs( got.get ) );
   test.true( _.routineIs( got.put ) );
@@ -368,7 +368,7 @@ function _asuiteForm( test )
       set : null,
       move : false,
     },
-    asuite :
+    normalizedAsuite :
     {
       grab : null,
       get : null,
@@ -377,7 +377,7 @@ function _asuiteForm( test )
       move : null,
     },
   }
-  var got = _.accessor._asuiteForm( options );
+  var got = _.accessor._normalizedAsuiteForm( options );
   var exp =
   {
     'grab' : got.grab,
@@ -387,7 +387,7 @@ function _asuiteForm( test )
     'move' : false,
   }
   test.identical( got, exp );
-  test.true( got === options.asuite );
+  test.true( got === options.normalizedAsuite );
   test.true( _.routineIs( got.grab ) );
   test.true( _.routineIs( got.get ) );
   test.true( _.routineIs( got.put ) );
@@ -395,6 +395,168 @@ function _asuiteForm( test )
   test.true( _.boolIs( got.move ) );
 
   /* */
+
+}
+
+//
+
+function declareBasic( test )
+{
+
+  /* */
+
+  test.case = 'basic';
+
+  var obj1 = {};
+  var exp = { a : 1 };
+  var returned = _.accessor.declare( obj1, { a : { val : 1 } } );
+  test.identical( obj1, exp );
+
+  var got = Object.getOwnPropertyDescriptor( obj1, 'a' );
+  var exp =
+  {
+    get : got.get,
+    set : got.set,
+    'enumerable' : true,
+    'configurable' : true,
+  }
+  test.identical( got, exp );
+
+  /* */
+
+  test.case = 'unrolled accessor';
+
+  var obj1 = {};
+  var exp = { a : 1 };
+  var accessor1 = { get : get1, set : set1, grab : grab1, put : put1, move : move1 };
+  var returned = _.accessor.declare( obj1, { a : { ... accessor1 } } );
+  test.identical( obj1, exp );
+
+  var got = Object.getOwnPropertyDescriptor( obj1, 'a' );
+  var exp =
+  {
+    get : got.get,
+    set : got.set,
+    'enumerable' : true,
+    'configurable' : true,
+  }
+  test.identical( got, exp );
+  test.true( got.get === get1 );
+  test.true( got.set === set1 );
+
+  /* */
+
+  test.case = 'suite';
+
+  var obj1 = {};
+  var exp = { a : 1 };
+  var accessor1 = { get : get1, set : set1, grab : grab1, put : put1, move : move1 };
+  var returned = _.accessor.declare( obj1, { a : { suite : accessor1 } } );
+  test.identical( obj1, exp );
+
+  var got = Object.getOwnPropertyDescriptor( obj1, 'a' );
+  var exp =
+  {
+    get : got.get,
+    set : got.set,
+    'enumerable' : true,
+    'configurable' : true,
+  }
+  test.identical( got, exp );
+  test.true( got.get === get1 );
+  test.true( got.set === set1 );
+
+  /* */
+
+  test.case = 'throwing';
+
+  if( !Config.debug )
+  return;
+
+  test.shouldThrowErrorSync
+  (
+    () => _.accessor.declare( Object, { a : { val : 1 } } ),
+    ( err ) =>
+    {
+      test.identical( err.originalMessage, 'Attempt to polute _global_.Object' );
+    }
+  );
+  test.shouldThrowErrorSync
+  (
+    () => _.accessor.declare( Object.prototype, { a : { val : 1 } } ),
+    ( err ) =>
+    {
+      test.identical( err.originalMessage, 'Attempt to polute _global_.Object.prototype' );
+    }
+  );
+
+  /* */
+
+  function get1()
+  {
+    return 1;
+  }
+
+  /* */
+
+  function get2()
+  {
+    return 2;
+  }
+
+  /* */
+
+  function grab1()
+  {
+    return 3;
+  }
+
+  /* */
+
+  function grab2()
+  {
+    return 4;
+  }
+
+  /* */
+
+  function set1( src )
+  {
+    this._.x = src + 10;
+  }
+
+  /* */
+
+  function set2()
+  {
+    this._.x = src + 20;
+  }
+
+  /* */
+
+  function put1( src )
+  {
+    this._.x = src + 30;
+  }
+
+  /* */
+
+  function put2()
+  {
+    this._.x = src + 40;
+  }
+
+  /* */
+
+  function move1( it )
+  {
+  }
+
+  /* */
+
+  function move2( it )
+  {
+  }
 
 }
 
@@ -1495,7 +1657,7 @@ function accessorOptionAddingMethods( test )
     'set' : dst.aSet,
     'move' : false,
   }
-  test.identical( declared.a.asuite, exp );
+  test.identical( declared.a.normalizedAsuite, exp );
 
   /* */
 
@@ -1534,7 +1696,7 @@ function accessorOptionAddingMethods( test )
     'set' : dst.aSet,
     'move' : false,
   }
-  test.identical( declared.a.asuite, exp );
+  test.identical( declared.a.normalizedAsuite, exp );
 
   /* */
 
@@ -1577,7 +1739,176 @@ function accessorOptionAddingMethods( test )
     'set' : dst.aSet,
     'move' : false,
   }
-  test.identical( declared.a.asuite, exp );
+  test.identical( declared.a.normalizedAsuite, exp );
+
+  /* */
+
+  test.case = 'functors instead of accessors';
+
+  function put_functor( o )
+  {
+    o = _.routineOptions( put_functor, arguments );
+    let symbol = Symbol.for( o.propName );
+    return function put( val )
+    {
+      this[ symbol ] = val;
+      return val;
+    }
+  }
+
+  put_functor.defaults =
+  {
+    propName : null,
+  }
+
+  put_functor.identity = { 'accessor' : true, 'put' : true, 'functor' : true };
+
+  test.case = 'set : false, put : explicit';
+  var object =
+  {
+    'a' : 'a1',
+    'b' : 'b1',
+    aPut : put_functor,
+    aSet : put_functor,
+    aGrab : put_functor,
+    aGet : put_functor,
+  };
+  var names =
+  {
+    a : {},
+  }
+  var got = _.accessor.declare
+  ({
+    object,
+    names,
+    prime : 0,
+    strict : 0,
+    addingMethods : 1,
+    preservingValue : 1,
+  });
+
+  /* */
+
+  test.case = 'already has method get';
+
+  var dst =
+  {
+    'a' : 'a1',
+    'b' : 'b1',
+    aGrab : function() { return this.b },
+    aGet : function() { return this.b },
+    aPut : function( src ) { this.b = src },
+    aSet : function( src ) { this.b = src },
+  };
+
+  if( Config.debug )
+  test.shouldThrowErrorSync( () =>
+  {
+    var declared = _.accessor.declare
+    ({
+      object : dst,
+      names : { a : { get : function() { return this.b } } },
+      prime : 0,
+      strict : 0,
+      addingMethods : 1,
+    });
+  });
+
+  /* */
+
+  test.case = 'already has method get';
+
+  var dst =
+  {
+    'a' : 'a1',
+    'b' : 'b1',
+    aGet : function() { return this.b },
+  };
+
+  if( Config.debug )
+  test.shouldThrowErrorSync( () =>
+  {
+    var declared = _.accessor.declare
+    ({
+      object : dst,
+      names : { a : { get : function() { return this.b } } },
+      prime : 0,
+      strict : 0,
+      addingMethods : 1,
+    });
+  });
+
+  /* */
+
+  test.case = 'already has method grab';
+
+  var dst =
+  {
+    'a' : 'a1',
+    'b' : 'b1',
+    aGrab : function() { return this.b },
+  };
+
+  if( Config.debug )
+  test.shouldThrowErrorSync( () =>
+  {
+    var declared = _.accessor.declare
+    ({
+      object : dst,
+      names : { a : { grab : function() { return this.b } } },
+      prime : 0,
+      strict : 0,
+      addingMethods : 1,
+    });
+  });
+
+  /* */
+
+  test.case = 'already has method set';
+
+  var dst =
+  {
+    'a' : 'a1',
+    'b' : 'b1',
+    aSet : function( src ) { this.b = src },
+  };
+
+  if( Config.debug )
+  test.shouldThrowErrorSync( () =>
+  {
+    var declared = _.accessor.declare
+    ({
+      object : dst,
+      names : { a : { set : function( src ) { this.b = src } } },
+      prime : 0,
+      strict : 0,
+      addingMethods : 1,
+    });
+  });
+
+  /* */
+
+  test.case = 'already has method put';
+
+  var dst =
+  {
+    'a' : 'a1',
+    'b' : 'b1',
+    aPut : function( src ) { this.b = src },
+  };
+
+  if( Config.debug )
+  test.shouldThrowErrorSync( () =>
+  {
+    var declared = _.accessor.declare
+    ({
+      object : dst,
+      names : { a : { put : function( src ) { this.b = src } } },
+      prime : 0,
+      strict : 0,
+      addingMethods : 1,
+    });
+  });
 
   /* */
 
@@ -1780,7 +2111,6 @@ function accessorDeducingMethods( test )
   }
 
   symbolPut_functor.identity = { 'accessor' : true, 'put' : true, 'functor' : true };
-  // symbolPut_functor.identity = [ 'accessor', 'put', 'functor' ]; /* yyy : modernize */
 
   /* */
 
@@ -1831,7 +2161,7 @@ function accessorDeducingMethods( test )
     'set' : false,
     'move' : false,
   }
-  test.identical( got.a.asuite, exp );
+  test.identical( got.a.normalizedAsuite, exp );
 
   /* */
 
@@ -1886,7 +2216,7 @@ function accessorDeducingMethods( test )
     'set' : false,
     'move' : false,
   }
-  test.identical( got.a.asuite, exp );
+  test.identical( got.a.normalizedAsuite, exp );
 
   /* */
 
@@ -1950,7 +2280,7 @@ function accessorDeducingMethods( test )
     'put' : false,
     'move' : false,
   }
-  test.identical( got.a.asuite, exp );
+  test.identical( got.a.normalizedAsuite, exp );
 
   /* */
 
@@ -1993,7 +2323,7 @@ function accessorDeducingMethods( test )
     'set' : false,
     'move' : false,
   }
-  test.identical( got.a.asuite, exp );
+  test.identical( got.a.normalizedAsuite, exp );
 
   /* */
 
@@ -2235,7 +2565,7 @@ function accessorUnfunctGetSuite( test )
     o.accessor.configurable = 1;
     let configurable = o.accessor.configurable;
     if( configurable === null )
-    configurable = _.accessor.AccessorPreferences.configurable;
+    configurable = _.accessor.DeclarationDefaults.configurable;
     _.assert( _.boolLike( configurable ) );
 
     if( o.accessorKind === 'suite' )
@@ -2878,6 +3208,380 @@ function accessorStoringStrategyUnderscoreBasic( test )
 
 }
 
+//
+
+function accessorStoringStrategyUnderscorePrototyped( test )
+{
+
+  /* */
+
+  test.case = 'proto has f1';
+
+  var proto1 = Object.create( null );
+  proto1.f1 = 1;
+  var ins1 = Object.create( proto1 );
+
+  _.accessor.declare( ins1, { f1 : { storingStrategy : 'underscore', preservingValue : 1 } } );
+
+  var exp =
+  {
+    f1 : undefined,
+  }
+  test.identical( _.property.of( ins1 ), exp );
+  test.identical( _.prototype.each( ins1 ).length, 2 );
+  var exp =
+  {
+  }
+  test.identical( _.property.of( ins1._ ), exp );
+  test.identical( _.prototype.each( ins1._ ).length, 1 );
+
+  test.description = 'set'; /* */
+
+  ins1.f1 = 2;
+  var exp =
+  {
+    f1 : 2,
+  }
+  test.identical( _.property.of( ins1 ), exp );
+  test.identical( _.prototype.each( ins1 ).length, 2 );
+  var exp =
+  {
+    f1 : 2,
+  }
+  test.identical( _.property.of( ins1._ ), exp );
+  test.identical( _.prototype.each( ins1._ ).length, 1 );
+  test.true( _.prototype.each( ins1._ )[ 1 ] === proto1._ );
+
+  /* */
+
+  test.case = 'proto has underscore';
+
+  var proto1 = Object.create( null );
+  proto1._ = Object.create( null );
+  var ins1 = Object.create( proto1 );
+
+  _.accessor.declare( ins1, { f1 : { storingStrategy : 'underscore', preservingValue : 1 } } );
+
+  var exp =
+  {
+    f1 : undefined,
+  }
+  test.identical( _.property.of( ins1 ), exp );
+  test.identical( _.prototype.each( ins1 ).length, 2 );
+  var exp =
+  {
+  }
+  test.identical( _.property.of( ins1._ ), exp );
+  test.identical( _.prototype.each( ins1._ ).length, 2 );
+  test.true( _.prototype.each( ins1._ )[ 1 ] === proto1._ );
+  var exp =
+  {
+  }
+  test.identical( _.property.of( proto1._ ), exp );
+
+  test.description = 'set'; /* */
+
+  ins1.f1 = 2;
+  var exp =
+  {
+    f1 : 2,
+  }
+  test.identical( _.property.of( ins1 ), exp );
+  test.identical( _.prototype.each( ins1 ).length, 2 );
+  var exp =
+  {
+    f1 : 2,
+  }
+  test.identical( _.property.of( ins1._ ), exp );
+  test.identical( _.prototype.each( ins1._ ).length, 2 );
+  test.true( _.prototype.each( ins1._ )[ 1 ] === proto1._ );
+  var exp =
+  {
+  }
+  test.identical( _.property.of( proto1._ ), exp );
+
+  /* */
+
+  test.case = 'proto has underscore with f1';
+
+  var proto1 = Object.create( null );
+  proto1._ = Object.create( null );
+  proto1._.f1 = 1;
+  var ins1 = Object.create( proto1 );
+
+  _.accessor.declare( ins1, { f1 : { storingStrategy : 'underscore', preservingValue : 1 } } );
+
+  var exp =
+  {
+    f1 : 1,
+  }
+  test.identical( _.property.of( ins1 ), exp );
+  test.identical( _.prototype.each( ins1 ).length, 2 );
+  var exp =
+  {
+    f1 : 1,
+  }
+  test.identical( _.property.of( ins1._ ), exp );
+  test.identical( _.prototype.each( ins1._ ).length, 2 );
+  test.true( _.prototype.each( ins1._ )[ 1 ] === proto1._ );
+  var exp =
+  {
+    f1 : 1,
+  }
+  test.identical( _.property.of( proto1._ ), exp );
+
+  test.description = 'set'; /* */
+
+  ins1.f1 = 2;
+  var exp =
+  {
+    f1 : 2,
+  }
+  test.identical( _.property.of( ins1 ), exp );
+  test.identical( _.prototype.each( ins1 ).length, 2 );
+  var exp =
+  {
+    f1 : 2,
+  }
+  test.identical( _.property.of( ins1._ ), exp );
+  test.identical( _.prototype.each( ins1._ ).length, 2 );
+  test.true( _.prototype.each( ins1._ )[ 1 ] === proto1._ );
+  var exp =
+  {
+    f1 : 1,
+  }
+  test.identical( _.property.of( proto1._ ), exp );
+
+  /* */
+
+}
+
+//
+
+function accessorStoringStrategyUnderscoreIniting( test )
+{
+
+  /* */
+
+  test.case = 'control';
+
+  var obj1 = {};
+  var accessor1 = {};
+  var returned = _.accessor.declare( obj1, { a : { suite : accessor1, storingStrategy : 'underscore' } } );
+
+  var got = Object.getOwnPropertyDescriptor( obj1, 'a' );
+  var exp =
+  {
+    get : got.get,
+    set : got.set,
+    'enumerable' : true,
+    'configurable' : true,
+  }
+  test.identical( got, exp );
+  test.true( _.routineIs( got.get ) );
+  test.true( _.routineIs( got.set ) );
+
+  var exp =
+  {
+    a : undefined,
+  }
+  test.identical( obj1, exp );
+
+  var exp =
+  {
+  }
+  test.identical( obj1._, exp );
+
+  test.true( _.objectIs( obj1._ ) );
+
+  /* */
+
+  test.case = 'full suite';
+
+  var obj1 = {};
+  var accessor1 = { get : get1, set : set1, grab : grab1, put : put1, move : move1 };
+  var returned = _.accessor.declare( obj1, { a : { suite : accessor1, storingStrategy : 'underscore' } } );
+
+  var got = Object.getOwnPropertyDescriptor( obj1, 'a' );
+  var exp =
+  {
+    get : got.get,
+    set : got.set,
+    'enumerable' : true,
+    'configurable' : true,
+  }
+  test.identical( got, exp );
+  test.true( _.routineIs( got.get ) );
+  test.true( _.routineIs( got.set ) );
+
+  var exp =
+  {
+    a : 1,
+  }
+  test.identical( obj1, exp );
+
+  test.true( obj1._ === undefined );
+
+  /* */
+
+  test.case = 'get + set';
+
+  var obj1 = {};
+  var accessor1 = { get : get1, set : set1 };
+  var returned = _.accessor.declare( obj1, { a : { suite : accessor1, storingStrategy : 'underscore' } } );
+
+  var exp =
+  {
+    a : 1,
+  }
+  test.identical( obj1, exp );
+  test.true( obj1._ === undefined );
+
+  /* */
+
+  test.case = 'grab + put';
+
+  var obj1 = {};
+  var accessor1 = { grab : grab1, put : put1 };
+  var returned = _.accessor.declare( obj1, { a : { suite : accessor1, storingStrategy : 'underscore' } } );
+
+  var exp =
+  {
+    a : 3,
+  }
+  test.identical( obj1, exp );
+  test.true( obj1._ === undefined );
+
+  /* */
+
+  test.case = 'grab only';
+
+  var obj1 = {};
+  var accessor1 = { grab : grab1 };
+  var returned = _.accessor.declare( obj1, { a : { suite : accessor1, storingStrategy : 'underscore' } } );
+
+  var exp =
+  {
+    a : 3,
+  }
+  test.identical( obj1, exp );
+  test.true( _.objectIs( obj1._ ) );
+
+  /* */
+
+  test.case = 'get only';
+
+  var obj1 = {};
+  var accessor1 = { get : get1 };
+  var returned = _.accessor.declare( obj1, { a : { suite : accessor1, storingStrategy : 'underscore' } } );
+
+  var exp =
+  {
+    a : 1,
+  }
+  test.identical( obj1, exp );
+  test.true( _.objectIs( obj1._ ) );
+
+  /* */
+
+  test.case = 'put only';
+
+  var obj1 = {};
+  var accessor1 = { put : put1 };
+  var returned = _.accessor.declare( obj1, { a : { suite : accessor1, storingStrategy : 'underscore' } } );
+
+  var exp =
+  {
+    a : undefined,
+  }
+  test.identical( obj1, exp );
+  test.true( _.objectIs( obj1._ ) );
+
+  /* */
+
+  test.case = 'set only';
+
+  var obj1 = {};
+  var accessor1 = { set : set1 };
+  var returned = _.accessor.declare( obj1, { a : { suite : accessor1, storingStrategy : 'underscore' } } );
+
+  var exp =
+  {
+    a : undefined,
+  }
+  test.identical( obj1, exp );
+  test.true( _.objectIs( obj1._ ) );
+
+  /* */
+
+  function get1()
+  {
+    return 1;
+  }
+
+  /* */
+
+  function get2()
+  {
+    return 2;
+  }
+
+  /* */
+
+  function grab1()
+  {
+    return 3;
+  }
+
+  /* */
+
+  function grab2()
+  {
+    return 4;
+  }
+
+  /* */
+
+  function set1( src )
+  {
+    this._.x = src + 10;
+  }
+
+  /* */
+
+  function set2()
+  {
+    this._.x = src + 20;
+  }
+
+  /* */
+
+  function put1( src )
+  {
+    this._.x = src + 30;
+  }
+
+  /* */
+
+  function put2()
+  {
+    this._.x = src + 40;
+  }
+
+  /* */
+
+  function move1( it )
+  {
+  }
+
+  /* */
+
+  function move2( it )
+  {
+  }
+
+}
+
 // --
 // declare
 // --
@@ -2891,7 +3595,9 @@ let Self =
   tests :
   {
 
-    _asuiteForm,
+    _normalizedAsuiteForm,
+
+    declareBasic,
 
     declareConstant,
     declareConstantSymbol,
@@ -2910,7 +3616,9 @@ let Self =
     forbidWithoutConstructor,
 
     accessorMoveBasic,
-    accessorStoringStrategyUnderscoreBasic,
+    accessorStoringStrategyUnderscoreBasic, /* qqq : write similar test routine with option static:1 */
+    accessorStoringStrategyUnderscorePrototyped, /* qqq : write similar test routine with option static:1 */
+    accessorStoringStrategyUnderscoreIniting,
 
   },
 

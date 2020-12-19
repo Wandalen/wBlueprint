@@ -13,6 +13,26 @@ _.routineIs( Definition );
 // implementation
 // --
 
+function _pairArgumentsHead( routine, args )
+{
+  let o = args[ 1 ];
+
+  if( !o )
+  o = { val : args[ 0 ] };
+  else
+  o.val = args[ 0 ];
+
+  o = _.routineOptions( routine, o );
+
+  _.assert( arguments.length === 2 );
+  _.assert( args.length === 1 || args.length === 2 );
+  _.assert( args[ 1 ] === undefined || _.mapIs( args[ 1 ] ) );
+
+  return o;
+}
+
+//
+
 function callable( o )
 {
   if( !_.mapIs( o ) )
@@ -39,8 +59,9 @@ function typed( o )
   o = { val : arguments[ 0 ] };
   _.routineOptions( typed, o );
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.boolIs( o.val ) );
+  _.assert( _.boolLike( o.val ) );
 
+  o.val = !!o.val;
   o.blueprintForm2 = blueprintForm2;
   o.blueprint = false;
 
@@ -62,7 +83,7 @@ function typed( o )
   {
     if( genesis.construction === null )
     genesis.construction = new( _.constructorJoin( genesis.runtime.Make, [] ) );
-    _.assert( genesis.construction === null || genesis.construction instanceof genesis.runtime.Make );
+    _.assert( genesis.construction === null || !genesis.runtime.Make.prototype || genesis.construction instanceof genesis.runtime.Make );
     return genesis.construction;
   }
 
@@ -73,7 +94,7 @@ function typed( o )
     else if( genesis.construction === null )
     genesis.construction = Object.create( null );
     _.assert( genesis.construction === null || _.mapIs( genesis.construction ) );
-    _.assert( !( genesis.construction instanceof genesis.runtime.Make ) );
+    _.assert( genesis.runtime.Make.prototype === null || !( genesis.construction instanceof genesis.runtime.Make ) );
     return genesis.construction;
   }
 
@@ -196,13 +217,16 @@ extendable.defaults =
 
 //
 
-function prototype( o )
+function prototype_body( o )
 {
-  if( !_.mapIs( o ) )
-  o = { val : arguments[ 0 ] };
-  _.routineOptions( prototype, o );
+  _.routineOptions( prototype_body, o );
+
+  if( o.new === null )
+  o.new = _.blueprint.is( o.val );
+
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.blueprint.isDefinitive( o.val ) );
+  _.assert( _.boolLike( o.new ) );
+  _.assert( o.val === null || !_.primitiveIs( o.val ) );
 
   o.blueprintForm1 = blueprintForm1;
   o.blueprintForm2 = blueprintForm2;
@@ -210,30 +234,66 @@ function prototype( o )
 
   return _.definition._traitMake( 'prototype', o );
 
+  /* */
+
   function blueprintForm1( blueprint )
   {
-    _.assert( _.blueprint.isDefinitive( blueprint.Traits.prototype.val ) );
+    let prototype;
+
     _.assert( blueprint.Make === null );
-    _.assert( _.routineIs( blueprint.Traits.prototype.val.Make ) );
     _.assert( _.objectIs( blueprint.prototype ) );
-    _.assert( _.objectIs( blueprint.Traits.prototype.val.prototype ) );
-    blueprint.Runtime.prototype = Object.create( blueprint.Traits.prototype.val.prototype );
+
+    if( _global_.debugger )
+    debugger;
+
+    if( _.blueprint.is( blueprint.Traits.prototype.val ) )
+    {
+      prototype = blueprint.Traits.prototype.val.prototype;
+      _.assert( _.routineIs( blueprint.Traits.prototype.val.Make ) );
+      _.assert( _.objectIs( blueprint.Traits.prototype.val.prototype ) );
+    }
+    else
+    {
+      prototype = blueprint.Traits.prototype.val;
+    }
+    if( blueprint.Traits.prototype.new )
+    blueprint.Runtime.prototype = Object.create( prototype );
+    else
+    blueprint.Runtime.prototype = prototype;
   }
+
+  /* */
 
   function blueprintForm2( blueprint )
   {
-    _.assert( _.blueprint.isDefinitive( blueprint.Traits.prototype.val ) );
-    _.assert( _.routineIs( blueprint.Make ) );
-    _.assert( _.routineIs( blueprint.Traits.prototype.val.Make ) );
-    Object.setPrototypeOf( blueprint.Make, blueprint.Traits.prototype.val.Make );
+    _.assert( _.boolIs( blueprint.Typed ) );
+    if( _.blueprint.is( blueprint.Traits.prototype.val ) )
+    {
+      _.assert( _.blueprint.isDefinitive( blueprint.Traits.prototype.val ) );
+      _.assert( _.routineIs( blueprint.Make ) );
+      _.assert( _.routineIs( blueprint.Traits.prototype.val.Make ) );
+      Object.setPrototypeOf( blueprint.Make, blueprint.Traits.prototype.val.Make );
+    }
+    else
+    {
+      let prototype = blueprint.Traits.prototype.val;
+      _.assert( prototype !== null || !blueprint.Typed, 'Object with null prototype cant be typed' );
+      if( prototype && Object.hasOwnProperty.call( prototype, 'constructor' ) && _.routineIs( prototype.constructor ) )
+      Object.setPrototypeOf( blueprint.Make, prototype.constructor );
+    }
   }
 
+  /* */
+
 }
 
-prototype.defaults =
+prototype_body.defaults =
 {
   val : null,
+  new : null,
 }
+
+let prototype = _.routineUnite( _pairArgumentsHead, prototype_body );
 
 //
 

@@ -6,17 +6,21 @@ if( typeof module !== 'undefined' )
 {
   let _ = require( '../../../wtools/Tools.s' );
   require( '../../abase/l2_blueprint/Include.s' );
-  _.include( 'wReplicator' );
+  // _.include( 'wReplicator' );
   _.include( 'wTesting' );
 }
 
 let _global = _global_;
 let _ = _global_.wTools;
+let select = _globals_.testing.wTools.select;
 
 /* xxx qqq
 
- - cover construction.extend() + definition::*
+- cover _.accessor.define object.prototype throwing
 
+ - cover construction.extend() + definition::*
+ - eslint Definitions.s
+ - implement options but, only for amending
  - allow for _.blueprint.define to have in blueprint other bluprints
 
 */
@@ -121,7 +125,7 @@ function blueprintIsRuntime( test )
 // definition
 // --
 
-function definitionProp( test )
+function defineProp( test )
 {
 
   /* */
@@ -260,7 +264,7 @@ function definitionProp( test )
 
 //
 
-function definitionProps( test )
+function defineProps( test )
 {
 
   /* */
@@ -383,7 +387,7 @@ function definitionProps( test )
 
 //
 
-function definitionPropStaticBasic( test )
+function definePropStaticBasic( test )
 {
 
   /* */
@@ -512,14 +516,14 @@ function definitionPropStaticBasic( test )
 
 }
 
-definitionPropStaticBasic.description =
+definePropStaticBasic.description =
 `
 - static fields added to prototype
 `
 
 //
 
-function definitionPropStaticInheritance( test )
+function definePropStaticInheritance( test )
 {
   let context = this;
   let s = _.define.static;
@@ -782,7 +786,7 @@ function definitionPropStaticInheritance( test )
 
 //
 
-function definitionPropEnumerable( test )
+function definePropEnumerable( test )
 {
   let context = this;
   let s = _.define.static;
@@ -1371,7 +1375,7 @@ function definitionPropEnumerable( test )
 
 //
 
-function definitionPropWritable( test )
+function definePropWritable( test )
 {
   let context = this;
   let s = _.define.static;
@@ -2115,7 +2119,7 @@ function definitionPropWritable( test )
 
 //
 
-function definitionPropConfigurable( test )
+function definePropConfigurable( test )
 {
   let context = this;
   let s = _.define.static;
@@ -3255,7 +3259,7 @@ function definitionPropConfigurable( test )
 
 //
 
-function definitionProper( test )
+function defineProper( test )
 {
   let context = this;
 
@@ -3399,1027 +3403,7 @@ function definitionProper( test )
 
 //
 
-function definitionExtensionBasic( test )
-{
-
-  /* */
-
-  test.case = 'not typed -> not typed';
-  var Blueprint1 = _.Blueprint
-  ({
-    field1 : 'b1',
-    field2 : 'b1',
-    typed : _.trait.typed( false ),
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    typed : _.trait.typed( false ),
-    field2 : 'b2',
-    field3 : 'b2',
-    extension : _.define.extension( Blueprint1 ),
-  });
-
-  var exp = { field1 : 'b1', field2 : 'b1', field3 : 'b2' };
-  var instance = Blueprint2.Make();
-  test.identical( instance, exp );
-  test.identical( instance instanceof Blueprint1.Make, false );
-  test.identical( instance instanceof Blueprint2.Make, false );
-
-  /* */
-
-  test.case = 'not typed -> typed';
-  var Blueprint1 = _.Blueprint
-  ({
-    field1 : 'b1',
-    field2 : 'b1',
-    typed : _.trait.typed( false ),
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field2 : 'b2',
-    field3 : 'b2',
-    extension : _.define.extension( Blueprint1 ),
-  });
-
-  var exp = { field1 : 'b1', field2 : 'b1', field3 : 'b2' };
-  var instance = Blueprint2.Make();
-  test.identical( instance, exp );
-  test.identical( instance instanceof Blueprint1.Make, false );
-  test.identical( instance instanceof Blueprint2.Make, false );
-
-  /* */
-
-  test.case = 'typed -> not typed';
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    typed : _.trait.typed( false ),
-    field2 : 'b2',
-    field3 : 'b2',
-    extension : _.define.extension( Blueprint1 ),
-  });
-
-  var exp = { field1 : 'b1', field2 : 'b1', field3 : 'b2' };
-  var instance = Blueprint2.Make();
-  test.containsOnly( instance, exp );
-  test.identical( instance instanceof Blueprint1.Make, false );
-  test.identical( instance instanceof Blueprint2.Make, true );
-
-  /* */
-
-  test.case = 'typed -> typed';
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field2 : 'b2',
-    field3 : 'b2',
-    extension : _.define.extension( Blueprint1 ),
-  });
-
-  var exp = { field1 : 'b1', field2 : 'b1', field3 : 'b2' };
-  var instance = Blueprint2.Make();
-  test.containsOnly( instance, exp );
-  test.identical( instance instanceof Blueprint1.Make, false );
-  test.identical( instance instanceof Blueprint2.Make, true );
-
-  /* */
-
-}
-
-definitionExtensionBasic.description =
-`
-- blueprint extend another blueprint by fields
-- blueprint extend another blueprint by traits
-`
-
-//
-
-function definitionSupplementationBasic( test )
-{
-
-  /* */
-
-  test.case = 'not typed -> not typed';
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( false ),
-    field1 : 'b1',
-    field2 : 'b1',
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    typed : _.trait.typed( false ),
-    field2 : 'b2',
-    field3 : 'b2',
-    supplementation : _.define.supplementation( Blueprint1 ),
-  });
-
-  var exp = { field1 : 'b1', field2 : 'b2', field3 : 'b2' };
-  var instance = Blueprint2.Make();
-  test.identical( instance, exp );
-  test.identical( instance instanceof Blueprint1.Make, false );
-  test.identical( instance instanceof Blueprint2.Make, false );
-
-  /* */
-
-  test.case = 'not typed -> typed';
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( false ),
-    field1 : 'b1',
-    field2 : 'b1',
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field2 : 'b2',
-    field3 : 'b2',
-    supplementation : _.define.supplementation( Blueprint1 ),
-  });
-
-  var exp = { field1 : 'b1', field2 : 'b2', field3 : 'b2' };
-  var instance = Blueprint2.Make();
-  test.containsOnly( instance, exp );
-  test.identical( instance instanceof Blueprint1.Make, false );
-  test.identical( instance instanceof Blueprint2.Make, true );
-
-  /* */
-
-  test.case = 'typed -> not typed';
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    typed : _.trait.typed( false ),
-    field2 : 'b2',
-    field3 : 'b2',
-    supplementation : _.define.supplementation( Blueprint1 ),
-  });
-
-  var exp = { field1 : 'b1', field2 : 'b2', field3 : 'b2' };
-  var instance = Blueprint2.Make();
-  test.containsOnly( instance, exp );
-  test.identical( instance instanceof Blueprint1.Make, false );
-  test.identical( instance instanceof Blueprint2.Make, false );
-
-  /* */
-
-  test.case = 'typed -> typed';
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field2 : 'b2',
-    field3 : 'b2',
-    supplementation : _.define.supplementation( Blueprint1 ),
-  });
-
-  var exp = { field1 : 'b1', field2 : 'b2', field3 : 'b2' };
-  var instance = Blueprint2.Make();
-  test.containsOnly( instance, exp );
-  test.identical( instance instanceof Blueprint1.Make, false );
-  test.identical( instance instanceof Blueprint2.Make, true );
-
-  /* */
-
-}
-
-definitionSupplementationBasic.description =
-`
-- blueprint supplement another blueprint by fields
-- blueprint supplement another blueprint by traits
-`
-
-//
-
-function definitionExtensionOrder( test )
-{
-
-  /* */
-
-  test.case = 'blueprint1'; /* */
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-    staticField1 : _.define.static( 'b1' ),
-    staticField2 : _.define.static( 'b1' ),
-  });
-
-  var instance = Blueprint1.Make();
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b1',
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
-  }
-  test.identical( _.property.all( instance ), exp );
-
-  /* */
-
-  test.case = 'extension before';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-    staticField1 : _.define.static( 'b1' ),
-    staticField2 : _.define.static( 'b1' ),
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    extension : _.define.extension( Blueprint1 ),
-    field2 : 'b2',
-    field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
-    staticField3 : _.define.static( 'b2' ),
-  });
-
-  var instance = Blueprint2.Make();
-
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b2',
-    'field3' : 'b2',
-    'staticField2' : 'b2',
-    'staticField3' : 'b2',
-  }
-  test.identical( _.property.all( instance ), exp );
-
-  /* */
-
-  test.case = 'extension before, extension.blueprintDepthReserve:Infinity';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-    staticField1 : _.define.static( 'b1' ),
-    staticField2 : _.define.static( 'b1' ),
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    extension : _.define.extension( Blueprint1, { blueprintDepthReserve : Infinity } ),
-    field2 : 'b2',
-    field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
-    staticField3 : _.define.static( 'b2' ),
-  });
-
-  var instance = Blueprint2.Make();
-
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b2',
-    'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2',
-    'staticField3' : 'b2',
-  }
-  test.identical( _.property.all( instance ), exp );
-
-  /* */
-
-  test.case = 'extension before, static.blueprintDepthReserve:Infinity';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
-    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    extension : _.define.extension( Blueprint1 ),
-    field2 : 'b2',
-    field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
-    staticField3 : _.define.static( 'b2' ),
-  });
-
-  var instance = Blueprint2.Make();
-
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b2',
-    'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2',
-    'staticField3' : 'b2',
-  }
-  test.identical( _.property.all( instance ), exp );
-
-  /* */
-
-  test.case = 'extension after';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-    staticField1 : _.define.static( 'b1' ),
-    staticField2 : _.define.static( 'b1' ),
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    field2 : 'b2',
-    field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
-    staticField3 : _.define.static( 'b2' ),
-    extension : _.define.extension( Blueprint1 ),
-  });
-
-  var instance = Blueprint2.Make();
-
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b1',
-    'field3' : 'b2',
-    'staticField2' : 'b2',
-    'staticField3' : 'b2',
-  }
-  test.identical( _.property.all( instance ), exp );
-
-  /* */
-
-  test.case = 'extension after, field.blueprintDepthLimit:1';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-    staticField1 : _.define.static( 'b1', { blueprintDepthLimit : 1 } ),
-    staticField2 : _.define.static( 'b1', { blueprintDepthLimit : 1 } ),
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    field2 : 'b2',
-    field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
-    staticField3 : _.define.static( 'b2' ),
-    extension : _.define.extension( Blueprint1 ),
-  });
-
-  var instance = Blueprint2.Make();
-
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b1',
-    'field3' : 'b2',
-    'staticField2' : 'b2',
-    'staticField3' : 'b2',
-  }
-  test.identical( _.property.all( instance ), exp );
-
-  /* */
-
-  test.case = 'extension after, field.blueprintDepthReserve:Infinity';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
-    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    field2 : 'b2',
-    field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
-    staticField3 : _.define.static( 'b2' ),
-    extension : _.define.extension( Blueprint1 ),
-  });
-
-  var instance = Blueprint2.Make();
-
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b1',
-    'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
-    'staticField3' : 'b2',
-  }
-  test.identical( _.property.all( instance ), exp );
-
-  /* */
-
-  test.case = 'extension after, field.blueprintDepthReserve:1';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : 1 } ),
-    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : 1 } ),
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    field2 : 'b2',
-    field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
-    staticField3 : _.define.static( 'b2' ),
-    extension : _.define.extension( Blueprint1 ),
-  });
-
-  var instance = Blueprint2.Make();
-
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b1',
-    'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
-    'staticField3' : 'b2',
-  }
-  test.identical( _.property.all( instance ), exp );
-
-  /* */
-
-  test.case = 'extension after, field.blueprintDepthLimit:0';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-    staticField1 : _.define.static( 'b1', { blueprintDepthLimit : 0 } ),
-    staticField2 : _.define.static( 'b1', { blueprintDepthLimit : 0 } ),
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    field2 : 'b2',
-    field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
-    staticField3 : _.define.static( 'b2' ),
-    extension : _.define.extension( Blueprint1 ),
-  });
-
-  var instance = Blueprint2.Make();
-
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b1',
-    'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
-    'staticField3' : 'b2',
-  }
-  test.identical( _.property.all( instance ), exp );
-
-  /* */
-
-  test.case = 'extension after, extension.blueprintDepthReserve:Infinity';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-    staticField1 : _.define.static( 'b1' ),
-    staticField2 : _.define.static( 'b1' ),
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    field2 : 'b2',
-    field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
-    staticField3 : _.define.static( 'b2' ),
-    extension : _.define.extension( Blueprint1, { blueprintDepthReserve : Infinity } ),
-  });
-
-  var instance = Blueprint2.Make();
-
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b1',
-    'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
-    'staticField3' : 'b2',
-  }
-  test.identical( _.property.all( instance ), exp );
-
-  /* */
-
-}
-
-definitionExtensionOrder.description =
-`
-- order of definition::extension makes difference
-`
-
-//
-
-function definitionSupplementationOrder( test )
-{
-
-  /* */
-
-  test.case = 'blueprint1'; /* */
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-    staticField1 : _.define.static( 'b1' ),
-    staticField2 : _.define.static( 'b1' ),
-  });
-
-  var instance = Blueprint1.Make();
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b1',
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
-  }
-  test.identical( _.property.all( instance ), exp );
-
-  /* */
-
-  test.case = 'supplementation before';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-    staticField1 : _.define.static( 'b1' ),
-    staticField2 : _.define.static( 'b1' ),
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    supplementation : _.define.supplementation( Blueprint1 ),
-    field2 : 'b2',
-    field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
-    staticField3 : _.define.static( 'b2' ),
-  });
-
-  var instance = Blueprint2.Make();
-
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b2',
-    'field3' : 'b2',
-    'staticField2' : 'b2',
-    'staticField3' : 'b2',
-  }
-  test.identical( _.property.all( instance ), exp );
-
-  /* */
-
-  test.case = 'supplementation before, supplementation.blueprintDepthReserve:Infinity';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-    staticField1 : _.define.static( 'b1' ),
-    staticField2 : _.define.static( 'b1' ),
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    supplementation : _.define.supplementation( Blueprint1, { blueprintDepthReserve : Infinity } ),
-    field2 : 'b2',
-    field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
-    staticField3 : _.define.static( 'b2' ),
-  });
-
-  var instance = Blueprint2.Make();
-
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b2',
-    'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2',
-    'staticField3' : 'b2',
-  }
-  test.identical( _.property.all( instance ), exp );
-
-  /* */
-
-  test.case = 'supplementation before, static.blueprintDepthReserve:Infinity';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
-    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    supplementation : _.define.supplementation( Blueprint1 ),
-    field2 : 'b2',
-    field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
-    staticField3 : _.define.static( 'b2' ),
-  });
-
-  var instance = Blueprint2.Make();
-
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b2',
-    'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2',
-    'staticField3' : 'b2',
-  }
-  test.identical( _.property.all( instance ), exp );
-
-  /* */
-
-  test.case = 'supplementation after';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-    staticField1 : _.define.static( 'b1' ),
-    staticField2 : _.define.static( 'b1' ),
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    field2 : 'b2',
-    field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
-    staticField3 : _.define.static( 'b2' ),
-    supplementation : _.define.supplementation( Blueprint1 ),
-  });
-
-  var instance = Blueprint2.Make();
-
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b2',
-    'field3' : 'b2',
-    'staticField2' : 'b2',
-    'staticField3' : 'b2',
-  }
-  test.identical( _.property.all( instance ), exp );
-
-  /* */
-
-  test.case = 'supplementation after, field.blueprintDepthLimit:1';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-    staticField1 : _.define.static( 'b1', { blueprintDepthLimit : 1 } ),
-    staticField2 : _.define.static( 'b1', { blueprintDepthLimit : 1 } ),
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    field2 : 'b2',
-    field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
-    staticField3 : _.define.static( 'b2' ),
-    supplementation : _.define.supplementation( Blueprint1 ),
-  });
-
-  var instance = Blueprint2.Make();
-
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b2',
-    'field3' : 'b2',
-    'staticField2' : 'b2',
-    'staticField3' : 'b2',
-  }
-  test.identical( _.property.all( instance ), exp );
-
-  /* */
-
-  test.case = 'supplementation after, field.blueprintDepthReserve:Infinity';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
-    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    field2 : 'b2',
-    field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
-    staticField3 : _.define.static( 'b2' ),
-    supplementation : _.define.supplementation( Blueprint1 ),
-  });
-
-  var instance = Blueprint2.Make();
-
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b2',
-    'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2',
-    'staticField3' : 'b2',
-  }
-  test.identical( _.property.all( instance ), exp );
-
-  /* */
-
-  test.case = 'supplementation after, field.blueprintDepthReserve:1';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : 1 } ),
-    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : 1 } ),
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    field2 : 'b2',
-    field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
-    staticField3 : _.define.static( 'b2' ),
-    supplementation : _.define.supplementation( Blueprint1 ),
-  });
-
-  var instance = Blueprint2.Make();
-
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b2',
-    'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2',
-    'staticField3' : 'b2',
-  }
-  test.identical( _.property.all( instance ), exp );
-
-  /* */
-
-  test.case = 'supplementation after, field.blueprintDepthLimit:0';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-    staticField1 : _.define.static( 'b1', { blueprintDepthLimit : 0 } ),
-    staticField2 : _.define.static( 'b1', { blueprintDepthLimit : 0 } ),
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    field2 : 'b2',
-    field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
-    staticField3 : _.define.static( 'b2' ),
-    supplementation : _.define.supplementation( Blueprint1 ),
-  });
-
-  var instance = Blueprint2.Make();
-
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b2',
-    'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2',
-    'staticField3' : 'b2',
-  }
-  test.identical( _.property.all( instance ), exp );
-
-  /* */
-
-  test.case = 'supplementation after, supplementation.blueprintDepthReserve:Infinity';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed( true ),
-    field1 : 'b1',
-    field2 : 'b1',
-    staticField1 : _.define.static( 'b1' ),
-    staticField2 : _.define.static( 'b1' ),
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    field2 : 'b2',
-    field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
-    staticField3 : _.define.static( 'b2' ),
-    supplementation : _.define.supplementation( Blueprint1, { blueprintDepthReserve : Infinity } ),
-  });
-
-  var instance = Blueprint2.Make();
-
-  var exp =
-  {
-    'field1' : 'b1',
-    'field2' : 'b2',
-    'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2',
-    'staticField3' : 'b2',
-  }
-  test.identical( _.property.all( instance ), exp );
-
-  /* */
-
-}
-
-definitionSupplementationOrder.description =
-`
-- order of definition::supplementation makes difference
-`
-
-//
-
-function definitionsOrder( test )
-{
-
-  /* */
-
-  test.case = 'extension';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    field1 : null,
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    typed : _.trait.typed(),
-    prototype : _.trait.prototype( Blueprint1 ),
-    extension : _.define.extension( Blueprint1 ),
-  });
-
-  var Blueprint3 = _.Blueprint
-  ({
-    prototype : _.trait.prototype( Blueprint1 ),
-    extension : _.define.extension( Blueprint1 ),
-    typed : _.trait.typed(),
-  });
-
-  var instance1 = _.blueprint.construct( Blueprint1 );
-  var prototypes1 = _.prototype.each( instance1 );
-  test.identical( prototypes1.length, 1 );
-
-  var instance2 = _.blueprint.construct( Blueprint2 );
-  var prototypes2 = _.prototype.each( instance2 );
-  test.identical( prototypes2.length, 1 );
-
-  var instance3 = _.blueprint.construct( Blueprint3 );
-  var prototypes3 = _.prototype.each( instance3 );
-  test.identical( prototypes3.length, 4 );
-  test.true( prototypes3[ 0 ] === instance3 );
-  test.true( prototypes3[ 1 ] === Blueprint3.Make.prototype );
-  test.true( prototypes3[ 2 ] === Blueprint1.Make.prototype );
-  test.true( prototypes3[ 3 ] === _.Construction.prototype );
-
-  /* */
-
-  test.case = 'supplementation';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    field1 : null,
-  });
-
-  var Blueprint2 = _.Blueprint
-  ({
-    typed : _.trait.typed(),
-    prototype : _.trait.prototype( Blueprint1 ),
-    supplementation : _.define.supplementation( Blueprint1 ),
-  });
-
-  var Blueprint3 = _.Blueprint
-  ({
-    prototype : _.trait.prototype( Blueprint1 ),
-    supplementation : _.define.supplementation( Blueprint1 ),
-    typed : _.trait.typed(),
-  });
-
-  var instance1 = _.blueprint.construct( Blueprint1 );
-  var prototypes1 = _.prototype.each( instance1 );
-  test.identical( prototypes1.length, 1 );
-
-  var instance2 = _.blueprint.construct( Blueprint2 );
-  var prototypes2 = _.prototype.each( instance2 );
-  test.identical( prototypes2.length, 4 );
-  test.true( prototypes2[ 0 ] === instance2 );
-  test.true( prototypes2[ 1 ] === Blueprint2.Make.prototype );
-  test.true( prototypes2[ 2 ] === Blueprint1.Make.prototype );
-  test.true( prototypes2[ 3 ] === _.Construction.prototype );
-
-  var instance3 = _.blueprint.construct( Blueprint3 );
-  var prototypes3 = _.prototype.each( instance3 );
-  test.identical( prototypes3.length, 4 );
-  test.true( prototypes3[ 0 ] === instance3 );
-  test.true( prototypes3[ 1 ] === Blueprint3.Make.prototype );
-  test.true( prototypes3[ 2 ] === Blueprint1.Make.prototype );
-  test.true( prototypes3[ 3 ] === _.Construction.prototype );
-
-  /* */
-
-}
-
-definitionsOrder.description =
-`
-- order of definitionProp/traits makes difference
-- typing first and then extending by untyped blueprint produce untyped blueprint
-- extending by untyped blueprint and then typing produce typed blueprint
-- typing first and then supplementing by untyped blueprint produce typed blueprint
-- supplementing by untyped blueprint and then typing produce typed blueprint
-`
-
-//
-
-function defineShallowComplex( test )
+function definePropShallowComplex( test )
 {
 
   /* */
@@ -4452,14 +3436,14 @@ function defineShallowComplex( test )
 
 }
 
-defineShallowComplex.description =
+definePropShallowComplex.description =
 `
 - shortcut shallow define definition field with valToIns:shallow
 `
 
 //
 
-function defineShallowComplexSourceCode( test )
+function definePropShallowComplexSourceCode( test )
 {
 
   /* */
@@ -4491,7 +3475,7 @@ function defineShallowComplexSourceCode( test )
   /* */
 
   // debugger;
-  // var sourceCode = blueprint.defineShallowComplexSourceCode();
+  // var sourceCode = blueprint.definePropShallowComplexSourceCode();
   // debugger;
 
 /*
@@ -4518,7 +3502,7 @@ function defineShallowComplexSourceCode( test )
 
 }
 
-defineShallowComplexSourceCode.description =
+definePropShallowComplexSourceCode.description =
 `
 - zzz
 `
@@ -4865,30 +3849,39 @@ function definePropAccessorBasic( test )
   test.description = 'instance'; /* */
 
   test.identical( instance1.f1, 1 );
-  test.shouldThrowErrorSync( () => blueprint.prototype.f1 );
+  test.identical( blueprint.prototype.f1, undefined );
   test.identical( blueprint.Make.f1, undefined );
 
   test.identical( _.prototype.each( instance1 ).length, 3 );
   var exp =
   {
-    '_' : { 'f1' : 1 },
     'f1' : 1,
   }
-  test.identical( propertyOwn( _.property.all( instance1 ) ), exp );
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 1,
+  }
+  test.identical( _.property.all( instance1._ ), exp );
 
   test.description = 'instance set'; /* */
 
   instance1.f1 = 2;
 
   test.identical( instance1.f1, 2 );
-  test.shouldThrowErrorSync( () => blueprint.prototype.f1 );
+  test.identical( blueprint.prototype.f1, undefined );
   test.identical( blueprint.Make.f1, undefined );
 
   var exp =
   {
-    '_' : { 'f1' : 2 },
+    'f1' : 2,
   }
-  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 2,
+  }
+  test.identical( _.property.all( instance1._ ), exp );
 
   /* */
 
@@ -4910,10 +3903,14 @@ function definePropAccessorBasic( test )
   test.identical( _.prototype.each( instance1 ).length, 1 );
   var exp =
   {
-    '_' : { 'f1' : 1 },
     'f1' : 1,
   }
-  test.identical( propertyOwn( _.property.all( instance1 ) ), exp );
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 1,
+  }
+  test.identical( _.property.all( instance1._ ), exp );
 
   test.description = 'instance set'; /* */
 
@@ -4925,10 +3922,14 @@ function definePropAccessorBasic( test )
 
   var exp =
   {
-    '_' : { 'f1' : 2 },
     'f1' : 2,
   }
-  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 2,
+  }
+  test.identical( _.property.all( instance1._ ), exp );
 
   /* */
 
@@ -4944,16 +3945,20 @@ function definePropAccessorBasic( test )
   test.description = 'instance'; /* */
 
   test.identical( instance1.f1, 1 );
-  test.shouldThrowErrorSync( () => blueprint.prototype.f1 );
+  test.identical( blueprint.prototype.f1, undefined );
   test.identical( blueprint.Make.f1, undefined );
 
   test.identical( _.prototype.each( instance1 ).length, 3 );
   var exp =
   {
-    '_' : { 'f1' : 1 },
     'f1' : 1,
   }
-  test.identical( propertyOwn( _.property.all( instance1 ) ), exp );
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 1,
+  }
+  test.identical( _.property.all( instance1._ ), exp );
 
   test.description = 'instance set'; /* */
 
@@ -4961,14 +3966,19 @@ function definePropAccessorBasic( test )
   test.shouldThrowErrorSync( () => instance1.f1 = 3 );
 
   test.identical( instance1.f1, 2 );
-  test.shouldThrowErrorSync( () => blueprint.prototype.f1 );
+  test.identical( blueprint.prototype.f1, undefined );
   test.identical( blueprint.Make.f1, undefined );
 
   var exp =
   {
-    '_' : { 'f1' : 2 },
+    'f1' : 2,
   }
-  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 2,
+  }
+  test.identical( _.property.all( instance1._ ), exp );
 
   /* */
 
@@ -4990,10 +4000,14 @@ function definePropAccessorBasic( test )
   test.identical( _.prototype.each( instance1 ).length, 1 );
   var exp =
   {
-    '_' : { 'f1' : 1 },
     'f1' : 1,
   }
-  test.identical( propertyOwn( _.property.all( instance1 ) ), exp );
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 1,
+  }
+  test.identical( _.property.all( instance1._ ), exp );
 
   test.description = 'instance set'; /* */
 
@@ -5006,10 +4020,14 @@ function definePropAccessorBasic( test )
 
   var exp =
   {
-    '_' : { 'f1' : 2 },
     'f1' : 2,
   }
-  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 2,
+  }
+  test.identical( _.property.all( instance1._ ), exp );
 
   /* */
 
@@ -5031,9 +4049,10 @@ function definePropAccessorBasic( test )
   test.identical( _.prototype.each( instance1 ).length, 3 );
   var exp =
   {
-    '_' : { 'f1' : 1 },
+    'f1' : 1,
   }
-  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( _.property.all( instance1._ ), exp );
+  test.shouldThrowErrorSync( () => instance1.f1 );
 
   test.description = 'instance set'; /* */
 
@@ -5045,9 +4064,10 @@ function definePropAccessorBasic( test )
 
   var exp =
   {
-    '_' : { 'f1' : 2 },
+    'f1' : 2,
   }
-  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
+  test.identical( _.property.all( instance1._ ), exp );
+  test.shouldThrowErrorSync( () => instance1.f1 );
 
   /* */
 
@@ -5076,7 +4096,3446 @@ function definePropAccessorBasic( test )
   test.shouldThrowErrorSync( () => instance1.f1 );
   test.identical( blueprint.prototype.f1, undefined );
   test.identical( blueprint.Make.f1, undefined );
-  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ]._ ), { 'f1' : 2 } );
+
+  var exp =
+  {
+    'f1' : 2,
+  }
+  test.identical( _.property.all( instance1._ ), exp );
+  test.shouldThrowErrorSync( () => instance1.f1 );
+
+  /* */
+
+}
+
+//
+
+function definePropAccessorAlternativeOptions( test )
+{
+  let context = this;
+
+  _.accessor.methodWithStoringStrategyUnderscore( get1 )
+
+  /* */
+
+  test.case = 'typed:1 static:0 accesors:both';
+
+  var accessor1 = { get : get1, set : set1, grab : grab1, put : put1, move : move1 };
+  var accessor2 = { get : get2, set : set2, grab : grab2, put : put2, move : move2 };
+  var blueprint = _.blueprint.define
+  ({
+    typed : _.trait.typed( true ),
+    f1 : _.define.prop( -100, { addingMethods : 1, static : 0, ... accessor1, accessor : accessor2 } ),
+  });
+  var instance1 = blueprint.Make();
+
+  test.description = 'instance'; /* */
+
+  test.identical( instance1.f1, 1 );
+  test.identical( blueprint.prototype.f1, 1 );
+  test.identical( blueprint.Make.f1, undefined );
+
+  var exp =
+  {
+    f1 : 1,
+  }
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    x : -70,
+  }
+  test.identical( _.property.all( instance1._ ), exp );
+  test.true( instance1.f1Grab === grab1 );
+  test.true( instance1.f1Get === get1 );
+  test.true( instance1.f1Put === put1 );
+  test.true( instance1.f1Set === set1 );
+  test.true( instance1.f1Move === move1 );
+
+  /* */
+
+  test.case = 'typed:true static:0 accesors:unrolled';
+
+  var accessor1 = { get : get1, set : set1, grab : grab1, put : put1, move : move1 };
+  var accessor2 = { get : get2, set : set2, grab : grab2, put : put2, move : move2 };
+  var blueprint = _.blueprint.define
+  ({
+    typed : _.trait.typed( 1 ),
+    f1 : _.define.prop( -100, { addingMethods : 1, static : 0, ... accessor1 } ),
+  });
+  var instance1 = blueprint.Make();
+
+  test.description = 'instance'; /* */
+
+  test.identical( instance1.f1, 1 );
+  test.identical( blueprint.prototype.f1, 1 );
+  test.identical( blueprint.Make.f1, undefined );
+
+  var exp =
+  {
+    f1 : 1,
+  }
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    x : -70,
+  }
+  test.identical( _.property.all( instance1._ ), exp );
+  test.true( instance1.f1Grab === grab1 );
+  test.true( instance1.f1Get === get1 );
+  test.true( instance1.f1Put === put1 );
+  test.true( instance1.f1Set === set1 );
+  test.true( instance1.f1Move === move1 );
+
+  /* */
+
+  test.case = 'typed:true static:0 accesors:map';
+
+  var accessor1 = { get : get1, set : set1, grab : grab1, put : put1, move : move1 };
+  var accessor2 = { get : get2, set : set2, grab : grab2, put : put2, move : move2 };
+  var blueprint = _.blueprint.define
+  ({
+    typed : _.trait.typed( 1 ),
+    f1 : _.define.prop( -100, { addingMethods : 1, static : 0, accessor : accessor1 } ),
+  });
+  var instance1 = blueprint.Make();
+
+  test.description = 'instance'; /* */
+
+  test.identical( blueprint.prototype.f1, 1 );
+  test.identical( blueprint.Make.f1, undefined );
+
+  var exp =
+  {
+    f1 : 1,
+  }
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    x : -70,
+  }
+  test.identical( _.property.all( instance1._ ), exp );
+  test.true( instance1.f1Grab === grab1 );
+  test.true( instance1.f1Get === get1 );
+  test.true( instance1.f1Put === put1 );
+  test.true( instance1.f1Set === set1 );
+  test.true( instance1.f1Move === move1 );
+
+  /* */
+
+  test.case = 'typed:1 static:1 accesors:both';
+
+  var accessor1 = { get : get1, set : set1, grab : grab1, put : put1, move : move1 };
+  var accessor2 = { get : get2, set : set2, grab : grab2, put : put2, move : move2 };
+  var blueprint = _.blueprint.define
+  ({
+    typed : _.trait.typed( true ),
+    f1 : _.define.prop( -100, { addingMethods : 1, static : 1, ... accessor1, accessor : accessor2 } ),
+  });
+  var instance1 = blueprint.Make();
+
+  test.description = 'instance'; /* */
+
+  test.identical( instance1.f1, 1 );
+  test.identical( blueprint.prototype.f1, 1 );
+  test.identical( blueprint.Make.f1, 1 );
+
+  var exp =
+  {
+    x : -70,
+  }
+  test.identical( _.property.all( instance1._ ), exp );
+  test.true( instance1.f1Grab.originalRoutine === grab1 );
+  test.true( instance1.f1Get.originalRoutine === get1 );
+  test.true( instance1.f1Put.originalRoutine === put1 );
+  test.true( instance1.f1Set.originalRoutine === set1 );
+  test.true( instance1.f1Move.originalRoutine === move1 );
+
+  /* */
+
+  test.case = 'typed:true static:1 accesors:unrolled';
+
+  var accessor1 = { get : get1, set : set1, grab : grab1, put : put1, move : move1 };
+  var accessor2 = { get : get2, set : set2, grab : grab2, put : put2, move : move2 };
+  var blueprint = _.blueprint.define
+  ({
+    typed : _.trait.typed( 1 ),
+    f1 : _.define.prop( -100, { addingMethods : 1, static : 1, ... accessor1 } ),
+  });
+  var instance1 = blueprint.Make();
+
+  test.description = 'instance'; /* */
+
+  test.identical( instance1.f1, 1 );
+  test.identical( blueprint.prototype.f1, 1 );
+  test.identical( blueprint.Make.f1, 1 );
+
+  var exp =
+  {
+    x : -70,
+  }
+  test.identical( _.property.all( instance1._ ), exp );
+
+  test.true( instance1.f1Grab.originalRoutine === grab1 );
+  test.true( instance1.f1Get.originalRoutine === get1 );
+  test.true( instance1.f1Put.originalRoutine === put1 );
+  test.true( instance1.f1Set.originalRoutine === set1 );
+  test.true( instance1.f1Move.originalRoutine === move1 );
+
+  /* */
+
+  test.case = 'typed:true static:1 accesors:map';
+
+  var accessor1 = { get : get1, set : set1, grab : grab1, put : put1, move : move1 };
+  var accessor2 = { get : get2, set : set2, grab : grab2, put : put2, move : move2 };
+  var blueprint = _.blueprint.define
+  ({
+    typed : _.trait.typed( 1 ),
+    f1 : _.define.prop( -100, { addingMethods : 1, static : 1, accessor : accessor1 } ),
+  });
+  var instance1 = blueprint.Make();
+
+  test.description = 'instance'; /* */
+
+  test.identical( instance1.f1, 1 );
+  test.identical( blueprint.prototype.f1, 1 );
+  test.identical( blueprint.Make.f1, 1 );
+
+  var exp =
+  {
+    x : -70,
+  }
+  test.identical( _.property.all( instance1._ ), exp );
+
+  test.true( instance1.f1Grab.originalRoutine === grab1 );
+  test.true( instance1.f1Get.originalRoutine === get1 );
+  test.true( instance1.f1Put.originalRoutine === put1 );
+  test.true( instance1.f1Set.originalRoutine === set1 );
+  test.true( instance1.f1Move.originalRoutine === move1 );
+
+  /* */
+
+  function get1()
+  {
+    return 1;
+  }
+
+  /* */
+
+  function get2()
+  {
+    return 2;
+  }
+
+  /* */
+
+  function grab1()
+  {
+    return 3;
+  }
+
+  /* */
+
+  function grab2()
+  {
+    return 4;
+  }
+
+  /* */
+
+  function set1( src )
+  {
+    this._.x = src + 10;
+  }
+
+  /* */
+
+  function set2()
+  {
+    this._.x = src + 20;
+  }
+
+  /* */
+
+  function put1( src )
+  {
+    this._.x = src + 30;
+  }
+
+  /* */
+
+  function put2()
+  {
+    this._.x = src + 40;
+  }
+
+  /* */
+
+  function move1( it )
+  {
+  }
+
+  /* */
+
+  function move2( it )
+  {
+  }
+
+}
+
+//
+
+function definePropAccessorStaticNonStatic( test )
+{
+
+  /* */
+
+  test.case = 'f1 and s1, typed : true';
+
+  var blueprint1 = _.blueprint.define
+  ({
+    typed : _.trait.typed( true ),
+    f1 : _.define.prop( 1, { accessor : 1 } ),
+    s1 : _.define.prop( 2, { static : 1, accessor : 1 } ),
+  });
+  var instance1 = blueprint1.Make();
+
+  test.description = 'instance'; /* */
+
+  test.identical( instance1.f1, 1 );
+  test.identical( blueprint1.prototype.f1, undefined );
+  test.identical( blueprint1.Make.f1, undefined );
+
+  test.identical( instance1.s1, 2 );
+  test.identical( blueprint1.prototype.s1, 2 );
+  test.identical( blueprint1.Make.s1, 2 );
+
+  test.identical( _.prototype.each( instance1 ).length, 3 );
+  var exp =
+  {
+    'f1' : 1,
+  }
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 1,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    's1' : 2,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'instance set f1'; /* */
+
+  instance1.f1 = 3;
+
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint1.prototype.f1, undefined );
+  test.identical( blueprint1.Make.f1, undefined );
+
+  test.identical( instance1.s1, 2 );
+  test.identical( blueprint1.prototype.s1, 2 );
+  test.identical( blueprint1.Make.s1, 2 );
+
+  test.identical( _.prototype.each( instance1 ).length, 3 );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    's1' : 2,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'instance set s1'; /* */
+
+  instance1.s1 = 4;
+
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint1.prototype.f1, undefined );
+  test.identical( blueprint1.Make.f1, undefined );
+
+  test.identical( instance1.s1, 4 );
+  test.identical( blueprint1.prototype.s1, 4 );
+  test.identical( blueprint1.Make.s1, 4 );
+
+  test.identical( _.prototype.each( instance1 ).length, 3 );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    's1' : 4,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'prototype set f1'; /* */
+
+  blueprint1.prototype.f1 = 5;
+
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint1.prototype.f1, 5 );
+  test.identical( blueprint1.Make.f1, undefined );
+
+  test.identical( instance1.s1, 4 );
+  test.identical( blueprint1.prototype.s1, 4 );
+  test.identical( blueprint1.Make.s1, 4 );
+
+  test.identical( _.prototype.each( instance1 ).length, 3 );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 5,
+    's1' : 4,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'prototype set s1'; /* */
+
+  blueprint1.prototype.s1 = 6;
+
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint1.prototype.f1, 5 );
+  test.identical( blueprint1.Make.f1, undefined );
+
+  test.identical( instance1.s1, 6 );
+  test.identical( blueprint1.prototype.s1, 6 );
+  test.identical( blueprint1.Make.s1, 6 );
+
+  test.identical( _.prototype.each( instance1 ).length, 3 );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 5,
+    's1' : 6,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+
+  /* */
+
+}
+
+//
+
+function definePropAccessorRewriting( test )
+{
+
+  /* */
+
+  test.case = 'overriding static:1 by static:1, typed : true';
+
+  var blueprint1 = _.blueprint.define
+  ({
+    typed : _.trait.typed( true ),
+    f1 : _.define.prop( 1, { accessor : 1, static : 1 } ),
+  });
+  var blueprint2 = _.blueprint.define
+  ({
+    inherit : _.define.inherit( blueprint1 ),
+    f1 : _.define.prop( 2, { accessor : 1, static : 1, combining : 'rewrite' } ),
+  });
+  var instance1 = blueprint2.Make();
+
+  test.description = 'instance'; /* */
+
+  test.identical( instance1.f1, 2 );
+  test.identical( blueprint1.prototype.f1, 1 );
+  test.identical( blueprint1.Make.f1, 1 );
+  test.identical( blueprint2.prototype.f1, 2 );
+  test.identical( blueprint2.Make.f1, 2 );
+
+  test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( _.prototype.each( instance1 ).length, 4 );
+  var exp =
+  {
+  }
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 1,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 2,
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'instance set f1'; /* */
+
+  instance1.f1 = 3;
+
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint1.prototype.f1, 1 );
+  test.identical( blueprint1.Make.f1, 1 );
+  test.identical( blueprint2.prototype.f1, 3 );
+  test.identical( blueprint2.Make.f1, 3 );
+
+  test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( _.prototype.each( instance1 ).length, 4 );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 1,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'blueprint1.prototype set f1'; /* */
+
+  blueprint1.prototype.f1 = 5;
+
+  test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint1.prototype.f1, 5 );
+  test.identical( blueprint1.Make.f1, 5 );
+  test.identical( blueprint2.prototype.f1, 3 );
+  test.identical( blueprint2.Make.f1, 3 );
+
+  test.identical( _.prototype.each( instance1 ).length, 4 );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 5,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'blueprint2.prototype set f1'; /* */
+
+  blueprint2.prototype.f1 = 6;
+
+  test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( instance1.f1, 6 );
+  test.identical( blueprint1.prototype.f1, 5 );
+  test.identical( blueprint1.Make.f1, 5 );
+  test.identical( blueprint2.prototype.f1, 6 );
+  test.identical( blueprint2.Make.f1, 6 );
+
+  test.identical( _.prototype.each( instance1 ).length, 4 );
+  var exp =
+  {
+    'f1' : 6,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 5,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 6,
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  /* */
+
+  test.case = 'overriding static:1 by static:1, typed : false';
+
+  var blueprint1 = _.blueprint.define
+  ({
+    typed : _.trait.typed( false ),
+    f1 : _.define.prop( 1, { accessor : 1, static : 1 } ),
+  });
+  var blueprint2 = _.blueprint.define
+  ({
+    inherit : _.define.inherit( blueprint1 ),
+    f1 : _.define.prop( 2, { accessor : 1, static : 1, combining : 'rewrite' } ),
+  });
+  var instance1 = blueprint2.Make();
+
+  test.description = 'instance'; /* */
+
+  test.identical( instance1.f1, undefined );
+  test.identical( blueprint1.prototype.f1, 1 );
+  test.identical( blueprint1.Make.f1, 1 );
+  test.identical( blueprint2.prototype.f1, 2 );
+  test.identical( blueprint2.Make.f1, 2 );
+
+  test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( _.prototype.each( instance1 ).length, 1 );
+  var exp =
+  {
+  }
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 1,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 2,
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'instance set f1'; /* */
+
+  test.shouldThrowErrorSync( () => instance1.f1 = 3 );
+
+  test.identical( instance1.f1, undefined );
+  test.identical( blueprint1.prototype.f1, 1 );
+  test.identical( blueprint1.Make.f1, 1 );
+  test.identical( blueprint2.prototype.f1, 2 );
+  test.identical( blueprint2.Make.f1, 2 );
+
+  test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( _.prototype.each( instance1 ).length, 1 );
+  var exp =
+  {
+    'f1' : 1,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 2,
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'blueprint1.prototype set f1'; /* */
+
+  blueprint1.prototype.f1 = 5;
+
+  test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( instance1.f1, undefined );
+  test.identical( blueprint1.prototype.f1, 5 );
+  test.identical( blueprint1.Make.f1, 5 );
+  test.identical( blueprint2.prototype.f1, 2 );
+  test.identical( blueprint2.Make.f1, 2 );
+
+  test.identical( _.prototype.each( instance1 ).length, 1 );
+  var exp =
+  {
+    'f1' : 5,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 2,
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'blueprint2.prototype set f1'; /* */
+
+  blueprint2.prototype.f1 = 6;
+
+  test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( instance1.f1, undefined );
+  test.identical( blueprint1.prototype.f1, 5 );
+  test.identical( blueprint1.Make.f1, 5 );
+  test.identical( blueprint2.prototype.f1, 6 );
+  test.identical( blueprint2.Make.f1, 6 );
+
+  test.identical( _.prototype.each( instance1 ).length, 1 );
+  var exp =
+  {
+    'f1' : 5,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 6,
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  /* */
+
+  test.case = 'overriding static:0 by static:0, typed : true';
+
+  var blueprint1 = _.blueprint.define
+  ({
+    typed : _.trait.typed( true ),
+    f1 : _.define.prop( 1, { accessor : 1, static : 0 } ),
+  });
+  var blueprint2 = _.blueprint.define
+  ({
+    inherit : _.define.inherit( blueprint1 ),
+    f1 : _.define.prop( 2, { accessor : 1, static : 0, combining : 'rewrite' } ),
+  });
+  var instance1 = blueprint2.Make();
+
+  test.description = 'instance'; /* */
+
+  test.identical( instance1.f1, 2 );
+  test.identical( blueprint1.prototype.f1, undefined );
+  test.identical( blueprint1.Make.f1, undefined );
+  test.identical( blueprint2.prototype.f1, undefined );
+  test.identical( blueprint2.Make.f1, undefined );
+
+  test.true( Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( _.prototype.each( instance1 ).length, 4 );
+  var exp =
+  {
+    'f1' : 2,
+  }
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'instance set f1'; /* */
+
+  instance1.f1 = 3;
+
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint1.prototype.f1, undefined );
+  test.identical( blueprint1.Make.f1, undefined );
+  test.identical( blueprint2.prototype.f1, undefined );
+  test.identical( blueprint2.Make.f1, undefined );
+
+  test.true( Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( _.prototype.each( instance1 ).length, 4 );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'blueprint2.prototype set f1'; /* */
+
+  blueprint2.prototype.f1 = 5;
+
+  test.true( Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint1.prototype.f1, undefined );
+  test.identical( blueprint1.Make.f1, undefined );
+  test.identical( blueprint2.prototype.f1, 5 );
+  test.identical( blueprint2.Make.f1, undefined );
+
+  test.identical( _.prototype.each( instance1 ).length, 4 );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 5,
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'blueprint1.prototype set f1'; /* */
+
+  blueprint1.prototype.f1 = 6;
+
+  test.true( Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint1.prototype.f1, 6 );
+  test.identical( blueprint1.Make.f1, undefined );
+  test.identical( blueprint2.prototype.f1, 5 );
+  test.identical( blueprint2.Make.f1, undefined );
+
+  test.identical( _.prototype.each( instance1 ).length, 4 );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 6,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 5,
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  /* */
+
+  test.case = 'overriding static:0 by static:0, typed:false';
+
+  var blueprint1 = _.blueprint.define
+  ({
+    typed : _.trait.typed( false ),
+    f1 : _.define.prop( 1, { accessor : 1, static : 0 } ),
+  });
+  var blueprint2 = _.blueprint.define
+  ({
+    inherit : _.define.inherit( blueprint1 ),
+    f1 : _.define.prop( 2, { accessor : 1, static : 0, combining : 'rewrite' } ),
+  });
+  var instance1 = blueprint2.Make();
+
+  test.description = 'instance'; /* */
+
+  test.identical( instance1.f1, 2 );
+  test.identical( blueprint1.prototype.f1, undefined );
+  test.identical( blueprint1.Make.f1, undefined );
+  test.identical( blueprint2.prototype.f1, undefined );
+  test.identical( blueprint2.Make.f1, undefined );
+
+  test.true( Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( !Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( !Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( _.prototype.each( instance1 ).length, 1 );
+  var exp =
+  {
+    'f1' : 2,
+  }
+  test.identical( _.property.of( instance1 ), exp );
+
+  test.description = 'instance set f1'; /* */
+
+  instance1.f1 = 3;
+
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint1.prototype.f1, undefined );
+  test.identical( blueprint1.Make.f1, undefined );
+  test.identical( blueprint2.prototype.f1, undefined );
+  test.identical( blueprint2.Make.f1, undefined );
+
+  test.true( Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( !Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( !Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( _.prototype.each( instance1 ).length, 1 );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'blueprint2.prototype set f1'; /* */
+
+  blueprint2.prototype.f1 = 5;
+
+  test.true( Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( !Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( !Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint1.prototype.f1, undefined );
+  test.identical( blueprint1.Make.f1, undefined );
+  test.identical( blueprint2.prototype.f1, 5 );
+  test.identical( blueprint2.Make.f1, undefined );
+
+  test.identical( _.prototype.each( instance1 ).length, 1 );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'blueprint1.prototype set f1'; /* */
+
+  blueprint1.prototype.f1 = 6;
+
+  test.true( Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( !Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( !Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint1.prototype.f1, 6 );
+  test.identical( blueprint1.Make.f1, undefined );
+  test.identical( blueprint2.prototype.f1, 5 );
+  test.identical( blueprint2.Make.f1, undefined );
+
+  test.identical( _.prototype.each( instance1 ).length, 1 );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+
+  /* */
+
+  test.case = 'overriding static by non-static, typed : true';
+
+  var blueprint1 = _.blueprint.define
+  ({
+    typed : _.trait.typed( true ),
+    f1 : _.define.prop( 1, { accessor : 1, static : 1 } ),
+  });
+  var blueprint2 = _.blueprint.define
+  ({
+    inherit : _.define.inherit( blueprint1 ),
+    f1 : _.define.prop( 2, { accessor : 1, static : 0, combining : 'rewrite' } ),
+  });
+  /* zzz : throw error instead of allowing changing of static? */
+  var instance1 = blueprint2.Make();
+
+  test.description = 'instance'; /* */
+
+  test.identical( instance1.f1, 2 );
+  test.identical( blueprint1.prototype.f1, 1 );
+  test.identical( blueprint1.Make.f1, 1 );
+  test.identical( blueprint2.prototype.f1, 1 );
+  test.identical( blueprint2.Make.f1, 1 );
+
+  test.true( Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( _.prototype.each( instance1 ).length, 4 );
+  var exp =
+  {
+    'f1' : 2,
+  }
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 2,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 1,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'instance set f1'; /* */
+
+  instance1.f1 = 3;
+
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint1.prototype.f1, 1 );
+  test.identical( blueprint1.Make.f1, 1 );
+  test.identical( blueprint2.prototype.f1, 1 );
+  test.identical( blueprint2.Make.f1, 1 );
+
+  test.identical( _.prototype.each( instance1 ).length, 4 );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 1,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'blueprint1.prototype set f1'; /* */
+
+  blueprint1.prototype.f1 = 5;
+
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint1.prototype.f1, 5 );
+  test.identical( blueprint1.Make.f1, 5 );
+  test.identical( blueprint2.prototype.f1, 5 );
+  test.identical( blueprint2.Make.f1, 5 );
+
+  test.identical( _.prototype.each( instance1 ).length, 4 );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 5,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'blueprint2.prototype set f1'; /* */
+
+  blueprint2.prototype.f1 = 6;
+
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint1.prototype.f1, 5 );
+  test.identical( blueprint1.Make.f1, 5 );
+  test.identical( blueprint2.prototype.f1, 6 );
+  test.identical( blueprint2.Make.f1, 5 );
+
+  test.identical( _.prototype.each( instance1 ).length, 4 );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 5,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 6,
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  /* */
+
+}
+
+//
+
+function definePropAlias2Basic( test )
+{
+
+  /* */
+
+  test.case = 'typed:true';
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    f1 : '1',
+    s1 : _.define.prop( '1', { static : 1, enumerable : 1 } ),
+    af1p : _.define.alias2({ originalName : 'f1', static : 0, enumerable : 1 }),
+    af1s : _.define.alias2({ originalName : 'f1', static : 1, enumerable : 1 }),
+    as1p : _.define.alias2({ originalName : 's1', static : 0, enumerable : 1 }),
+    as1s : _.define.alias2({ originalName : 's1', static : 1, enumerable : 1 }),
+  });
+
+  var instance1 = Blueprint1.Make();
+  var exp =
+  {
+    'f1' : '1',
+    's1' : '1',
+    'af1p' : '1',
+    'af1s' : undefined,
+    'as1p' : '1',
+    'as1s' : '1'
+  }
+  test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
+
+  test.true( instance1._ === undefined );
+  // var exp =
+  // {
+  // }
+  // test.identical( _.property.all( instance1._ ), exp );
+
+  var exp =
+  {
+    'f1' : '1',
+    's1' : '1',
+    'af1p' : '1',
+    'af1s' : undefined,
+    'as1p' : '1',
+    'as1s' : '1'
+  }
+  test.identical( _.mapExtend( null, instance1 ), exp );
+
+  test.description = 'descriptor of f1'; /* */
+
+  var exp =
+  {
+    'value' : '1',
+    'writable' : true,
+    'enumerable' : true,
+    'configurable' : true,
+  }
+  var got = Object.getOwnPropertyDescriptor( instance1, 'f1' );
+  test.identical( got, exp );
+  var exp = undefined;
+  var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'f1' );
+  test.identical( got, exp );
+
+  test.description = 'descriptor of af1p'; /* */
+
+  var exp = undefined;
+  var got = Object.getOwnPropertyDescriptor( instance1, 'af1p' );
+  test.identical( got, exp );
+  var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'af1p' );
+  var exp =
+  {
+    get : got.get,
+    set : got.set,
+    'enumerable' : true,
+    'configurable' : true,
+  }
+  test.identical( got, exp );
+
+  test.description = 'descriptor of af1s'; /* */
+
+  var exp = undefined;
+  var got = Object.getOwnPropertyDescriptor( instance1, 'af1s' );
+  test.identical( got, exp );
+  var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'af1s' );
+  var exp =
+  {
+    get : got.get,
+    set : got.set,
+    'enumerable' : true,
+    'configurable' : true,
+  }
+  test.identical( got, exp );
+
+  test.description = 'descriptor of s1'; /* */
+
+  var exp = undefined;
+  var got = Object.getOwnPropertyDescriptor( instance1, 's1' );
+  test.identical( got, exp );
+  var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 's1' );
+  var exp =
+  {
+    get : got.get,
+    set : got.set,
+    'enumerable' : true,
+    'configurable' : true,
+  }
+  test.identical( got, exp );
+
+  test.description = 'descriptor of as1p'; /* */
+
+  var exp = undefined;
+  var got = Object.getOwnPropertyDescriptor( instance1, 'as1p' );
+  test.identical( got, exp );
+  var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'as1p' );
+  var exp =
+  {
+    get : got.get,
+    set : got.set,
+    'enumerable' : true,
+    'configurable' : true,
+  }
+  test.identical( got, exp );
+
+  test.description = 'descriptor of as1s'; /* */
+
+  var exp = undefined;
+  var got = Object.getOwnPropertyDescriptor( instance1, 'as1s' );
+  test.identical( got, exp );
+  var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'as1s' );
+  var exp =
+  {
+    get : got.get,
+    set : got.set,
+    'enumerable' : true,
+    'configurable' : true,
+  }
+  test.identical( got, exp );
+
+  test.description = 'set f1'; /* */
+  instance1.f1 = '2';
+
+  var exp =
+  {
+    'f1' : '2',
+    's1' : '1',
+    'af1p' : '2',
+    'af1s' : undefined,
+    'as1p' : '1',
+    'as1s' : '1'
+  }
+  test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
+
+  test.true( instance1._ === undefined );
+  // var exp =
+  // {
+  // }
+  // test.identical( _.property.all( instance1._ ), exp );
+
+  test.description = 'set af1p'; /* */
+  instance1.af1p = 'af1p';
+
+  var exp =
+  {
+    'f1' : 'af1p',
+    's1' : '1',
+    'af1p' : 'af1p',
+    'af1s' : undefined,
+    'as1p' : '1',
+    'as1s' : '1'
+  }
+  test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
+
+  // var exp =
+  // {
+  // }
+  // test.identical( _.property.all( instance1._ ), exp );
+  test.true( instance1._ === undefined );
+
+  test.description = 'set af1s'; /* */
+  instance1.af1s = 'af1s'
+
+  var exp =
+  {
+    'f1' : 'af1p',
+    's1' : '1',
+    'af1p' : 'af1p',
+    'af1s' : 'af1s',
+    'as1p' : '1',
+    'as1s' : '1'
+  }
+  test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
+
+  // var exp =
+  // {
+  // }
+  // test.identical( _.property.own( instance1._ ), exp );
+  test.true( instance1._ === undefined );
+
+  // var exp =
+  // {
+  // }
+  // test.identical( _.property.own( Blueprint1.prototype._ ), exp );
+  test.true( Blueprint1.prototype._ === undefined );
+
+  test.description = 'set s1'; /* */
+  instance1.s1 = '3';
+
+  var exp =
+  {
+    'f1' : 'af1p',
+    's1' : '3',
+    'af1p' : 'af1p',
+    'af1s' : 'af1s',
+    'as1p' : '3',
+    'as1s' : '3'
+  };
+  test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
+
+  // var exp =
+  // {
+  // }
+  // test.identical( _.property.all( instance1._ ), exp );
+  test.true( instance1._ === undefined );
+
+  test.description = 'set as1p'; /* */
+  instance1.as1p = '4';
+
+  var exp =
+  {
+    'f1' : 'af1p',
+    's1' : '4',
+    'af1p' : 'af1p',
+    'af1s' : 'af1s',
+    'as1p' : '4',
+    'as1s' : '4'
+  }
+  test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
+
+  // var exp =
+  // {
+  // }
+  // test.identical( _.property.all( instance1._ ), exp );
+  test.true( instance1._ === undefined );
+
+  test.description = 'set as1s'; /* */
+  instance1.as1s = '5';
+
+  var exp =
+  {
+    'f1' : 'af1p',
+    's1' : '5',
+    'af1p' : 'af1p',
+    'af1s' : 'af1s',
+    'as1p' : '5',
+    'as1s' : '5'
+  }
+  test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
+
+  // var exp =
+  // {
+  // }
+  // test.identical( _.property.all( instance1._ ), exp );
+  test.true( instance1._ === undefined );
+
+  /* */
+
+  test.case = 'typed:false';
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( false ),
+    f1 : '1',
+    s1 : _.define.prop( '1', { static : 1, enumerable : 1 } ),
+    af1p : _.define.alias2({ originalName : 'f1', static : 0, enumerable : 1 }),
+    af1s : _.define.alias2({ originalName : 'f1', static : 1, enumerable : 1 }),
+    as1p : _.define.alias2({ originalName : 's1', static : 0, enumerable : 1 }),
+    as1s : _.define.alias2({ originalName : 's1', static : 1, enumerable : 1 }),
+  });
+
+  var instance1 = Blueprint1.Make();
+  var exp =
+  {
+    'f1' : '1',
+    'af1p' : '1',
+    'as1p' : undefined,
+  }
+  test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
+
+  // var exp =
+  // {
+  // }
+  // test.identical( _.property.all( instance1._ ), exp );
+  test.true( instance1._ === undefined );
+
+  var exp =
+  {
+    'f1' : '1',
+    'af1p' : '1',
+    'as1p' : undefined,
+  }
+  test.identical( _.mapExtend( null, instance1 ), exp );
+
+  test.description = 'descriptor of f1'; /* */
+
+  var exp =
+  {
+    'value' : '1',
+    'writable' : true,
+    'enumerable' : true,
+    'configurable' : true,
+  }
+  var got = Object.getOwnPropertyDescriptor( instance1, 'f1' );
+  test.identical( got, exp );
+  var exp = undefined;
+  var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'f1' );
+  test.identical( got, exp );
+
+  test.description = 'descriptor of af1p'; /* */
+
+  var got = Object.getOwnPropertyDescriptor( instance1, 'af1p' );
+  var exp =
+  {
+    get : got.get,
+    set : got.set,
+    'enumerable' : true,
+    'configurable' : true,
+  }
+  test.identical( got, exp );
+  var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'af1p' );
+  var exp = undefined;
+  test.identical( got, exp );
+
+  test.description = 'descriptor of af1s'; /* */
+
+  var exp = undefined;
+  var got = Object.getOwnPropertyDescriptor( instance1, 'af1s' );
+  test.identical( got, exp );
+  var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'af1s' );
+  var exp =
+  {
+    get : got.get,
+    set : got.set,
+    'enumerable' : true,
+    'configurable' : true,
+  }
+  test.identical( got, exp );
+
+  test.description = 'descriptor of s1'; /* */
+
+  var exp = undefined;
+  var got = Object.getOwnPropertyDescriptor( instance1, 's1' );
+  test.identical( got, exp );
+  var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 's1' );
+  var exp =
+  {
+    get : got.get,
+    set : got.set,
+    'enumerable' : true,
+    'configurable' : true,
+  }
+  test.identical( got, exp );
+
+  test.description = 'descriptor of as1p'; /* */
+
+  var got = Object.getOwnPropertyDescriptor( instance1, 'as1p' );
+  var exp =
+  {
+    get : got.get,
+    set : got.set,
+    'enumerable' : true,
+    'configurable' : true,
+  }
+  test.identical( got, exp );
+  var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'as1p' );
+  var exp = undefined;
+  test.identical( got, exp );
+
+  test.description = 'descriptor of as1s'; /* */
+
+  var exp = undefined;
+  var got = Object.getOwnPropertyDescriptor( instance1, 'as1s' );
+  test.identical( got, exp );
+  var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'as1s' );
+  var exp =
+  {
+    get : got.get,
+    set : got.set,
+    'enumerable' : true,
+    'configurable' : true,
+  }
+  test.identical( got, exp );
+
+  test.description = 'set f1'; /* */
+  instance1.f1 = '2';
+
+  var exp =
+  {
+    'f1' : '2',
+    'af1p' : '2',
+    'as1p' : undefined,
+  }
+  test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
+
+  // var exp =
+  // {
+  // }
+  // test.identical( _.property.all( instance1._ ), exp );
+  test.true( instance1._ === undefined );
+
+  test.description = 'set af1p'; /* */
+  instance1.af1p = 'af1p';
+
+  var exp =
+  {
+    'f1' : 'af1p',
+    'af1p' : 'af1p',
+    'as1p' : undefined,
+  }
+  test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
+
+  // var exp =
+  // {
+  // }
+  // test.identical( _.property.all( instance1._ ), exp );
+  test.true( instance1._ === undefined );
+
+  test.description = 'set af1s'; /* */
+  test.shouldThrowErrorSync( () => instance1.af1s = 'af1s' );
+
+  var exp =
+  {
+    'f1' : 'af1p',
+    'af1p' : 'af1p',
+    'as1p' : undefined,
+  }
+  test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
+
+  // var exp =
+  // {
+  // }
+  // test.identical( _.property.all( instance1._ ), exp );
+  test.true( instance1._ === undefined );
+
+  test.description = 'set s1'; /* */
+  test.shouldThrowErrorSync( () => instance1.s1 = '3' );
+
+  var exp =
+  {
+    'f1' : 'af1p',
+    'af1p' : 'af1p',
+    'as1p' : undefined,
+  }
+  test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
+
+  var exp =
+  {
+  }
+  // test.identical( _.property.all( instance1._ ), exp );
+  test.true( instance1._ === undefined );
+
+  test.description = 'set as1p'; /* */
+  test.shouldThrowErrorSync( () => instance1.as1p = '4' );
+
+  var exp =
+  {
+    'f1' : 'af1p',
+    'af1p' : 'af1p',
+    'as1p' : undefined,
+  }
+  test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
+
+  var exp =
+  {
+  }
+  // test.identical( _.property.all( instance1._ ), exp );
+  test.true( instance1._ === undefined );
+
+  test.description = 'set as1s'; /* */
+  test.shouldThrowErrorSync( () => instance1.as1s = '5' );
+
+  var exp =
+  {
+    'f1' : 'af1p',
+    'af1p' : 'af1p',
+    'as1p' : undefined,
+  }
+  test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
+
+  var exp =
+  {
+  }
+  // test.identical( _.property.all( instance1._ ), exp );
+  test.true( instance1._ === undefined );
+
+  /* */
+
+  test.case = 'typed:true, enumerable : implicit';
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    f1 : '1',
+    s1 : _.define.prop( '1', { static : 1 } ),
+    af1p : _.define.alias2({ originalName : 'f1', static : 0 }),
+    af1s : _.define.alias2({ originalName : 'f1', static : 1 }),
+    as1p : _.define.alias2({ originalName : 's1', static : 0 }),
+    as1s : _.define.alias2({ originalName : 's1', static : 1 }),
+  });
+
+  var instance1 = Blueprint1.Make();
+  var exp =
+  {
+    'f1' : '1',
+    'af1p' : '1',
+    'as1p' : '1',
+  }
+  test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
+
+  var exp =
+  {
+  }
+  // test.identical( _.property.all( instance1._ ), exp );
+  test.true( instance1._ === undefined );
+
+  var exp =
+  {
+    'f1' : '1',
+    'af1p' : '1',
+    'as1p' : '1',
+  }
+  test.identical( _.mapExtend( null, instance1 ), exp );
+
+  test.description = 'descriptor of f1'; /* */
+
+  var exp =
+  {
+    'value' : '1',
+    'writable' : true,
+    'enumerable' : true,
+    'configurable' : true,
+  }
+  var got = Object.getOwnPropertyDescriptor( instance1, 'f1' );
+  test.identical( got, exp );
+  var exp = undefined;
+  var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'f1' );
+  test.identical( got, exp );
+
+  test.description = 'descriptor of af1p'; /* */
+
+  var exp = undefined;
+  var got = Object.getOwnPropertyDescriptor( instance1, 'af1p' );
+  test.identical( got, exp );
+  var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'af1p' );
+  var exp =
+  {
+    get : got.get,
+    set : got.set,
+    'enumerable' : true,
+    'configurable' : true,
+  }
+  test.identical( got, exp );
+
+  test.description = 'descriptor of af1s'; /* */
+
+  var exp = undefined;
+  var got = Object.getOwnPropertyDescriptor( instance1, 'af1s' );
+  test.identical( got, exp );
+  var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'af1s' );
+  var exp =
+  {
+    get : got.get,
+    set : got.set,
+    'enumerable' : false,
+    'configurable' : true,
+  }
+  test.identical( got, exp );
+
+  test.description = 'descriptor of s1'; /* */
+
+  var exp = undefined;
+  var got = Object.getOwnPropertyDescriptor( instance1, 's1' );
+  test.identical( got, exp );
+  var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 's1' );
+  var exp =
+  {
+    get : got.get,
+    set : got.set,
+    'enumerable' : false,
+    'configurable' : true,
+  }
+  test.identical( got, exp );
+
+  test.description = 'descriptor of as1p'; /* */
+
+  var exp = undefined;
+  var got = Object.getOwnPropertyDescriptor( instance1, 'as1p' );
+  test.identical( got, exp );
+  var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'as1p' );
+  var exp =
+  {
+    get : got.get,
+    set : got.set,
+    'enumerable' : true,
+    'configurable' : true,
+  }
+  test.identical( got, exp );
+
+  test.description = 'descriptor of as1s'; /* */
+
+  var exp = undefined;
+  var got = Object.getOwnPropertyDescriptor( instance1, 'as1s' );
+  test.identical( got, exp );
+  var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'as1s' );
+  var exp =
+  {
+    get : got.get,
+    set : got.set,
+    'enumerable' : false,
+    'configurable' : true,
+  }
+  test.identical( got, exp );
+
+  /* */
+
+}
+
+//
+
+function definePropAlias2OptionOriginalContainer( test )
+{
+
+  act({ set : true });
+  act({ set : false });
+
+  function act( tops )
+  {
+
+    /* */
+
+    test.case = `typed:true set:${tops.set} basic`;
+
+    var originalContainer =
+    {
+      f1 : '1',
+      f2 : '2',
+    }
+
+    var Blueprint1 = _.Blueprint
+    ({
+      typed : _.trait.typed( true ),
+      p : _.define.alias2({ originalContainer, originalName : 'f1', static : 0, set : tops.set }),
+      s : _.define.alias2({ originalContainer, originalName : 'f2', static : 1, set : tops.set }),
+    });
+
+    var instance1 = Blueprint1.Make();
+
+    test.description = 'properties'; /* */
+
+    test.identical( instance1.p, '1' );
+    test.identical( instance1.s, '2' );
+    test.identical( Blueprint1.prototype.p, '1' );
+    test.identical( Blueprint1.prototype.s, '2' );
+
+    test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
+    test.true( !Object.hasOwnProperty.call( Blueprint1.prototype, '_' ) );
+    test.true( instance1._ === undefined );
+    test.true( Blueprint1.prototype._ === undefined );
+
+    var exp =
+    {
+      'p' : '1',
+      's' : '2',
+    }
+    test.identical( _.mapBut( _.property.all( instance1 ), [ '_' ] ), exp );
+
+    var exp =
+    {
+    }
+    test.identical( _.property.own( instance1 ), exp );
+
+    var exp =
+    {
+      'p' : '1',
+    }
+    test.identical( _.mapExtend( null, instance1 ), exp );
+
+    var exp =
+    {
+      f1 : '1',
+      f2 : '2',
+    }
+    test.identical( originalContainer, exp );
+
+    test.description = 'descriptor of p'; /* */
+
+    var got = Object.getOwnPropertyDescriptor( instance1, 'p' );
+    var exp = undefined;
+    test.identical( got, exp );
+
+    var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'p' );
+    var exp =
+    {
+      get : got.get,
+      set : got.set,
+      'enumerable' : true,
+      'configurable' : true,
+    }
+    test.identical( got, exp );
+    if( !tops.set )
+    test.true( got.set === undefined );
+
+    test.description = 'descriptor of s'; /* */
+
+    var got = Object.getOwnPropertyDescriptor( instance1, 's' );
+    var exp = undefined;
+    test.identical( got, exp );
+
+    var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 's' );
+    var exp =
+    {
+      get : got.get,
+      set : got.set,
+      'enumerable' : false,
+      'configurable' : true,
+    }
+    test.identical( got, exp );
+    if( !tops.set )
+    test.true( got.set === undefined );
+
+    /* */
+
+    test.case = `typed:true set:${tops.set} set instance.p`;
+
+    var originalContainer =
+    {
+      f1 : '1',
+      f2 : '2',
+    }
+
+    var Blueprint1 = _.Blueprint
+    ({
+      typed : _.trait.typed( true ),
+      p : _.define.alias2({ originalContainer, originalName : 'f1', static : 0, set : tops.set }),
+      s : _.define.alias2({ originalContainer, originalName : 'f2', static : 1, set : tops.set }),
+    });
+
+    var instance1 = Blueprint1.Make();
+
+    test.description = 'properties'; /* */
+
+    if( tops.set )
+    instance1.p = '3';
+    else
+    test.shouldThrowErrorSync( () => instance1.p = '3' );
+
+    test.identical( instance1.p, tops.set ? '3' : '1' );
+    test.identical( instance1.s, '2' );
+    test.identical( Blueprint1.prototype.p, tops.set ? '3' : '1' );
+    test.identical( Blueprint1.prototype.s, '2' );
+
+    var exp =
+    {
+      'p' : tops.set ? '3' : '1',
+      's' : '2',
+    }
+    test.identical( _.mapBut( _.property.all( instance1 ), [ '_' ] ), exp );
+
+    var exp =
+    {
+    }
+    test.identical( _.property.own( instance1 ), exp );
+
+    var exp =
+    {
+      'p' : tops.set ? '3' : '1',
+    }
+    test.identical( _.mapExtend( null, instance1 ), exp );
+
+    var exp =
+    {
+      f1 : tops.set ? '3' : '1',
+      f2 : '2',
+    }
+    test.identical( originalContainer, exp );
+
+    test.description = 'descriptor of p'; /* */
+
+    var got = Object.getOwnPropertyDescriptor( instance1, 'p' );
+    var exp = undefined;
+    test.identical( got, exp );
+
+    test.description = 'descriptor of s'; /* */
+
+    var got = Object.getOwnPropertyDescriptor( instance1, 's' );
+    var exp = undefined;
+    test.identical( got, exp );
+
+    /* */
+
+    test.case = `typed:true set:${tops.set} set instance.s`;
+
+    var originalContainer =
+    {
+      f1 : '1',
+      f2 : '2',
+    }
+
+    var Blueprint1 = _.Blueprint
+    ({
+      typed : _.trait.typed( true ),
+      p : _.define.alias2({ originalContainer, originalName : 'f1', static : 0, set : tops.set }),
+      s : _.define.alias2({ originalContainer, originalName : 'f2', static : 1, set : tops.set }),
+    });
+
+    var instance1 = Blueprint1.Make();
+
+    test.description = 'properties'; /* */
+
+    if( tops.set )
+    instance1.s = '3';
+    else
+    test.shouldThrowErrorSync( () => instance1.s = '3' );
+
+    test.identical( instance1.p, '1' );
+    test.identical( instance1.s, tops.set ? '3' : '2' );
+    test.identical( Blueprint1.prototype.p, '1' );
+    test.identical( Blueprint1.prototype.s, tops.set ? '3' : '2' );
+
+    var exp =
+    {
+      'p' : '1',
+      's' : tops.set ? '3' : '2',
+    }
+    test.identical( _.mapBut( _.property.all( instance1 ), [ '_' ] ), exp );
+
+    var exp =
+    {
+    }
+    test.identical( _.property.own( instance1 ), exp );
+
+    var exp =
+    {
+      'p' : '1',
+    }
+    test.identical( _.mapExtend( null, instance1 ), exp );
+
+    var exp =
+    {
+      f1 : '1',
+      f2 : tops.set ? '3' : '2',
+    }
+    test.identical( originalContainer, exp );
+
+    test.description = 'descriptor of p'; /* */
+
+    var got = Object.getOwnPropertyDescriptor( instance1, 'p' );
+    var exp = undefined;
+    test.identical( got, exp );
+
+    test.description = 'descriptor of s'; /* */
+
+    var got = Object.getOwnPropertyDescriptor( instance1, 's' );
+    var exp = undefined;
+    test.identical( got, exp );
+
+    /* */
+
+    test.case = `typed:false set:${tops.set} basic`;
+
+    var originalContainer =
+    {
+      f1 : '1',
+      f2 : '2',
+    }
+
+    var Blueprint1 = _.Blueprint
+    ({
+      typed : _.trait.typed( false ),
+      p : _.define.alias2({ originalContainer, originalName : 'f1', static : 0, set : tops.set }),
+      s : _.define.alias2({ originalContainer, originalName : 'f2', static : 1, set : tops.set }),
+    });
+
+    var instance1 = Blueprint1.Make();
+
+    test.description = 'properties'; /* */
+
+    test.identical( instance1.p, '1' );
+    test.identical( instance1.s, undefined );
+    test.identical( Blueprint1.prototype.p, undefined );
+    test.identical( Blueprint1.prototype.s, '2' );
+
+    test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
+    test.true( !Object.hasOwnProperty.call( Blueprint1.prototype, '_' ) );
+    test.true( instance1._ === undefined );
+    test.true( Blueprint1.prototype._ === undefined );
+
+    var exp =
+    {
+      'p' : '1',
+    }
+    test.identical( _.mapBut( _.property.all( instance1 ), [ '_' ] ), exp );
+
+    var exp =
+    {
+      'p' : '1',
+    }
+    test.identical( _.property.own( instance1 ), exp );
+
+    var exp =
+    {
+      'p' : '1',
+    }
+    test.identical( _.mapExtend( null, instance1 ), exp );
+
+    var exp =
+    {
+      f1 : '1',
+      f2 : '2',
+    }
+    test.identical( originalContainer, exp );
+
+    test.description = 'descriptor of p'; /* */
+
+    var got = Object.getOwnPropertyDescriptor( instance1, 'p' );
+    var exp =
+    {
+      get : got.get,
+      set : got.set,
+      'enumerable' : true,
+      'configurable' : true,
+    }
+    test.identical( got, exp );
+    if( !tops.set )
+    test.true( got.set === undefined );
+
+    var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'p' );
+    var exp = undefined;
+    test.identical( got, exp );
+
+    test.description = 'descriptor of s'; /* */
+
+    var got = Object.getOwnPropertyDescriptor( instance1, 's' );
+    var exp = undefined;
+    test.identical( got, exp );
+
+    var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 's' );
+    var exp =
+    {
+      get : got.get,
+      set : got.set,
+      'enumerable' : false,
+      'configurable' : true,
+    }
+    test.identical( got, exp );
+    if( !tops.set )
+    test.true( got.set === undefined );
+
+    /* */
+
+    test.case = `typed:false set:${tops.set} set instance.p`;
+
+    var originalContainer =
+    {
+      f1 : '1',
+      f2 : '2',
+    }
+
+    var Blueprint1 = _.Blueprint
+    ({
+      typed : _.trait.typed( false ),
+      p : _.define.alias2({ originalContainer, originalName : 'f1', static : 0, set : tops.set }),
+      s : _.define.alias2({ originalContainer, originalName : 'f2', static : 1, set : tops.set }),
+    });
+
+    var instance1 = Blueprint1.Make();
+
+    test.description = 'properties'; /* */
+
+    if( tops.set )
+    instance1.p = '3'
+    else
+    test.shouldThrowErrorSync( () => instance1.p = '3' );
+
+    test.identical( instance1.p, tops.set ? '3' : '1' );
+    test.identical( instance1.s, undefined );
+    test.identical( Blueprint1.prototype.p, undefined );
+    test.identical( Blueprint1.prototype.s, '2' );
+
+    var exp =
+    {
+      'p' : tops.set ? '3' : '1',
+    }
+    test.identical( _.mapBut( _.property.all( instance1 ), [ '_' ] ), exp );
+
+    var exp =
+    {
+      'p' : tops.set ? '3' : '1',
+    }
+    test.identical( _.property.own( instance1 ), exp );
+
+    var exp =
+    {
+      'p' : tops.set ? '3' : '1',
+    }
+    test.identical( _.mapExtend( null, instance1 ), exp );
+
+    var exp =
+    {
+      f1 : tops.set ? '3' : '1',
+      f2 : '2',
+    }
+    test.identical( originalContainer, exp );
+
+    /* */
+
+    test.case = `typed:false set:${tops.set} set instance.s`;
+
+    var originalContainer =
+    {
+      f1 : '1',
+      f2 : '2',
+    }
+
+    var Blueprint1 = _.Blueprint
+    ({
+      typed : _.trait.typed( false ),
+      p : _.define.alias2({ originalContainer, originalName : 'f1', static : 0, set : tops.set }),
+      s : _.define.alias2({ originalContainer, originalName : 'f2', static : 1, set : tops.set }),
+    });
+
+    var instance1 = Blueprint1.Make();
+
+    test.description = 'properties'; /* */
+
+    test.shouldThrowErrorSync( () => instance1.s = '3' );
+
+    test.identical( instance1.p, '1' );
+    test.identical( instance1.s, undefined );
+    test.identical( Blueprint1.prototype.p, undefined );
+    test.identical( Blueprint1.prototype.s, '2' );
+
+    var exp =
+    {
+      'p' : '1',
+    }
+    test.identical( _.mapBut( _.property.all( instance1 ), [ '_' ] ), exp );
+
+    var exp =
+    {
+      'p' : '1',
+    }
+    test.identical( _.property.own( instance1 ), exp );
+
+    var exp =
+    {
+      'p' : '1',
+    }
+    test.identical( _.mapExtend( null, instance1 ), exp );
+
+    var exp =
+    {
+      f1 : '1',
+      f2 : '2',
+    }
+    test.identical( originalContainer, exp );
+
+    /* */
+
+  }
+
+}
+
+//
+
+function definePropAlias2ConstructionExtend( test )
+{
+
+  act({});
+
+  function act( tops )
+  {
+
+    /* */
+
+    test.case = `static : 0`;
+
+    var originalContainer =
+    {
+      f1 : '1',
+      f2 : '2',
+    }
+
+    var dstContainer =
+    {
+      f1 : '11',
+      f2 : '12',
+    }
+
+    var extension =
+    {
+      p : _.define.alias2({ originalContainer, originalName : 'f1', static : 0 }),
+    }
+
+    var keysBefore = _.mapKeys( _.prototype.of( dstContainer ), { onlyEnumerable : 0, onlyOwn : 0 } );
+    _.construction.extend( dstContainer, extension );
+    var keysAfter = _.mapKeys( _.prototype.of( dstContainer ), { onlyEnumerable : 0, onlyOwn : 0 } );
+    test.identical( keysAfter, keysBefore );
+
+    var exp =
+    {
+      'f1' : '11',
+      'f2' : '12',
+      'p' : '1',
+    }
+    test.identical( dstContainer, exp );
+    test.true( dstContainer._ === undefined );
+
+    var got = Object.getOwnPropertyDescriptor( dstContainer, 'p' );
+    var exp =
+    {
+      get : got.get,
+      set : got.set,
+      'enumerable' : true,
+      'configurable' : true,
+    }
+    test.identical( got, exp );
+    test.true( _.routineIs( got.get ) );
+    test.true( _.routineIs( got.set ) );
+
+    /* */
+
+    test.case = `static : 1`;
+
+    var originalContainer =
+    {
+      f1 : '1',
+      f2 : '2',
+    }
+
+    var prototype = Object.create( Object.prototype );
+    var dstContainer = Object.create( prototype );
+    dstContainer.f1 = '11';
+    dstContainer.f2 = '12';
+
+    var extension =
+    {
+      s : _.define.alias2({ originalContainer, originalName : 'f1', static : 1 }),
+    }
+
+    var keysBefore = _.mapKeys( Object.prototype, { onlyEnumerable : 0, onlyOwn : 0 } );
+    _.construction.extend( dstContainer, extension );
+    var keysAfter = _.mapKeys( Object.prototype, { onlyEnumerable : 0, onlyOwn : 0 } );
+    test.identical( keysAfter, keysBefore );
+
+    var exp =
+    {
+      'f1' : '11',
+      'f2' : '12',
+    }
+    test.identical( _.property.all( dstContainer, { onlyEnumerable : 1 } ), exp );
+
+    test.identical( dstContainer.s, '1' );
+
+    test.true( dstContainer._ === undefined );
+
+    var got = Object.getOwnPropertyDescriptor( prototype, 's' );
+    var exp =
+    {
+      get : got.get,
+      set : got.set,
+      'enumerable' : false,
+      'configurable' : true,
+    }
+    test.identical( got, exp );
+    test.true( _.routineIs( got.get ) );
+    test.true( _.routineIs( got.set ) );
+
+    /* */
+
+    test.case = `polution`;
+
+    var originalContainer =
+    {
+      f1 : '1',
+      f2 : '2',
+    }
+
+    var dstContainer =
+    {
+      f1 : '11',
+      f2 : '12',
+    }
+
+    var extension =
+    {
+      s : _.define.alias2({ originalContainer, originalName : 'f2', static : 1 }),
+    }
+
+    if( Config.debug )
+    {
+      test.shouldThrowErrorSync
+      (
+        () => _.construction.extend( dstContainer, extension ),
+        ( err ) =>
+        {
+          test.identical( err.originalMessage, 'Attempt to polute _global_.Object.prototype' );
+        }
+      );
+    }
+
+    /* */
+
+  }
+
+}
+
+// --
+// define amendment
+// --
+
+function defineExtensionBasic( test )
+{
+
+  /* */
+
+  test.case = 'not typed -> not typed';
+  var Blueprint1 = _.Blueprint
+  ({
+    field1 : 'b1',
+    field2 : 'b1',
+    typed : _.trait.typed( false ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    typed : _.trait.typed( false ),
+    field2 : 'b2',
+    field3 : 'b2',
+    extension : _.define.extension( Blueprint1 ),
+  });
+
+  var exp = { field1 : 'b1', field2 : 'b1', field3 : 'b2' };
+  var instance = Blueprint2.Make();
+  test.identical( instance, exp );
+  test.identical( instance instanceof Blueprint1.Make, false );
+  test.identical( instance instanceof Blueprint2.Make, false );
+
+  /* */
+
+  test.case = 'not typed -> typed';
+  var Blueprint1 = _.Blueprint
+  ({
+    field1 : 'b1',
+    field2 : 'b1',
+    typed : _.trait.typed( false ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field2 : 'b2',
+    field3 : 'b2',
+    extension : _.define.extension( Blueprint1 ),
+  });
+
+  var exp = { field1 : 'b1', field2 : 'b1', field3 : 'b2' };
+  var instance = Blueprint2.Make();
+  test.identical( instance, exp );
+  test.identical( instance instanceof Blueprint1.Make, false );
+  test.identical( instance instanceof Blueprint2.Make, false );
+
+  /* */
+
+  test.case = 'typed -> not typed';
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    typed : _.trait.typed( false ),
+    field2 : 'b2',
+    field3 : 'b2',
+    extension : _.define.extension( Blueprint1 ),
+  });
+
+  var exp = { field1 : 'b1', field2 : 'b1', field3 : 'b2' };
+  var instance = Blueprint2.Make();
+  test.containsOnly( instance, exp );
+  test.identical( instance instanceof Blueprint1.Make, false );
+  test.identical( instance instanceof Blueprint2.Make, true );
+
+  /* */
+
+  test.case = 'typed -> typed';
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field2 : 'b2',
+    field3 : 'b2',
+    extension : _.define.extension( Blueprint1 ),
+  });
+
+  var exp = { field1 : 'b1', field2 : 'b1', field3 : 'b2' };
+  var instance = Blueprint2.Make();
+  test.containsOnly( instance, exp );
+  test.identical( instance instanceof Blueprint1.Make, false );
+  test.identical( instance instanceof Blueprint2.Make, true );
+
+  /* */
+
+}
+
+defineExtensionBasic.description =
+`
+- blueprint extend another blueprint by fields
+- blueprint extend another blueprint by traits
+`
+
+//
+
+function defineSupplementationBasic( test )
+{
+
+  /* */
+
+  test.case = 'not typed -> not typed';
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( false ),
+    field1 : 'b1',
+    field2 : 'b1',
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    typed : _.trait.typed( false ),
+    field2 : 'b2',
+    field3 : 'b2',
+    supplementation : _.define.supplementation( Blueprint1 ),
+  });
+
+  var exp = { field1 : 'b1', field2 : 'b2', field3 : 'b2' };
+  var instance = Blueprint2.Make();
+  test.identical( instance, exp );
+  test.identical( instance instanceof Blueprint1.Make, false );
+  test.identical( instance instanceof Blueprint2.Make, false );
+
+  /* */
+
+  test.case = 'not typed -> typed';
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( false ),
+    field1 : 'b1',
+    field2 : 'b1',
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field2 : 'b2',
+    field3 : 'b2',
+    supplementation : _.define.supplementation( Blueprint1 ),
+  });
+
+  var exp = { field1 : 'b1', field2 : 'b2', field3 : 'b2' };
+  var instance = Blueprint2.Make();
+  test.containsOnly( instance, exp );
+  test.identical( instance instanceof Blueprint1.Make, false );
+  test.identical( instance instanceof Blueprint2.Make, true );
+
+  /* */
+
+  test.case = 'typed -> not typed';
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    typed : _.trait.typed( false ),
+    field2 : 'b2',
+    field3 : 'b2',
+    supplementation : _.define.supplementation( Blueprint1 ),
+  });
+
+  var exp = { field1 : 'b1', field2 : 'b2', field3 : 'b2' };
+  var instance = Blueprint2.Make();
+  test.containsOnly( instance, exp );
+  test.identical( instance instanceof Blueprint1.Make, false );
+  test.identical( instance instanceof Blueprint2.Make, false );
+
+  /* */
+
+  test.case = 'typed -> typed';
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field2 : 'b2',
+    field3 : 'b2',
+    supplementation : _.define.supplementation( Blueprint1 ),
+  });
+
+  var exp = { field1 : 'b1', field2 : 'b2', field3 : 'b2' };
+  var instance = Blueprint2.Make();
+  test.containsOnly( instance, exp );
+  test.identical( instance instanceof Blueprint1.Make, false );
+  test.identical( instance instanceof Blueprint2.Make, true );
+
+  /* */
+
+}
+
+defineSupplementationBasic.description =
+`
+- blueprint supplement another blueprint by fields
+- blueprint supplement another blueprint by traits
+`
+
+//
+
+function defineExtensionOrder( test )
+{
+
+  /* */
+
+  test.case = 'blueprint1'; /* */
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1' ),
+    staticField2 : _.define.static( 'b1' ),
+  });
+
+  var instance = Blueprint1.Make();
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b1',
+    'staticField1' : 'b1',
+    'staticField2' : 'b1',
+  }
+  test.identical( _.property.all( instance ), exp );
+
+  /* */
+
+  test.case = 'extension before';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1' ),
+    staticField2 : _.define.static( 'b1' ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    extension : _.define.extension( Blueprint1 ),
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+  });
+
+  var instance = Blueprint2.Make();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.property.all( instance ), exp );
+
+  /* */
+
+  test.case = 'extension before, extension.blueprintDepthReserve:Infinity';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1' ),
+    staticField2 : _.define.static( 'b1' ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    extension : _.define.extension( Blueprint1, { blueprintDepthReserve : Infinity } ),
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+  });
+
+  var instance = Blueprint2.Make();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField1' : 'b1',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.property.all( instance ), exp );
+
+  /* */
+
+  test.case = 'extension before, static.blueprintDepthReserve:Infinity';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
+    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    extension : _.define.extension( Blueprint1 ),
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+  });
+
+  var instance = Blueprint2.Make();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField1' : 'b1',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.property.all( instance ), exp );
+
+  /* */
+
+  test.case = 'extension after';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1' ),
+    staticField2 : _.define.static( 'b1' ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+    extension : _.define.extension( Blueprint1 ),
+  });
+
+  var instance = Blueprint2.Make();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b1',
+    'field3' : 'b2',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.property.all( instance ), exp );
+
+  /* */
+
+  test.case = 'extension after, field.blueprintDepthLimit:1';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1', { blueprintDepthLimit : 1 } ),
+    staticField2 : _.define.static( 'b1', { blueprintDepthLimit : 1 } ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+    extension : _.define.extension( Blueprint1 ),
+  });
+
+  var instance = Blueprint2.Make();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b1',
+    'field3' : 'b2',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.property.all( instance ), exp );
+
+  /* */
+
+  test.case = 'extension after, field.blueprintDepthReserve:Infinity';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
+    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+    extension : _.define.extension( Blueprint1 ),
+  });
+
+  var instance = Blueprint2.Make();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b1',
+    'field3' : 'b2',
+    'staticField1' : 'b1',
+    'staticField2' : 'b1',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.property.all( instance ), exp );
+
+  /* */
+
+  test.case = 'extension after, field.blueprintDepthReserve:1';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : 1 } ),
+    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : 1 } ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+    extension : _.define.extension( Blueprint1 ),
+  });
+
+  var instance = Blueprint2.Make();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b1',
+    'field3' : 'b2',
+    'staticField1' : 'b1',
+    'staticField2' : 'b1',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.property.all( instance ), exp );
+
+  /* */
+
+  test.case = 'extension after, field.blueprintDepthLimit:0';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1', { blueprintDepthLimit : 0 } ),
+    staticField2 : _.define.static( 'b1', { blueprintDepthLimit : 0 } ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+    extension : _.define.extension( Blueprint1 ),
+  });
+
+  var instance = Blueprint2.Make();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b1',
+    'field3' : 'b2',
+    'staticField1' : 'b1',
+    'staticField2' : 'b1',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.property.all( instance ), exp );
+
+  /* */
+
+  test.case = 'extension after, extension.blueprintDepthReserve:Infinity';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1' ),
+    staticField2 : _.define.static( 'b1' ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+    extension : _.define.extension( Blueprint1, { blueprintDepthReserve : Infinity } ),
+  });
+
+  var instance = Blueprint2.Make();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b1',
+    'field3' : 'b2',
+    'staticField1' : 'b1',
+    'staticField2' : 'b1',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.property.all( instance ), exp );
+
+  /* */
+
+}
+
+defineExtensionOrder.description =
+`
+- order of definition::extension makes difference
+`
+
+//
+
+function defineSupplementationOrder( test )
+{
+
+  /* */
+
+  test.case = 'blueprint1'; /* */
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1' ),
+    staticField2 : _.define.static( 'b1' ),
+  });
+
+  var instance = Blueprint1.Make();
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b1',
+    'staticField1' : 'b1',
+    'staticField2' : 'b1',
+  }
+  test.identical( _.property.all( instance ), exp );
+
+  /* */
+
+  test.case = 'supplementation before';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1' ),
+    staticField2 : _.define.static( 'b1' ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    supplementation : _.define.supplementation( Blueprint1 ),
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+  });
+
+  var instance = Blueprint2.Make();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.property.all( instance ), exp );
+
+  /* */
+
+  test.case = 'supplementation before, supplementation.blueprintDepthReserve:Infinity';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1' ),
+    staticField2 : _.define.static( 'b1' ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    supplementation : _.define.supplementation( Blueprint1, { blueprintDepthReserve : Infinity } ),
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+  });
+
+  var instance = Blueprint2.Make();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField1' : 'b1',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.property.all( instance ), exp );
+
+  /* */
+
+  test.case = 'supplementation before, static.blueprintDepthReserve:Infinity';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
+    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    supplementation : _.define.supplementation( Blueprint1 ),
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+  });
+
+  var instance = Blueprint2.Make();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField1' : 'b1',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.property.all( instance ), exp );
+
+  /* */
+
+  test.case = 'supplementation after';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1' ),
+    staticField2 : _.define.static( 'b1' ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+    supplementation : _.define.supplementation( Blueprint1 ),
+  });
+
+  var instance = Blueprint2.Make();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.property.all( instance ), exp );
+
+  /* */
+
+  test.case = 'supplementation after, field.blueprintDepthLimit:1';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1', { blueprintDepthLimit : 1 } ),
+    staticField2 : _.define.static( 'b1', { blueprintDepthLimit : 1 } ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+    supplementation : _.define.supplementation( Blueprint1 ),
+  });
+
+  var instance = Blueprint2.Make();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.property.all( instance ), exp );
+
+  /* */
+
+  test.case = 'supplementation after, field.blueprintDepthReserve:Infinity';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
+    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+    supplementation : _.define.supplementation( Blueprint1 ),
+  });
+
+  var instance = Blueprint2.Make();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField1' : 'b1',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.property.all( instance ), exp );
+
+  /* */
+
+  test.case = 'supplementation after, field.blueprintDepthReserve:1';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : 1 } ),
+    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : 1 } ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+    supplementation : _.define.supplementation( Blueprint1 ),
+  });
+
+  var instance = Blueprint2.Make();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField1' : 'b1',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.property.all( instance ), exp );
+
+  /* */
+
+  test.case = 'supplementation after, field.blueprintDepthLimit:0';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1', { blueprintDepthLimit : 0 } ),
+    staticField2 : _.define.static( 'b1', { blueprintDepthLimit : 0 } ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+    supplementation : _.define.supplementation( Blueprint1 ),
+  });
+
+  var instance = Blueprint2.Make();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField1' : 'b1',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.property.all( instance ), exp );
+
+  /* */
+
+  test.case = 'supplementation after, supplementation.blueprintDepthReserve:Infinity';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    field1 : 'b1',
+    field2 : 'b1',
+    staticField1 : _.define.static( 'b1' ),
+    staticField2 : _.define.static( 'b1' ),
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    field2 : 'b2',
+    field3 : 'b2',
+    staticField2 : _.define.static( 'b2' ),
+    staticField3 : _.define.static( 'b2' ),
+    supplementation : _.define.supplementation( Blueprint1, { blueprintDepthReserve : Infinity } ),
+  });
+
+  var instance = Blueprint2.Make();
+
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b2',
+    'field3' : 'b2',
+    'staticField1' : 'b1',
+    'staticField2' : 'b2',
+    'staticField3' : 'b2',
+  }
+  test.identical( _.property.all( instance ), exp );
+
+  /* */
+
+}
+
+defineSupplementationOrder.description =
+`
+- order of definition::supplementation makes difference
+`
+
+//
+
+function defineAmendmentOrder( test )
+{
+
+  /* */
+
+  test.case = 'extension';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    field1 : null,
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    typed : _.trait.typed(),
+    prototype : _.trait.prototype( Blueprint1 ),
+    extension : _.define.extension( Blueprint1 ),
+  });
+
+  var Blueprint3 = _.Blueprint
+  ({
+    prototype : _.trait.prototype( Blueprint1 ),
+    extension : _.define.extension( Blueprint1 ),
+    typed : _.trait.typed(),
+  });
+
+  var instance1 = _.blueprint.construct( Blueprint1 );
+  var prototypes1 = _.prototype.each( instance1 );
+  test.identical( prototypes1.length, 1 );
+
+  var instance2 = _.blueprint.construct( Blueprint2 );
+  var prototypes2 = _.prototype.each( instance2 );
+  test.identical( prototypes2.length, 1 );
+
+  var instance3 = _.blueprint.construct( Blueprint3 );
+  var prototypes3 = _.prototype.each( instance3 );
+  test.identical( prototypes3.length, 4 );
+  test.true( prototypes3[ 0 ] === instance3 );
+  test.true( prototypes3[ 1 ] === Blueprint3.Make.prototype );
+  test.true( prototypes3[ 2 ] === Blueprint1.Make.prototype );
+  test.true( prototypes3[ 3 ] === _.Construction.prototype );
+
+  /* */
+
+  test.case = 'supplementation';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    field1 : null,
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    typed : _.trait.typed(),
+    prototype : _.trait.prototype( Blueprint1 ),
+    supplementation : _.define.supplementation( Blueprint1 ),
+  });
+
+  var Blueprint3 = _.Blueprint
+  ({
+    prototype : _.trait.prototype( Blueprint1 ),
+    supplementation : _.define.supplementation( Blueprint1 ),
+    typed : _.trait.typed(),
+  });
+
+  var instance1 = _.blueprint.construct( Blueprint1 );
+  var prototypes1 = _.prototype.each( instance1 );
+  test.identical( prototypes1.length, 1 );
+
+  var instance2 = _.blueprint.construct( Blueprint2 );
+  var prototypes2 = _.prototype.each( instance2 );
+  test.identical( prototypes2.length, 4 );
+  test.true( prototypes2[ 0 ] === instance2 );
+  test.true( prototypes2[ 1 ] === Blueprint2.Make.prototype );
+  test.true( prototypes2[ 2 ] === Blueprint1.Make.prototype );
+  test.true( prototypes2[ 3 ] === _.Construction.prototype );
+
+  var instance3 = _.blueprint.construct( Blueprint3 );
+  var prototypes3 = _.prototype.each( instance3 );
+  test.identical( prototypes3.length, 4 );
+  test.true( prototypes3[ 0 ] === instance3 );
+  test.true( prototypes3[ 1 ] === Blueprint3.Make.prototype );
+  test.true( prototypes3[ 2 ] === Blueprint1.Make.prototype );
+  test.true( prototypes3[ 3 ] === _.Construction.prototype );
+
+  /* */
+
+}
+
+defineAmendmentOrder.description =
+`
+- order of defineProp/traits makes difference
+- typing first and then extending by untyped blueprint produce untyped blueprint
+- extending by untyped blueprint and then typing produce typed blueprint
+- typing first and then supplementing by untyped blueprint produce typed blueprint
+- supplementing by untyped blueprint and then typing produce typed blueprint
+`
+
+//
+
+function defineAmendmentPropInheritance( test )
+{
+
+  /* */
+
+  test.case = 'basic';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    s1 : _.define.prop( '1', { static : 1 } ),
+    f1 : _.define.prop( '1', { static : 0 } ),
+  });
+
+  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([ 'f1', 's1' ]) );
+  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/amending' ) ]), new Set([]) );
+  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 0 );
+
+  var Blueprint2 = _.Blueprint
+  ({
+    s2 : _.define.prop( '2', { static : 1 } ),
+    f2 : _.define.prop( '2', { static : 0 } ),
+    extension : _.define.supplementation( Blueprint1 ),
+  });
+
+  test.identical( new Set([ ... _.mapKeys( Blueprint2._NamedDefinitionsMap ) ]), new Set([ 'f1', 'f2', 's2' ]) );
+  test.identical( new Set([ ... select( Blueprint2._UnnamedDefinitionsArray, '*/amending' ) ]), new Set([ 'supplement' ]) );
+  test.identical( Blueprint2._UnnamedDefinitionsArray.length, 1 );
+
+  var Blueprint3 = _.Blueprint
+  ({
+    s3 : _.define.prop( '3', { static : 1 } ),
+    f3 : _.define.prop( '3', { static : 0 } ),
+    extension : _.define.extension( Blueprint2 ),
+  });
+
+  test.identical( new Set([ ... _.mapKeys( Blueprint3._NamedDefinitionsMap ) ]), new Set([ 'f1', 'f2', 'f3', 's3' ]) );
+  test.identical( new Set([ ... select( Blueprint3._UnnamedDefinitionsArray, '*/amending' ) ]), new Set([ 'extend' ]) );
+  test.identical( Blueprint3._UnnamedDefinitionsArray.length, 1 );
+
+  var instance1 = _.blueprint.construct( Blueprint1 );
+  var exp =
+  {
+    f1 : '1',
+  }
+  test.identical( _.property.all( instance1 ), exp );
+
+  var instance2 = _.blueprint.construct( Blueprint2 );
+  var exp =
+  {
+    f2 : '2',
+    f1 : '1',
+  }
+  test.identical( _.property.all( instance2 ), exp );
+
+  var instance3 = _.blueprint.construct( Blueprint3 );
+  var exp =
+  {
+    f3 : '3',
+    f2 : '2',
+    f1 : '1',
+  }
+  test.identical( _.property.all( instance3 ), exp );
+
+  /* */
+
+}
+
+defineAmendmentPropInheritance.description =
+`
+- amendments are not inheritable, but subdefinitions of such amendments are
+`
+
+// --
+// define etc
+// --
+
+function defineNothing( test )
+{
+
+  /* */
+
+  test.case = 'basic';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    nothing : _.define.nothing(),
+    f1 : '1',
+  });
+
+  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ 'nothing' ]) );
+  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 1 );
+
+  var instance1 = _.blueprint.construct( Blueprint1 );
+  var exp =
+  {
+    f1 : '1',
+  }
+  test.identical( _.property.all( instance1 ), exp );
+
+  /* */
+
+  test.case = 'extension';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    nothing : _.define.nothing(),
+    f1 : '1',
+  });
+  var Blueprint2 = _.Blueprint
+  ({
+    extension : _.define.extension( Blueprint1 ),
+  });
+
+  test.identical( new Set([ ... _.mapKeys( Blueprint2._NamedDefinitionsMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint2._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ 'amend' ]) );
+  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 1 );
+
+  var instance2 = _.blueprint.construct( Blueprint2 );
+  var exp =
+  {
+    f1 : '1',
+  }
+  test.identical( _.property.all( instance1 ), exp );
 
   /* */
 
@@ -5707,6 +8166,416 @@ blueprintInheritWithTrait.description =
 `
 - blueprint inheritance with trait
 `
+
+//
+
+function traitPrototype( test )
+{
+
+  /* */
+
+  test.case = 'with blueprint';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    field1 : null,
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    prototype : _.trait.prototype( Blueprint1 ),
+  });
+
+  var Blueprint3 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    prototype : _.trait.prototype( Blueprint2 ),
+  });
+
+  var instance1 = _.blueprint.construct( Blueprint1 );
+  test.identical( _.prototype.each( instance1 ).length, 1 );
+
+  var instance2 = _.blueprint.construct( Blueprint2 );
+  test.identical( _.prototype.each( instance2 ).length, 4 );
+
+  var instance3 = _.blueprint.construct( Blueprint3 );
+  test.identical( _.prototype.each( instance3 ).length, 5 );
+
+  test.true( _.prototype.each( instance3 )[ 0 ] === instance3 );
+  test.true( _.prototype.each( instance3 )[ 1 ] === Blueprint3.Make.prototype );
+  test.true( _.prototype.each( instance3 )[ 2 ] === Blueprint2.Make.prototype );
+  test.true( _.prototype.each( instance3 )[ 3 ] === Blueprint1.Make.prototype );
+  test.true( _.prototype.each( instance3 )[ 4 ] === _.Construction.prototype );
+
+  /* */
+
+  test.case = 'with blueprint, new:1';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    field1 : null,
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    prototype : _.trait.prototype( Blueprint1 ),
+  });
+
+  var Blueprint3 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    prototype : _.trait.prototype( Blueprint2, { new : 1 } ),
+  });
+
+  var instance1 = _.blueprint.construct( Blueprint1 );
+  test.identical( _.prototype.each( instance1 ).length, 1 );
+
+  var instance2 = _.blueprint.construct( Blueprint2 );
+  test.identical( _.prototype.each( instance2 ).length, 4 );
+
+  var instance3 = _.blueprint.construct( Blueprint3 );
+  test.identical( _.prototype.each( instance3 ).length, 5 );
+
+  test.true( _.prototype.each( instance3 )[ 0 ] === instance3 );
+  test.true( _.prototype.each( instance3 )[ 1 ] === Blueprint3.Make.prototype );
+  test.true( _.prototype.each( instance3 )[ 2 ] === Blueprint2.Make.prototype );
+  test.true( _.prototype.each( instance3 )[ 3 ] === Blueprint1.Make.prototype );
+  test.true( _.prototype.each( instance3 )[ 4 ] === _.Construction.prototype );
+
+  /* */
+
+  test.case = 'with blueprint, new:0';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    field1 : null,
+  });
+
+  var Blueprint2 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    prototype : _.trait.prototype( Blueprint1 ),
+  });
+
+  var Blueprint3 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    prototype : _.trait.prototype( Blueprint2, { new : 0 } ),
+  });
+
+  var instance1 = _.blueprint.construct( Blueprint1 );
+  test.identical( _.prototype.each( instance1 ).length, 1 );
+
+  var instance2 = _.blueprint.construct( Blueprint2 );
+  test.identical( _.prototype.each( instance2 ).length, 4 );
+
+  var instance3 = _.blueprint.construct( Blueprint3 );
+  test.identical( _.prototype.each( instance3 ).length, 4 );
+
+  test.true( _.prototype.each( instance3 )[ 0 ] === instance3 );
+  test.true( _.prototype.each( instance3 )[ 1 ] === Blueprint3.Make.prototype );
+  test.true( _.prototype.each( instance3 )[ 1 ] === Blueprint2.Make.prototype );
+  test.true( _.prototype.each( instance3 )[ 2 ] === Blueprint1.Make.prototype );
+  test.true( _.prototype.each( instance3 )[ 3 ] === _.Construction.prototype );
+
+  /* */
+
+  test.case = 'with object. new:implicit';
+
+  var proto1 = Object.create( null );
+  var proto2 = Object.create( proto1 );
+
+  var Blueprint3 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    prototype : _.trait.prototype( proto2 ),
+  });
+
+  var instance3 = _.blueprint.construct( Blueprint3 );
+  test.identical( _.prototype.each( instance3 ).length, 3 );
+
+  test.true( _.prototype.each( instance3 )[ 0 ] === instance3 );
+  test.true( _.prototype.each( instance3 )[ 1 ] === Blueprint3.Make.prototype );
+  test.true( _.prototype.each( instance3 )[ 1 ] === proto2 );
+  test.true( _.prototype.each( instance3 )[ 2 ] === proto1 );
+
+  /* */
+
+  test.case = 'with object. new:0';
+
+  var proto1 = Object.create( null );
+  var proto2 = Object.create( proto1 );
+
+  var Blueprint3 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    prototype : _.trait.prototype( proto2, { new : 0 } ),
+  });
+
+  var instance3 = _.blueprint.construct( Blueprint3 );
+  test.identical( _.prototype.each( instance3 ).length, 3 );
+
+  test.true( _.prototype.each( instance3 )[ 0 ] === instance3 );
+  test.true( _.prototype.each( instance3 )[ 1 ] === Blueprint3.Make.prototype );
+  test.true( _.prototype.each( instance3 )[ 1 ] === proto2 );
+  test.true( _.prototype.each( instance3 )[ 2 ] === proto1 );
+
+  /* */
+
+  test.case = 'with object. new:1';
+
+  var proto1 = Object.create( null );
+  var proto2 = Object.create( proto1 );
+
+  var Blueprint3 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    prototype : _.trait.prototype( proto2, { new : 1 } ),
+  });
+
+  var instance3 = _.blueprint.construct( Blueprint3 );
+  test.identical( _.prototype.each( instance3 ).length, 4 );
+
+  test.true( _.prototype.each( instance3 )[ 0 ] === instance3 );
+  test.true( _.prototype.each( instance3 )[ 1 ] === Blueprint3.Make.prototype );
+  test.true( _.prototype.each( instance3 )[ 2 ] === proto2 );
+  test.true( _.prototype.each( instance3 )[ 3 ] === proto1 );
+
+  /* */
+
+  test.case = 'with object with constructor immediately. new:implicit';
+
+  var proto1 = Object.create( null );
+  var proto2 = Object.create( proto1 );
+  proto2.constructor = function constr1(){}
+
+  var Blueprint3 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    prototype : _.trait.prototype( proto2 ),
+  });
+
+  var instance3 = _.blueprint.construct( Blueprint3 );
+
+  test.identical( _.prototype.each( instance3 ).length, 3 );
+  test.true( _.prototype.each( instance3 )[ 0 ] === instance3 );
+  test.true( _.prototype.each( instance3 )[ 1 ] === Blueprint3.Make.prototype );
+  test.true( _.prototype.each( instance3 )[ 1 ] === proto2 );
+  test.true( _.prototype.each( instance3 )[ 2 ] === proto1 );
+
+  test.identical( _.prototype.each( Blueprint3.Make ).length, 4 );
+  test.true( _.prototype.each( Blueprint3.Make )[ 0 ] !== proto2.constructor );
+  test.true( _.prototype.each( Blueprint3.Make )[ 1 ] === proto2.constructor );
+  test.true( _.prototype.each( Blueprint3.Make )[ 2 ] === Function.prototype );
+  test.true( _.prototype.each( Blueprint3.Make )[ 3 ] === Object.prototype );
+
+  /* */
+
+  test.case = 'with object with constructor immediately. new:0';
+
+  var proto1 = Object.create( null );
+  var proto2 = Object.create( proto1 );
+  proto2.constructor = function constr1(){}
+
+  var Blueprint3 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    prototype : _.trait.prototype( proto2, { new : 0 } ),
+  });
+
+  var instance3 = _.blueprint.construct( Blueprint3 );
+  test.identical( _.prototype.each( instance3 ).length, 3 );
+
+  test.identical( _.prototype.each( instance3 ).length, 3 );
+  test.true( _.prototype.each( instance3 )[ 0 ] === instance3 );
+  test.true( _.prototype.each( instance3 )[ 1 ] === Blueprint3.Make.prototype );
+  test.true( _.prototype.each( instance3 )[ 1 ] === proto2 );
+  test.true( _.prototype.each( instance3 )[ 2 ] === proto1 );
+
+  test.identical( _.prototype.each( Blueprint3.Make ).length, 4 );
+  test.true( _.prototype.each( Blueprint3.Make )[ 0 ] !== proto2.constructor );
+  test.true( _.prototype.each( Blueprint3.Make )[ 1 ] === proto2.constructor );
+  test.true( _.prototype.each( Blueprint3.Make )[ 2 ] === Function.prototype );
+  test.true( _.prototype.each( Blueprint3.Make )[ 3 ] === Object.prototype );
+
+  /* */
+
+  test.case = 'with object with constructor immediately. new:1';
+
+  var proto1 = Object.create( null );
+  var proto2 = Object.create( proto1 );
+  proto2.constructor = function constr1(){}
+
+  var Blueprint3 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    prototype : _.trait.prototype( proto2, { new : 1 } ),
+  });
+
+  var instance3 = _.blueprint.construct( Blueprint3 );
+
+  test.identical( _.prototype.each( instance3 ).length, 4 );
+  test.true( _.prototype.each( instance3 )[ 0 ] === instance3 );
+  test.true( _.prototype.each( instance3 )[ 1 ] === Blueprint3.Make.prototype );
+  test.true( _.prototype.each( instance3 )[ 2 ] === proto2 );
+  test.true( _.prototype.each( instance3 )[ 3 ] === proto1 );
+
+  test.identical( _.prototype.each( Blueprint3.Make ).length, 4 );
+  test.true( _.prototype.each( Blueprint3.Make )[ 0 ] !== proto2.constructor );
+  test.true( _.prototype.each( Blueprint3.Make )[ 1 ] === proto2.constructor );
+  test.true( _.prototype.each( Blueprint3.Make )[ 2 ] === Function.prototype );
+  test.true( _.prototype.each( Blueprint3.Make )[ 3 ] === Object.prototype );
+
+  /* */
+
+  test.case = 'with object with constructor mediatory. new:implicit';
+
+  var proto1 = Object.create( null );
+  proto1.constructor = function constr1(){}
+  var proto2 = Object.create( proto1 );
+
+  var Blueprint3 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    prototype : _.trait.prototype( proto2 ),
+  });
+
+  var instance3 = _.blueprint.construct( Blueprint3 );
+
+  test.identical( _.prototype.each( instance3 ).length, 3 );
+  test.true( _.prototype.each( instance3 )[ 0 ] === instance3 );
+  test.true( _.prototype.each( instance3 )[ 1 ] === Blueprint3.Make.prototype );
+  test.true( _.prototype.each( instance3 )[ 1 ] === proto2 );
+  test.true( _.prototype.each( instance3 )[ 2 ] === proto1 );
+
+  test.identical( _.prototype.each( Blueprint3.Make ).length, 1 );
+
+  /* */
+
+  test.case = 'with object with constructor mediatory. new:0';
+
+  var proto1 = Object.create( null );
+  proto1.constructor = function constr1(){}
+  var proto2 = Object.create( proto1 );
+
+  var Blueprint3 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    prototype : _.trait.prototype( proto2, { new : 0 } ),
+  });
+
+  var instance3 = _.blueprint.construct( Blueprint3 );
+  test.identical( _.prototype.each( instance3 ).length, 3 );
+
+  test.identical( _.prototype.each( instance3 ).length, 3 );
+  test.true( _.prototype.each( instance3 )[ 0 ] === instance3 );
+  test.true( _.prototype.each( instance3 )[ 1 ] === Blueprint3.Make.prototype );
+  test.true( _.prototype.each( instance3 )[ 1 ] === proto2 );
+  test.true( _.prototype.each( instance3 )[ 2 ] === proto1 );
+
+  test.identical( _.prototype.each( Blueprint3.Make ).length, 1 );
+
+  /* */
+
+  test.case = 'with object with constructor mediatory. new:1';
+
+  var proto1 = Object.create( null );
+  proto1.constructor = function constr1(){}
+  var proto2 = Object.create( proto1 );
+
+  var Blueprint3 = _.Blueprint
+  ({
+    typed : _.trait.typed( true ),
+    prototype : _.trait.prototype( proto2, { new : 1 } ),
+  });
+
+  var instance3 = _.blueprint.construct( Blueprint3 );
+
+  test.identical( _.prototype.each( instance3 ).length, 4 );
+  test.true( _.prototype.each( instance3 )[ 0 ] === instance3 );
+  test.true( _.prototype.each( instance3 )[ 1 ] === Blueprint3.Make.prototype );
+  test.true( _.prototype.each( instance3 )[ 2 ] === proto2 );
+  test.true( _.prototype.each( instance3 )[ 3 ] === proto1 );
+
+  test.identical( _.prototype.each( Blueprint3.Make ).length, 1 );
+
+  /* */
+
+  test.case = 'with null. new:implicit';
+
+  var proto1 = null;
+  var Blueprint3 = _.Blueprint
+  ({
+    typed : _.trait.typed( false ),
+    prototype : _.trait.prototype( proto1 ),
+  });
+
+  var instance3 = _.blueprint.construct( Blueprint3 );
+  test.identical( _.prototype.each( instance3 ).length, 1 );
+
+  test.true( _.prototype.each( instance3 )[ 0 ] === instance3 );
+
+  /* */
+
+  test.case = 'with null. new:0';
+
+  var proto1 = null;
+  var Blueprint3 = _.Blueprint
+  ({
+    typed : _.trait.typed( false ),
+    prototype : _.trait.prototype( proto1, { new : 0 } ),
+  });
+
+  var instance3 = _.blueprint.construct( Blueprint3 );
+  test.identical( _.prototype.each( instance3 ).length, 1 );
+
+  test.true( _.prototype.each( instance3 )[ 0 ] === instance3 );
+
+  /* */
+
+  test.case = 'with null. new:1';
+
+  var proto1 = null;
+  var Blueprint3 = _.Blueprint
+  ({
+    typed : _.trait.typed( false ),
+    prototype : _.trait.prototype( proto1, { new : 1 } ),
+  });
+
+  var instance3 = _.blueprint.construct( Blueprint3 );
+  test.identical( _.prototype.each( instance3 ).length, 1 );
+
+  test.true( _.prototype.each( instance3 )[ 0 ] === instance3 );
+
+  /* */
+
+  test.case = 'prototype null, but typed';
+
+  if( Config.debug )
+  test.shouldThrowErrorSync( () =>
+  {
+    _.Blueprint
+    ({
+      typed : _.trait.typed( true ),
+      prototype : _.trait.prototype( null, { new : 1 } ),
+    });
+  });
+
+  if( Config.debug )
+  test.shouldThrowErrorSync( () =>
+  {
+    _.Blueprint
+    ({
+      typed : _.trait.typed( true ),
+      prototype : _.trait.prototype( null, { new : 0 } ),
+    });
+  });
+
+  /* */
+
+}
 
 //
 
@@ -9400,34 +12269,48 @@ let Self =
     blueprintIsDefinitive,
     blueprintIsRuntime,
 
-    // definition
+    // define
 
-    definitionProp,
-    definitionProps,
-    definitionPropStaticBasic,
-    definitionPropStaticInheritance,
-    definitionPropEnumerable,
-    definitionPropWritable,
-    definitionPropConfigurable,
-    definitionProper,
+    defineProp,
+    defineProps,
+    definePropStaticBasic,
+    definePropStaticInheritance,
+    definePropEnumerable,
+    definePropWritable,
+    definePropConfigurable,
+    defineProper,
 
-    definitionExtensionBasic,
-    definitionSupplementationBasic,
-    definitionExtensionOrder,
-    definitionSupplementationOrder,
-
-    definitionsOrder,
-    defineShallowComplex,
-    defineShallowComplexSourceCode,
+    definePropShallowComplex,
+    definePropShallowComplexSourceCode,
 
     definePropStaticAccessorBasic,
     definePropAccessorBasic,
+    definePropAccessorAlternativeOptions,
+    definePropAccessorStaticNonStatic,
+    definePropAccessorRewriting,
+    definePropAlias2Basic,
+    definePropAlias2OptionOriginalContainer,
+    definePropAlias2ConstructionExtend,
+
+    // define amendment
+
+    defineExtensionBasic,
+    defineSupplementationBasic,
+    defineExtensionOrder,
+    defineSupplementationOrder,
+    defineAmendmentOrder,
+    defineAmendmentPropInheritance,
+
+    // define etc
+
+    defineNothing,
 
     // trait
 
     blueprintInheritManually,
     blueprintInheritWithTrait,
 
+    traitPrototype,
     traitTyped,
     traitName,
     traitWithConstructor,

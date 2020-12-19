@@ -174,8 +174,8 @@ function declare_body( o )
     configurable : !!o.configurable,
   }
 
-  if( o.name === 'f1' )
-  debugger;
+  // if( o.name === 'f1' )
+  // debugger;
 
   if( o.get === false )
   {

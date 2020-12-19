@@ -9,6 +9,15 @@ let _ = _global_.wTools;
 // implementation
 // --
 
+function is( blueprint )
+{
+  if( !blueprint )
+  return false;
+  return _.isPrototypeOf( _.Blueprint.prototype, blueprint );
+}
+
+//
+
 function isDefinitive( blueprint )
 {
   if( !blueprint )
@@ -673,6 +682,7 @@ var BlueprintExtension =
 
   // routines
 
+  is,
   isDefinitive,
   isRuntime,
   isBlueprintOf,

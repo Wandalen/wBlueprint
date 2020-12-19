@@ -121,7 +121,10 @@ function _definitionMake( kind, o )
   if( !o.kind )
   o.kind = kind;
   if( !o.constructionAmend )
-  o.constructionAmend = _.definition._constructionAmendCant;
+  {
+    o.constructionAmend = constructionAmend_functor();
+    // o.constructionAmend = _.definition._constructionAmendCant;
+  }
   if( o.blueprint === undefined )
   o.blueprint = null;
 
@@ -129,6 +132,26 @@ function _definitionMake( kind, o )
 
   Object.preventExtensions( definition );
   return definition;
+
+  function constructionAmend_functor()
+  {
+    return function constructionAmend( dst, key, amend )
+    {
+      let prototype = _.prototype.of( dst );
+      let blueprint = _.blueprint.define
+      ({
+        prototype : prototype ? _.trait.prototype( prototype, { new : 0 } ) : _.define.nothing(),
+        [ key ] : definition,
+      });
+      _.construction._init
+      ({
+        constructing : false,
+        construction : dst,
+        runtime : blueprint.Runtime,
+      });
+    }
+  }
+
 }
 
 // --

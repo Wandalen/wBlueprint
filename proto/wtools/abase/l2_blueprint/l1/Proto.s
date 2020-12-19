@@ -15,6 +15,13 @@ let _ = _global_.wTools;
  * @module Tools/base/Proto
  */
 
+function _of( object )
+{
+  return Object.getPrototypeOf( object );
+}
+
+//
+
 /**
  * Iterate through prototypes.
  * @param {object} proto - prototype
@@ -74,20 +81,17 @@ function hasPrototype( srcProto, insProto )
  * @namespace Tools.prototype
  */
 
-function hasProperty( srcPrototype, names ) /* xxx qqq : names could be only string */
+function hasProperty( srcPrototype, name ) /* yyy qqq : names could be only string */
 {
-  names = _nameFielded( names );
-  _.assert( _.objectIs( srcPrototype ) );
+
+  _.assert( !_.primitiveIs( srcPrototype ) );
+  _.assert( _.strIs( name ) );
 
   do
   {
     let has = true;
-    for( let n in names )
-    if( !_ObjectHasOwnProperty.call( srcPrototype, n ) )
-    {
-      has = false;
-      break;
-    }
+    if( !_ObjectHasOwnProperty.call( srcPrototype, name ) )
+    has = false;
     if( has )
     return srcPrototype;
 
@@ -97,6 +101,29 @@ function hasProperty( srcPrototype, names ) /* xxx qqq : names could be only str
 
   return null;
 }
+
+// {
+//   names = _nameFielded( names );
+//   _.assert( _.objectIs( srcPrototype ) );
+//
+//   do
+//   {
+//     let has = true;
+//     for( let n in names )
+//     if( !_ObjectHasOwnProperty.call( srcPrototype, n ) )
+//     {
+//       has = false;
+//       break;
+//     }
+//     if( has )
+//     return srcPrototype;
+//
+//     srcPrototype = Object.getPrototypeOf( srcPrototype );
+//   }
+//   while( srcPrototype !== Object.prototype && srcPrototype );
+//
+//   return null;
+// }
 
 //
 
@@ -170,6 +197,7 @@ function propertyDescriptorGet( object, name )
 let PrototypeExtension =
 {
 
+  of : _of,
   each,
 
   hasProperty,

@@ -41,9 +41,20 @@ function isInstanceOf( construction, runtime )
   _.assert( arguments.length === 2 );
   _.assert( _.blueprint.isRuntime( runtime ) );
   _.assert( _.boolIs( runtime.Typed ) );
+  _.assert( _.routineIs( runtime.Make ) );
 
-  if( runtime.Typed )
-  return construction instanceof runtime.Make;
+  if( !construction )
+  return false;
+
+  if( _global_.debugger )
+  debugger;
+
+  if( runtime.Typed && runtime.Make.prototype !== null )
+  {
+    // if( !runtime.Make.prototype )
+    // return _.maybe;
+    return construction instanceof runtime.Make;
+  }
 
   if( _.mapIs( construction ) )
   return _.maybe;
@@ -249,7 +260,7 @@ function _retype( construction, runtime, args )
   genesis.construction = construction;
   genesis.args = args;
   genesis.runtime = runtime;
-  genesis.retyping = 1;
+  genesis.constructing = 'retype';
 
   return _.construction._make3( genesis );
 }
@@ -279,7 +290,7 @@ function _make2( construction, runtime, args )
   genesis.construction = construction;
   genesis.args = args;
   genesis.runtime = runtime;
-  genesis.retyping = 0;
+  genesis.constructing = 'allocate';
 
   return _.construction._make3( genesis );
 }
@@ -302,9 +313,9 @@ function _make3( genesis )
   genesis.construction = constructAct();
 
   if( genesis.runtime.Typed )
-  _.assert( genesis.construction instanceof genesis.runtime.Make );
+  _.assert( genesis.runtime.Make.prototype === null || genesis.construction instanceof genesis.runtime.Make );
   else
-  _.assert( !( genesis.construction instanceof genesis.runtime.Make ) );
+  _.assert( genesis.runtime.Make.prototype === null || !( genesis.construction instanceof genesis.runtime.Make ) );
 
   _.construction._init( genesis );
   _.construction._extendArguments( genesis );
@@ -315,20 +326,21 @@ function _make3( genesis )
 
   function constructAct()
   {
-    if( genesis.retyping )
+    if( genesis.constructing === 'retype' )
     return genesis.runtime._RuntimeRoutinesMap.retype( genesis );
-    else
+    else if( genesis.constructing === 'allocate' )
     return genesis.runtime._RuntimeRoutinesMap.allocate( genesis );
+    else _.assert( genesis.constructing === false );
   }
 
 }
 
 _make3.defaults =
 {
+  constructing : null,
   construction : null,
   args : null,
   runtime : null,
-  retyping : 0,
 }
 
 //
@@ -353,9 +365,9 @@ function _init( genesis )
 
 _init.defaults =
 {
+  constructing : null,
   construction : null,
   runtime : null,
-  retyping : 0,
 }
 
 //
@@ -367,10 +379,13 @@ function _initFields( genesis )
   _.assert( _.blueprint.isRuntime( genesis.runtime ) );
   _.assert( arguments.length === 1 );
 
-  if( genesis.retyping )
-  _.mapSupplement( genesis.construction, genesis.runtime.Props );
-  else
+  if( genesis.constructing === 'allocate' )
   _.mapExtend( genesis.construction, genesis.runtime.Props );
+  else if( genesis.constructing === 'retype' )
+  _.mapSupplement( genesis.construction, genesis.runtime.Props );
+  else if( genesis.constructing === false )
+  _.mapSupplement( genesis.construction, genesis.runtime.Props );
+  else _.assert( 0 );
 
   return genesis.construction;
 }
@@ -379,7 +394,7 @@ _initFields.defaults =
 {
   construction : null,
   runtime : null,
-  retyping : 0,
+  constructing : null,
 }
 
 //
@@ -405,7 +420,7 @@ _initDefines.defaults =
 {
   construction : null,
   runtime : null,
-  retyping : 0,
+  constructing : null,
 }
 
 //
@@ -441,7 +456,7 @@ _extendArguments.defaults =
   construction : null,
   args : null,
   runtime : null,
-  retyping : 0,
+  constructing : null,
 }
 
 // --
