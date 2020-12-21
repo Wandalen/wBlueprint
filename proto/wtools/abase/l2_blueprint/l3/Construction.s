@@ -40,14 +40,14 @@ function isInstanceOf( construction, runtime )
 
   _.assert( arguments.length === 2 );
   _.assert( _.blueprint.isRuntime( runtime ) );
-  _.assert( _.boolIs( runtime.Typed ) );
+  _.assert( _.fuzzyLike( runtime.Typed ) );
   _.assert( _.routineIs( runtime.Make ) );
 
   if( !construction )
   return false;
 
-  if( _global_.debugger )
-  debugger;
+  // if( _global_.debugger )
+  // debugger;
 
   if( runtime.Typed && runtime.Make.prototype !== null )
   {
@@ -78,8 +78,9 @@ function amend( o )
     return constructionMapExtend( dstConstruction, src, name );
     else if( _.definitionIs( src ) )
     return constructionDefinitionExtend( dstConstruction, src, name );
-    else if( _.blueprintIs( src ) )
+    else if( _.blueprintIsDefinitive( src ) )
     return constructionBlueprintExtend( dstConstruction, src, name );
+    else _.assert( 0 );
   }
 
   function constructionMapExtend( dstConstruction, map, name )
@@ -105,9 +106,8 @@ function amend( o )
 
   function constructionBlueprintExtend( dstConstruction, blueprint, name )
   {
-    _.assert( !_.blueprint.isDefinitive( dst ) );
-    _.assert( !_.blueprint.isRuntime( dst ) );
-    _.assert( 0, 'not tested' );
+    _.assert( !_.blueprint.is( dstConstruction ) );
+    // _.assert( 0, 'not tested' );
     return blueprint.Retype( dstConstruction );
   }
 
@@ -146,6 +146,46 @@ function supplement( dstConstruction, src )
     src,
     amending : 'supplement'
   });
+}
+
+//
+
+function _amendDefinitionWithoutMethod( o )
+{
+
+  _.assertMapHasAll( o, _amendDefinitionWithoutMethod.defaults );
+  _.assert( _.strIs( o.key ) || _.symbolIs( o.key ) );
+  _.assert( _.definitionIs( o.definition ) );
+  _.assert( _.longHas( [ 'supplement', 'extend' ], o.amend ) );
+
+  if( o.amend === 'supplement' )
+  {
+    /* xxx qqq : cover */
+    if( Object.hasOwnProperty.call( o.construction, o.key && o.construction[ o.key ] !== undefined ) )
+    return;
+  }
+
+  let prototype = _.prototype.of( o.construction );
+  let blueprint = _.blueprint.define
+  ({
+    prototype : prototype ? _.trait.prototype( prototype, { new : 0 } ) : _.define.nothing(),
+    [ o.key ] : o.definition,
+  });
+  _.construction._init
+  ({
+    constructing : false,
+    construction : o.construction,
+    runtime : blueprint.Runtime,
+  });
+
+}
+
+_amendDefinitionWithoutMethod.defaults =
+{
+  construction : null,
+  definition : null,
+  key : null,
+  amend : null,
 }
 
 //
@@ -308,13 +348,13 @@ function _make3( genesis )
   _.assert( _.arrayLike( genesis.args ) );
   _.assert( genesis.args.length === 0 || genesis.args.length === 1 );
   _.assert( arguments.length === 1 );
-  _.assert( _.boolIs( genesis.runtime.Typed ) );
+  _.assert( _.fuzzyIs( genesis.runtime.Typed ) );
 
   genesis.construction = constructAct();
 
-  if( genesis.runtime.Typed )
+  if( genesis.runtime.Typed === true )
   _.assert( genesis.runtime.Make.prototype === null || genesis.construction instanceof genesis.runtime.Make );
-  else
+  else if( genesis.runtime.Typed === false )
   _.assert( genesis.runtime.Make.prototype === null || !( genesis.construction instanceof genesis.runtime.Make ) );
 
   _.construction._init( genesis );
@@ -484,6 +524,7 @@ var ConstructionExtension =
   amend,
   extend,
   supplement,
+  _amendDefinitionWithoutMethod,
 
   _make,
   _makeEach,

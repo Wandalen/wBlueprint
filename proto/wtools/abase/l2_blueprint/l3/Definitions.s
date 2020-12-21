@@ -59,8 +59,8 @@ function _singleArgumentHead( routine, args )
   o = _.routineOptions( routine, o );
 
   _.assert( arguments.length === 2 );
-  _.assert( args.length === 1 );
-  _.assert( _.mapIs( args[ 0 ] ) );
+  _.assert( args.length === 0 || args.length === 1 );
+  _.assert( _.mapIs( o ) );
 
   return o;
 }
@@ -751,17 +751,17 @@ _.routineEr( _statics, _singleArgumentHead );
 
 //
 
-function nothing_head( routine, args )
-{
-  let o = args[ 0 ];
-
-  o = _.routineOptions( routine, o );
-
-  _.assert( arguments.length === 2 );
-  _.assert( args.length === 0 || args.length === 1 );
-
-  return o;
-}
+// function nothing_head( routine, args )
+// {
+//   let o = args[ 0 ];
+//
+//   o = _.routineOptions( routine, o );
+//
+//   _.assert( arguments.length === 2 );
+//   _.assert( args.length === 0 || args.length === 1 );
+//
+//   return o;
+// }
 
 function nothing_body( o )
 {
@@ -792,12 +792,11 @@ function nothing_body( o )
 nothing_body.defaults =
 {
   ... PropOptionsLogic,
-  // blueprintDepthReserve : -1,
-  // blueprintDepthLimit : 1,
-  /* yyy : use PropOptionsLogic? */
+  blueprintDepthReserve : -1,
+  blueprintDepthLimit : 1,
 }
 
-let nothing = _.routineUnite( nothing_head, nothing_body );
+let nothing = _.routineUnite( _singleArgumentHead, nothing_body );
 
 //
 
@@ -1023,62 +1022,62 @@ let _constant = _constant_functor();
 //   val : null,
 // }
 
+// //
+//
+// function alias_body( o ) /* xxx : replace by alias */
+// {
+//
+//   _.assertRoutineOptions( alias_body, arguments );
+//
+//   o.definitionGroup = 'definition.named';
+//   o.constructionAmend = constructionAmend;
+//   o.blueprintForm2 = blueprintForm2;
+//   o.blueprint = false;
+//
+//   let originalContainer = o.originalContainer;
+//   let originalName = o.originalName;
+//
+//   _.assert( originalContainer === null || !!originalContainer );
+//   _.assert( _.strDefined( originalName ) );
+//
+//   let definition = _.definition._definitionMake( o.amending, o );
+//   Object.freeze( definition );
+//   return definition;
+//
+//   function constructionInit( genesis )
+//   {
+//     let originalContainer2 = originalContainer || genesis.construction;
+//     Object.defineProperty( o.blueprint.Make, o.name, opts );
+//     debugger;
+//     _.assert( 0, 'not implemented' ); /* zzz */
+//   }
+//
+//   function constructionAmend( construction, key )
+//   {
+//     _.assert( 0, 'not implemented' ); /* zzz */
+//   }
+//
+//   function blueprintForm2( blueprint, name )
+//   {
+//     let definition = this;
+//     blueprint = op.blueprint;
+//     _.blueprint._routineAdd( blueprint, 'constructionInit', constructionInit );
+//   }
+//
+// }
+//
+// alias_body.defaults =
+// {
+//   originalContainer : null,
+//   originalName : null,
+// }
+//
+// let alias = _.routineUnite( _singleArgumentHead, alias_body );
+// _.routineEr( alias );
+
 //
 
-function alias_body( o ) /* xxx : replace by alias2 */
-{
-
-  _.assertRoutineOptions( alias_body, arguments );
-
-  o.definitionGroup = 'definition.named';
-  o.constructionAmend = constructionAmend;
-  o.blueprintForm2 = blueprintForm2;
-  o.blueprint = false;
-
-  let originalContainer = o.originalContainer;
-  let originalName = o.originalName;
-
-  _.assert( originalContainer === null || !!originalContainer );
-  _.assert( _.strDefined( originalName ) );
-
-  let definition = _.definition._definitionMake( o.amending, o );
-  Object.freeze( definition );
-  return definition;
-
-  function constructionInit( genesis )
-  {
-    let originalContainer2 = originalContainer || genesis.construction;
-    Object.defineProperty( o.blueprint.Make, o.name, opts );
-    debugger;
-    _.assert( 0, 'not implemented' ); /* zzz */
-  }
-
-  function constructionAmend( construction, key )
-  {
-    _.assert( 0, 'not implemented' ); /* zzz */
-  }
-
-  function blueprintForm2( blueprint, name )
-  {
-    let definition = this;
-    blueprint = op.blueprint;
-    _.blueprint._routineAdd( blueprint, 'constructionInit', constructionInit );
-  }
-
-}
-
-alias_body.defaults =
-{
-  originalContainer : null,
-  originalName : null,
-}
-
-let alias = _.routineUnite( _singleArgumentHead, alias_body );
-_.routineEr( alias );
-
-//
-
-function alias2_head( routine, args )
+function alias_head( routine, args )
 {
   let o = args[ 0 ];
 
@@ -1090,10 +1089,10 @@ function alias2_head( routine, args )
   return _.define.prop.head( routine, [ undefined, o ] );
 }
 
-function alias2_body( o ) /* xxx : finish */
+function alias_body( o ) /* xxx : finish */
 {
 
-  _.assertRoutineOptions( alias2_body, arguments );
+  _.assertRoutineOptions( alias_body, arguments );
 
   let originalContainer = o.originalContainer;
   let originalName = o.originalName;
@@ -1148,15 +1147,15 @@ function alias2_body( o ) /* xxx : finish */
 
 }
 
-alias2_body.defaults =
+alias_body.defaults =
 {
   ... _.mapBut( prop.defaults, { methods : null, val : null } ),
   originalContainer : null,
   originalName : null,
 }
 
-let alias2 = _.routineUnite( alias2_head, alias2_body );
-_.routineEr( alias2 );
+let alias = _.routineUnite( alias_head, alias_body );
+_.routineEr( alias );
 
 // --
 //
@@ -1210,8 +1209,8 @@ let DefineExtension =
   inherit,
 
   constant : _constant,
+  // alias,
   alias,
-  alias2,
 
 }
 

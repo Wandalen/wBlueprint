@@ -59,20 +59,35 @@ function typed( o )
   o = { val : arguments[ 0 ] };
   _.routineOptions( typed, o );
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.boolLike( o.val ) );
+  _.assert( _.fuzzyLike( o.val ) );
 
+  if( _.boolLike( o.val ) )
   o.val = !!o.val;
+  o.constructionAmend = constructionAmend;
   o.blueprintForm2 = blueprintForm2;
   o.blueprint = false;
+
+  const val = o.val;
+  const allocate = o.val ? allocateTyped : allocateUntyped;
+  const retype = o.val ? retypeTyped : retypeUntyped;
 
   return _.definition._traitMake( 'typed', o );
 
   /* */
 
+  function constructionAmend( construction, key )
+  {
+    debugger; xxx
+    if( val )
+    retype({ construction });
+  }
+
   function blueprintForm2( blueprint )
   {
 
-    _.assert( _.boolIs( blueprint.Traits.typed.val ) );
+    _.assert( blueprint.Traits.typed.val === val );
+    _.assert( _.fuzzyIs( blueprint.Traits.typed.val ) );
+    _.assert( blueprint.Typed === blueprint.Traits.typed.val );
 
     _.blueprint._routineAdd( blueprint, 'allocate', blueprint.Traits.typed.val ? allocateTyped : allocateUntyped );
     _.blueprint._routineAdd( blueprint, 'retype', blueprint.Traits.typed.val ? retypeTyped : retypeUntyped );
@@ -81,6 +96,8 @@ function typed( o )
 
   function allocateTyped( genesis )
   {
+    if( _global_.debugger )
+    debugger;
     if( genesis.construction === null )
     genesis.construction = new( _.constructorJoin( genesis.runtime.Make, [] ) );
     _.assert( genesis.construction === null || !genesis.runtime.Make.prototype || genesis.construction instanceof genesis.runtime.Make );
@@ -89,6 +106,8 @@ function typed( o )
 
   function allocateUntyped( genesis )
   {
+    if( _global_.debugger )
+    debugger;
     if( genesis.construction && genesis.construction instanceof genesis.runtime.Make )
     genesis.construction = Object.create( null );
     else if( genesis.construction === null )
@@ -100,24 +119,31 @@ function typed( o )
 
   function retypeTyped( genesis )
   {
+    if( _global_.debugger )
+    debugger;
     if( genesis.construction )
     {
       if( !genesis.construction || !( genesis.construction instanceof genesis.runtime.Make ) )
+      if( genesis.runtime.Typed !== _.maybe )
       Object.setPrototypeOf( genesis.construction, genesis.runtime.Make.prototype );
     }
     else if( genesis.construction === null )
     {
       genesis.construction = new( _.constructorJoin( genesis.runtime.Make, [] ) );
     }
-    _.assert( genesis.construction instanceof genesis.runtime.Make );
+    _.assert( genesis.runtime.Typed === _.maybe || genesis.construction instanceof genesis.runtime.Make );
     return genesis.construction;
   }
 
   function retypeUntyped( genesis )
   {
+    if( _global_.debugger )
+    debugger;
     if( genesis.construction )
     {
-      if( Object.getPrototypeOf( genesis.construction ) !== null )
+      let wasProto = Object.getPrototypeOf( genesis.construction );
+      if( wasProto !== null && wasProto !== Object.prototype )
+      if( genesis.runtime.Typed !== _.maybe )
       Object.setPrototypeOf( genesis.construction, null );
     }
     else if( genesis.construction === null )
@@ -125,7 +151,7 @@ function typed( o )
       genesis.construction = Object.create( null );
     }
     _.assert( _.mapIs( genesis.construction ) );
-    _.assert( !( genesis.construction instanceof genesis.runtime.Make ) );
+    _.assert( genesis.runtime.Typed === _.maybe || !( genesis.construction instanceof genesis.runtime.Make ) );
     return genesis.construction;
   }
 

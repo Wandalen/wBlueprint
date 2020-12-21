@@ -95,11 +95,21 @@ function define()
     });
   }
 
+  // let defaultSupplement =
+  // {
+  //   extendable : _.trait.extendable( false ),
+  //   typed : _.trait.typed( false ),
+  // }
+
   let defaultSupplement =
-  {
-    extendable : _.trait.extendable( false ),
-    typed : _.trait.typed( false ),
-  }
+  [
+    _.trait.extendable( false ),
+    _.trait.typed( false ),
+  ]
+
+  if( _global_.debugger )
+  debugger;
+
   _.blueprint._supplement( blueprint, defaultSupplement );
 
   _.blueprint._associateDefinitions( blueprint );
@@ -525,7 +535,7 @@ function _validate( blueprint )
     _.routineIs( blueprint._RuntimeRoutinesMap.retype )
     , `Each blueprint should have handler::retype, but definition::${blueprint.name} does not have`
   );
-  _.assert( blueprint.Traits.typed ? blueprint.Typed === !!blueprint.Traits.typed.val : true );
+  _.assert( blueprint.Traits.typed ? blueprint.Typed === blueprint.Traits.typed.val : true );
 }
 
 //

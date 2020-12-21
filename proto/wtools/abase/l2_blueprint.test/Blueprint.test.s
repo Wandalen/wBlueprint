@@ -5174,9 +5174,11 @@ function definePropAccessorRewriting( test )
 
 }
 
-//
+// --
+// alias
+// --
 
-function definePropAlias2Basic( test )
+function definePropAliasBasic( test )
 {
 
   /* */
@@ -5187,10 +5189,10 @@ function definePropAlias2Basic( test )
     typed : _.trait.typed( true ),
     f1 : '1',
     s1 : _.define.prop( '1', { static : 1, enumerable : 1 } ),
-    af1p : _.define.alias2({ originalName : 'f1', static : 0, enumerable : 1 }),
-    af1s : _.define.alias2({ originalName : 'f1', static : 1, enumerable : 1 }),
-    as1p : _.define.alias2({ originalName : 's1', static : 0, enumerable : 1 }),
-    as1s : _.define.alias2({ originalName : 's1', static : 1, enumerable : 1 }),
+    af1p : _.define.alias({ originalName : 'f1', static : 0, enumerable : 1 }),
+    af1s : _.define.alias({ originalName : 'f1', static : 1, enumerable : 1 }),
+    as1p : _.define.alias({ originalName : 's1', static : 0, enumerable : 1 }),
+    as1s : _.define.alias({ originalName : 's1', static : 1, enumerable : 1 }),
   });
 
   var instance1 = Blueprint1.Make();
@@ -5206,10 +5208,6 @@ function definePropAlias2Basic( test )
   test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
 
   test.true( instance1._ === undefined );
-  // var exp =
-  // {
-  // }
-  // test.identical( _.property.all( instance1._ ), exp );
 
   var exp =
   {
@@ -5327,10 +5325,6 @@ function definePropAlias2Basic( test )
   test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
 
   test.true( instance1._ === undefined );
-  // var exp =
-  // {
-  // }
-  // test.identical( _.property.all( instance1._ ), exp );
 
   test.description = 'set af1p'; /* */
   instance1.af1p = 'af1p';
@@ -5346,10 +5340,6 @@ function definePropAlias2Basic( test )
   }
   test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
 
-  // var exp =
-  // {
-  // }
-  // test.identical( _.property.all( instance1._ ), exp );
   test.true( instance1._ === undefined );
 
   test.description = 'set af1s'; /* */
@@ -5366,16 +5356,8 @@ function definePropAlias2Basic( test )
   }
   test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
 
-  // var exp =
-  // {
-  // }
-  // test.identical( _.property.own( instance1._ ), exp );
   test.true( instance1._ === undefined );
 
-  // var exp =
-  // {
-  // }
-  // test.identical( _.property.own( Blueprint1.prototype._ ), exp );
   test.true( Blueprint1.prototype._ === undefined );
 
   test.description = 'set s1'; /* */
@@ -5392,10 +5374,6 @@ function definePropAlias2Basic( test )
   };
   test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
 
-  // var exp =
-  // {
-  // }
-  // test.identical( _.property.all( instance1._ ), exp );
   test.true( instance1._ === undefined );
 
   test.description = 'set as1p'; /* */
@@ -5412,10 +5390,6 @@ function definePropAlias2Basic( test )
   }
   test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
 
-  // var exp =
-  // {
-  // }
-  // test.identical( _.property.all( instance1._ ), exp );
   test.true( instance1._ === undefined );
 
   test.description = 'set as1s'; /* */
@@ -5432,10 +5406,6 @@ function definePropAlias2Basic( test )
   }
   test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
 
-  // var exp =
-  // {
-  // }
-  // test.identical( _.property.all( instance1._ ), exp );
   test.true( instance1._ === undefined );
 
   /* */
@@ -5446,10 +5416,10 @@ function definePropAlias2Basic( test )
     typed : _.trait.typed( false ),
     f1 : '1',
     s1 : _.define.prop( '1', { static : 1, enumerable : 1 } ),
-    af1p : _.define.alias2({ originalName : 'f1', static : 0, enumerable : 1 }),
-    af1s : _.define.alias2({ originalName : 'f1', static : 1, enumerable : 1 }),
-    as1p : _.define.alias2({ originalName : 's1', static : 0, enumerable : 1 }),
-    as1s : _.define.alias2({ originalName : 's1', static : 1, enumerable : 1 }),
+    af1p : _.define.alias({ originalName : 'f1', static : 0, enumerable : 1 }),
+    af1s : _.define.alias({ originalName : 'f1', static : 1, enumerable : 1 }),
+    as1p : _.define.alias({ originalName : 's1', static : 0, enumerable : 1 }),
+    as1s : _.define.alias({ originalName : 's1', static : 1, enumerable : 1 }),
   });
 
   var instance1 = Blueprint1.Make();
@@ -5461,10 +5431,6 @@ function definePropAlias2Basic( test )
   }
   test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
 
-  // var exp =
-  // {
-  // }
-  // test.identical( _.property.all( instance1._ ), exp );
   test.true( instance1._ === undefined );
 
   var exp =
@@ -5576,10 +5542,6 @@ function definePropAlias2Basic( test )
   }
   test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
 
-  // var exp =
-  // {
-  // }
-  // test.identical( _.property.all( instance1._ ), exp );
   test.true( instance1._ === undefined );
 
   test.description = 'set af1p'; /* */
@@ -5593,10 +5555,6 @@ function definePropAlias2Basic( test )
   }
   test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
 
-  // var exp =
-  // {
-  // }
-  // test.identical( _.property.all( instance1._ ), exp );
   test.true( instance1._ === undefined );
 
   test.description = 'set af1s'; /* */
@@ -5610,10 +5568,6 @@ function definePropAlias2Basic( test )
   }
   test.identical( _.property.of( instance1, { onlyOwn : 0 } ), exp );
 
-  // var exp =
-  // {
-  // }
-  // test.identical( _.property.all( instance1._ ), exp );
   test.true( instance1._ === undefined );
 
   test.description = 'set s1'; /* */
@@ -5630,7 +5584,6 @@ function definePropAlias2Basic( test )
   var exp =
   {
   }
-  // test.identical( _.property.all( instance1._ ), exp );
   test.true( instance1._ === undefined );
 
   test.description = 'set as1p'; /* */
@@ -5647,7 +5600,6 @@ function definePropAlias2Basic( test )
   var exp =
   {
   }
-  // test.identical( _.property.all( instance1._ ), exp );
   test.true( instance1._ === undefined );
 
   test.description = 'set as1s'; /* */
@@ -5664,7 +5616,6 @@ function definePropAlias2Basic( test )
   var exp =
   {
   }
-  // test.identical( _.property.all( instance1._ ), exp );
   test.true( instance1._ === undefined );
 
   /* */
@@ -5675,10 +5626,10 @@ function definePropAlias2Basic( test )
     typed : _.trait.typed( true ),
     f1 : '1',
     s1 : _.define.prop( '1', { static : 1 } ),
-    af1p : _.define.alias2({ originalName : 'f1', static : 0 }),
-    af1s : _.define.alias2({ originalName : 'f1', static : 1 }),
-    as1p : _.define.alias2({ originalName : 's1', static : 0 }),
-    as1s : _.define.alias2({ originalName : 's1', static : 1 }),
+    af1p : _.define.alias({ originalName : 'f1', static : 0 }),
+    af1s : _.define.alias({ originalName : 'f1', static : 1 }),
+    as1p : _.define.alias({ originalName : 's1', static : 0 }),
+    as1s : _.define.alias({ originalName : 's1', static : 1 }),
   });
 
   var instance1 = Blueprint1.Make();
@@ -5693,7 +5644,6 @@ function definePropAlias2Basic( test )
   var exp =
   {
   }
-  // test.identical( _.property.all( instance1._ ), exp );
   test.true( instance1._ === undefined );
 
   var exp =
@@ -5800,7 +5750,7 @@ function definePropAlias2Basic( test )
 
 //
 
-function definePropAlias2OptionOriginalContainer( test )
+function definePropAliasOptionOriginalContainer( test )
 {
 
   act({ set : true });
@@ -5822,8 +5772,8 @@ function definePropAlias2OptionOriginalContainer( test )
     var Blueprint1 = _.Blueprint
     ({
       typed : _.trait.typed( true ),
-      p : _.define.alias2({ originalContainer, originalName : 'f1', static : 0, set : tops.set }),
-      s : _.define.alias2({ originalContainer, originalName : 'f2', static : 1, set : tops.set }),
+      p : _.define.alias({ originalContainer, originalName : 'f1', static : 0, set : tops.set }),
+      s : _.define.alias({ originalContainer, originalName : 'f2', static : 1, set : tops.set }),
     });
 
     var instance1 = Blueprint1.Make();
@@ -5914,8 +5864,8 @@ function definePropAlias2OptionOriginalContainer( test )
     var Blueprint1 = _.Blueprint
     ({
       typed : _.trait.typed( true ),
-      p : _.define.alias2({ originalContainer, originalName : 'f1', static : 0, set : tops.set }),
-      s : _.define.alias2({ originalContainer, originalName : 'f2', static : 1, set : tops.set }),
+      p : _.define.alias({ originalContainer, originalName : 'f1', static : 0, set : tops.set }),
+      s : _.define.alias({ originalContainer, originalName : 'f2', static : 1, set : tops.set }),
     });
 
     var instance1 = Blueprint1.Make();
@@ -5982,8 +5932,8 @@ function definePropAlias2OptionOriginalContainer( test )
     var Blueprint1 = _.Blueprint
     ({
       typed : _.trait.typed( true ),
-      p : _.define.alias2({ originalContainer, originalName : 'f1', static : 0, set : tops.set }),
-      s : _.define.alias2({ originalContainer, originalName : 'f2', static : 1, set : tops.set }),
+      p : _.define.alias({ originalContainer, originalName : 'f1', static : 0, set : tops.set }),
+      s : _.define.alias({ originalContainer, originalName : 'f2', static : 1, set : tops.set }),
     });
 
     var instance1 = Blueprint1.Make();
@@ -6050,8 +6000,8 @@ function definePropAlias2OptionOriginalContainer( test )
     var Blueprint1 = _.Blueprint
     ({
       typed : _.trait.typed( false ),
-      p : _.define.alias2({ originalContainer, originalName : 'f1', static : 0, set : tops.set }),
-      s : _.define.alias2({ originalContainer, originalName : 'f2', static : 1, set : tops.set }),
+      p : _.define.alias({ originalContainer, originalName : 'f1', static : 0, set : tops.set }),
+      s : _.define.alias({ originalContainer, originalName : 'f2', static : 1, set : tops.set }),
     });
 
     var instance1 = Blueprint1.Make();
@@ -6142,8 +6092,8 @@ function definePropAlias2OptionOriginalContainer( test )
     var Blueprint1 = _.Blueprint
     ({
       typed : _.trait.typed( false ),
-      p : _.define.alias2({ originalContainer, originalName : 'f1', static : 0, set : tops.set }),
-      s : _.define.alias2({ originalContainer, originalName : 'f2', static : 1, set : tops.set }),
+      p : _.define.alias({ originalContainer, originalName : 'f1', static : 0, set : tops.set }),
+      s : _.define.alias({ originalContainer, originalName : 'f2', static : 1, set : tops.set }),
     });
 
     var instance1 = Blueprint1.Make();
@@ -6198,8 +6148,8 @@ function definePropAlias2OptionOriginalContainer( test )
     var Blueprint1 = _.Blueprint
     ({
       typed : _.trait.typed( false ),
-      p : _.define.alias2({ originalContainer, originalName : 'f1', static : 0, set : tops.set }),
-      s : _.define.alias2({ originalContainer, originalName : 'f2', static : 1, set : tops.set }),
+      p : _.define.alias({ originalContainer, originalName : 'f1', static : 0, set : tops.set }),
+      s : _.define.alias({ originalContainer, originalName : 'f2', static : 1, set : tops.set }),
     });
 
     var instance1 = Blueprint1.Make();
@@ -6246,7 +6196,7 @@ function definePropAlias2OptionOriginalContainer( test )
 
 //
 
-function definePropAlias2ConstructionExtend( test )
+function definePropAliasConstructionExtendWithDefinition( test )
 {
 
   act({});
@@ -6272,7 +6222,7 @@ function definePropAlias2ConstructionExtend( test )
 
     var extension =
     {
-      p : _.define.alias2({ originalContainer, originalName : 'f1', static : 0 }),
+      p : _.define.alias({ originalContainer, originalName : 'f1', static : 0 }),
     }
 
     var keysBefore = _.mapKeys( _.prototype.of( dstContainer ), { onlyEnumerable : 0, onlyOwn : 0 } );
@@ -6318,7 +6268,7 @@ function definePropAlias2ConstructionExtend( test )
 
     var extension =
     {
-      s : _.define.alias2({ originalContainer, originalName : 'f1', static : 1 }),
+      s : _.define.alias({ originalContainer, originalName : 'f1', static : 1 }),
     }
 
     var keysBefore = _.mapKeys( Object.prototype, { onlyEnumerable : 0, onlyOwn : 0 } );
@@ -6361,13 +6311,11 @@ function definePropAlias2ConstructionExtend( test )
 
     var dstContainer =
     {
-      f1 : '11',
-      f2 : '12',
     }
 
     var extension =
     {
-      s : _.define.alias2({ originalContainer, originalName : 'f2', static : 1 }),
+      s : _.define.alias({ originalContainer, originalName : 'f2', static : 1 }),
     }
 
     if( Config.debug )
@@ -6381,6 +6329,135 @@ function definePropAlias2ConstructionExtend( test )
         }
       );
     }
+
+    /* */
+
+  }
+
+}
+
+//
+
+function definePropAliasConstructionExtendWithBlueprint( test )
+{
+
+  act({});
+
+  function act( tops )
+  {
+
+    /* */
+
+    test.case = `static : 0`;
+
+    var originalContainer =
+    {
+      f1 : '1',
+      f2 : '2',
+    }
+
+    var dstContainer =
+    {
+      f1 : '11',
+      f2 : '12',
+    }
+
+    var extension = _.Blueprint
+    ({
+      p : _.define.alias({ originalContainer, originalName : 'f1', static : 0 }),
+    });
+
+    var keysBefore = _.mapKeys( _.prototype.of( dstContainer ), { onlyEnumerable : 0, onlyOwn : 0 } );
+    _.construction.extend( dstContainer, extension );
+    var keysAfter = _.mapKeys( _.prototype.of( dstContainer ), { onlyEnumerable : 0, onlyOwn : 0 } );
+    test.identical( keysAfter, keysBefore );
+
+    var exp =
+    {
+      'f1' : '11',
+      'f2' : '12',
+      'p' : '1',
+    }
+    test.identical( dstContainer, exp );
+    test.true( dstContainer._ === undefined );
+
+    var got = Object.getOwnPropertyDescriptor( dstContainer, 'p' );
+    var exp =
+    {
+      get : got.get,
+      set : got.set,
+      'enumerable' : true,
+      'configurable' : true,
+    }
+    test.identical( got, exp );
+    test.true( _.routineIs( got.get ) );
+    test.true( _.routineIs( got.set ) );
+
+    /* */
+
+    test.case = `static : 1`;
+
+    var originalContainer =
+    {
+      f1 : '1',
+      f2 : '2',
+    }
+
+    var prototype = Object.create( Object.prototype );
+    var dstContainer = Object.create( prototype );
+    dstContainer.f1 = '11';
+    dstContainer.f2 = '12';
+
+    var extension = _.Blueprint
+    ({
+      s : _.define.alias({ originalContainer, originalName : 'f1', static : 1 }),
+    })
+
+    var keysBefore = _.mapKeys( Object.prototype, { onlyEnumerable : 0, onlyOwn : 0 } );
+    _.construction.extend( dstContainer, extension );
+    var keysAfter = _.mapKeys( Object.prototype, { onlyEnumerable : 0, onlyOwn : 0 } );
+    test.identical( keysAfter, keysBefore );
+
+    var exp =
+    {
+      'f1' : '11',
+      'f2' : '12',
+    }
+    test.identical( _.property.all( dstContainer, { onlyEnumerable : 1 } ), exp );
+
+    test.identical( dstContainer.s, undefined );
+    test.identical( extension.prototype.s, '1' );
+
+    test.true( dstContainer._ === undefined );
+
+    /* */
+
+    test.case = `static : 1, impure, no pollution`;
+
+    var originalContainer =
+    {
+      f1 : '1',
+      f2 : '2',
+    }
+
+    var dstContainer =
+    {
+      f1 : '11',
+      f2 : '12',
+    }
+
+    var extension = _.Blueprint
+    ({
+      s : _.define.alias({ originalContainer, originalName : 'f2', static : 1 }),
+    });
+
+    var keysBefore = _.mapKeys( Object.prototype, { onlyEnumerable : 0, onlyOwn : 0 } );
+    _.construction.extend( dstContainer, extension );
+    var keysAfter = _.mapKeys( Object.prototype, { onlyEnumerable : 0, onlyOwn : 0 } );
+    test.identical( keysAfter, keysBefore );
+
+    test.identical( dstContainer.s, undefined );
+    test.identical( extension.prototype.s, '2' );
 
     /* */
 
@@ -7501,6 +7578,7 @@ function defineNothing( test )
     f1 : '1',
   });
 
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
   test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
   test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ 'nothing' ]) );
   test.identical( Blueprint1._UnnamedDefinitionsArray.length, 1 );
@@ -7511,6 +7589,8 @@ function defineNothing( test )
     f1 : '1',
   }
   test.identical( _.property.all( instance1 ), exp );
+  test.true( !Object.isExtensible( instance1 ) );
+  test.true( _.mapIs( instance1 ) );
 
   /* */
 
@@ -7526,7 +7606,8 @@ function defineNothing( test )
     extension : _.define.extension( Blueprint1 ),
   });
 
-  test.identical( new Set([ ... _.mapKeys( Blueprint2._NamedDefinitionsMap ) ]), new Set([]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
   test.identical( new Set([ ... select( Blueprint2._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ 'amend' ]) );
   test.identical( Blueprint1._UnnamedDefinitionsArray.length, 1 );
 
@@ -7536,6 +7617,408 @@ function defineNothing( test )
     f1 : '1',
   }
   test.identical( _.property.all( instance1 ), exp );
+  test.true( !Object.isExtensible( instance1 ) );
+  test.true( _.mapIs( instance1 ) );
+
+  /* */
+
+}
+
+//
+
+function constructionExtendWithBlueprintWithNothing( test )
+{
+
+  /* */
+
+  test.case = 'extend untyped construction with blueprint typed:0';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( 0 ),
+    nothing : _.define.nothing(),
+    f1 : '1',
+  });
+
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ 'nothing' ]) );
+  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 1 );
+
+  var construction1 = Object.create( null )
+  test.true( Object.isExtensible( construction1 ) );
+  test.true( _.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === null );
+
+  _.construction.extend( construction1, Blueprint1 );
+  var exp =
+  {
+    f1 : '1',
+  }
+  test.identical( _.property.all( construction1 ), exp );
+  test.true( !Object.isExtensible( construction1 ) );
+  test.true( _.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === null );
+
+  /* */
+
+  test.case = 'extend untyped impure construction with blueprint typed:0';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( 0 ),
+    nothing : _.define.nothing(),
+    f1 : '1',
+  });
+
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ 'nothing' ]) );
+  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 1 );
+
+  var construction1 = {};
+  test.true( Object.isExtensible( construction1 ) );
+  test.true( _.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === Object.prototype );
+
+  _.construction.extend( construction1, Blueprint1 );
+  var exp =
+  {
+    f1 : '1',
+  }
+  test.identical( _.property.all( construction1, { onlyEnumerable : 1 } ), exp );
+  test.true( !Object.isExtensible( construction1 ) );
+  test.true( _.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === Object.prototype );
+
+  /* */
+
+  test.case = 'extend untyped construction with blueprint typed:1';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( 1 ),
+    nothing : _.define.nothing(),
+    f1 : '1',
+  });
+
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ 'nothing' ]) );
+  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 1 );
+
+  var construction1 = Object.create( null )
+  test.true( Object.isExtensible( construction1 ) );
+  test.true( _.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === null );
+
+  _.construction.extend( construction1, Blueprint1 );
+  var exp =
+  {
+    f1 : '1',
+  }
+  test.identical( _.property.all( construction1 ), exp );
+  test.true( !Object.isExtensible( construction1 ) );
+  test.true( !_.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === Blueprint1.prototype );
+
+  /* */
+
+  test.case = 'extend untyped impure construction with blueprint typed:1';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( 1 ),
+    nothing : _.define.nothing(),
+    f1 : '1',
+  });
+
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ 'nothing' ]) );
+  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 1 );
+
+  var construction1 = {};
+  test.true( Object.isExtensible( construction1 ) );
+  test.true( _.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === Object.prototype );
+
+  _.construction.extend( construction1, Blueprint1 );
+  var exp =
+  {
+    f1 : '1',
+  }
+  test.identical( _.property.all( construction1 ), exp );
+  test.true( !Object.isExtensible( construction1 ) );
+  test.true( !_.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === Blueprint1.prototype );
+
+  /* */
+
+  test.case = 'extend typed construction with blueprint typed:0';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( 0 ),
+    nothing : _.define.nothing(),
+    f1 : '1',
+  });
+
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ 'nothing' ]) );
+  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 1 );
+
+  var prototype1 = Object.create( null );
+  var construction1 = Object.create( prototype1 );
+  test.true( Object.isExtensible( construction1 ) );
+  test.true( !_.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === prototype1 );
+
+  _.construction.extend( construction1, Blueprint1 );
+  var exp =
+  {
+    f1 : '1',
+  }
+  test.identical( _.property.all( construction1 ), exp );
+  test.true( !Object.isExtensible( construction1 ) );
+  test.true( _.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === null );
+
+  /* */
+
+  test.case = 'extend typed construction with blueprint typed:1';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( 1 ),
+    nothing : _.define.nothing(),
+    f1 : '1',
+  });
+
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ 'nothing' ]) );
+  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 1 );
+
+  var prototype1 = Object.create( null );
+  var construction1 = Object.create( prototype1 );
+  test.true( Object.isExtensible( construction1 ) );
+  test.true( !_.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === prototype1 );
+
+  _.construction.extend( construction1, Blueprint1 );
+  var exp =
+  {
+    f1 : '1',
+  }
+  test.identical( _.property.all( construction1 ), exp );
+  test.true( !Object.isExtensible( construction1 ) );
+  test.true( !_.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === Blueprint1.prototype );
+
+  /* xxx */
+
+  test.case = 'extend untyped construction with blueprint typed:maybe';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( _.maybe ),
+    nothing : _.define.nothing(),
+    f1 : '1',
+  });
+
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ 'nothing' ]) );
+  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 1 );
+
+  var construction1 = Object.create( null )
+  test.true( Object.isExtensible( construction1 ) );
+  test.true( _.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === null );
+
+  _.construction.extend( construction1, Blueprint1 );
+  var exp =
+  {
+    f1 : '1',
+  }
+  test.identical( _.property.all( construction1 ), exp );
+  test.true( !Object.isExtensible( construction1 ) );
+  test.true( _.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === null );
+
+  /* */
+
+  test.case = 'extend untyped impure construction with blueprint typed:maybe';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( _.maybe ),
+    nothing : _.define.nothing(),
+    f1 : '1',
+  });
+
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ 'nothing' ]) );
+  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 1 );
+
+  var construction1 = {};
+  test.true( Object.isExtensible( construction1 ) );
+  test.true( _.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === Object.prototype );
+
+  _.construction.extend( construction1, Blueprint1 );
+  var exp =
+  {
+    f1 : '1',
+  }
+  test.identical( _.property.all( construction1, { onlyEnumerable : 1 } ), exp );
+  test.true( !Object.isExtensible( construction1 ) );
+  test.true( _.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === Object.prototype );
+
+  /* */
+
+  test.case = 'extend typed construction with blueprint typed:maybe';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed( _.maybe ),
+    nothing : _.define.nothing(),
+    f1 : '1',
+  });
+
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ 'nothing' ]) );
+  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 1 );
+
+  var prototype1 = Object.create( null );
+  var construction1 = Object.create( prototype1 );
+  test.true( Object.isExtensible( construction1 ) );
+  test.true( !_.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === prototype1 );
+
+  _.construction.extend( construction1, Blueprint1 );
+  var exp =
+  {
+    f1 : '1',
+  }
+  test.identical( _.property.all( construction1 ), exp );
+  test.true( !Object.isExtensible( construction1 ) );
+  test.true( !_.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === prototype1 );
+
+  /* */
+
+}
+
+//
+
+function constructionExtendWithNothing( test )
+{
+
+  /* */
+
+  test.case = 'extend untyped construction';
+
+  var extension =
+  {
+    nothing : _.define.nothing(),
+  }
+
+  var construction1 = Object.create( null );
+  construction1.f1 = '1';
+  test.true( Object.isExtensible( construction1 ) );
+  test.true( _.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === null );
+
+  _.construction.extend( construction1, extension );
+  var exp =
+  {
+    f1 : '1',
+  }
+  test.identical( _.property.all( construction1 ), exp );
+  test.true( Object.isExtensible( construction1 ) );
+  test.true( _.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === null );
+
+  /* */
+
+  test.case = 'extend untyped impure construction';
+
+  var extension =
+  {
+    nothing : _.define.nothing(),
+  }
+
+  var construction1 = {};
+  construction1.f1 = '1';
+  test.true( Object.isExtensible( construction1 ) );
+  test.true( _.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === Object.prototype );
+
+  _.construction.extend( construction1, extension );
+  var exp =
+  {
+    f1 : '1',
+  }
+  test.identical( _.property.all( construction1, { onlyEnumerable : 1 } ), exp );
+  test.true( Object.isExtensible( construction1 ) );
+  test.true( _.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === Object.prototype );
+
+  /* */
+
+  test.case = 'extend typed construction';
+
+  var extension =
+  {
+    nothing : _.define.nothing(),
+  }
+
+  var prototype1 = Object.create( null );
+  var construction1 = Object.create( prototype1 );
+  construction1.f1 = '1';
+  test.true( Object.isExtensible( construction1 ) );
+  test.true( !_.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === prototype1 );
+
+  _.construction.extend( construction1, extension );
+  var exp =
+  {
+    f1 : '1',
+  }
+  test.identical( _.property.all( construction1 ), exp );
+  test.true( Object.isExtensible( construction1 ) );
+  test.true( !_.mapIs( construction1 ) );
+  test.true( _.objectIs( construction1 ) );
+  test.true( _.prototype.of( construction1 ) === prototype1 );
 
   /* */
 
@@ -11990,10 +12473,10 @@ function retypeBasic( test )
     b : '3',
   });
   var src = { a : 'a2' }
-  test.identical( Object.getPrototypeOf( src ), Object.prototype );
+  test.true( Object.getPrototypeOf( src ) === Object.prototype );
   var got = new blueprint1.Make( src );
   test.true( Object.getPrototypeOf( got ) === null );
-  test.identical( Object.getPrototypeOf( src ), Object.prototype );
+  test.true( Object.getPrototypeOf( src ) === Object.prototype );
   test.true( got !== src );
   var exp =
   {
@@ -12009,16 +12492,16 @@ function retypeBasic( test )
 
   /* */
 
-  test.case = 'untyped to untyped';
+  test.case = 'untyped impure to untyped';
   var blueprint1 = _.Blueprint
   ({
     a : 'a',
     b : '3',
   });
   var src = { a : 'a2' }
-  test.identical( Object.getPrototypeOf( src ), Object.prototype );
+  test.true( Object.getPrototypeOf( src ) === Object.prototype );
   var got = blueprint1.Retype( src );
-  test.true( Object.getPrototypeOf( got ) === null );
+  test.true( Object.getPrototypeOf( got ) === Object.prototype );
   test.true( got === src );
   var exp =
   {
@@ -12288,9 +12771,13 @@ let Self =
     definePropAccessorAlternativeOptions,
     definePropAccessorStaticNonStatic,
     definePropAccessorRewriting,
-    definePropAlias2Basic,
-    definePropAlias2OptionOriginalContainer,
-    definePropAlias2ConstructionExtend,
+
+    // alias
+
+    definePropAliasBasic,
+    definePropAliasOptionOriginalContainer,
+    definePropAliasConstructionExtendWithDefinition,
+    definePropAliasConstructionExtendWithBlueprint,
 
     // define amendment
 
@@ -12304,6 +12791,8 @@ let Self =
     // define etc
 
     defineNothing,
+    constructionExtendWithBlueprintWithNothing,
+    constructionExtendWithNothing,
 
     // trait
 

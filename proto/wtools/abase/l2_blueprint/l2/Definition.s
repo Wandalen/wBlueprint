@@ -137,17 +137,12 @@ function _definitionMake( kind, o )
   {
     return function constructionAmend( dst, key, amend )
     {
-      let prototype = _.prototype.of( dst );
-      let blueprint = _.blueprint.define
+      _.construction._amendDefinitionWithoutMethod
       ({
-        prototype : prototype ? _.trait.prototype( prototype, { new : 0 } ) : _.define.nothing(),
-        [ key ] : definition,
-      });
-      _.construction._init
-      ({
-        constructing : false,
         construction : dst,
-        runtime : blueprint.Runtime,
+        definition,
+        key,
+        amend,
       });
     }
   }
