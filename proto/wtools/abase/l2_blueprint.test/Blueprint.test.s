@@ -6392,10 +6392,12 @@ function definePropAliasConstructionExtendWithBlueprint( test )
     test.identical( got, exp );
     test.true( _.routineIs( got.get ) );
     test.true( _.routineIs( got.set ) );
+    test.true( !Object.isExtensible( dstContainer ) );
+    test.true( _.mapIs( dstContainer ) );
 
     /* */
 
-    test.case = `static : 1`;
+    test.case = `static : 1, typed : 0`;
 
     var originalContainer =
     {
@@ -6410,6 +6412,7 @@ function definePropAliasConstructionExtendWithBlueprint( test )
 
     var extension = _.Blueprint
     ({
+      typed : _.trait.typed( 0 ),
       s : _.define.alias({ originalContainer, originalName : 'f1', static : 1 }),
     })
 
@@ -6427,8 +6430,50 @@ function definePropAliasConstructionExtendWithBlueprint( test )
 
     test.identical( dstContainer.s, undefined );
     test.identical( extension.prototype.s, '1' );
-
     test.true( dstContainer._ === undefined );
+    test.true( Object.getPrototypeOf( dstContainer ) === null );
+    test.true( !Object.isExtensible( dstContainer ) );
+    test.true( _.mapIs( dstContainer ) );
+
+    /* */
+
+    test.case = `static : 1, typed : 1`;
+
+    var originalContainer =
+    {
+      f1 : '1',
+      f2 : '2',
+    }
+
+    var prototype = Object.create( Object.prototype );
+    var dstContainer = Object.create( prototype );
+    dstContainer.f1 = '11';
+    dstContainer.f2 = '12';
+
+    var extension = _.Blueprint
+    ({
+      typed : _.trait.typed( 1 ),
+      s : _.define.alias({ originalContainer, originalName : 'f1', static : 1 }),
+    })
+
+    var keysBefore = _.mapKeys( Object.prototype, { onlyEnumerable : 0, onlyOwn : 0 } );
+    _.construction.extend( dstContainer, extension );
+    var keysAfter = _.mapKeys( Object.prototype, { onlyEnumerable : 0, onlyOwn : 0 } );
+    test.identical( keysAfter, keysBefore );
+
+    var exp =
+    {
+      'f1' : '11',
+      'f2' : '12',
+    }
+    test.identical( _.property.all( dstContainer, { onlyEnumerable : 1 } ), exp );
+
+    test.identical( dstContainer.s, '1' );
+    test.identical( extension.prototype.s, '1' );
+    test.true( dstContainer._ === undefined );
+    test.true( Object.getPrototypeOf( dstContainer ) === extension.prototype );
+    test.true( !Object.isExtensible( dstContainer ) );
+    test.true( !_.mapIs( dstContainer ) );
 
     /* */
 
@@ -6446,6 +6491,8 @@ function definePropAliasConstructionExtendWithBlueprint( test )
       f2 : '12',
     }
 
+    test.true( Object.isExtensible( dstContainer ) );
+
     var extension = _.Blueprint
     ({
       s : _.define.alias({ originalContainer, originalName : 'f2', static : 1 }),
@@ -6458,6 +6505,9 @@ function definePropAliasConstructionExtendWithBlueprint( test )
 
     test.identical( dstContainer.s, undefined );
     test.identical( extension.prototype.s, '2' );
+
+    test.true( !Object.isExtensible( dstContainer ) );
+    test.true( _.mapIs( dstContainer ) );
 
     /* */
 
