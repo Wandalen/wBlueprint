@@ -13,7 +13,7 @@ function is( blueprint )
 {
   if( !blueprint )
   return false;
-  return _.isPrototypeOf( _.Blueprint.prototype, blueprint );
+  return _.prototypeIsPrototypeOf( _.Blueprint.prototype, blueprint );
 }
 
 //
@@ -22,7 +22,7 @@ function isDefinitive( blueprint )
 {
   if( !blueprint )
   return false;
-  return _.isPrototypeOf( _.Blueprint.prototype, blueprint ) && !!blueprint.Traits;
+  return _.prototypeIsPrototypeOf( _.Blueprint.prototype, blueprint ) && !!blueprint.Traits;
 }
 
 //
@@ -31,7 +31,7 @@ function isRuntime( runtime )
 {
   if( !runtime )
   return false;
-  return _.isPrototypeOf( _.Blueprint.prototype, runtime ) && !runtime.Traits;
+  return _.prototypeIsPrototypeOf( _.Blueprint.prototype, runtime ) && !runtime.Traits;
 }
 
 //

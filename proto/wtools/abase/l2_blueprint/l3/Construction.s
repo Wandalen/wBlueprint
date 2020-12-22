@@ -150,6 +150,63 @@ function supplement( dstConstruction, src )
 
 //
 
+// function _amendDefinitionWithoutMethod_functor( fop )
+// {
+//
+//   _.routineOptions( _amendDefinitionWithoutMethod_functor, fop );
+//
+//   _amendDefinitionWithoutMethod.defaults =
+//   {
+//     construction : null,
+//     definition : null,
+//     key : null,
+//     amend : null,
+//   }
+//
+//   function _amendDefinitionWithoutMethod( o )
+//   {
+//
+//     if( !o.definition )
+//     o.definition = fop.definition
+//
+//     _.assertMapHasAll( o, _amendDefinitionWithoutMethod.defaults );
+//     _.assert( _.strIs( o.key ) || _.symbolIs( o.key ) );
+//     _.assert( _.definitionIs( o.definition ) );
+//     _.assert( _.longHas( [ 'supplement', 'extend' ], o.amend ) );
+//
+//     if( o.amend === 'supplement' )
+//     {
+//       /* xxx qqq : cover */
+//       if( Object.hasOwnProperty.call( o.construction, o.key && o.construction[ o.key ] !== undefined ) )
+//       return;
+//     }
+//
+//     debugger;
+//
+//     let prototype = _.prototype.of( o.construction );
+//     let defs = [];
+//     if( prototype )
+//     defs.push( _.trait.prototype( prototype, { new : false } ) );
+//     defs.push( _.trait.extendable( true ) );
+//     let blueprint = _.blueprint.define( defs, { [ o.key ] : o.definition } );
+//     _.construction._init
+//     ({
+//       constructing : false,
+//       construction : o.construction,
+//       runtime : blueprint.Runtime,
+//     });
+//
+//   }
+//
+// }
+//
+// _amendDefinitionWithoutMethod_functor.defaults =
+// {
+//   definition : null,
+// }
+
+//
+
 function _amendDefinitionWithoutMethod( o )
 {
 
@@ -166,11 +223,11 @@ function _amendDefinitionWithoutMethod( o )
   }
 
   let prototype = _.prototype.of( o.construction );
-  let blueprint = _.blueprint.define
-  ({
-    prototype : prototype ? _.trait.prototype( prototype, { new : 0 } ) : _.define.nothing(),
-    [ o.key ] : o.definition,
-  });
+  let defs = [];
+  if( prototype )
+  defs.push( _.trait.prototype( prototype, { new : false } ) );
+  defs.push( _.trait.extendable( true ) );
+  let blueprint = _.blueprint.define( defs, { [ o.key ] : o.definition } );
   _.construction._init
   ({
     constructing : false,
@@ -186,6 +243,14 @@ _amendDefinitionWithoutMethod.defaults =
   definition : null,
   key : null,
   amend : null,
+}
+
+//
+
+function _amendCant( construction, definition, key )
+{
+  debugger;
+  throw _.err( `Definition::${definition.kind} cant extend created construction after initialization. Use this definition during initialization only.` );
 }
 
 //
@@ -525,6 +590,7 @@ var ConstructionExtension =
   extend,
   supplement,
   _amendDefinitionWithoutMethod,
+  _amendCant,
 
   _make,
   _makeEach,

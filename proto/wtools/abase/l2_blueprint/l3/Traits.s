@@ -183,10 +183,30 @@ function withConstructor( o )
   {
 
     _.assert( !_.mapOwnKey( blueprint.prototype, 'constructor' ) );
-    if( blueprint.Traits.withConstructor.val )
+    _.assert( _.routineIs( blueprint.Make ) );
+    if( !blueprint.Traits.withConstructor.val )
+    return;
+
+    _.assert( _.boolIs( blueprint.Typed ) );
+    _.assert( !_.primitiveIs( blueprint.prototype ) );
+
+    let properties =
     {
-      _.assert( _.routineIs( blueprint.Make ) );
-      _.assert( _.objectIs( blueprint.prototype ) );
+      value : blueprint.Make,
+      enumerable : false,
+      configurable : false,
+      writable : false,
+    };
+    Object.defineProperty( blueprint.prototype, 'constructor', properties );
+
+    if( !blueprint.Typed )
+    {
+      _.blueprint._routineAdd( blueprint, 'initEnd', initEnd );
+    }
+
+    function initEnd( genesis )
+    {
+      _.assert( !_.primitiveIs( genesis.construction ) );
       let properties =
       {
         value : blueprint.Make,
@@ -194,7 +214,7 @@ function withConstructor( o )
         configurable : false,
         writable : false,
       };
-      Object.defineProperty( blueprint.prototype, 'constructor', properties );
+      Object.defineProperty( genesis.construction, 'constructor', properties );
     }
 
   }

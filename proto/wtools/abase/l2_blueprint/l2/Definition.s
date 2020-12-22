@@ -75,8 +75,8 @@ function toVal( definition )
 function _constructionAmendCant( construction, key )
 {
   let trait = this;
-  debugger;
-  throw _.err( `Trait::${trait.kind} cant extend created construction after initialization. Use this trait during initialization only.` );
+  return _.construction._amendCant( construction, definition, key );
+  // throw _.err( `Trait::${trait.kind} cant extend created construction after initialization. Use this trait during initialization only.` );
 }
 
 //
@@ -93,8 +93,14 @@ function _traitMake( kind, o )
   o.definitionGroup = 'trait';
   if( !o.kind )
   o.kind = kind;
+  // if( !o.constructionAmend )
+  // o.constructionAmend = _.definition._constructionAmendCant;
   if( !o.constructionAmend )
-  o.constructionAmend = _.definition._constructionAmendCant;
+  {
+    o.constructionAmend = constructionAmend;
+    // o.constructionAmend = constructionAmend_functor();
+    // o.constructionAmend = _.definition._constructionAmendCant;
+  }
   if( o.blueprint === undefined )
   o.blueprint = null;
 
@@ -104,6 +110,19 @@ function _traitMake( kind, o )
   if( definition.blueprint === false )
   Object.freeze( definition );
   return definition;
+
+  function constructionAmend( dst, key, amend )
+  {
+    // debugger;
+    _.construction._amendDefinitionWithoutMethod
+    ({
+      construction : dst,
+      definition,
+      key,
+      amend,
+    });
+  }
+
 }
 
 //
@@ -122,7 +141,8 @@ function _definitionMake( kind, o )
   o.kind = kind;
   if( !o.constructionAmend )
   {
-    o.constructionAmend = constructionAmend_functor();
+    o.constructionAmend = constructionAmend;
+    // o.constructionAmend = constructionAmend_functor();
     // o.constructionAmend = _.definition._constructionAmendCant;
   }
   if( o.blueprint === undefined )
@@ -133,18 +153,15 @@ function _definitionMake( kind, o )
   Object.preventExtensions( definition );
   return definition;
 
-  function constructionAmend_functor()
+  function constructionAmend( dst, key, amend )
   {
-    return function constructionAmend( dst, key, amend )
-    {
-      _.construction._amendDefinitionWithoutMethod
-      ({
-        construction : dst,
-        definition,
-        key,
-        amend,
-      });
-    }
+    _.construction._amendDefinitionWithoutMethod
+    ({
+      construction : dst,
+      definition,
+      key,
+      amend,
+    });
   }
 
 }
@@ -168,7 +185,7 @@ let DefinitionExtension =
   is : _.definitionIs,
   retype,
   toVal,
-  _constructionAmendCant,
+  // _constructionAmendCant,
   _traitMake,
   _definitionMake,
 

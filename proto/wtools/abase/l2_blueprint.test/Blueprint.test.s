@@ -413,8 +413,8 @@ function definePropStaticBasic( test )
     field2 : 'b1',
     method1 : m1,
     staticMethod1 : s( sm1 ),
-    staticField1 : s( 'sf1' ),
-    staticField2 : s( { k : 'staticField2' } ),
+    s1 : s( 'sf1' ),
+    s2 : s( { k : 's2' } ),
     statics1 : ss
     ({
       staticMethod2 : sm2,
@@ -429,21 +429,21 @@ function definePropStaticBasic( test )
 
   test.true( !Object.hasOwnProperty.call( instance, 'staticMethod1' ) );
   test.true( !Object.hasOwnProperty.call( instance, 'staticMethod2' ) );
-  test.true( !Object.hasOwnProperty.call( instance, 'staticField1' ) );
-  test.true( !Object.hasOwnProperty.call( instance, 'staticField2' ) );
+  test.true( !Object.hasOwnProperty.call( instance, 's1' ) );
+  test.true( !Object.hasOwnProperty.call( instance, 's2' ) );
   test.true( !Object.hasOwnProperty.call( instance, 'staticField3' ) );
   test.true( !Object.hasOwnProperty.call( instance, 'staticField4' ) );
 
   test.true( Object.hasOwnProperty.call( Object.getPrototypeOf( instance ), 'staticMethod1' ) );
   test.true( Object.hasOwnProperty.call( Object.getPrototypeOf( instance ), 'staticMethod2' ) );
-  test.true( Object.hasOwnProperty.call( Object.getPrototypeOf( instance ), 'staticField1' ) );
-  test.true( Object.hasOwnProperty.call( Object.getPrototypeOf( instance ), 'staticField2' ) );
+  test.true( Object.hasOwnProperty.call( Object.getPrototypeOf( instance ), 's1' ) );
+  test.true( Object.hasOwnProperty.call( Object.getPrototypeOf( instance ), 's2' ) );
   test.true( Object.hasOwnProperty.call( Object.getPrototypeOf( instance ), 'staticField3' ) );
   test.true( Object.hasOwnProperty.call( Object.getPrototypeOf( instance ), 'staticField4' ) );
 
   test.description = 'property descriptor'; /* */
 
-  var got = Object.getOwnPropertyDescriptor( Object.getPrototypeOf( instance ), 'staticField1' );
+  var got = Object.getOwnPropertyDescriptor( Object.getPrototypeOf( instance ), 's1' );
   var exp =
   {
     get : got.get || true,
@@ -472,8 +472,8 @@ function definePropStaticBasic( test )
     'method1' : m1,
     'staticMethod1' : sm1,
     'staticMethod2' : sm2,
-    'staticField1' : 'sf1',
-    'staticField2' : { 'k' : 'staticField2' },
+    's1' : 'sf1',
+    's2' : { 'k' : 's2' },
     'staticField3' : 'sf3',
     'staticField4' : { 'k' : 'staticField4' },
     'staticField5' : { 'k' : 'staticField5' },
@@ -490,8 +490,8 @@ function definePropStaticBasic( test )
   {
     'staticMethod1' : sm1,
     'staticMethod2' : sm2,
-    'staticField1' : 'sf1',
-    'staticField2' : { 'k' : 'staticField2' },
+    's1' : 'sf1',
+    's2' : { 'k' : 's2' },
     'staticField3' : 'sf3',
     'staticField4' : { 'k' : 'staticField4' },
     'staticField5' : { 'k' : 'staticField5' },
@@ -503,8 +503,8 @@ function definePropStaticBasic( test )
   }
   test.identical( propertyOwn( _.prototype.each( instance )[ 2 ] ), exp );
 
-  test.true( Blueprint1.Make.staticField1 === Blueprint1.prototype.staticField1 );
-  test.true( Blueprint1.Make.staticField2 === Blueprint1.prototype.staticField2 );
+  test.true( Blueprint1.Make.s1 === Blueprint1.prototype.s1 );
+  test.true( Blueprint1.Make.s2 === Blueprint1.prototype.s2 );
   test.true( Blueprint1.Make.staticField3 === Blueprint1.prototype.staticField3 );
   test.true( Blueprint1.Make.staticField4 === Blueprint1.prototype.staticField4 );
   test.true( Blueprint1.Make.staticField5 === Blueprint1.prototype.staticField5 );
@@ -6332,6 +6332,68 @@ function definePropAliasConstructionExtendWithDefinition( test )
 
     /* */
 
+    test.case = `several`;
+
+    var dstContainer =
+    {
+      a : 1,
+      b : 2,
+    }
+
+    var extensionMap =
+    {
+      c : _.define.alias( 'a' ),
+      d : _.define.alias( 'b' ),
+    }
+
+    _.construction.extend( dstContainer, extensionMap );
+
+    var exp =
+    {
+      'a' : 1,
+      'b' : 2,
+      'c' : 1,
+      'd' : 2,
+    }
+    test.identical( dstContainer, exp );
+    test.true( Object.isExtensible( dstContainer ) );
+
+    /* */
+
+    test.case = `several with originalContainer`;
+
+    var dstContainer =
+    {
+      a : 1,
+      b : 2,
+    }
+
+    var originalContainer =
+    {
+      a : 3,
+      b : 4,
+    }
+
+    var extensionMap =
+    {
+      c : _.define.alias({ originalName : 'a', originalContainer }),
+      d : _.define.alias({ originalName : 'b', originalContainer }),
+    }
+
+    _.construction.extend( dstContainer, extensionMap );
+
+    var exp =
+    {
+      'a' : 1,
+      'b' : 2,
+      'c' : 3,
+      'd' : 4,
+    }
+    test.identical( dstContainer, exp );
+    test.true( Object.isExtensible( dstContainer ) );
+
+    /* */
+
   }
 
 }
@@ -6753,8 +6815,8 @@ function defineExtensionOrder( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : _.define.static( 'b1' ),
-    staticField2 : _.define.static( 'b1' ),
+    s1 : _.define.static( 'b1' ),
+    s2 : _.define.static( 'b1' ),
   });
 
   var instance = Blueprint1.Make();
@@ -6762,8 +6824,8 @@ function defineExtensionOrder( test )
   {
     'field1' : 'b1',
     'field2' : 'b1',
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
   }
   test.identical( _.property.all( instance ), exp );
 
@@ -6776,8 +6838,8 @@ function defineExtensionOrder( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : _.define.static( 'b1' ),
-    staticField2 : _.define.static( 'b1' ),
+    s1 : _.define.static( 'b1' ),
+    s2 : _.define.static( 'b1' ),
   });
 
   var Blueprint2 = _.Blueprint
@@ -6785,7 +6847,7 @@ function defineExtensionOrder( test )
     extension : _.define.extension( Blueprint1 ),
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
+    s2 : _.define.static( 'b2' ),
     staticField3 : _.define.static( 'b2' ),
   });
 
@@ -6796,7 +6858,7 @@ function defineExtensionOrder( test )
     'field1' : 'b1',
     'field2' : 'b2',
     'field3' : 'b2',
-    'staticField2' : 'b2',
+    's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance ), exp );
@@ -6810,8 +6872,8 @@ function defineExtensionOrder( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : _.define.static( 'b1' ),
-    staticField2 : _.define.static( 'b1' ),
+    s1 : _.define.static( 'b1' ),
+    s2 : _.define.static( 'b1' ),
   });
 
   var Blueprint2 = _.Blueprint
@@ -6819,7 +6881,7 @@ function defineExtensionOrder( test )
     extension : _.define.extension( Blueprint1, { blueprintDepthReserve : Infinity } ),
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
+    s2 : _.define.static( 'b2' ),
     staticField3 : _.define.static( 'b2' ),
   });
 
@@ -6830,8 +6892,8 @@ function defineExtensionOrder( test )
     'field1' : 'b1',
     'field2' : 'b2',
     'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2',
+    's1' : 'b1',
+    's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance ), exp );
@@ -6845,8 +6907,8 @@ function defineExtensionOrder( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
-    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
+    s1 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
+    s2 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
   });
 
   var Blueprint2 = _.Blueprint
@@ -6854,7 +6916,7 @@ function defineExtensionOrder( test )
     extension : _.define.extension( Blueprint1 ),
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
+    s2 : _.define.static( 'b2' ),
     staticField3 : _.define.static( 'b2' ),
   });
 
@@ -6865,8 +6927,8 @@ function defineExtensionOrder( test )
     'field1' : 'b1',
     'field2' : 'b2',
     'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2',
+    's1' : 'b1',
+    's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance ), exp );
@@ -6880,15 +6942,15 @@ function defineExtensionOrder( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : _.define.static( 'b1' ),
-    staticField2 : _.define.static( 'b1' ),
+    s1 : _.define.static( 'b1' ),
+    s2 : _.define.static( 'b1' ),
   });
 
   var Blueprint2 = _.Blueprint
   ({
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
+    s2 : _.define.static( 'b2' ),
     staticField3 : _.define.static( 'b2' ),
     extension : _.define.extension( Blueprint1 ),
   });
@@ -6900,7 +6962,7 @@ function defineExtensionOrder( test )
     'field1' : 'b1',
     'field2' : 'b1',
     'field3' : 'b2',
-    'staticField2' : 'b2',
+    's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance ), exp );
@@ -6914,15 +6976,15 @@ function defineExtensionOrder( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : _.define.static( 'b1', { blueprintDepthLimit : 1 } ),
-    staticField2 : _.define.static( 'b1', { blueprintDepthLimit : 1 } ),
+    s1 : _.define.static( 'b1', { blueprintDepthLimit : 1 } ),
+    s2 : _.define.static( 'b1', { blueprintDepthLimit : 1 } ),
   });
 
   var Blueprint2 = _.Blueprint
   ({
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
+    s2 : _.define.static( 'b2' ),
     staticField3 : _.define.static( 'b2' ),
     extension : _.define.extension( Blueprint1 ),
   });
@@ -6934,7 +6996,7 @@ function defineExtensionOrder( test )
     'field1' : 'b1',
     'field2' : 'b1',
     'field3' : 'b2',
-    'staticField2' : 'b2',
+    's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance ), exp );
@@ -6948,15 +7010,15 @@ function defineExtensionOrder( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
-    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
+    s1 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
+    s2 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
   });
 
   var Blueprint2 = _.Blueprint
   ({
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
+    s2 : _.define.static( 'b2' ),
     staticField3 : _.define.static( 'b2' ),
     extension : _.define.extension( Blueprint1 ),
   });
@@ -6968,8 +7030,8 @@ function defineExtensionOrder( test )
     'field1' : 'b1',
     'field2' : 'b1',
     'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance ), exp );
@@ -6983,15 +7045,15 @@ function defineExtensionOrder( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : 1 } ),
-    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : 1 } ),
+    s1 : _.define.static( 'b1', { blueprintDepthReserve : 1 } ),
+    s2 : _.define.static( 'b1', { blueprintDepthReserve : 1 } ),
   });
 
   var Blueprint2 = _.Blueprint
   ({
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
+    s2 : _.define.static( 'b2' ),
     staticField3 : _.define.static( 'b2' ),
     extension : _.define.extension( Blueprint1 ),
   });
@@ -7003,8 +7065,8 @@ function defineExtensionOrder( test )
     'field1' : 'b1',
     'field2' : 'b1',
     'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance ), exp );
@@ -7018,15 +7080,15 @@ function defineExtensionOrder( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : _.define.static( 'b1', { blueprintDepthLimit : 0 } ),
-    staticField2 : _.define.static( 'b1', { blueprintDepthLimit : 0 } ),
+    s1 : _.define.static( 'b1', { blueprintDepthLimit : 0 } ),
+    s2 : _.define.static( 'b1', { blueprintDepthLimit : 0 } ),
   });
 
   var Blueprint2 = _.Blueprint
   ({
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
+    s2 : _.define.static( 'b2' ),
     staticField3 : _.define.static( 'b2' ),
     extension : _.define.extension( Blueprint1 ),
   });
@@ -7038,8 +7100,8 @@ function defineExtensionOrder( test )
     'field1' : 'b1',
     'field2' : 'b1',
     'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance ), exp );
@@ -7053,15 +7115,15 @@ function defineExtensionOrder( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : _.define.static( 'b1' ),
-    staticField2 : _.define.static( 'b1' ),
+    s1 : _.define.static( 'b1' ),
+    s2 : _.define.static( 'b1' ),
   });
 
   var Blueprint2 = _.Blueprint
   ({
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
+    s2 : _.define.static( 'b2' ),
     staticField3 : _.define.static( 'b2' ),
     extension : _.define.extension( Blueprint1, { blueprintDepthReserve : Infinity } ),
   });
@@ -7073,8 +7135,8 @@ function defineExtensionOrder( test )
     'field1' : 'b1',
     'field2' : 'b1',
     'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance ), exp );
@@ -7102,8 +7164,8 @@ function defineSupplementationOrder( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : _.define.static( 'b1' ),
-    staticField2 : _.define.static( 'b1' ),
+    s1 : _.define.static( 'b1' ),
+    s2 : _.define.static( 'b1' ),
   });
 
   var instance = Blueprint1.Make();
@@ -7111,8 +7173,8 @@ function defineSupplementationOrder( test )
   {
     'field1' : 'b1',
     'field2' : 'b1',
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
   }
   test.identical( _.property.all( instance ), exp );
 
@@ -7125,8 +7187,8 @@ function defineSupplementationOrder( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : _.define.static( 'b1' ),
-    staticField2 : _.define.static( 'b1' ),
+    s1 : _.define.static( 'b1' ),
+    s2 : _.define.static( 'b1' ),
   });
 
   var Blueprint2 = _.Blueprint
@@ -7134,7 +7196,7 @@ function defineSupplementationOrder( test )
     supplementation : _.define.supplementation( Blueprint1 ),
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
+    s2 : _.define.static( 'b2' ),
     staticField3 : _.define.static( 'b2' ),
   });
 
@@ -7145,7 +7207,7 @@ function defineSupplementationOrder( test )
     'field1' : 'b1',
     'field2' : 'b2',
     'field3' : 'b2',
-    'staticField2' : 'b2',
+    's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance ), exp );
@@ -7159,8 +7221,8 @@ function defineSupplementationOrder( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : _.define.static( 'b1' ),
-    staticField2 : _.define.static( 'b1' ),
+    s1 : _.define.static( 'b1' ),
+    s2 : _.define.static( 'b1' ),
   });
 
   var Blueprint2 = _.Blueprint
@@ -7168,7 +7230,7 @@ function defineSupplementationOrder( test )
     supplementation : _.define.supplementation( Blueprint1, { blueprintDepthReserve : Infinity } ),
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
+    s2 : _.define.static( 'b2' ),
     staticField3 : _.define.static( 'b2' ),
   });
 
@@ -7179,8 +7241,8 @@ function defineSupplementationOrder( test )
     'field1' : 'b1',
     'field2' : 'b2',
     'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2',
+    's1' : 'b1',
+    's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance ), exp );
@@ -7194,8 +7256,8 @@ function defineSupplementationOrder( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
-    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
+    s1 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
+    s2 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
   });
 
   var Blueprint2 = _.Blueprint
@@ -7203,7 +7265,7 @@ function defineSupplementationOrder( test )
     supplementation : _.define.supplementation( Blueprint1 ),
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
+    s2 : _.define.static( 'b2' ),
     staticField3 : _.define.static( 'b2' ),
   });
 
@@ -7214,8 +7276,8 @@ function defineSupplementationOrder( test )
     'field1' : 'b1',
     'field2' : 'b2',
     'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2',
+    's1' : 'b1',
+    's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance ), exp );
@@ -7229,15 +7291,15 @@ function defineSupplementationOrder( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : _.define.static( 'b1' ),
-    staticField2 : _.define.static( 'b1' ),
+    s1 : _.define.static( 'b1' ),
+    s2 : _.define.static( 'b1' ),
   });
 
   var Blueprint2 = _.Blueprint
   ({
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
+    s2 : _.define.static( 'b2' ),
     staticField3 : _.define.static( 'b2' ),
     supplementation : _.define.supplementation( Blueprint1 ),
   });
@@ -7249,7 +7311,7 @@ function defineSupplementationOrder( test )
     'field1' : 'b1',
     'field2' : 'b2',
     'field3' : 'b2',
-    'staticField2' : 'b2',
+    's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance ), exp );
@@ -7263,15 +7325,15 @@ function defineSupplementationOrder( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : _.define.static( 'b1', { blueprintDepthLimit : 1 } ),
-    staticField2 : _.define.static( 'b1', { blueprintDepthLimit : 1 } ),
+    s1 : _.define.static( 'b1', { blueprintDepthLimit : 1 } ),
+    s2 : _.define.static( 'b1', { blueprintDepthLimit : 1 } ),
   });
 
   var Blueprint2 = _.Blueprint
   ({
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
+    s2 : _.define.static( 'b2' ),
     staticField3 : _.define.static( 'b2' ),
     supplementation : _.define.supplementation( Blueprint1 ),
   });
@@ -7283,7 +7345,7 @@ function defineSupplementationOrder( test )
     'field1' : 'b1',
     'field2' : 'b2',
     'field3' : 'b2',
-    'staticField2' : 'b2',
+    's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance ), exp );
@@ -7297,15 +7359,15 @@ function defineSupplementationOrder( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
-    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
+    s1 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
+    s2 : _.define.static( 'b1', { blueprintDepthReserve : Infinity } ),
   });
 
   var Blueprint2 = _.Blueprint
   ({
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
+    s2 : _.define.static( 'b2' ),
     staticField3 : _.define.static( 'b2' ),
     supplementation : _.define.supplementation( Blueprint1 ),
   });
@@ -7317,8 +7379,8 @@ function defineSupplementationOrder( test )
     'field1' : 'b1',
     'field2' : 'b2',
     'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2',
+    's1' : 'b1',
+    's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance ), exp );
@@ -7332,15 +7394,15 @@ function defineSupplementationOrder( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : _.define.static( 'b1', { blueprintDepthReserve : 1 } ),
-    staticField2 : _.define.static( 'b1', { blueprintDepthReserve : 1 } ),
+    s1 : _.define.static( 'b1', { blueprintDepthReserve : 1 } ),
+    s2 : _.define.static( 'b1', { blueprintDepthReserve : 1 } ),
   });
 
   var Blueprint2 = _.Blueprint
   ({
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
+    s2 : _.define.static( 'b2' ),
     staticField3 : _.define.static( 'b2' ),
     supplementation : _.define.supplementation( Blueprint1 ),
   });
@@ -7352,8 +7414,8 @@ function defineSupplementationOrder( test )
     'field1' : 'b1',
     'field2' : 'b2',
     'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2',
+    's1' : 'b1',
+    's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance ), exp );
@@ -7367,15 +7429,15 @@ function defineSupplementationOrder( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : _.define.static( 'b1', { blueprintDepthLimit : 0 } ),
-    staticField2 : _.define.static( 'b1', { blueprintDepthLimit : 0 } ),
+    s1 : _.define.static( 'b1', { blueprintDepthLimit : 0 } ),
+    s2 : _.define.static( 'b1', { blueprintDepthLimit : 0 } ),
   });
 
   var Blueprint2 = _.Blueprint
   ({
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
+    s2 : _.define.static( 'b2' ),
     staticField3 : _.define.static( 'b2' ),
     supplementation : _.define.supplementation( Blueprint1 ),
   });
@@ -7387,8 +7449,8 @@ function defineSupplementationOrder( test )
     'field1' : 'b1',
     'field2' : 'b2',
     'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2',
+    's1' : 'b1',
+    's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance ), exp );
@@ -7402,15 +7464,15 @@ function defineSupplementationOrder( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : _.define.static( 'b1' ),
-    staticField2 : _.define.static( 'b1' ),
+    s1 : _.define.static( 'b1' ),
+    s2 : _.define.static( 'b1' ),
   });
 
   var Blueprint2 = _.Blueprint
   ({
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : _.define.static( 'b2' ),
+    s2 : _.define.static( 'b2' ),
     staticField3 : _.define.static( 'b2' ),
     supplementation : _.define.supplementation( Blueprint1, { blueprintDepthReserve : Infinity } ),
   });
@@ -7422,8 +7484,8 @@ function defineSupplementationOrder( test )
     'field1' : 'b1',
     'field2' : 'b2',
     'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2',
+    's1' : 'b1',
+    's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance ), exp );
@@ -7879,7 +7941,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   test.true( _.objectIs( construction1 ) );
   test.true( _.prototype.of( construction1 ) === Blueprint1.prototype );
 
-  /* xxx */
+  /* */
 
   test.case = 'extend untyped construction with blueprint typed:maybe';
 
@@ -8094,8 +8156,8 @@ function blueprintInheritManually( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : s( 'b1' ),
-    staticField2 : s( 'b1' ),
+    s1 : s( 'b1' ),
+    s2 : s( 'b1' ),
   });
 
   var instance = Blueprint1.Make();
@@ -8106,8 +8168,8 @@ function blueprintInheritManually( test )
   {
     'field1' : 'b1',
     'field2' : 'b1',
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
   }
   test.identical( _.property.all( instance ), exp );
   var exp =
@@ -8118,7 +8180,7 @@ function blueprintInheritManually( test )
   test.identical( propertyOwn( _.prototype.each( instance )[ 0 ] ), exp );
   var exp =
   {
-    'staticField1' : 'b1', 'staticField2' : 'b1'
+    's1' : 'b1', 's2' : 'b1'
   }
   test.identical( propertyOwn( _.prototype.each( instance )[ 1 ] ), exp );
   var exp =
@@ -8134,7 +8196,7 @@ function blueprintInheritManually( test )
     prototype : _.trait.prototype( Blueprint1 ),
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : s( 'b2' ),
+    s2 : s( 'b2' ),
     staticField3 : s( 'b2' ),
   });
 
@@ -8148,8 +8210,8 @@ function blueprintInheritManually( test )
     'field1' : 'b1',
     'field2' : 'b2',
     'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2',
+    's1' : 'b1',
+    's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance ), exp );
@@ -8163,12 +8225,12 @@ function blueprintInheritManually( test )
   test.identical( propertyOwn( _.prototype.each( instance )[ 0 ] ), exp );
   var exp =
   {
-    'staticField2' : 'b2', 'staticField3' : 'b2'
+    's2' : 'b2', 'staticField3' : 'b2'
   }
   test.identical( propertyOwn( _.prototype.each( instance )[ 1 ] ), exp );
   var exp =
   {
-    'staticField1' : 'b1', 'staticField2' : 'b1'
+    's1' : 'b1', 's2' : 'b1'
   }
   test.identical( propertyOwn( _.prototype.each( instance )[ 2 ] ), exp );
   var exp =
@@ -8185,8 +8247,8 @@ function blueprintInheritManually( test )
   {
     'field1' : 'b1',
     'field2' : 'b1',
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
   }
   var got = _.property.all( instance );
   test.identical( got, exp );
@@ -8218,8 +8280,8 @@ function blueprintInheritManually( test )
     'field4' : 'b3',
     'staticField3' : 'b3',
     'staticField4' : 'b3',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2'
+    's1' : 'b1',
+    's2' : 'b2'
   }
   test.identical( _.property.all( instance ), exp );
   var exp =
@@ -8237,12 +8299,12 @@ function blueprintInheritManually( test )
   test.identical( propertyOwn( _.prototype.each( instance )[ 1 ] ), exp );
   var exp =
   {
-    'staticField2' : 'b2', 'staticField3' : 'b2'
+    's2' : 'b2', 'staticField3' : 'b2'
   }
   test.identical( propertyOwn( _.prototype.each( instance )[ 2 ] ), exp );
   var exp =
   {
-    'staticField1' : 'b1', 'staticField2' : 'b1'
+    's1' : 'b1', 's2' : 'b1'
   }
   test.identical( propertyOwn( _.prototype.each( instance )[ 3 ] ), exp );
   var exp =
@@ -8274,8 +8336,8 @@ function blueprintInheritWithTrait( test )
     typed : _.trait.typed( true ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : s( 'b1' ),
-    staticField2 : s( 'b1' ),
+    s1 : s( 'b1' ),
+    s2 : s( 'b1' ),
   });
 
   test.description = 'blueprint1'; /* */
@@ -8288,8 +8350,8 @@ function blueprintInheritWithTrait( test )
   {
     'field1' : 'b1',
     'field2' : 'b1',
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
   }
   test.identical( _.property.all( instance ), exp );
   var exp =
@@ -8300,7 +8362,7 @@ function blueprintInheritWithTrait( test )
   test.identical( propertyOwn( _.prototype.each( instance )[ 0 ] ), exp );
   var exp =
   {
-    'staticField1' : 'b1', 'staticField2' : 'b1'
+    's1' : 'b1', 's2' : 'b1'
   }
   test.identical( propertyOwn( _.prototype.each( instance )[ 1 ] ), exp );
   var exp =
@@ -8315,7 +8377,7 @@ function blueprintInheritWithTrait( test )
     inherit : _.define.inherit( Blueprint1 ),
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : s( 'b2' ),
+    s2 : s( 'b2' ),
     staticField3 : s( 'b2' ),
   });
 
@@ -8330,8 +8392,8 @@ function blueprintInheritWithTrait( test )
     'field1' : 'b1',
     'field2' : 'b2',
     'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2',
+    's1' : 'b1',
+    's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance ), exp );
@@ -8344,12 +8406,12 @@ function blueprintInheritWithTrait( test )
   test.identical( propertyOwn( _.prototype.each( instance )[ 0 ] ), exp );
   var exp =
   {
-    'staticField2' : 'b2', 'staticField3' : 'b2'
+    's2' : 'b2', 'staticField3' : 'b2'
   }
   test.identical( propertyOwn( _.prototype.each( instance )[ 1 ] ), exp );
   var exp =
   {
-    'staticField1' : 'b1', 'staticField2' : 'b1'
+    's1' : 'b1', 's2' : 'b1'
   }
   test.identical( propertyOwn( _.prototype.each( instance )[ 2 ] ), exp );
   var exp =
@@ -8366,8 +8428,8 @@ function blueprintInheritWithTrait( test )
   {
     'field1' : 'b1',
     'field2' : 'b1',
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
   }
   var got = _.property.all( instance );
   test.identical( got, exp );
@@ -8398,8 +8460,8 @@ function blueprintInheritWithTrait( test )
     'field4' : 'b3',
     'staticField3' : 'b3',
     'staticField4' : 'b3',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2'
+    's1' : 'b1',
+    's2' : 'b2'
   }
   test.identical( _.property.all( instance ), exp );
   var exp =
@@ -8417,12 +8479,12 @@ function blueprintInheritWithTrait( test )
   test.identical( propertyOwn( _.prototype.each( instance )[ 1 ] ), exp );
   var exp =
   {
-    'staticField2' : 'b2', 'staticField3' : 'b2'
+    's2' : 'b2', 'staticField3' : 'b2'
   }
   test.identical( propertyOwn( _.prototype.each( instance )[ 2 ] ), exp );
   var exp =
   {
-    'staticField1' : 'b1', 'staticField2' : 'b1'
+    's1' : 'b1', 's2' : 'b1'
   }
   test.identical( propertyOwn( _.prototype.each( instance )[ 3 ] ), exp );
   var exp =
@@ -9237,8 +9299,8 @@ function traitName( test )
     withConstructor : _.trait.withConstructor(),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : s( 'b1' ),
-    staticField2 : s( 'b1' ),
+    s1 : s( 'b1' ),
+    s2 : s( 'b1' ),
   });
 
   test.identical( Blueprint1.Make.name, 'Construction' );
@@ -9268,8 +9330,8 @@ function traitName( test )
     name : _.trait.name( 'Blueprint1X' ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : s( 'b1' ),
-    staticField2 : s( 'b1' ),
+    s1 : s( 'b1' ),
+    s2 : s( 'b1' ),
   });
 
   test.identical( Blueprint1.Make.name, 'Blueprint1X' );
@@ -9299,8 +9361,8 @@ function traitName( test )
     name : _.trait.name( 'Blueprint1X' ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : s( 'b1' ),
-    staticField2 : s( 'b1' ),
+    s1 : s( 'b1' ),
+    s2 : s( 'b1' ),
   });
 
   var Blueprint2 = _.Blueprint
@@ -9309,7 +9371,7 @@ function traitName( test )
     name : _.trait.name( 'Blueprint2X' ),
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : s( 'b2' ),
+    s2 : s( 'b2' ),
     staticField3 : s( 'b2' ),
   });
 
@@ -9341,8 +9403,8 @@ function traitName( test )
     name : _.trait.name( 'Blueprint1X' ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : s( 'b1' ),
-    staticField2 : s( 'b1' ),
+    s1 : s( 'b1' ),
+    s2 : s( 'b1' ),
   });
 
   var Blueprint2 = _.Blueprint
@@ -9350,7 +9412,7 @@ function traitName( test )
     inherit : _.define.inherit( Blueprint1 ),
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : s( 'b2' ),
+    s2 : s( 'b2' ),
     staticField3 : s( 'b2' ),
   });
 
@@ -9382,14 +9444,123 @@ traitName.description =
 
 //
 
-function traitWithConstructor( test )
+function traitWithConstructorBasic( test )
 {
   let context = this;
   let s = _.define.static;
 
   /* */
 
-  test.case = 'unnamed blueprint';
+  test.case = 'unnamed blueprint, typed:0';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed({ val : false }),
+    withConstructor : _.trait.withConstructor(),
+    field1 : 'b1',
+    field2 : 'b1',
+    s1 : s( 'b1' ),
+    s2 : s( 'b1' ),
+  });
+  test.true( Blueprint1.prototype === Blueprint1.Make.prototype );
+  test.true( Blueprint1.Make === Blueprint1.prototype.constructor );
+  test.true( Blueprint1.constructor === undefined );
+  test.identical( Blueprint1.Make.name, 'Construction' );
+
+  test.description = 'instance1'; /* */
+
+  var instance1 = Blueprint1.Make();
+  test.identical( instance1 instanceof Blueprint1.Make, false );
+  test.true( _.routineIs( instance1.constructor ) );
+  test.identical( instance1.constructor.name, 'Construction' );
+  test.true( instance1.constructor === Blueprint1.Make );
+  test.true( instance1.constructor === Blueprint1.prototype.constructor );
+
+  test.identical( _.prototype.each( instance1 ).length, 1 );
+  var exp =
+  {
+    constructor : instance1.constructor,
+    'field1' : 'b1',
+    'field2' : 'b1',
+  }
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
+
+  test.description = 'instance2'; /* */
+
+  var instance2 = instance1.constructor();
+  test.identical( instance2 instanceof Blueprint1.Make, false );
+  test.true( _.routineIs( instance2.constructor ) );
+  test.identical( instance2.constructor.name, 'Construction' );
+  test.true( instance2.constructor === Blueprint1.Make );
+  test.true( instance2.constructor === Blueprint1.prototype.constructor );
+
+  test.identical( _.prototype.each( instance2 ).length, 1 );
+  var exp =
+  {
+    constructor : instance1.constructor,
+    'field1' : 'b1',
+    'field2' : 'b1',
+  }
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 0 ] ), exp );
+
+  /* */
+
+  test.case = 'named blueprint, typed:0';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed({ val : false }),
+    withConstructor : _.trait.withConstructor(),
+    name : _.trait.name( 'Blueprint1X' ),
+    field1 : 'b1',
+    field2 : 'b1',
+    s1 : s( 'b1' ),
+    s2 : s( 'b1' ),
+  });
+  test.true( Blueprint1.prototype === Blueprint1.Make.prototype );
+  test.true( Blueprint1.Make === Blueprint1.prototype.constructor );
+  test.true( Blueprint1.constructor === undefined );
+  test.identical( Blueprint1.Make.name, 'Blueprint1X' );
+
+  test.description = 'instance1'; /* */
+
+  var instance1 = Blueprint1.Make();
+  test.identical( instance1 instanceof Blueprint1.Make, false );
+  test.true( _.routineIs( instance1.constructor ) );
+  test.identical( instance1.constructor.name, 'Blueprint1X' );
+  test.true( instance1.constructor === Blueprint1.Make );
+  test.true( instance1.constructor === Blueprint1.prototype.constructor );
+
+  test.identical( _.prototype.each( instance1 ).length, 1 );
+  var exp =
+  {
+    constructor : instance1.constructor,
+    'field1' : 'b1',
+    'field2' : 'b1',
+  }
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
+
+  test.description = 'instance2'; /* */
+
+  var instance2 = instance1.constructor();
+  test.identical( instance2 instanceof Blueprint1.Make, false );
+  test.true( _.routineIs( instance2.constructor ) );
+  test.identical( instance2.constructor.name, 'Blueprint1X' );
+  test.true( instance2.constructor === Blueprint1.Make );
+  test.true( instance2.constructor === Blueprint1.prototype.constructor );
+
+  test.identical( _.prototype.each( instance2 ).length, 1 );
+  var exp =
+  {
+    constructor : instance1.constructor,
+    'field1' : 'b1',
+    'field2' : 'b1',
+  }
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 0 ] ), exp );
+
+  /* */
+
+  test.case = 'unnamed blueprint, typed:1';
 
   var Blueprint1 = _.Blueprint
   ({
@@ -9397,8 +9568,8 @@ function traitWithConstructor( test )
     withConstructor : _.trait.withConstructor(),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : s( 'b1' ),
-    staticField2 : s( 'b1' ),
+    s1 : s( 'b1' ),
+    s2 : s( 'b1' ),
   });
   test.true( Blueprint1.prototype === Blueprint1.Make.prototype );
   test.true( Blueprint1.Make === Blueprint1.prototype.constructor );
@@ -9418,8 +9589,8 @@ function traitWithConstructor( test )
     constructor : Blueprint1.prototype.constructor,
     'field1' : 'b1',
     'field2' : 'b1',
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
   }
   test.identical( _.property.all( instance1 ), exp );
   var exp =
@@ -9431,8 +9602,8 @@ function traitWithConstructor( test )
   var exp =
   {
     constructor : Blueprint1.prototype.constructor,
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
   }
   test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
@@ -9453,8 +9624,8 @@ function traitWithConstructor( test )
     constructor : Blueprint1.prototype.constructor,
     'field1' : 'b1',
     'field2' : 'b1',
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
   }
   test.identical( _.property.all( instance2 ), exp );
   var exp =
@@ -9466,8 +9637,8 @@ function traitWithConstructor( test )
   var exp =
   {
     constructor : Blueprint1.prototype.constructor,
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
   }
   test.identical( propertyOwn( _.prototype.each( instance2 )[ 1 ] ), exp );
   var exp =
@@ -9477,7 +9648,7 @@ function traitWithConstructor( test )
 
   /* */
 
-  test.case = 'named blueprint';
+  test.case = 'named blueprint, typed:1';
 
   var Blueprint1 = _.Blueprint
   ({
@@ -9486,8 +9657,8 @@ function traitWithConstructor( test )
     name : _.trait.name( 'Blueprint1X' ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : s( 'b1' ),
-    staticField2 : s( 'b1' ),
+    s1 : s( 'b1' ),
+    s2 : s( 'b1' ),
   });
 
   test.true( Blueprint1.prototype === Blueprint1.Make.prototype );
@@ -9508,8 +9679,8 @@ function traitWithConstructor( test )
     constructor : Blueprint1.prototype.constructor,
     'field1' : 'b1',
     'field2' : 'b1',
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
   }
   test.identical( _.property.all( instance1 ), exp );
   var exp =
@@ -9521,8 +9692,8 @@ function traitWithConstructor( test )
   var exp =
   {
     constructor : Blueprint1.prototype.constructor,
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
   }
   test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
@@ -9543,8 +9714,8 @@ function traitWithConstructor( test )
     constructor : Blueprint1.prototype.constructor,
     'field1' : 'b1',
     'field2' : 'b1',
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
   }
   test.identical( _.property.all( instance2 ), exp );
   var exp =
@@ -9556,8 +9727,8 @@ function traitWithConstructor( test )
   var exp =
   {
     constructor : Blueprint1.prototype.constructor,
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
   }
   test.identical( propertyOwn( _.prototype.each( instance2 )[ 1 ] ), exp );
   var exp =
@@ -9567,7 +9738,7 @@ function traitWithConstructor( test )
 
   /* */
 
-  test.case = 'inheritance';
+  test.case = 'inheritance, typed:1';
 
   var Blueprint1 = _.Blueprint
   ({
@@ -9576,8 +9747,8 @@ function traitWithConstructor( test )
     name : _.trait.name( 'Blueprint1X' ),
     field1 : 'b1',
     field2 : 'b1',
-    staticField1 : s( 'b1' ),
-    staticField2 : s( 'b1' ),
+    s1 : s( 'b1' ),
+    s2 : s( 'b1' ),
   });
 
   var Blueprint2 = _.Blueprint
@@ -9586,7 +9757,7 @@ function traitWithConstructor( test )
     name : _.trait.name( 'Blueprint2X' ),
     field2 : 'b2',
     field3 : 'b2',
-    staticField2 : s( 'b2' ),
+    s2 : s( 'b2' ),
     staticField3 : s( 'b2' ),
   });
 
@@ -9631,8 +9802,8 @@ function traitWithConstructor( test )
     'field1' : 'b1',
     'field2' : 'b2',
     'field3' : 'b2',
-    'staticField1' : 'b1',
-    'staticField2' : 'b2',
+    's1' : 'b1',
+    's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( _.property.all( instance1 ), exp );
@@ -9646,15 +9817,15 @@ function traitWithConstructor( test )
   var exp =
   {
     constructor : Blueprint2.prototype.constructor,
-    'staticField2' : 'b2',
+    's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
     constructor : Blueprint1.prototype.constructor,
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
   }
   test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
   var exp =
@@ -9679,15 +9850,15 @@ function traitWithConstructor( test )
   var exp =
   {
     constructor : Blueprint2.prototype.constructor,
-    'staticField2' : 'b2',
+    's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( propertyOwn( _.prototype.each( instance2 )[ 1 ] ), exp );
   var exp =
   {
     constructor : Blueprint1.prototype.constructor,
-    'staticField1' : 'b1',
-    'staticField2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
   }
   test.identical( propertyOwn( _.prototype.each( instance2 )[ 2 ] ), exp );
   var exp =
@@ -9699,10 +9870,42 @@ function traitWithConstructor( test )
 
 }
 
-traitWithConstructor.description =
+traitWithConstructorBasic.description =
 `
 - blueprint inheritance with trait make inheritance
 `
+
+//
+
+function traitWithConstructorExtendConstructionWithDefinition( test )
+{
+  let context = this;
+  let s = _.define.static;
+
+  /* */
+
+  test.case = 'pure map';
+
+  var extensionMap =
+  ({
+    withConstructor : _.trait.withConstructor(),
+  });
+  var dstContainer = Object.create( null );
+
+  _.construction.extend( dstContainer, extensionMap );
+  test.true( _.routineIs( dstContainer.constructor ) );
+  test.identical( dstContainer.constructor.name, 'Construction' );
+
+  test.identical( _.prototype.each( dstContainer ).length, 1 );
+  var exp =
+  {
+    constructor : dstContainer.constructor,
+  }
+  test.identical( propertyOwn( _.prototype.each( dstContainer )[ 0 ] ), exp );
+
+  /* */
+
+}
 
 //
 
@@ -12852,7 +13055,8 @@ let Self =
     traitPrototype,
     traitTyped,
     traitName,
-    traitWithConstructor,
+    traitWithConstructorBasic,
+    traitWithConstructorExtendConstructionWithDefinition,
     traitExtendable,
 
     // construct / define
