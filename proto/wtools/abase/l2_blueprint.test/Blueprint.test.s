@@ -6196,7 +6196,7 @@ function definePropAliasOptionOriginalContainer( test )
 
 //
 
-function definePropAliasConstructionExtendWithDefinition( test )
+function definePropAliasConstructionAmendWithDefinition( test )
 {
 
   act({});
@@ -6223,6 +6223,7 @@ function definePropAliasConstructionExtendWithDefinition( test )
     var extension =
     {
       p : _.define.alias({ originalContainer, originalName : 'f1', static : 0 }),
+      f2 : _.define.alias({ originalContainer, originalName : 'f2', static : 0 }),
     }
 
     var keysBefore = _.mapKeys( _.prototype.of( dstContainer ), { onlyEnumerable : 0, onlyOwn : 0 } );
@@ -6238,6 +6239,13 @@ function definePropAliasConstructionExtendWithDefinition( test )
     }
     test.identical( dstContainer, exp );
     test.true( dstContainer._ === undefined );
+
+    var exp =
+    {
+      'f1' : '1',
+      'f2' : '12',
+    }
+    test.identical( originalContainer, exp );
 
     var got = Object.getOwnPropertyDescriptor( dstContainer, 'p' );
     var exp =
@@ -6269,6 +6277,7 @@ function definePropAliasConstructionExtendWithDefinition( test )
     var extension =
     {
       s : _.define.alias({ originalContainer, originalName : 'f1', static : 1 }),
+      f2 : _.define.alias({ originalContainer, originalName : 'f2', static : 0 }),
     }
 
     var keysBefore = _.mapKeys( Object.prototype, { onlyEnumerable : 0, onlyOwn : 0 } );
@@ -6282,10 +6291,15 @@ function definePropAliasConstructionExtendWithDefinition( test )
       'f2' : '12',
     }
     test.identical( _.property.all( dstContainer, { onlyEnumerable : 1 } ), exp );
-
     test.identical( dstContainer.s, '1' );
-
     test.true( dstContainer._ === undefined );
+
+    var exp =
+    {
+      'f1' : '1',
+      'f2' : '12',
+    }
+    test.identical( originalContainer, exp );
 
     var got = Object.getOwnPropertyDescriptor( prototype, 's' );
     var exp =
@@ -6316,6 +6330,7 @@ function definePropAliasConstructionExtendWithDefinition( test )
     var extension =
     {
       s : _.define.alias({ originalContainer, originalName : 'f2', static : 1 }),
+      f2 : _.define.alias({ originalContainer, originalName : 'f2', static : 0 }),
     }
 
     if( Config.debug )
@@ -6330,6 +6345,13 @@ function definePropAliasConstructionExtendWithDefinition( test )
       );
     }
 
+    var exp =
+    {
+      'f1' : '1',
+      'f2' : '2',
+    }
+    test.identical( originalContainer, exp );
+
     /* */
 
     test.case = `several`;
@@ -6338,6 +6360,7 @@ function definePropAliasConstructionExtendWithDefinition( test )
     {
       a : 1,
       b : 2,
+      d : 3,
     }
 
     var extensionMap =
@@ -6351,9 +6374,9 @@ function definePropAliasConstructionExtendWithDefinition( test )
     var exp =
     {
       'a' : 1,
-      'b' : 2,
+      'b' : 3,
       'c' : 1,
-      'd' : 2,
+      'd' : 3,
     }
     test.identical( dstContainer, exp );
     test.true( Object.isExtensible( dstContainer ) );
@@ -6372,6 +6395,7 @@ function definePropAliasConstructionExtendWithDefinition( test )
     {
       a : 3,
       b : 4,
+      d : 5,
     }
 
     var extensionMap =
@@ -6392,6 +6416,14 @@ function definePropAliasConstructionExtendWithDefinition( test )
     test.identical( dstContainer, exp );
     test.true( Object.isExtensible( dstContainer ) );
 
+    var exp =
+    {
+      a : 3,
+      b : 4,
+      d : 5,
+    }
+    test.identical( originalContainer, exp );
+
     /* */
 
   }
@@ -6400,7 +6432,7 @@ function definePropAliasConstructionExtendWithDefinition( test )
 
 //
 
-function definePropAliasConstructionExtendWithBlueprint( test )
+function definePropAliasConstructionAmendWithBlueprint( test )
 {
 
   act({});
@@ -13029,8 +13061,8 @@ let Self =
 
     definePropAliasBasic,
     definePropAliasOptionOriginalContainer,
-    definePropAliasConstructionExtendWithDefinition,
-    definePropAliasConstructionExtendWithBlueprint,
+    definePropAliasConstructionAmendWithDefinition,
+    definePropAliasConstructionAmendWithBlueprint,
 
     // define amendment
 

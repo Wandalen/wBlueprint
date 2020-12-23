@@ -176,7 +176,6 @@ function supplement( dstConstruction, src )
 //
 //     if( o.amend === 'supplement' )
 //     {
-//       /* xxx qqq : cover */
 //       if( Object.hasOwnProperty.call( o.construction, o.key && o.construction[ o.key ] !== undefined ) )
 //       return;
 //     }
