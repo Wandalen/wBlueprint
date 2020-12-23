@@ -6199,7 +6199,8 @@ function definePropAliasOptionOriginalContainer( test )
 function definePropAliasConstructionAmendWithDefinition( test )
 {
 
-  act({});
+  act({ amending : 'extend' });
+  act({ amending : 'supplement' });
 
   function act( tops )
   {
@@ -6227,7 +6228,7 @@ function definePropAliasConstructionAmendWithDefinition( test )
     }
 
     var keysBefore = _.mapKeys( _.prototype.of( dstContainer ), { onlyEnumerable : 0, onlyOwn : 0 } );
-    _.construction.extend( dstContainer, extension );
+    _.construction[ tops.amending ]( dstContainer, extension );
     var keysAfter = _.mapKeys( _.prototype.of( dstContainer ), { onlyEnumerable : 0, onlyOwn : 0 } );
     test.identical( keysAfter, keysBefore );
 
@@ -6245,6 +6246,8 @@ function definePropAliasConstructionAmendWithDefinition( test )
       'f1' : '1',
       'f2' : '12',
     }
+    if( tops.amending === 'supplement' )
+    exp.f2 = '2';
     test.identical( originalContainer, exp );
 
     var got = Object.getOwnPropertyDescriptor( dstContainer, 'p' );
@@ -6281,7 +6284,7 @@ function definePropAliasConstructionAmendWithDefinition( test )
     }
 
     var keysBefore = _.mapKeys( Object.prototype, { onlyEnumerable : 0, onlyOwn : 0 } );
-    _.construction.extend( dstContainer, extension );
+    _.construction[ tops.amending ]( dstContainer, extension );
     var keysAfter = _.mapKeys( Object.prototype, { onlyEnumerable : 0, onlyOwn : 0 } );
     test.identical( keysAfter, keysBefore );
 
@@ -6299,6 +6302,8 @@ function definePropAliasConstructionAmendWithDefinition( test )
       'f1' : '1',
       'f2' : '12',
     }
+    if( tops.amending === 'supplement' )
+    exp.f2 = '2';
     test.identical( originalContainer, exp );
 
     var got = Object.getOwnPropertyDescriptor( prototype, 's' );
@@ -6337,7 +6342,7 @@ function definePropAliasConstructionAmendWithDefinition( test )
     {
       test.shouldThrowErrorSync
       (
-        () => _.construction.extend( dstContainer, extension ),
+        () => _.construction[ tops.amending ]( dstContainer, extension ),
         ( err ) =>
         {
           test.identical( err.originalMessage, 'Attempt to polute _global_.Object.prototype' );
@@ -6369,7 +6374,7 @@ function definePropAliasConstructionAmendWithDefinition( test )
       d : _.define.alias( 'b' ),
     }
 
-    _.construction.extend( dstContainer, extensionMap );
+    _.construction[ tops.amending ]( dstContainer, extensionMap );
 
     var exp =
     {
@@ -6378,6 +6383,8 @@ function definePropAliasConstructionAmendWithDefinition( test )
       'c' : 1,
       'd' : 3,
     }
+    if( tops.amending === 'supplement' )
+    exp.b = 2;
     test.identical( dstContainer, exp );
     test.true( Object.isExtensible( dstContainer ) );
 
@@ -6404,7 +6411,7 @@ function definePropAliasConstructionAmendWithDefinition( test )
       d : _.define.alias({ originalName : 'b', originalContainer }),
     }
 
-    _.construction.extend( dstContainer, extensionMap );
+    _.construction[ tops.amending ]( dstContainer, extensionMap );
 
     var exp =
     {
@@ -6435,7 +6442,9 @@ function definePropAliasConstructionAmendWithDefinition( test )
 function definePropAliasConstructionAmendWithBlueprint( test )
 {
 
-  act({});
+  /* xxx */
+  act({ amending : 'extend' });
+  // act({ amending : 'supplement' });
 
   function act( tops )
   {
@@ -6459,10 +6468,11 @@ function definePropAliasConstructionAmendWithBlueprint( test )
     var extension = _.Blueprint
     ({
       p : _.define.alias({ originalContainer, originalName : 'f1', static : 0 }),
+      f2 : _.define.alias({ originalContainer, originalName : 'f2', static : 0 }),
     });
 
     var keysBefore = _.mapKeys( _.prototype.of( dstContainer ), { onlyEnumerable : 0, onlyOwn : 0 } );
-    _.construction.extend( dstContainer, extension );
+    _.construction[ tops.amending ]( dstContainer, extension );
     var keysAfter = _.mapKeys( _.prototype.of( dstContainer ), { onlyEnumerable : 0, onlyOwn : 0 } );
     test.identical( keysAfter, keysBefore );
 
@@ -6474,6 +6484,13 @@ function definePropAliasConstructionAmendWithBlueprint( test )
     }
     test.identical( dstContainer, exp );
     test.true( dstContainer._ === undefined );
+
+    var exp =
+    {
+      'f1' : '1',
+      'f2' : '12',
+    }
+    test.identical( originalContainer, exp );
 
     var got = Object.getOwnPropertyDescriptor( dstContainer, 'p' );
     var exp =
@@ -6508,10 +6525,11 @@ function definePropAliasConstructionAmendWithBlueprint( test )
     ({
       typed : _.trait.typed( 0 ),
       s : _.define.alias({ originalContainer, originalName : 'f1', static : 1 }),
+      f2 : _.define.alias({ originalContainer, originalName : 'f2', static : 1 }),
     })
 
     var keysBefore = _.mapKeys( Object.prototype, { onlyEnumerable : 0, onlyOwn : 0 } );
-    _.construction.extend( dstContainer, extension );
+    _.construction[ tops.amending ]( dstContainer, extension );
     var keysAfter = _.mapKeys( Object.prototype, { onlyEnumerable : 0, onlyOwn : 0 } );
     test.identical( keysAfter, keysBefore );
 
@@ -6548,10 +6566,11 @@ function definePropAliasConstructionAmendWithBlueprint( test )
     ({
       typed : _.trait.typed( 1 ),
       s : _.define.alias({ originalContainer, originalName : 'f1', static : 1 }),
+      f2 : _.define.alias({ originalContainer, originalName : 'f2', static : 1 }),
     })
 
     var keysBefore = _.mapKeys( Object.prototype, { onlyEnumerable : 0, onlyOwn : 0 } );
-    _.construction.extend( dstContainer, extension );
+    _.construction[ tops.amending ]( dstContainer, extension );
     var keysAfter = _.mapKeys( Object.prototype, { onlyEnumerable : 0, onlyOwn : 0 } );
     test.identical( keysAfter, keysBefore );
 
@@ -6561,6 +6580,13 @@ function definePropAliasConstructionAmendWithBlueprint( test )
       'f2' : '12',
     }
     test.identical( _.property.all( dstContainer, { onlyEnumerable : 1 } ), exp );
+
+    var exp =
+    {
+      'f1' : '1',
+      'f2' : '2',
+    }
+    test.identical( originalContainer, exp );
 
     test.identical( dstContainer.s, '1' );
     test.identical( extension.prototype.s, '1' );
@@ -6590,15 +6616,22 @@ function definePropAliasConstructionAmendWithBlueprint( test )
     var extension = _.Blueprint
     ({
       s : _.define.alias({ originalContainer, originalName : 'f2', static : 1 }),
+      f2 : _.define.alias({ originalContainer, originalName : 'f2', static : 1 }),
     });
 
     var keysBefore = _.mapKeys( Object.prototype, { onlyEnumerable : 0, onlyOwn : 0 } );
-    _.construction.extend( dstContainer, extension );
+    _.construction[ tops.amending ]( dstContainer, extension );
     var keysAfter = _.mapKeys( Object.prototype, { onlyEnumerable : 0, onlyOwn : 0 } );
     test.identical( keysAfter, keysBefore );
-
     test.identical( dstContainer.s, undefined );
     test.identical( extension.prototype.s, '2' );
+
+    var exp =
+    {
+      'f1' : '1',
+      'f2' : '2',
+    }
+    test.identical( originalContainer, exp );
 
     test.true( !Object.isExtensible( dstContainer ) );
     test.true( _.mapIs( dstContainer ) );
@@ -7752,7 +7785,7 @@ function defineNothing( test )
 
   test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
   test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
-  test.identical( new Set([ ... select( Blueprint2._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ 'amend' ]) );
+  test.identical( new Set([ ... select( Blueprint2._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ 'amending' ]) );
   test.identical( Blueprint1._UnnamedDefinitionsArray.length, 1 );
 
   var instance2 = _.blueprint.construct( Blueprint2 );
@@ -9909,7 +9942,7 @@ traitWithConstructorBasic.description =
 
 //
 
-function traitWithConstructorExtendConstructionWithDefinition( test )
+function traitWithConstructorExtendConstructionWithDefinition( test ) /* xxx : subroutine for amending */
 {
   let context = this;
   let s = _.define.static;

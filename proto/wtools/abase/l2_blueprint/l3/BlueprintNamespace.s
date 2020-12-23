@@ -107,8 +107,8 @@ function define()
     _.trait.typed( false ),
   ]
 
-  if( _global_.debugger )
-  debugger;
+  // if( _global_.debugger )
+  // debugger;
 
   _.blueprint._supplement( blueprint, defaultSupplement );
 

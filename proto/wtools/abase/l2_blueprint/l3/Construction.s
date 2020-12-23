@@ -68,6 +68,8 @@ function amend( o )
   o = _.routineOptions( amend, arguments );
   if( o.dstConstruction === null )
   o.dstConstruction = Object.create( null );
+  if( _global_.debugger )
+  debugger;
   return constructionExtend( o.dstConstruction, o.src, null );
 
   /* */
@@ -92,7 +94,7 @@ function amend( o )
       if( _.definitionIs( def ) )
       constructionDefinitionExtend( dstConstruction, def, name2 );
       else
-      dstConstruction[ name2 ] = def;
+      dstConstruction[ name2 ] = def; /* xxx */
     }
     return dstConstruction;
   }
@@ -107,7 +109,6 @@ function amend( o )
   function constructionBlueprintExtend( dstConstruction, blueprint, name )
   {
     _.assert( !_.blueprint.is( dstConstruction ) );
-    // _.assert( 0, 'not tested' );
     return blueprint.Retype( dstConstruction );
   }
 
@@ -217,7 +218,7 @@ function _amendDefinitionWithoutMethod( o )
   if( o.amend === 'supplement' )
   {
     /* xxx qqq : cover */
-    if( Object.hasOwnProperty.call( o.construction, o.key && o.construction[ o.key ] !== undefined ) )
+    if( Object.hasOwnProperty.call( o.construction, o.key ) && o.construction[ o.key ] !== undefined )
     return;
   }
 

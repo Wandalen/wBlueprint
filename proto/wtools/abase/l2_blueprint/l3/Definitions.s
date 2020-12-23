@@ -958,7 +958,7 @@ function _constant_functor() /* xxx : test with blueprint? */
 
   /* */
 
-  function constructionAmend( dst, key, amend )
+  function constructionAmend( dst, key, amending )
   {
     let instanceIsStandard = _.workpiece.instanceIsStandard( dst );
     _.assert( arguments.length === 3 );
@@ -1008,7 +1008,7 @@ let _constant = _constant_functor();
 //
 //   /* */
 //
-//   function constructionAmend( dst, key, amend )
+//   function constructionAmend( dst, key, amending )
 //   {
 //     let instanceIsStandard = _.workpiece.instanceIsStandard( dst );
 //     _.assert( arguments.length === 3 );

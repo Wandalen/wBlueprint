@@ -289,8 +289,8 @@ function prototype_body( o )
     _.assert( blueprint.Make === null );
     _.assert( _.objectIs( blueprint.prototype ) );
 
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
 
     if( _.blueprint.is( blueprint.Traits.prototype.val ) )
     {
