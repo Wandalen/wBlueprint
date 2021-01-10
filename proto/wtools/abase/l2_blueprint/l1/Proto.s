@@ -90,7 +90,7 @@ function hasProperty( srcPrototype, name ) /* yyy qqq : names could be only stri
   do
   {
     let has = true;
-    if( !_ObjectHasOwnProperty.call( srcPrototype, name ) )
+    if( !Object.hasOwnProperty.call( srcPrototype, name ) )
     has = false;
     if( has )
     return srcPrototype;
@@ -110,7 +110,7 @@ function hasProperty( srcPrototype, name ) /* yyy qqq : names could be only stri
 //   {
 //     let has = true;
 //     for( let n in names )
-//     if( !_ObjectHasOwnProperty.call( srcPrototype, n ) )
+//     if( !Object.hasOwnProperty.call( srcPrototype, n ) )
 //     {
 //       has = false;
 //       break;
@@ -166,6 +166,15 @@ function propertyDescriptorActiveGet( object, name )
 
 //
 
+function _isStandardEntity( src )
+{
+  if( src === Object.prototype )
+  return true;
+  return false;
+}
+
+//
+
 function propertyDescriptorGet( object, name )
 {
   let result = Object.create( null );
@@ -204,6 +213,7 @@ let PrototypeExtension =
   hasPrototype,
 
   isSubPrototypeOf,
+  _isStandardEntity,
 
   propertyDescriptorActiveGet,
   propertyDescriptorGet,

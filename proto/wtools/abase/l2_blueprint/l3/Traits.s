@@ -53,13 +53,128 @@ callable.defaults =
 
 //
 
+function prototype_body( o )
+{
+  _.routineOptions( prototype_body, o );
+
+  if( o.new === null )
+  o.new = _.blueprint.is( o.val );
+
+  if( _.boolLike( o.val ) )
+  o.val = !!o.val;
+
+  _.assert( arguments.length === 0 || arguments.length === 1 );
+  _.assert( _.boolLike( o.new ) );
+  _.assert( o.val === null || _.boolIs( o.val ) || !_.primitiveIs( o.val ) );
+
+  o.blueprintForm1 = blueprintForm1;
+  o.blueprintForm2 = blueprintForm2;
+  o.blueprint = false;
+
+  return _.definition._traitMake( 'prototype', o );
+
+  /* */
+
+  function blueprintForm1( o )
+  {
+    let prototype;
+
+    _.assert( o.blueprint.Make === null );
+    _.assert( _.objectIs( o.blueprint.prototype ) );
+
+    if( _.boolIs( o.blueprint.Traits.prototype.val ) )
+    {
+      /* xxx : take into account option::new */
+      /* xxx : take into account true/false */
+      /* xxx : merge traits typed and prototype */
+      return;
+    }
+
+    if( _.blueprint.is( o.blueprint.Traits.prototype.val ) )
+    {
+      prototype = o.blueprint.Traits.prototype.val.prototype;
+      _.assert( _.routineIs( o.blueprint.Traits.prototype.val.Make ) );
+      _.assert( _.objectIs( o.blueprint.Traits.prototype.val.prototype ) );
+    }
+    else
+    {
+      prototype = o.blueprint.Traits.prototype.val;
+    }
+    if( o.blueprint.Traits.prototype.new )
+    o.blueprint.Runtime.prototype = Object.create( prototype );
+    else
+    o.blueprint.Runtime.prototype = prototype;
+  }
+
+  /* */
+
+  function blueprintForm2( o )
+  {
+    let prototype;
+
+    _.assert( _.fuzzyIs( o.blueprint.Typed ) );
+
+    if( _.boolIs( o.blueprint.Traits.prototype.val ) )
+    {
+      return;
+    }
+
+    if( _.blueprint.is( o.blueprint.Traits.prototype.val ) )
+    {
+      prototype = o.blueprint.Traits.prototype.val.prototype;
+      _.assert( _.blueprint.isDefinitive( o.blueprint.Traits.prototype.val ) );
+      _.assert( _.routineIs( o.blueprint.Make ) );
+      _.assert( _.routineIs( o.blueprint.Traits.prototype.val.Make ) );
+      Object.setPrototypeOf( o.blueprint.Make, o.blueprint.Traits.prototype.val.Make );
+    }
+    else
+    {
+      prototype = o.blueprint.Traits.prototype.val;
+      _.assert( prototype !== null || !o.blueprint.Typed, 'Object with null prototype cant be typed' );
+      if( prototype && Object.hasOwnProperty.call( prototype, 'constructor' ) && _.routineIs( prototype.constructor ) )
+      if( o.blueprint.Make !== prototype.constructor )
+      Object.setPrototypeOf( o.blueprint.Make, prototype.constructor );
+    }
+
+    /* yyy */
+    // if( Config.debug )
+    // if( prototype !== null && o.blueprint.Typed === false )
+    // _.blueprint._routineAdd( o.blueprint, 'initEnd', notPrototyped );
+
+    // function notPrototyped( genesis )
+    // {
+    //   if( _global_.debugger )
+    //   debugger;
+    //   _.assert
+    //   (
+    //     Object.getPrototypeOf( genesis.construction ) !== prototype,
+    //     'trait::typed is false, but construction has prototype defined by trait::prototype'
+    //   );
+    // }
+
+  }
+
+  /* */
+
+}
+
+prototype_body.defaults =
+{
+  val : null,
+  new : null,
+}
+
+let prototype = _.routineUnite( _pairArgumentsHead, prototype_body );
+
+//
+
 function typed( o )
 {
   if( !_.mapIs( o ) )
   o = { val : arguments[ 0 ] };
   _.routineOptions( typed, o );
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.fuzzyLike( o.val ) );
+  _.assert( _.fuzzyLike( o.val ), () => `Expects fuzzy-like argument, but got ${_.strType( o.val )}` );
 
   if( _.boolLike( o.val ) )
   o.val = !!o.val;
@@ -82,22 +197,20 @@ function typed( o )
     retype({ construction });
   }
 
-  function blueprintForm2( blueprint )
+  function blueprintForm2( o )
   {
 
-    _.assert( blueprint.Traits.typed.val === val );
-    _.assert( _.fuzzyIs( blueprint.Traits.typed.val ) );
-    _.assert( blueprint.Typed === blueprint.Traits.typed.val );
+    _.assert( o.blueprint.Traits.typed.val === val );
+    _.assert( _.fuzzyIs( o.blueprint.Traits.typed.val ) );
+    _.assert( o.blueprint.Typed === o.blueprint.Traits.typed.val );
 
-    _.blueprint._routineAdd( blueprint, 'allocate', blueprint.Traits.typed.val ? allocateTyped : allocateUntyped );
-    _.blueprint._routineAdd( blueprint, 'retype', blueprint.Traits.typed.val ? retypeTyped : retypeUntyped );
+    _.blueprint._routineAdd( o.blueprint, 'allocate', o.blueprint.Traits.typed.val ? allocateTyped : allocateUntyped );
+    _.blueprint._routineAdd( o.blueprint, 'retype', o.blueprint.Traits.typed.val ? retypeTyped : retypeUntyped );
 
   }
 
   function allocateTyped( genesis )
   {
-    if( _global_.debugger )
-    debugger;
     if( genesis.construction === null )
     genesis.construction = new( _.constructorJoin( genesis.runtime.Make, [] ) );
     _.assert( genesis.construction === null || !genesis.runtime.Make.prototype || genesis.construction instanceof genesis.runtime.Make );
@@ -106,8 +219,6 @@ function typed( o )
 
   function allocateUntyped( genesis )
   {
-    if( _global_.debugger )
-    debugger;
     if( genesis.construction && genesis.construction instanceof genesis.runtime.Make )
     genesis.construction = Object.create( null );
     else if( genesis.construction === null )
@@ -119,8 +230,6 @@ function typed( o )
 
   function retypeTyped( genesis )
   {
-    if( _global_.debugger )
-    debugger;
     if( genesis.construction )
     {
       if( !genesis.construction || !( genesis.construction instanceof genesis.runtime.Make ) )
@@ -137,8 +246,6 @@ function typed( o )
 
   function retypeUntyped( genesis )
   {
-    if( _global_.debugger )
-    debugger;
     if( genesis.construction )
     {
       let wasProto = Object.getPrototypeOf( genesis.construction );
@@ -151,7 +258,7 @@ function typed( o )
       genesis.construction = Object.create( null );
     }
     _.assert( _.mapIs( genesis.construction ) );
-    _.assert( genesis.runtime.Typed === _.maybe || !( genesis.construction instanceof genesis.runtime.Make ) );
+    // _.assert( genesis.runtime.Typed === _.maybe || !( genesis.construction instanceof genesis.runtime.Make ) ); /* yyy */
     return genesis.construction;
   }
 
@@ -170,8 +277,9 @@ function withConstructor( o )
   o = { val : arguments[ 0 ] };
   _.routineOptions( withConstructor, o );
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.boolIs( o.val ) );
+  _.assert( _.boolLike( o.val ) );
 
+  o.val = !!o.val;
   o.blueprintForm2 = blueprintForm2;
   o.blueprint = false;
 
@@ -179,37 +287,50 @@ function withConstructor( o )
 
   /* */
 
-  function blueprintForm2( blueprint )
+  function blueprintForm2( o )
   {
 
-    _.assert( !_.mapOwnKey( blueprint.prototype, 'constructor' ) );
-    _.assert( _.routineIs( blueprint.Make ) );
-    if( !blueprint.Traits.withConstructor.val )
+    if( !o.blueprint.Traits.withConstructor.val )
+    return;
+    if( o.amending === 'supplement' && _.mapOnlyOwnKey( o.blueprint.prototype, 'constructor' ) )
     return;
 
-    _.assert( _.boolIs( blueprint.Typed ) );
-    _.assert( !_.primitiveIs( blueprint.prototype ) );
+    _.assert( !_.primitiveIs( o.blueprint.prototype ) );
+    _.assert( o.blueprint.prototype !== Object.prototype, 'Constructor of `Object.prototype` should not be rewritten' );
+    _.assert( _.routineIs( o.blueprint.Make ) );
+    _.assert( _.fuzzyIs( o.blueprint.Typed ) );
 
     let properties =
     {
-      value : blueprint.Make,
+      value : o.blueprint.Make,
       enumerable : false,
       configurable : false,
       writable : false,
     };
-    Object.defineProperty( blueprint.prototype, 'constructor', properties );
+    Object.defineProperty( o.blueprint.prototype, 'constructor', properties );
 
-    if( !blueprint.Typed )
+    let constructor = o.blueprint.Make;
+    let typed = o.blueprint.Typed;
+
+    if( typed !== true )
     {
-      _.blueprint._routineAdd( blueprint, 'initEnd', initEnd );
+      _.blueprint._routineAdd( o.blueprint, 'initEnd', initEnd );
     }
 
     function initEnd( genesis )
     {
       _.assert( !_.primitiveIs( genesis.construction ) );
+      if( genesis.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, 'constructor' ) )
+      return;
+      if( typed === _.maybe )
+      {
+        let prototype = Object.getPrototypeOf( genesis.construction );
+        if( prototype && prototype.constructor === constructor )
+        return;
+      }
       let properties =
       {
-        value : blueprint.Make,
+        value : constructor,
         enumerable : false,
         configurable : false,
         writable : false,
@@ -241,12 +362,12 @@ function extendable( o )
 
   return _.definition._traitMake( 'extendable', o );
 
-  function blueprintForm2( blueprint )
+  function blueprintForm2( o )
   {
-    _.assert( _.boolIs( blueprint.Traits.extendable.val ) );
-    if( blueprint.Traits.extendable.val )
+    _.assert( _.boolIs( o.blueprint.Traits.extendable.val ) );
+    if( o.blueprint.Traits.extendable.val )
     return;
-    _.blueprint._routineAdd( blueprint, 'initEnd', preventExtensions );
+    _.blueprint._routineAdd( o.blueprint, 'initEnd', preventExtensions );
   }
 
   function preventExtensions( genesis )
@@ -263,86 +384,6 @@ extendable.defaults =
 
 //
 
-function prototype_body( o )
-{
-  _.routineOptions( prototype_body, o );
-
-  if( o.new === null )
-  o.new = _.blueprint.is( o.val );
-
-  _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.boolLike( o.new ) );
-  _.assert( o.val === null || !_.primitiveIs( o.val ) );
-
-  o.blueprintForm1 = blueprintForm1;
-  o.blueprintForm2 = blueprintForm2;
-  o.blueprint = false;
-
-  return _.definition._traitMake( 'prototype', o );
-
-  /* */
-
-  function blueprintForm1( blueprint )
-  {
-    let prototype;
-
-    _.assert( blueprint.Make === null );
-    _.assert( _.objectIs( blueprint.prototype ) );
-
-    // if( _global_.debugger )
-    // debugger;
-
-    if( _.blueprint.is( blueprint.Traits.prototype.val ) )
-    {
-      prototype = blueprint.Traits.prototype.val.prototype;
-      _.assert( _.routineIs( blueprint.Traits.prototype.val.Make ) );
-      _.assert( _.objectIs( blueprint.Traits.prototype.val.prototype ) );
-    }
-    else
-    {
-      prototype = blueprint.Traits.prototype.val;
-    }
-    if( blueprint.Traits.prototype.new )
-    blueprint.Runtime.prototype = Object.create( prototype );
-    else
-    blueprint.Runtime.prototype = prototype;
-  }
-
-  /* */
-
-  function blueprintForm2( blueprint )
-  {
-    _.assert( _.boolIs( blueprint.Typed ) );
-    if( _.blueprint.is( blueprint.Traits.prototype.val ) )
-    {
-      _.assert( _.blueprint.isDefinitive( blueprint.Traits.prototype.val ) );
-      _.assert( _.routineIs( blueprint.Make ) );
-      _.assert( _.routineIs( blueprint.Traits.prototype.val.Make ) );
-      Object.setPrototypeOf( blueprint.Make, blueprint.Traits.prototype.val.Make );
-    }
-    else
-    {
-      let prototype = blueprint.Traits.prototype.val;
-      _.assert( prototype !== null || !blueprint.Typed, 'Object with null prototype cant be typed' );
-      if( prototype && Object.hasOwnProperty.call( prototype, 'constructor' ) && _.routineIs( prototype.constructor ) )
-      Object.setPrototypeOf( blueprint.Make, prototype.constructor );
-    }
-  }
-
-  /* */
-
-}
-
-prototype_body.defaults =
-{
-  val : null,
-  new : null,
-}
-
-let prototype = _.routineUnite( _pairArgumentsHead, prototype_body );
-
-//
-
 function name( o )
 {
   if( !_.mapIs( o ) )
@@ -354,12 +395,14 @@ function name( o )
   o.blueprintForm1 = blueprintForm1;
   o.blueprint = false;
 
-  return _.definition._traitMake( 'name', o );
+  let def = _.definition._traitMake( 'name', o );
+  return def;
 
-  function blueprintForm1( blueprint )
+  function blueprintForm1( o )
   {
-    _.assert( blueprint.Make === null );
-    blueprint.Runtime.Name = o.val;
+    debugger;
+    _.assert( o.blueprint.Make === null );
+    o.blueprint.Runtime.Name = def.val;
   }
 
 }
@@ -384,10 +427,10 @@ let TraitExtension =
 {
 
   callable,
+  prototype,
   typed,
   withConstructor,
   extendable,
-  prototype,
   name,
 
 }

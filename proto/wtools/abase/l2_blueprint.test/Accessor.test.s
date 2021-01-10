@@ -400,6 +400,58 @@ function _normalizedAsuiteForm( test )
 
 //
 
+function _objectSetValueNoShadowing( test )
+{
+
+  /* */
+
+  test.case = 'basic';
+
+  var proto = Object.create( null );
+  var obj = Object.create( proto );
+  obj.f1 = 1;
+
+  var o2 = _.accessor.declareSingle
+  ({
+    name : 'f1',
+    object : proto,
+    storingStrategy : 'underscore',
+    storageIniting : false,
+    addingMethods : false,
+    val : _.nothing,
+  });
+
+  _.accessor._objectInitStorage( obj, o2.normalizedAsuite );
+
+  debugger;
+  _.accessor._objectSetValue
+  ({
+    object : obj,
+    normalizedAsuite : o2.normalizedAsuite,
+    storingStrategy : 'underscore',
+    name : 'f1',
+    val : 2,
+  });
+
+  var exp = { f1 : 2 };
+  test.identical( _.property.of( obj ), exp );
+
+  var exp = {};
+  test.identical( _.mapBut( proto, [ 'f1' ] ), exp );
+
+  debugger;
+
+  /* */
+
+}
+
+_objectSetValueNoShadowing.description =
+`
+ - property of object should not shadow value of accessor defined in prototype
+`
+
+//
+
 function declareBasic( test )
 {
 
@@ -714,7 +766,7 @@ function declareConstantSymbolWithDefinition( test )
   {
   };
 
-  var exp = {}
+  var exp = {};
   _.accessor.declare
   ({
     object : dst,
@@ -1643,7 +1695,7 @@ function accessorOptionAddingMethods( test )
     strict : 0,
     addingMethods : 1,
   });
-  test.identical( _.property.own( dst, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.property.onlyOwn( dst, { onlyEnumerable : 0 } ), exp );
   test.true( _.routineIs( dst.aGrab ) );
   test.true( _.routineIs( dst.aGet ) );
   test.true( _.routineIs( dst.aPut ) );
@@ -1686,7 +1738,7 @@ function accessorOptionAddingMethods( test )
     strict : 0,
     addingMethods : 1,
   });
-  test.identical( _.property.own( dst, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.property.onlyOwn( dst, { onlyEnumerable : 0 } ), exp );
 
   var exp =
   {
@@ -1729,7 +1781,7 @@ function accessorOptionAddingMethods( test )
     strict : 0,
     addingMethods : 1,
   });
-  test.identical( _.property.own( dst, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.property.onlyOwn( dst, { onlyEnumerable : 0 } ), exp );
 
   var exp =
   {
@@ -3078,7 +3130,7 @@ function accessorStoringStrategyUnderscoreBasic( test )
     f2 : undefined,
     _ : {}
   }
-  test.identical( _.property.own( ins1, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.property.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
 
   var exp =
   {
@@ -3087,7 +3139,7 @@ function accessorStoringStrategyUnderscoreBasic( test )
     _ : { f2 : 3 }
   }
   ins1.f2 = 3;
-  test.identical( _.property.own( ins1, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.property.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
 
   /* */
 
@@ -3106,7 +3158,7 @@ function accessorStoringStrategyUnderscoreBasic( test )
     f2 : 2,
     _ : { f2 : 2 }
   }
-  test.identical( _.property.own( ins1, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.property.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
 
   var exp =
   {
@@ -3115,7 +3167,7 @@ function accessorStoringStrategyUnderscoreBasic( test )
     _ : { f2 : 3 }
   }
   ins1.f2 = 3;
-  test.identical( _.property.own( ins1, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.property.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
 
   /* */
 
@@ -3135,7 +3187,7 @@ function accessorStoringStrategyUnderscoreBasic( test )
     f2 : 2,
     _ : { f2 : 2 }
   }
-  test.identical( _.property.own( ins1, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.property.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
 
   var exp =
   {
@@ -3144,7 +3196,7 @@ function accessorStoringStrategyUnderscoreBasic( test )
     _ : { f2 : 3 }
   }
   ins1.f2 = 3;
-  test.identical( _.property.own( ins1, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.property.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
 
   /* */
 
@@ -3164,7 +3216,7 @@ function accessorStoringStrategyUnderscoreBasic( test )
     f2 : 2,
     _ : { f2 : 2 }
   }
-  test.identical( _.property.own( ins1, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.property.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
 
   var exp =
   {
@@ -3173,7 +3225,7 @@ function accessorStoringStrategyUnderscoreBasic( test )
     _ : { f2 : 3 }
   }
   ins1.f2 = 3;
-  test.identical( _.property.own( ins1, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.property.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
 
   /* */
 
@@ -3193,7 +3245,7 @@ function accessorStoringStrategyUnderscoreBasic( test )
     f2 : 2,
     _ : { f2 : 2 }
   }
-  test.identical( _.property.own( ins1, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.property.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
 
   var exp =
   {
@@ -3202,7 +3254,7 @@ function accessorStoringStrategyUnderscoreBasic( test )
     _ : { f2 : 2 }
   }
   test.shouldThrowErrorSync( () => ins1.f2 = 3 );
-  test.identical( _.property.own( ins1, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.property.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
 
   /* */
 
@@ -3596,6 +3648,7 @@ let Self =
   {
 
     _normalizedAsuiteForm,
+    _objectSetValueNoShadowing,
 
     declareBasic,
 

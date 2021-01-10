@@ -1,4 +1,5 @@
-( function _Definitions_s_() {
+( function _Definitions_s_()
+{
 
 'use strict';
 
@@ -141,7 +142,7 @@ function prop_head( routine, args )
   _.assert( _.strIs( o.valToIns ) );
   _.assert( _.longHas( [ 'scalar', 'map', 'enumerable' ], o.collection ) );
   _.assert( 'scalar' === o.collection, 'not implemented' ); /* zzz : implement */
-  _.assert( _.longHas( [ 'no', 'val' , 'shallow' , 'deep' , 'call' , 'new' ], o.valToIns ) );
+  _.assert( _.longHas( [ 'no', 'val', 'shallow', 'deep', 'call', 'new' ], o.valToIns ) );
 
   _.assert( o.collection === 'scalar', 'not implemented' );
   _.assert( o.insToIns === 'val', 'not implemented' );
@@ -157,6 +158,8 @@ function prop_head( routine, args )
 
   return o;
 }
+
+//
 
 function prop_body( o )
 {
@@ -186,51 +189,65 @@ function prop_body( o )
 
   /* */
 
-  function blueprintForm2( blueprint, name )
+  function blueprintForm2( o )
   {
     let constructionInit = null;
 
-    _.assert( _.strDefined( name ) || _.strDefined( ext.name ) );
-    _.assert( name === null || definition.name === null || name === definition.name );
+    _.assert( _.strDefined( o.propName ) || _.strDefined( ext.name ) );
+    _.assert( o.propName === null || definition.name === null || o.propName === definition.name );
 
-    if( definition.name && definition.name !== name )
-    name = definition.name;
+    if( definition.name && definition.name !== o.propName )
+    o.propName = definition.name;
+
+    // if( _global_.debugger )
+    // debugger;
 
     if( definition.static )
     {
-      _declareStatic
-      ({
-        blueprint,
-        name,
-        val : definition.toVal( definition.val ),
-      });
+      let o2 =
+      {
+        blueprint : o.blueprint,
+        name : o.propName,
+        amending : o.amending
+        // val : definition.toVal( definition.val ),
+      }
+      if( optionsHasAccessor( definition ) )
+      _declareStaticWithAccessor( o2 );
+      else
+      _declareStaticWithoutAccessor( o2 );
     }
     else
     {
       if( optionsHasAccessor( definition ) )
-      constructionInit = constructionInitAccessor_functor( blueprint, definition );
-      else if( definition.valToIns === 'val' && definition.enumerable && definition.configurable && definition.writable )
-      blueprint.Props[ name ] = definition.val;
-      else if( definition.enumerable && definition.configurable && definition.writable )
-      constructionInit = constructionInitOrdinary_functor( blueprint, definition );
+      {
+        constructionInit = constructionInitAccessor_functor( o.blueprint, definition );
+      }
+      else if( definition.valToIns === 'val' && definition.enumerable && definition.configurable && ( definition.writable || definition.writable === null ) )
+      {
+        if( definition.val === _.nothing )
+        o.blueprint.PropsSupplementation[ o.propName ] = undefined;
+        else
+        o.blueprint.PropsExtension[ o.propName ] = _.escape.undo( definition.val );
+      }
+      else if( definition.enumerable && definition.configurable && ( definition.writable || definition.writable === null ) )
+      {
+        constructionInit = constructionInitOrdinary_functor( o.blueprint, definition );
+      }
       else
-      constructionInit = constructionInitUnordinary_functor( blueprint, definition );
+      {
+        constructionInit = constructionInitUnordinary_functor( o.blueprint, definition );
+      }
       if( constructionInit !== null )
-      _.blueprint._routineAdd( blueprint, 'constructionInit', constructionInit );
+      _.blueprint._routineAdd( o.blueprint, 'constructionInit', constructionInit );
     }
+
   }
 
   /* */
 
-  function _declareStatic( o )
+  function _declareStaticWithAccessor( o )
   {
-
-    _.assert( _.boolIs( definition.configurable ) );
-    _.assert( _.boolIs( definition.enumerable ) );
-
-    let val = o.val;
     let prototype = o.blueprint.prototype;
-    let make = o.blueprint.Make;
     let name = o.name;
     let opts =
     {
@@ -238,73 +255,112 @@ function prop_body( o )
       configurable : definition.configurable,
     };
 
-    if( optionsHasAccessor( definition ) )
+    _.assert( _.boolIs( definition.configurable ) );
+    _.assert( _.boolIs( definition.enumerable ) );
+    _.assert( !_.boolLikeFalse( definition.accessor ) );
+    _.assert( !_.prototype._isStandardEntity( prototype ), 'Attempt to pollute _global_.Object.prototype' ); /* xxx : cover */
+
+    if( _global_.debugger )
+    debugger;
+
+    let val2;
+    if( o.amending === 'supplement' && prototype[ name ] !== undefined )
+    val2 = prototype[ name ];
+    else if( val === _.nothing )
+    val2 = prototype[ name ];
+    else
+    val2 = definition.toVal( definition.val );
+
+    let o2 =
     {
+      name : o.name,
+      object : prototype,
+      methods : definition.methods,
+      suite : definition.accessor,
+      val : val2,
+      storingStrategy : definition.storingStrategy,
+      enumerable : definition.enumerable,
+      configurable : definition.configurable,
+      writable : definition.writable,
+      combining : definition.combining,
+      addingMethods : definition.addingMethods,
+    }
 
-      _.assert( !_.boolLikeFalse( definition.accessor ) );
+    o2.needed = _.accessor._objectDeclaringIsNeeded( o2 );
+    if( o2.needed )
+    {
+      _.accessor.suiteNormalize( o2 );
+      for( let mname in _.accessor.AmethodTypesMap )
+      if( o2.normalizedAsuite[ mname ] )
+      o2.normalizedAsuite[ mname ] = _.routineJoin( prototype, o2.normalizedAsuite[ mname ] );
+      _.accessor.declareSingle.body( o2 );
+    }
 
-      let o2 =
+    opts.get = () =>
+    {
+      return prototype[ name ];
+    }
+
+    if( definition.writable || definition.writable === null )
+    {
+      opts.set = ( src ) =>
       {
-        name : o.name,
-        object : prototype,
-        methods : definition.methods,
-        suite : definition.accessor,
-        val : o.val,
-        storingStrategy : definition.storingStrategy,
-        enumerable : definition.enumerable,
-        configurable : definition.configurable,
-        writable : definition.writable,
-        combining : definition.combining,
-        addingMethods : definition.addingMethods,
+        prototype[ name ] = src;
       }
+    }
 
-      o2.needed = _.accessor._objectDeclaringIsNeeded( o2 );
-      if( o2.needed )
-      {
-        _.accessor.suiteNormalize( o2 );
-        for( let mname in _.accessor.AmethodTypesMap )
-        if( o2.normalizedAsuite[ mname ] )
-        o2.normalizedAsuite[ mname ] = _.routineJoin( prototype, o2.normalizedAsuite[ mname ] );
-        _.accessor.declareSingle.body( o2 );
-      }
+    Object.defineProperty( o.blueprint.Make, name, opts );
 
+    return o.blueprint;
+  }
+
+  /* */
+
+  function _declareStaticWithoutAccessor( o )
+  {
+    let prototype = o.blueprint.prototype;
+    let name = o.name;
+    let opts =
+    {
+      enumerable : definition.enumerable,
+      configurable : definition.configurable,
+    };
+
+    _.assert( _.boolIs( definition.configurable ) );
+    _.assert( _.boolIs( definition.enumerable ) );
+    _.assert( !_.prototype._isStandardEntity( prototype ), 'Attempt to pollute _global_.Object.prototype' );
+
+    if( _global_.debugger )
+    debugger;
+
+    /* xxx : introduce option::preservingValue? */
+    let val2;
+    if( o.amending === 'supplement' && prototype[ name ] !== undefined )
+    val2 = prototype[ name ];
+    else if( definition.val === _.nothing )
+    val2 = prototype[ name ];
+    else
+    val2 = definition.toVal( _.escape.undo( definition.val ) );
+
+    if( definition.writable || definition.writable === null )
+    {
       opts.get = () =>
       {
-        return prototype[ name ];
+        return val2;
       }
-
-      if( definition.writable || definition.writable === null )
+      opts.set = ( src ) =>
       {
-        opts.set = ( src ) =>
-        {
-          prototype[ name ] = src;
-        }
+        val2 = src;
+        return src;
       }
-
-      Object.defineProperty( o.blueprint.Make, o.name, opts );
     }
     else
     {
-      if( definition.writable || definition.writable === null )
-      {
-        opts.get = () =>
-        {
-          return val;
-        }
-        opts.set = ( src ) =>
-        {
-          val = src;
-          return src;
-        }
-      }
-      else
-      {
-        opts.writable = false;
-        opts.value = val;
-      }
-      Object.defineProperty( o.blueprint.Make, o.name, opts );
-      Object.defineProperty( o.blueprint.prototype, o.name, opts );
+      opts.writable = false;
+      opts.value = val2;
     }
+    Object.defineProperty( o.blueprint.Make, name, opts );
+    Object.defineProperty( o.blueprint.prototype, name, opts );
 
     return o.blueprint;
   }
@@ -316,7 +372,6 @@ function prop_body( o )
     const toVal = definition.toVal;
     const name = definition.name;
     const methods = definition.methods;
-    const val = definition.val;
     const storingStrategy = definition.storingStrategy;
     const enumerable = definition.enumerable;
     const configurable = definition.configurable;
@@ -324,21 +379,25 @@ function prop_body( o )
     const combining = definition.combining;
     const addingMethods = definition.addingMethods;
     const accessor = definition.accessor;
+    const val = definition.val;
+    const prototype = blueprint.prototype;
 
-    _.assert( _.boolLike( blueprint.Typed ) );
+    let o2, normalizedAsuite;
 
-    let o2;
-    let normalizedAsuite;
+    _.assert( _.fuzzyIs( blueprint.Typed ) );
+
+    if( _global_.debugger )
+    debugger;
 
     if( blueprint.Typed )
     {
       o2 = _.accessor.declareSingle
       ({
-        name : name,
+        name,
         object : blueprint.prototype,
-        methods : methods,
+        methods,
         suite : _.mapExtend( null, accessor ),
-        storingStrategy : storingStrategy,
+        storingStrategy,
         storageIniting : false,
         enumerable,
         configurable,
@@ -347,46 +406,82 @@ function prop_body( o )
         addingMethods,
       });
       normalizedAsuite = o2.normalizedAsuite;
-      // _.accessor._objectInitStorage( blueprint.prototype, storingStrategy );
-      _.accessor._objectInitStorage( blueprint.prototype, normalizedAsuite );
+      _.accessor._objectInitStorage( blueprint.prototype, normalizedAsuite ); /* xxx : remove the call and introduce maybe extra option of declareSingle */
     }
 
-    if( blueprint.Typed )
+    if( blueprint.Typed === true )
     return constructionInitTyped;
-    else
+    else if( blueprint.Typed === false )
     return constructionInitUntyped;
+    else if( blueprint.Typed === _.maybe )
+    return constructionInitMaybe;
+    else _.assert( 0 );
 
     function constructionInitTyped( genesis )
     {
-      // _.accessor._objectInitStorage( genesis.construction, storingStrategy );
+      if( _global_.debugger )
+      debugger;
       _.accessor._objectInitStorage( genesis.construction, normalizedAsuite );
-      if( val !== _.nothing )
+
+      let val2;
+      if( genesis.amending === 'supplement' && genesis.construction[ name ] !== undefined )
+      val2 = genesis.construction[ name ];
+      else if( val === _.nothing )
+      val2 = genesis.construction[ name ];
+      else
+      val2 = toVal( val );
+
+      if( val2 !== _.nothing )
       _.accessor._objectSetValue
       ({
         object : genesis.construction,
-        normalizedAsuite : normalizedAsuite,
-        storingStrategy : storingStrategy,
-        name : name,
-        val : toVal( val ),
+        normalizedAsuite,
+        storingStrategy,
+        name,
+        val : val2,
       });
     }
 
     function constructionInitUntyped( genesis )
     {
+      if( _global_.debugger )
+      debugger;
+
+      let val2;
+      if( genesis.amending === 'supplement' && genesis.construction[ name ] !== undefined )
+      val2 = genesis.construction[ name ];
+      else if( val === _.nothing )
+      val2 = genesis.construction[ name ];
+      else
+      val2 = toVal( val );
+
       _.accessor.declareSingle
       ({
         object : genesis.construction,
-        methods : methods,
+        methods,
         suite : _.mapExtend( null, accessor ),
-        storingStrategy : storingStrategy,
-        name : name,
-        val : toVal( val ),
+        storingStrategy,
+        name,
+        val : val2,
         enumerable,
         configurable,
         writable,
         combining,
         addingMethods,
       });
+    }
+
+    function constructionInitMaybe( genesis )
+    {
+      let prototype2 = Object.getPrototypeOf( genesis.construction );
+      if( prototype2 === prototype )
+      {
+        constructionInitTyped( genesis );
+      }
+      else
+      {
+        constructionInitUntyped( genesis );
+      }
     }
 
   }
@@ -397,9 +492,18 @@ function prop_body( o )
   {
     const toVal = definition.toVal;
     const name = definition.name;
-    const val = definition.val;
+    const val = _.escape.undo( definition.val );
     return function constructionInit( genesis )
     {
+      if( _global_.debugger )
+      debugger;
+      if( genesis.amending === 'supplement' && genesis.construction[ name ] !== undefined )
+      genesis.construction[ name ] = genesis.construction[ name ];
+      /* it is important to set. property could be owned by prototype */
+      else if( val === _.nothing )
+      genesis.construction[ name ] = genesis.construction[ name ];
+      /* it is important to set. property could be owned by prototype */
+      else
       genesis.construction[ name ] = toVal( val );
     }
   }
@@ -413,19 +517,38 @@ function prop_body( o )
     const writable = definition.writable === null ? true : definition.writable;
     const toVal = definition.toVal;
     const name = definition.name;
-    const val = definition.val;
+    const val = _.escape.undo( definition.val );
     return function constructionInit( genesis )
     {
       const opts =
       {
-        value : toVal( val ),
         enumerable,
         configurable,
         writable,
       };
+      if( genesis.amending === 'supplement' && genesis.construction[ name ] !== undefined )
+      opts.value = genesis.construction[ name ];
+      else if( val === _.nothing )
+      opts.value = genesis.construction[ name ];
+      else
+      opts.value = toVal( val );
       Object.defineProperty( genesis.construction, name, opts );
     }
   }
+
+  /* */
+
+  // function valFor( o2 )
+  // {
+  //   let val2;
+  //   if( o2.amending === 'supplement' && o2.construction[ name ] !== undefined )
+  //   val2 = o2.construction[ name ];
+  //   else if( o2.val === _.nothing )
+  //   val2 = o2.construction[ name ];
+  //   else
+  //   val2 = toVal( o2.val );
+  //   return val2
+  // }
 
   /* */
 
@@ -442,7 +565,7 @@ prop_body.defaults =
 {
 
   name            : null,
-  val             : null,
+  val             : _.nothing,
 
   ... PropOptionsLogic,
   /*
@@ -815,7 +938,7 @@ function _amendment_body( o )
   _.assert( _.blueprintIsDefinitive( o.val ) );
 
   o.definitionGroup = 'definition.unnamed';
-  o.constructionAmend = constructionAmend;
+  // o.constructionAmend = constructionAmend;
   o.blueprintAmend = blueprintAmend;
   o.blueprint = false;
 
@@ -826,10 +949,10 @@ function _amendment_body( o )
   Object.freeze( definition );
   return definition;
 
-  function constructionAmend( construction, key )
-  {
-    _.assert( 0, 'not implemented' ); /* zzz */
-  }
+  // function constructionAmend( construction, key )
+  // {
+  //   _.assert( 0, 'not implemented' ); /* zzz */
+  // }
 
   function blueprintAmend( op )
   {
@@ -840,8 +963,7 @@ function _amendment_body( o )
     ({
       ... op,
       extension : definition.val,
-      amending : definition.amending,
-      // amending : op.amending, /* zzz : ? */
+      amending : op.amending === 'extend' ? definition.amending : op.amending, /* zzz : cover? */
       blueprintAction : 'amend',
       blueprintDepthReserve : definition.blueprintDepthReserve + o.blueprintDepthReserve,
     });
@@ -915,7 +1037,6 @@ function _constant_functor() /* xxx : test with blueprint? */
   prototype.subKind = 'constant';
   prototype.asAccessorSuite = asAccessorSuite;
   prototype.toVal = toVal;
-  prototype.constructionAmend = constructionAmend;
   _.property.hide( prototype, 'asAccessorSuite' );
   _.property.hide( prototype, 'toVal' );
   _.property.hide( prototype, 'constructionAmend' );
@@ -958,122 +1079,9 @@ function _constant_functor() /* xxx : test with blueprint? */
 
   /* */
 
-  function constructionAmend( dst, key, amending )
-  {
-    let instanceIsStandard = _.workpiece.instanceIsStandard( dst );
-    _.assert( arguments.length === 3 );
-    _.assert( 0, 'not implemented' );
-  }
-
 }
 
 let _constant = _constant_functor();
-
-//
-
-// function _constant( val )
-// {
-//   let o = { val }
-//
-//   _.routineOptions( _constant, o );
-//
-//   o.definitionGroup = 'definition.named';
-//   o.subKind = 'constant';
-//   o.constructionAmend = constructionAmend;
-//   o.toVal = toVal;
-//   o.asAccessorSuite = asAccessorSuite;
-//
-//   _.assert( arguments.length === 1 );
-//
-//   let definition = new _.Definition( o );
-//   _.property.hide( definition, 'constructionAmend' );
-//   _.assert( definition.val !== undefined );
-//   return definition;
-//
-//   /* */
-//
-//   function asAccessorSuite( op )
-//   {
-//     _.assert( _.definitionIs( op.amethod ) );
-//     return { get : op.amethod, set : false, put : false };
-//   }
-//
-//   /* */
-//
-//   function toVal( val )
-//   {
-//     _.assert( val !== undefined );
-//     return val;
-//   }
-//
-//   /* */
-//
-//   function constructionAmend( dst, key, amending )
-//   {
-//     let instanceIsStandard = _.workpiece.instanceIsStandard( dst );
-//     _.assert( arguments.length === 3 );
-//     _.assert( 0, 'not implemented' );
-//   }
-//
-// }
-//
-// _constant.defaults =
-// {
-//   val : null,
-// }
-
-// //
-//
-// function alias_body( o ) /* xxx : replace by alias */
-// {
-//
-//   _.assertRoutineOptions( alias_body, arguments );
-//
-//   o.definitionGroup = 'definition.named';
-//   o.constructionAmend = constructionAmend;
-//   o.blueprintForm2 = blueprintForm2;
-//   o.blueprint = false;
-//
-//   let originalContainer = o.originalContainer;
-//   let originalName = o.originalName;
-//
-//   _.assert( originalContainer === null || !!originalContainer );
-//   _.assert( _.strDefined( originalName ) );
-//
-//   let definition = _.definition._definitionMake( o.amending, o );
-//   Object.freeze( definition );
-//   return definition;
-//
-//   function constructionInit( genesis )
-//   {
-//     let originalContainer2 = originalContainer || genesis.construction;
-//     Object.defineProperty( o.blueprint.Make, o.name, opts );
-//     debugger;
-//     _.assert( 0, 'not implemented' ); /* zzz */
-//   }
-//
-//   function constructionAmend( construction, key )
-//   {
-//     _.assert( 0, 'not implemented' ); /* zzz */
-//   }
-//
-//   function blueprintForm2( blueprint, name )
-//   {
-//     let definition = this;
-//     blueprint = op.blueprint;
-//     _.blueprint._routineAdd( blueprint, 'constructionInit', constructionInit );
-//   }
-//
-// }
-//
-// alias_body.defaults =
-// {
-//   originalContainer : null,
-//   originalName : null,
-// }
-//
-// let alias = _.routineUnite( _singleArgumentHead, alias_body );
-// _.routineEr( alias );
 
 //
 
@@ -1103,7 +1111,7 @@ function alias_body( o ) /* xxx : finish */
   _.assert( o.accessor === null || _.boolLikeTrue( o.accessor ) || _.mapIs( o.accessor ) );
 
   if( !_.mapIs( o.accessor ) )
-  o.accessor = {};
+  o.accessor = Object.create( null );
 
   if( originalContainer === null )
   {
@@ -1112,7 +1120,7 @@ function alias_body( o ) /* xxx : finish */
   }
   else
   {
-    let accessor2 = { grab : get, get : get, put : set, set : set }
+    let accessor2 = { grab : get, get, put : set, set }
     _.accessor.suiteSupplement( o.accessor, accessor2 );
   }
 

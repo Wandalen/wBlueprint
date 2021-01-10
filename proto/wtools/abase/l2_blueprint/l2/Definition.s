@@ -111,7 +111,7 @@ function _traitMake( kind, o )
   Object.freeze( definition );
   return definition;
 
-  function constructionAmend( dst, key, amend )
+  function constructionAmend( dst, key, amending )
   {
     // debugger;
     _.construction._amendDefinitionWithoutMethod
@@ -119,7 +119,7 @@ function _traitMake( kind, o )
       construction : dst,
       definition,
       key,
-      amend,
+      amending,
     });
   }
 
@@ -153,14 +153,14 @@ function _definitionMake( kind, o )
   Object.preventExtensions( definition );
   return definition;
 
-  function constructionAmend( dst, key, amend )
+  function constructionAmend( dst, key, amending )
   {
     _.construction._amendDefinitionWithoutMethod
     ({
       construction : dst,
       definition,
       key,
-      amend,
+      amending,
     });
   }
 

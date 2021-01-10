@@ -60,7 +60,7 @@ let DeclarationOptions =
 {
 
   name : null,
-  val : null,
+  val : _.nothing,
   suite : null,
 
   preservingValue : null,
@@ -559,10 +559,15 @@ function _objectDeclaringIsNeeded( o )
 
     _.assert
     (
-      _.strIs( o.combining ), () =>
-        `Option::combining of property ${o.name}`
-      + ` supposed to be any of ${_.accessor.Combining }`
+      o.combining === null || _.longHas( _.accessor.Combining, o.combining )
+      , () => `Option::combining of property ${o.name}`
+      + ` supposed to be either any of ${_.accessor.Combining} or null`
       + ` but it is ${o.combining}`
+    );
+    _.assert
+    (
+      !!o.combining
+      , 'Overriding of accessor is not allowed, to allow it set option::combining'
     );
     _.assert( o.combining === 'rewrite' || o.combining === 'append' || o.combining === 'supplement', 'not implemented' );
 
@@ -689,18 +694,6 @@ function _amethodFunctor( propName, amethodType, storingStrategy )
   else _.assert( 0 );
 
   /* */
-
-  // function withMethod( routine )
-  // {
-  //   Object.defineProperty( routine, 'objectInitStorage',
-  //   {
-  //     value : _objectInitStorageUnderscore,
-  //     enumerable : true,
-  //     writable : true,
-  //     configurable : true,
-  //   });
-  //   return routine;
-  // }
 
   function grabWithSymbol()
   {
@@ -847,18 +840,28 @@ function _objectSetValue( o )
 
   _.assertMapHasAll( o, _objectSetValue.defaults );
 
+  // if( _global_.debugger )
+  // debugger;
+
+  // /* yyy */
+  let descriptor = Object.getOwnPropertyDescriptor( o.object, o.name );
+  if( descriptor && descriptor.configurable && descriptor.get == undefined && descriptor.set === undefined )
+  delete o.object[ o.name ];
+
+  let val2 = _.escape.undo( o.val );
+
   if( o.normalizedAsuite.put )
   {
-    o.normalizedAsuite.put.call( o.object, o.val );
+    o.normalizedAsuite.put.call( o.object, val2 );
   }
   else if( o.normalizedAsuite.set )
   {
-    o.normalizedAsuite.set.call( o.object, o.val );
+    o.normalizedAsuite.set.call( o.object, val2 );
   }
   else
   {
     let put = _.accessor._amethodFunctor( o.name, 'put', o.storingStrategy );
-    put.call( o.object, o.val );
+    put.call( o.object, val2 );
   }
 
 }
@@ -1060,15 +1063,6 @@ function suiteSupplement( dst, src )
     dst[ m ] = src[ m ];
   }
 
-    // let accessor2 = { grab : selfGet, get : selfGet, put : selfSet, set : selfSet }
-    // _.accessor.suiteSupplement( o.accessor, accessor2 );
-    // if( o.accessor.grab === null || o.accessor.grab === undefined || _.boolLikeTrue( o.accessor.grab ) )
-    // o.accessor.grab = selfGet;
-    // if( o.accessor.get === null || o.accessor.get === undefined || _.boolLikeTrue( o.accessor.get ) )
-    // o.accessor.get = selfGet;
-    // if( o.accessor.set === null || o.accessor.set === undefined || _.boolLikeTrue( o.accessor.set ) )
-    // o.accessor.set = selfSet;
-
   return dst;
 }
 
@@ -1077,16 +1071,7 @@ function suiteSupplement( dst, src )
 function suiteNormalize_body( o )
 {
 
-  // if( _.boolLike( o.writable ) )
-  // o.writable = !!o.writable;
-
   _.assertMapHasAll( o, suiteNormalize_body.defaults );
-  // _.assert( arguments.length === 1 );
-  //
-  // _.accessor._methodsNormalize( o );
-  // _.accessor._defaultsApply( o );
-  //
-  // _.assert( _.boolIs( o.writable ) || o.writable === null );
 
   /* */
 
@@ -1137,10 +1122,6 @@ var defaults = suiteNormalize_body.defaults =
   ... AmethodTypesMap,
   ... DeclarationSpecialDefaults,
   ... DeclarationOptions,
-  // ... DeclarationOptions,
-  // name : null,
-  // object : null,
-  // methods : null,
 }
 
 let suiteNormalize = _.routineUnite( declareSingle_head, suiteNormalize_body );
@@ -1150,9 +1131,13 @@ let suiteNormalize = _.routineUnite( declareSingle_head, suiteNormalize_body );
 function declareSingle_head( routine, args )
 {
 
+  let o = args[ 0 ];
+  if( o.val === null )
+  o.val = _.null;
+
   _.assert( arguments.length === 2 );
   _.assert( args.length === 1 );
-  let o = _.routineOptions( routine, args );
+  _.routineOptions( routine, o );
   _.assert( !_.primitiveIs( o.object ), 'Expects object as argument but got', o.object );
   _.assert( _.strIs( o.name ) || _.symbolIs( o.name ) );
   _.assert( _.longHas( [ null, 0, false, 1, true, 'rewrite', 'supplement' ], o.combining ), 'not tested' );
@@ -1182,7 +1167,8 @@ function declareSingle_body( o )
   _.assertMapHasAll( o, declareSingle_body.defaults );
   _.assert( _.boolIs( o.writable ) || o.writable === null );
   _.assert( o.object !== Object, 'Attempt to polute _global_.Object' );
-  _.assert( o.object !== Object.prototype, 'Attempt to polute _global_.Object.prototype' );
+  // _.assert( o.object !== Object.prototype, 'Attempt to pollute _global_.Object.prototype' );
+  _.assert( !_.prototype._isStandardEntity( o.object ), 'Attempt to pollute _global_.Object.prototype' );
 
   /* */
 
@@ -1225,12 +1211,8 @@ function declareSingle_body( o )
 
   /* init storage */
 
-  // if( o.storageIniting )
-  // debugger;
-
   if( o.storageIniting )
   _.accessor._objectInitStorage( o.object, o.normalizedAsuite );
-  // _.accessor._objectInitStorage( o.object, o.storingStrategy );
 
   /* cache value */
 
@@ -1247,7 +1229,7 @@ function declareSingle_body( o )
 
   /* define accessor */
 
-  _.property.declare.body
+  let descriptor = _.property.declare.body
   ({
     object : o.object,
     name : o.name,
@@ -1261,15 +1243,29 @@ function declareSingle_body( o )
 
   /* set value */
 
-  if( o.storageIniting && o.val !== _.nothing && o.normalizedAsuite.get !== null )
-  _.accessor._objectSetValue
-  ({
-    object : o.object,
-    normalizedAsuite : o.normalizedAsuite,
-    storingStrategy : o.storingStrategy,
-    name : o.name,
-    val : o.val,
-  });
+  // if( _global_.debugger )
+  // debugger;
+  if( o.storageIniting && o.val !== _.nothing && descriptor.get )
+  {
+    _.accessor._objectSetValue
+    ({
+      object : o.object,
+      normalizedAsuite : o.normalizedAsuite,
+      storingStrategy : o.storingStrategy,
+      name : o.name,
+      val : o.val,
+    });
+  }
+
+  // if( o.storageIniting && o.val !== _.nothing && o.normalizedAsuite.get !== null ) /* yyy */
+  // _.accessor._objectSetValue
+  // ({
+  //   object : o.object,
+  //   normalizedAsuite : o.normalizedAsuite,
+  //   storingStrategy : o.storingStrategy,
+  //   name : o.name,
+  //   val : o.val,
+  // });
 
   /* validate */
 
@@ -1321,10 +1317,6 @@ var defaults = declareSingle_body.defaults =
   ... AmethodTypesMap,
   ... DeclarationSpecialDefaults,
   ... DeclarationOptions,
-  // ... DeclarationOptions,
-  // name : null,
-  // object : null,
-  // methods : null,
 }
 
 let declareSingle = _.routineUnite( declareSingle_head, declareSingle_body );

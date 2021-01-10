@@ -159,7 +159,7 @@ function declare_head( routine, args )
 
 //
 
-function declare_body( o )
+function declare_body( o ) /* xxx : move back to accessor? */
 {
 
   _.assert( o.get === false || o.get === null || _.routineIs( o.get ) );
@@ -203,6 +203,8 @@ function declare_body( o )
   _.assert( o.writable || !o.set );
 
   Object.defineProperty( o.object, o.name, o2 );
+
+  return o2;
 
   function noGet()
   {
