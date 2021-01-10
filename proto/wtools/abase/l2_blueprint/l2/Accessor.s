@@ -1167,7 +1167,6 @@ function declareSingle_body( o )
   _.assertMapHasAll( o, declareSingle_body.defaults );
   _.assert( _.boolIs( o.writable ) || o.writable === null );
   _.assert( o.object !== Object, 'Attempt to polute _global_.Object' );
-  // _.assert( o.object !== Object.prototype, 'Attempt to pollute _global_.Object.prototype' );
   _.assert( !_.prototype._isStandardEntity( o.object ), 'Attempt to pollute _global_.Object.prototype' );
 
   /* */

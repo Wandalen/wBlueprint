@@ -212,7 +212,8 @@ function typed( o )
   function allocateTyped( genesis )
   {
     if( genesis.construction === null )
-    genesis.construction = new( _.constructorJoin( genesis.runtime.Make, [] ) );
+    genesis.construction = new( _.constructorJoin( genesis.runtime.Make, genesis.args ) );
+    // genesis.construction = new( _.constructorJoin( genesis.runtime.Make, [] ) );
     _.assert( genesis.construction === null || !genesis.runtime.Make.prototype || genesis.construction instanceof genesis.runtime.Make );
     return genesis.construction;
   }
@@ -400,7 +401,6 @@ function name( o )
 
   function blueprintForm1( o )
   {
-    debugger;
     _.assert( o.blueprint.Make === null );
     o.blueprint.Runtime.Name = def.val;
   }

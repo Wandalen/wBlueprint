@@ -70,14 +70,14 @@ function toVal( definition )
   return definition.toVal( definition.val );
 }
 
+// //
 //
-
-function _constructionAmendCant( construction, key )
-{
-  let trait = this;
-  return _.construction._amendCant( construction, definition, key );
-  // throw _.err( `Trait::${trait.kind} cant extend created construction after initialization. Use this trait during initialization only.` );
-}
+// function _constructionAmendCant( construction, key )
+// {
+//   let trait = this;
+//   return _.construction._amendCant( construction, definition, key );
+//   // throw _.err( `Trait::${trait.kind} cant extend created construction after initialization. Use this trait during initialization only.` );
+// }
 
 //
 
@@ -93,14 +93,8 @@ function _traitMake( kind, o )
   o.definitionGroup = 'trait';
   if( !o.kind )
   o.kind = kind;
-  // if( !o.constructionAmend )
-  // o.constructionAmend = _.definition._constructionAmendCant;
   if( !o.constructionAmend )
-  {
-    o.constructionAmend = constructionAmend;
-    // o.constructionAmend = constructionAmend_functor();
-    // o.constructionAmend = _.definition._constructionAmendCant;
-  }
+  o.constructionAmend = constructionAmend;
   if( o.blueprint === undefined )
   o.blueprint = null;
 
@@ -113,7 +107,7 @@ function _traitMake( kind, o )
 
   function constructionAmend( dst, key, amending )
   {
-    // debugger;
+    debugger;
     _.construction._amendDefinitionWithoutMethod
     ({
       construction : dst,
@@ -140,11 +134,7 @@ function _definitionMake( kind, o )
   if( !o.kind )
   o.kind = kind;
   if( !o.constructionAmend )
-  {
-    o.constructionAmend = constructionAmend;
-    // o.constructionAmend = constructionAmend_functor();
-    // o.constructionAmend = _.definition._constructionAmendCant;
-  }
+  o.constructionAmend = constructionAmend;
   if( o.blueprint === undefined )
   o.blueprint = null;
 
@@ -155,6 +145,7 @@ function _definitionMake( kind, o )
 
   function constructionAmend( dst, key, amending )
   {
+    debugger;
     _.construction._amendDefinitionWithoutMethod
     ({
       construction : dst,

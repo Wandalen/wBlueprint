@@ -1097,7 +1097,7 @@ function alias_head( routine, args )
   return _.define.prop.head( routine, [ undefined, o ] );
 }
 
-function alias_body( o ) /* xxx : finish */
+function alias_body( o )
 {
 
   _.assertRoutineOptions( alias_body, arguments );

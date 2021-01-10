@@ -198,18 +198,27 @@ function _amendDefinitionWithoutMethod( o )
 
   if( o.amending === 'supplement' )
   {
+    debugger;
     /* xxx qqq : cover */
     if( o.key !== null )
     if( Object.hasOwnProperty.call( o.construction, o.key ) && o.construction[ o.key ] !== undefined )
     return;
   }
 
+  // debugger; xxx
+
   let prototype = _.prototype.of( o.construction );
   let defs = [];
+  if( prototype && o.definition.kind === 'prototype' )
+  debugger;
   if( prototype && o.definition.kind !== 'prototype' ) /* xxx : cover */
   defs.push( _.trait.prototype( prototype, { new : false } ) );
+  if( o.definition.kind === 'extendable' )
+  debugger;
   if( o.definition.kind !== 'extendable' ) /* xxx : cover */
   defs.push( _.trait.extendable( true ) );
+  if( o.definition.kind !== 'typed' )
+  debugger;
   if( o.definition.kind !== 'typed' ) /* xxx : cover */
   defs.push( _.trait.typed( _.maybe ) );
 
@@ -587,8 +596,8 @@ function _extendArguments( genesis )
   return genesis.construction;
 
   _.assert( genesis.args.length === 1 );
-  let o = genesis.args[ 0 ];
 
+  let o = genesis.args[ 0 ];
   if( o === null )
   return genesis.construction;
 

@@ -16,12 +16,8 @@ let select = _globals_.testing.wTools.select;
 
 /* xxx qqq
 
-- cover _.accessor.define object.prototype throwing
-
  - cover construction.extend() + definition::*
- - eslint Definitions.s
  - implement options but, only for amending
- - allow for _.blueprint.define to have in blueprint other bluprints
 
 */
 
@@ -3523,9 +3519,7 @@ function definePropShallowComplexSourceCode( test )
 
   /* */
 
-  // debugger;
   // var sourceCode = blueprint.definePropShallowComplexSourceCode();
-  // debugger;
 
 /*
   var constructor = blueprint.compileConstructor();
@@ -12703,13 +12697,12 @@ function constructWithArgumentMap( test )
     typed : _.trait.typed( true ),
   });
   var opts = { field1 : 13 };
-  debugger;
+
   var instance = Blueprint.Make( opts );
 
   test.true( instance !== opts );
   var exp = { field1 : 13 }
   test.containsAll( instance, exp );
-  debugger;
 
   test.identical( _.blueprint.isDefinitive( Blueprint ), true );
   test.identical( _.construction.isTyped( instance ), true );
@@ -14946,10 +14939,6 @@ function retypeAlternativeRoutinesUntyped( test )
     ({
       a : 1,
     });
-
-    // debugger; _global_.debugger = 1;
-    // new Blueprint1[ top.method ]()
-    // debugger;
 
     test.shouldThrowErrorSync( () => new Blueprint1[ top.method ]() );
     test.shouldThrowErrorSync( () => new Blueprint1.Runtime[ top.method ]() );
