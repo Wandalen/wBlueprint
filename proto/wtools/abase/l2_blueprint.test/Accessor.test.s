@@ -538,7 +538,7 @@ function declareBasic( test )
     () => _.accessor.declare( Object.prototype, { a : { val : 1 } } ),
     ( err ) =>
     {
-      test.identical( err.originalMessage, 'Attempt to polute _global_.Object.prototype' );
+      test.identical( err.originalMessage, 'Attempt to pollute _global_.Object.prototype' );
     }
   );
 

@@ -355,6 +355,10 @@ function extendable( o )
   if( !_.mapIs( o ) )
   o = { val : arguments[ 0 ] };
   _.routineOptions( extendable, o );
+
+  if( _.boolLike( o.val ) )
+  o.val = !!o.val;
+
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( _.boolIs( o.val ) );
 

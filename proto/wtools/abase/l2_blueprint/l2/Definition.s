@@ -94,7 +94,10 @@ function _traitMake( kind, o )
   if( !o.kind )
   o.kind = kind;
   if( !o.constructionAmend )
-  o.constructionAmend = constructionAmend;
+  {
+    o.constructionAmend = constructionAmend;
+    // console.log( `Generated _amendDefinitionWithoutMethod for ${o.kind}` );
+  }
   if( o.blueprint === undefined )
   o.blueprint = null;
 

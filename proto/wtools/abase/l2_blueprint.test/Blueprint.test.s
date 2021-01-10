@@ -12458,6 +12458,46 @@ traitExtendable.description =
 
 //
 
+function traitExtendableAmendConstruction( test )
+{
+
+  eachCase({ amending : 'extend' });
+  eachCase({ amending : 'supplement' });
+
+  /* - */
+
+  function eachCase( tops )
+  {
+
+    /* */
+
+    test.case = `${tops.propKind}, typed : ${_.toStr( tops.typed )}`;
+
+    var amendation = _.trait.extendable( 1 );
+    var dstConstruction = Object.create( null );
+    debugger; _global_.debugger = 1;
+    _.construction[ tops.amending ]( dstConstruction, amendation );
+    debugger;
+    amendation.a = 2;
+    exp =
+    {
+      a : 2,
+    }
+    test.identical( dstConstruction, exp );
+
+    /* */
+
+  }
+
+}
+
+traitExtendableAmendConstruction.description =
+`
+- Amend construction with trait::extendable
+`
+
+//
+
 // function traitCallable( test )
 // {
 //
@@ -15529,6 +15569,7 @@ let Self =
     traitWithConstructorTraitPrototypeTraitTyped,
     traitPrototypeTraitTyped,
     traitExtendable,
+    traitExtendableAmendConstruction,
 
     // construct / define
 
