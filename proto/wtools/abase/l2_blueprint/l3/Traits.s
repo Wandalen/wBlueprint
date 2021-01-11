@@ -369,6 +369,9 @@ function extendable( o )
 
   function blueprintForm2( o )
   {
+    if( _global_.debugger )
+    debugger;
+
     _.assert( _.boolIs( o.blueprint.Traits.extendable.val ) );
     if( o.blueprint.Traits.extendable.val )
     return;
@@ -377,6 +380,8 @@ function extendable( o )
 
   function preventExtensions( genesis )
   {
+    if( _global_.debugger )
+    debugger;
     Object.preventExtensions( genesis.construction );
   }
 
