@@ -290,8 +290,9 @@ function _amend( o )
       let extension =
       {
         extension : _.define.extension( o.extension ),
-        prototype : _.trait.prototype( o.extension ),
-        typed : _.trait.typed( true ),
+        // prototype : _.trait.prototype( o.extension ),
+        // typed : _.trait.typed( true ),
+        typed : _.trait.typed( true, { prototype : o.extension } ),
       };
       _amendAct( extension );
     }

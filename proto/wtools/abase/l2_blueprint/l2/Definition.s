@@ -93,11 +93,11 @@ function _traitMake( kind, o )
   o.definitionGroup = 'trait';
   if( !o.kind )
   o.kind = kind;
-  if( !o.constructionAmend )
-  {
-    o.constructionAmend = constructionAmend;
-    // console.log( `Generated _amendDefinitionWithoutMethod for ${o.kind}` );
-  }
+  // if( !o.constructionAmend ) /* yyy */
+  // {
+  //   o.constructionAmend = constructionAmend;
+  //   // console.log( `Generated _amendDefinitionWithoutMethod for ${o.kind}` );
+  // }
   if( o.blueprint === undefined )
   o.blueprint = null;
 
@@ -108,17 +108,17 @@ function _traitMake( kind, o )
   Object.freeze( definition );
   return definition;
 
-  function constructionAmend( dst, key, amending )
-  {
-    debugger;
-    _.construction._amendDefinitionWithoutMethod
-    ({
-      construction : dst,
-      definition,
-      key,
-      amending,
-    });
-  }
+  // function constructionAmend( dst, key, amending )
+  // {
+  //   debugger;
+  //   _.construction._amendDefinitionWithoutMethod
+  //   ({
+  //     construction : dst,
+  //     definition,
+  //     key,
+  //     amending,
+  //   });
+  // }
 
 }
 
@@ -136,8 +136,8 @@ function _definitionMake( kind, o )
   o.definitionGroup = 'definition.unnamed';
   if( !o.kind )
   o.kind = kind;
-  if( !o.constructionAmend )
-  o.constructionAmend = constructionAmend;
+  // if( !o.constructionAmend ) /* yyy */
+  // o.constructionAmend = constructionAmend;
   if( o.blueprint === undefined )
   o.blueprint = null;
 
@@ -146,17 +146,17 @@ function _definitionMake( kind, o )
   Object.preventExtensions( definition );
   return definition;
 
-  function constructionAmend( dst, key, amending )
-  {
-    debugger;
-    _.construction._amendDefinitionWithoutMethod
-    ({
-      construction : dst,
-      definition,
-      key,
-      amending,
-    });
-  }
+  // function constructionAmend( dst, key, amending )
+  // {
+  //   debugger;
+  //   _.construction._amendDefinitionWithoutMethod
+  //   ({
+  //     construction : dst,
+  //     definition,
+  //     key,
+  //     amending,
+  //   });
+  // }
 
 }
 

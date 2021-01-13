@@ -46,13 +46,8 @@ function isInstanceOf( construction, runtime )
   if( !construction )
   return false;
 
-  // if( _global_.debugger )
-  // debugger;
-
   if( runtime.Typed && runtime.Make.prototype !== null )
   {
-    // if( !runtime.Make.prototype )
-    // return _.maybe;
     return construction instanceof runtime.Make;
   }
 
@@ -78,10 +73,24 @@ function amend( o )
     let add = o.amending === 'supplement' ? 'push' : 'unshift';
 
     defs[ add ]( o.src );
-    if( prototype )
-    defs[ add ]( _.trait.prototype( prototype, { new : false } ) );
+
+    {
+      let opts = Object.create( null );
+      opts.val = _.maybe;
+      if( prototype ) /* xxx : cover */
+      {
+        opts.prototype = prototype;
+        opts.new = false;
+      }
+      defs[ add ]( _.trait.typed( opts ) );
+    }
+
     defs[ add ]( _.trait.extendable( true ) );
-    defs[ add ]( _.trait.typed( _.maybe ) );
+
+    // if( prototype )
+    // defs[ add ]( _.trait.prototype( prototype, { new : false } ) ); /* xxx : cover */
+    // defs[ add ]( _.trait.extendable( true ) );
+    // defs[ add ]( _.trait.typed( _.maybe ) ); /* xxx : cover */
 
     blueprint = _.blueprint._define({ args : defs, amending : o.amending });
   }
@@ -186,70 +195,71 @@ function supplement( dstConstruction, src )
   });
 }
 
+// //
 //
-
-function _amendDefinitionWithoutMethod( o )
-{
-
-  _.assertMapHasAll( o, _amendDefinitionWithoutMethod.defaults );
-  _.assert( _.strIs( o.key ) || _.symbolIs( o.key ) || o.key === null );
-  _.assert( _.definitionIs( o.definition ) );
-  _.assert( _.longHas( [ 'supplement', 'extend' ], o.amending ) );
-
-  if( o.amending === 'supplement' )
-  {
-    debugger;
-    /* xxx qqq : cover */
-    if( o.key !== null )
-    if( Object.hasOwnProperty.call( o.construction, o.key ) && o.construction[ o.key ] !== undefined )
-    return;
-  }
-
-  // debugger; xxx
-
-  let prototype = _.prototype.of( o.construction );
-  let defs = [];
-  if( prototype && o.definition.kind === 'prototype' )
-  debugger;
-  if( prototype && o.definition.kind !== 'prototype' ) /* xxx : cover */
-  defs.push( _.trait.prototype( prototype, { new : false } ) );
-  if( o.definition.kind === 'extendable' )
-  debugger;
-  if( o.definition.kind !== 'extendable' ) /* xxx : cover */
-  defs.push( _.trait.extendable( true ) );
-  if( o.definition.kind !== 'typed' )
-  debugger;
-  if( o.definition.kind !== 'typed' ) /* xxx : cover */
-  defs.push( _.trait.typed( _.maybe ) );
-
-  let args;
-
-  let newDefinition = o.key === null ? o.definition : { [ o.key ] : o.definition };
-
-  if( o.amending === 'extend' )
-  args = [ defs, newDefinition ];
-  else
-  args = [ newDefinition, defs ];
-
-  let blueprint = _.blueprint._define({ args, amending : o.amending });
-
-  _.construction._init
-  ({
-    constructing : false,
-    construction : o.construction,
-    amending : o.amending,
-    runtime : blueprint.Runtime,
-  });
-
-}
-
-_amendDefinitionWithoutMethod.defaults =
-{
-  construction : null,
-  definition : null,
-  key : null,
-  amending : null,
-}
+// function _amendDefinitionWithoutMethod( o )
+// {
+//
+//   _.assertMapHasAll( o, _amendDefinitionWithoutMethod.defaults );
+//   _.assert( _.strIs( o.key ) || _.symbolIs( o.key ) || o.key === null );
+//   _.assert( _.definitionIs( o.definition ) );
+//   _.assert( _.longHas( [ 'supplement', 'extend' ], o.amending ) );
+//
+//   debugger;
+//   if( o.amending === 'supplement' )
+//   {
+//     debugger;
+//     /* zzz qqq : cover */
+//     if( o.key !== null )
+//     if( Object.hasOwnProperty.call( o.construction, o.key ) && o.construction[ o.key ] !== undefined )
+//     return;
+//   }
+//
+//   // debugger; zzz
+//
+//   let prototype = _.prototype.of( o.construction );
+//   let defs = [];
+//   if( prototype && o.definition.kind === 'prototype' )
+//   debugger;
+//   if( prototype && o.definition.kind !== 'prototype' ) /* zzz : cover */
+//   defs.push( _.trait.prototype( prototype, { new : false } ) );
+//   if( o.definition.kind === 'extendable' )
+//   debugger;
+//   if( o.definition.kind !== 'extendable' ) /* zzz : cover */
+//   defs.push( _.trait.extendable( true ) );
+//   if( o.definition.kind !== 'typed' )
+//   debugger;
+//   if( o.definition.kind !== 'typed' ) /* zzz : cover */
+//   defs.push( _.trait.typed( _.maybe ) );
+//
+//   let args;
+//
+//   let newDefinition = o.key === null ? o.definition : { [ o.key ] : o.definition };
+//
+//   if( o.amending === 'extend' )
+//   args = [ defs, newDefinition ];
+//   else
+//   args = [ newDefinition, defs ];
+//
+//   let blueprint = _.blueprint._define({ args, amending : o.amending });
+//
+//   _.construction._init
+//   ({
+//     constructing : false,
+//     construction : o.construction,
+//     amending : o.amending,
+//     runtime : blueprint.Runtime,
+//   });
+//
+// }
+//
+// _amendDefinitionWithoutMethod.defaults =
+// {
+//   construction : null,
+//   definition : null,
+//   key : null,
+//   amending : null,
+// }
 
 //
 
@@ -643,7 +653,7 @@ var ConstructionExtension =
   amend,
   extend,
   supplement,
-  _amendDefinitionWithoutMethod,
+  // _amendDefinitionWithoutMethod,
   _amendCant,
 
   _make2,

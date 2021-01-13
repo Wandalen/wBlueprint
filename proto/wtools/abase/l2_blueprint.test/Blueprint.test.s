@@ -592,6 +592,7 @@ function definePropStaticInheritance( test )
     StaticMethod2 : s( function(){} ),
   });
 
+  debugger;
   var Blueprint2 = _.Blueprint
   ({
     inherit : _.define.inherit( Blueprint1 ),
@@ -605,6 +606,7 @@ function definePropStaticInheritance( test )
     StaticMethod2 : s( function(){} ),
     StaticMethod3 : s( function(){} ),
   });
+  debugger;
 
   test.true( !!Blueprint1.Make.StaticField1 );
   test.true( !!Blueprint1.Make.StaticField2 );
@@ -663,7 +665,7 @@ function definePropStaticInheritance( test )
 
   test.description = 'own properites'; /* */
 
-  test.identical( _.prototype.each( instance1 ).length, 4 );
+  test.identical( _.prototype.each( instance1 ).length, 4 ); debugger;
   var exp =
   {
     'field1' : 'b1',
@@ -4429,8 +4431,9 @@ function constructionAmendWithPropTypedMaybe( test )
       eachCase({ ... permutation, ... props[ permutation.propKind ] });
     });
 
-    test.case = 'validation';
-    test.identical( visited1, visited2 );
+    // xxx
+    // test.case = 'validation';
+    // test.identical( visited1, visited2 );
   }
 
   /* - */
@@ -4457,8 +4460,9 @@ function constructionAmendWithPropTypedMaybe( test )
     console.log( nameFor( tops ) );
     visited1[ nameFor( tops ) ] = 1;
 
-    // if( nameFor( tops ) !== 'amend:extend typed:Symbol(nothing) propKind:static:1, get:1, set:1' )
-    // return;
+    /* xxx */
+    if( nameFor( tops ) !== 'amend:extend typed:1 valToIns:val' )
+    return;
 
     /* */
 
@@ -4544,7 +4548,9 @@ function constructionAmendWithPropTypedMaybe( test )
       var dstContainer = {};
 
       var keysBefore = _.mapAllKeys( Object.prototype );
+      debugger; _global_.debugger = 1;
       var instance1 = _.construction[ tops.amend ]( dstContainer, extension );
+      debugger;
       var keysAfter = _.mapAllKeys( Object.prototype );
       test.identical( keysAfter, keysBefore );
 
@@ -4571,11 +4577,20 @@ function constructionAmendWithPropTypedMaybe( test )
       var extension =
       {
         f1 : tops.prop,
-        prototype : _.trait.prototype( 1 ),
+        prototype : _.trait.typed({ prototype : 1 }),
       };
       if( tops.typed !== _.nothing )
-      extension.typed = _.trait.typed( tops.typed );
+      extension.typed = _.trait.typed({ val : tops.typed, prototype : 1 } );
       var dstContainer = {};
+
+      // var extension =
+      // {
+      //   f1 : tops.prop,
+      //   prototype : _.trait.prototype( 1 ),
+      // };
+      // if( tops.typed !== _.nothing )
+      // extension.typed = _.trait.typed( tops.typed );
+      // var dstContainer = {};
 
       var keysBefore = _.mapAllKeys( Object.prototype );
       var instance1 = _.construction[ tops.amend ]( dstContainer, extension );
@@ -4763,6 +4778,8 @@ function constructionAmendWithPropTypedMaybe( test )
       visited2[ nameFor( tops ) ] = 1;
     }
 
+    debugger; return; xxx
+
     /* */
 
     if
@@ -4776,10 +4793,11 @@ function constructionAmendWithPropTypedMaybe( test )
       var extension =
       {
         f1 : tops.prop,
-        prototype : _.trait.prototype( 1 ),
+        typed : _.trait.typed({ val : tops.typed === _.nothing ? undefined : tops.typed, prototype : 1 }),
+        // prototype : _.trait.prototype( 1 ),
       };
-      if( tops.typed !== _.nothing )
-      extension.typed = _.trait.typed( tops.typed );
+      // if( tops.typed !== _.nothing )
+      // extension.typed = _.trait.typed( tops.typed );
       var dstContainer = {};
 
       var keysBefore = _.mapAllKeys( Object.prototype );
@@ -4809,10 +4827,11 @@ function constructionAmendWithPropTypedMaybe( test )
       var extension =
       {
         f1 : tops.prop,
-        prototype : _.trait.prototype( 1 ),
+        typed : _.trait.typed({ val : tops.typed === _.nothing ? undefined : tops.typed, prototype : 1 }),
+        // prototype : _.trait.prototype( 1 ),
       };
-      if( tops.typed !== _.nothing )
-      extension.typed = _.trait.typed( tops.typed );
+      // if( tops.typed !== _.nothing )
+      // extension.typed = _.trait.typed( tops.typed );
       var dstContainer = {};
 
       var keysBefore = _.mapAllKeys( Object.prototype );
@@ -5042,10 +5061,11 @@ function constructionAmendWithPropTypedMaybe( test )
       var extension =
       {
         f1 : tops.prop,
-        prototype : _.trait.prototype( 1 ),
+        typed : _.trait.typed({ val : tops.typed === _.nothing ? undefined : tops.typed, prototype : 1 }),
+        // prototype : _.trait.prototype( 1 ),
       };
-      if( tops.typed !== _.nothing )
-      extension.typed = _.trait.typed( tops.typed );
+      // if( tops.typed !== _.nothing )
+      // extension.typed = _.trait.typed( tops.typed );
       var dstContainer = {};
 
       var keysBefore = _.mapAllKeys( Object.prototype );
@@ -5075,10 +5095,11 @@ function constructionAmendWithPropTypedMaybe( test )
       var extension =
       {
         f1 : tops.prop,
-        prototype : _.trait.prototype( 1 ),
+        typed : _.trait.typed({ val : tops.typed === _.nothing ? undefined : tops.typed, prototype : 1 }),
+        // prototype : _.trait.prototype( 1 ),
       };
-      if( tops.typed !== _.nothing )
-      extension.typed = _.trait.typed( tops.typed );
+      // if( tops.typed !== _.nothing )
+      // extension.typed = _.trait.typed( tops.typed );
       var dstContainer = {};
 
       var keysBefore = _.mapAllKeys( Object.prototype );
@@ -6294,7 +6315,7 @@ function definePropConstructionAmendWithBlueprint( test )
 
     _.assert( _.fuzzyLike( tops.typed ) );
 
-    /* */
+    /* xxx */
 
     test.case = `typed : ${_.toStr( tops.typed )}, static : 0, props, amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
 
@@ -6775,10 +6796,18 @@ function definePropConstructionAmendWithBlueprint( test )
       prototype.f2 = 0;
       var dstContainer = Object.create( prototype );
 
+      // var extension = _.Blueprint
+      // ({
+      //   typed : _.trait.typed( tops.typed ),
+      //   prototype : _.trait.prototype( prototype ),
+      //   f1 : _.define.prop( tops.val, { static : 1, accessor : 1 } ),
+      //   f2 : _.define.prop( tops.val, { static : 1, accessor : 1 } ),
+      // });
+
       var extension = _.Blueprint
       ({
-        typed : _.trait.typed( tops.typed ),
-        prototype : _.trait.prototype( prototype ),
+        typed : _.trait.typed( tops.typed, { prototype } ),
+        // prototype : _.trait.prototype( prototype ),
         f1 : _.define.prop( tops.val, { static : 1, accessor : 1 } ),
         f2 : _.define.prop( tops.val, { static : 1, accessor : 1 } ),
       });
@@ -6862,11 +6891,18 @@ function definePropConstructionAmendWithBlueprint( test )
 
       var extension =
       {
-        typed : _.trait.typed( tops.typed ),
-        prototype : _.trait.prototype( prototype ),
+        typed : _.trait.typed( tops.typed, { prototype } ),
         f1 : _.define.prop( tops.val, { static : 1, accessor : 1 } ),
         f2 : _.define.prop( tops.val, { static : 1, accessor : 1 } ),
       };
+
+      // var extension =
+      // {
+      //   typed : _.trait.typed( tops.typed ),
+      //   prototype : _.trait.prototype( prototype ),
+      //   f1 : _.define.prop( tops.val, { static : 1, accessor : 1 } ),
+      //   f2 : _.define.prop( tops.val, { static : 1, accessor : 1 } ),
+      // };
 
       var keysBefore = _.mapAllKeys( Object.prototype );
       _.construction[ tops.amending ]( dstContainer, extension );
@@ -6981,11 +7017,18 @@ function definePropConstructionAmendWithBlueprint( test )
 
       var extension =
       {
-        typed : _.trait.typed( tops.typed ),
-        prototype : _.trait.prototype( prototype ),
+        typed : _.trait.typed( tops.typed, { prototype } ),
         f1 : _.define.prop( tops.val, { static : 1, accessor : 0 } ),
         f2 : _.define.prop( tops.val, { static : 1, accessor : 0 } ),
       };
+
+      // var extension =
+      // {
+      //   typed : _.trait.typed( tops.typed ),
+      //   prototype : _.trait.prototype( prototype ),
+      //   f1 : _.define.prop( tops.val, { static : 1, accessor : 0 } ),
+      //   f2 : _.define.prop( tops.val, { static : 1, accessor : 0 } ),
+      // };
 
       var keysBefore = _.mapAllKeys( Object.prototype );
       _.construction[ tops.amending ]( dstContainer, extension );
@@ -9539,16 +9582,14 @@ function defineAmendmentOrder( test )
 
   var Blueprint2 = _.Blueprint
   ({
-    typed : _.trait.typed(),
-    prototype : _.trait.prototype( Blueprint1 ),
+    typed : _.trait.typed( 1, { prototype : Blueprint1 } ),
     extension : _.define.extension( Blueprint1 ),
   });
 
   var Blueprint3 = _.Blueprint
   ({
-    prototype : _.trait.prototype( Blueprint1 ),
     extension : _.define.extension( Blueprint1 ),
-    typed : _.trait.typed(),
+    typed : _.trait.typed( 1, { prototype : Blueprint1 } ),
   });
 
   var instance1 = _.blueprint.construct( Blueprint1 );
@@ -9578,16 +9619,14 @@ function defineAmendmentOrder( test )
 
   var Blueprint2 = _.Blueprint
   ({
-    typed : _.trait.typed(),
-    prototype : _.trait.prototype( Blueprint1 ),
+    typed : _.trait.typed( 1, { prototype : Blueprint1 } ),
     supplementation : _.define.supplementation( Blueprint1 ),
   });
 
   var Blueprint3 = _.Blueprint
   ({
-    prototype : _.trait.prototype( Blueprint1 ),
     supplementation : _.define.supplementation( Blueprint1 ),
-    typed : _.trait.typed(),
+    typed : _.trait.typed( 1, { prototype : Blueprint1 } ),
   });
 
   var instance1 = _.blueprint.construct( Blueprint1 );
@@ -10217,7 +10256,8 @@ function blueprintInheritManually( test )
   var Blueprint2 = _.Blueprint
   ({
     extension : _.define.extension( Blueprint1 ),
-    prototype : _.trait.prototype( Blueprint1 ),
+    typed : _.trait.typed({ val : Blueprint1.Traits.typed.val, prototype : Blueprint1 }),
+    // prototype : _.trait.prototype( Blueprint1 ),
     field2 : 'b2',
     field3 : 'b2',
     s2 : s( 'b2' ),
@@ -10282,7 +10322,8 @@ function blueprintInheritManually( test )
   var Blueprint3 = _.Blueprint
   ({
     extend : _.define.extension( Blueprint2 ),
-    prototype : _.trait.prototype( Blueprint2 ),
+    typed : _.trait.typed({ val : 1, prototype : Blueprint2 }),
+    // prototype : _.trait.prototype( Blueprint2 ),
     'field3' : 'b3',
     'field4' : 'b3',
     staticField3 : s( 'b3' ),
@@ -10802,14 +10843,16 @@ function traitPrototype( test )
 
   var Blueprint2 = _.Blueprint
   ({
-    typed : _.trait.typed( true ),
-    prototype : _.trait.prototype( Blueprint1 ),
+    typed : _.trait.typed({ val : true, prototype : Blueprint1 }),
+    // typed : _.trait.typed( true ),
+    // prototype : _.trait.prototype( Blueprint1 ),
   });
 
   var Blueprint3 = _.Blueprint
   ({
-    typed : _.trait.typed( true ),
-    prototype : _.trait.prototype( Blueprint2 ),
+    typed : _.trait.typed({ val : true, prototype : Blueprint2 }),
+    // typed : _.trait.typed( true ),
+    // prototype : _.trait.prototype( Blueprint2 ),
   });
 
   var instance1 = _.blueprint.construct( Blueprint1 );
@@ -10838,14 +10881,16 @@ function traitPrototype( test )
 
   var Blueprint2 = _.Blueprint
   ({
-    typed : _.trait.typed( true ),
-    prototype : _.trait.prototype( Blueprint1 ),
+    typed : _.trait.typed({ val : true, prototype : Blueprint1 }),
+    // typed : _.trait.typed( true ),
+    // prototype : _.trait.prototype( Blueprint1 ),
   });
 
   var Blueprint3 = _.Blueprint
   ({
-    typed : _.trait.typed( true ),
-    prototype : _.trait.prototype( Blueprint2, { new : 1 } ),
+    typed : _.trait.typed({ val : true, new : 1, prototype : Blueprint2 }),
+    // typed : _.trait.typed( true ),
+    // prototype : _.trait.prototype( Blueprint2, { new : 1 } ),
   });
 
   var instance1 = _.blueprint.construct( Blueprint1 );
@@ -10874,14 +10919,16 @@ function traitPrototype( test )
 
   var Blueprint2 = _.Blueprint
   ({
-    typed : _.trait.typed( true ),
-    prototype : _.trait.prototype( Blueprint1 ),
+    typed : _.trait.typed({ val : true, prototype : Blueprint1 }),
+    // typed : _.trait.typed( true ),
+    // prototype : _.trait.prototype( Blueprint1 ),
   });
 
   var Blueprint3 = _.Blueprint
   ({
-    typed : _.trait.typed( true ),
-    prototype : _.trait.prototype( Blueprint2, { new : 0 } ),
+      typed : _.trait.typed({ val : true, prototype : Blueprint2, new : 0 }),
+    // typed : _.trait.typed( true ),
+    // prototype : _.trait.prototype( Blueprint2, { new : 0 } ),
   });
 
   var instance1 = _.blueprint.construct( Blueprint1 );
@@ -10908,8 +10955,9 @@ function traitPrototype( test )
 
   var Blueprint3 = _.Blueprint
   ({
-    typed : _.trait.typed( true ),
-    prototype : _.trait.prototype( proto2 ),
+    typed : _.trait.typed({ val : true, prototype : proto2 }),
+    // typed : _.trait.typed( true ),
+    // prototype : _.trait.prototype( proto2 ),
   });
 
   var instance3 = _.blueprint.construct( Blueprint3 );
@@ -10929,8 +10977,9 @@ function traitPrototype( test )
 
   var Blueprint3 = _.Blueprint
   ({
-    typed : _.trait.typed( true ),
-    prototype : _.trait.prototype( proto2, { new : 0 } ),
+    typed : _.trait.typed({ val : true, prototype : proto2, new : 0 }),
+    // typed : _.trait.typed( true ),
+    // prototype : _.trait.prototype( proto2, { new : 0 } ),
   });
 
   var instance3 = _.blueprint.construct( Blueprint3 );
@@ -10950,8 +10999,9 @@ function traitPrototype( test )
 
   var Blueprint3 = _.Blueprint
   ({
-    typed : _.trait.typed( true ),
-    prototype : _.trait.prototype( proto2, { new : 1 } ),
+    typed : _.trait.typed({ val : true, prototype : proto2, new : 1 }),
+    // typed : _.trait.typed( true ),
+    // prototype : _.trait.prototype( proto2, { new : 1 } ),
   });
 
   var instance3 = _.blueprint.construct( Blueprint3 );
@@ -10972,8 +11022,9 @@ function traitPrototype( test )
 
   var Blueprint3 = _.Blueprint
   ({
-    typed : _.trait.typed( true ),
-    prototype : _.trait.prototype( proto2 ),
+    typed : _.trait.typed({ val : true, prototype : proto2 }),
+    // typed : _.trait.typed( true ),
+    // prototype : _.trait.prototype( proto2 ),
   });
 
   var instance3 = _.blueprint.construct( Blueprint3 );
@@ -11000,8 +11051,9 @@ function traitPrototype( test )
 
   var Blueprint3 = _.Blueprint
   ({
-    typed : _.trait.typed( true ),
-    prototype : _.trait.prototype( proto2, { new : 0 } ),
+    typed : _.trait.typed({ val : true, prototype : proto2, new : 0 }),
+    // typed : _.trait.typed( true ),
+    // prototype : _.trait.prototype( proto2, { new : 0 } ),
   });
 
   var instance3 = _.blueprint.construct( Blueprint3 );
@@ -11029,8 +11081,9 @@ function traitPrototype( test )
 
   var Blueprint3 = _.Blueprint
   ({
-    typed : _.trait.typed( true ),
-    prototype : _.trait.prototype( proto2, { new : 1 } ),
+    typed : _.trait.typed({ val : true, prototype : proto2, new : 1 }),
+    // typed : _.trait.typed( true ),
+    // prototype : _.trait.prototype( proto2, { new : 1 } ),
   });
 
   var instance3 = _.blueprint.construct( Blueprint3 );
@@ -11057,8 +11110,9 @@ function traitPrototype( test )
 
   var Blueprint3 = _.Blueprint
   ({
-    typed : _.trait.typed( true ),
-    prototype : _.trait.prototype( proto2 ),
+    typed : _.trait.typed({ val : true, prototype : proto2 }),
+    // typed : _.trait.typed( true ),
+    // prototype : _.trait.prototype( proto2 ),
   });
 
   var instance3 = _.blueprint.construct( Blueprint3 );
@@ -11081,8 +11135,9 @@ function traitPrototype( test )
 
   var Blueprint3 = _.Blueprint
   ({
-    typed : _.trait.typed( true ),
-    prototype : _.trait.prototype( proto2, { new : 0 } ),
+    typed : _.trait.typed({ val : true, prototype : proto2, new : 0 }),
+    // typed : _.trait.typed( true ),
+    // prototype : _.trait.prototype( proto2, { new : 0 } ),
   });
 
   var instance3 = _.blueprint.construct( Blueprint3 );
@@ -11106,8 +11161,9 @@ function traitPrototype( test )
 
   var Blueprint3 = _.Blueprint
   ({
-    typed : _.trait.typed( true ),
-    prototype : _.trait.prototype( proto2, { new : 1 } ),
+    typed : _.trait.typed({ val : true, prototype : proto2, new : 1 }),
+    // typed : _.trait.typed( true ),
+    // prototype : _.trait.prototype( proto2, { new : 1 } ),
   });
 
   var instance3 = _.blueprint.construct( Blueprint3 );
@@ -11127,8 +11183,9 @@ function traitPrototype( test )
   var proto1 = null;
   var Blueprint3 = _.Blueprint
   ({
-    typed : _.trait.typed( false ),
-    prototype : _.trait.prototype( proto1 ),
+    typed : _.trait.typed({ val : false, prototype : proto1 }),
+    // typed : _.trait.typed( false ),
+    // prototype : _.trait.prototype( proto1 ),
   });
 
   var instance3 = _.blueprint.construct( Blueprint3 );
@@ -11143,8 +11200,9 @@ function traitPrototype( test )
   var proto1 = null;
   var Blueprint3 = _.Blueprint
   ({
-    typed : _.trait.typed( false ),
-    prototype : _.trait.prototype( proto1, { new : 0 } ),
+    typed : _.trait.typed({ val : false, prototype : proto1, new : 0 }),
+    // typed : _.trait.typed( false ),
+    // prototype : _.trait.prototype( proto1, { new : 0 } ),
   });
 
   var instance3 = _.blueprint.construct( Blueprint3 );
@@ -11159,8 +11217,9 @@ function traitPrototype( test )
   var proto1 = null;
   var Blueprint3 = _.Blueprint
   ({
-    typed : _.trait.typed( false ),
-    prototype : _.trait.prototype( proto1, { new : 1 } ),
+    typed : _.trait.typed({ val : false, prototype : proto1, new : 1 }),
+    // typed : _.trait.typed( false ),
+    // prototype : _.trait.prototype( proto1, { new : 1 } ),
   });
 
   var instance3 = _.blueprint.construct( Blueprint3 );
@@ -11177,8 +11236,9 @@ function traitPrototype( test )
   {
     _.Blueprint
     ({
-      typed : _.trait.typed( true ),
-      prototype : _.trait.prototype( null, { new : 1 } ),
+      typed : _.trait.typed({ val : false, prototype : null, new : 1 }),
+      // typed : _.trait.typed( true ),
+      // prototype : _.trait.prototype( null, { new : 1 } ),
     });
   });
 
@@ -11187,8 +11247,9 @@ function traitPrototype( test )
   {
     _.Blueprint
     ({
-      typed : _.trait.typed( true ),
-      prototype : _.trait.prototype( null, { new : 0 } ),
+      typed : _.trait.typed({ val : true, prototype : null, new : 0 }),
+      // typed : _.trait.typed( true ),
+      // prototype : _.trait.prototype( null, { new : 0 } ),
     });
   });
 
@@ -12251,8 +12312,9 @@ function traitPrototypeTraitTyped( test )
   prototype.constructor = constructor1;
   var construction = Object.create( prototype );
   var args = [];
-  args.push( _.trait.typed( _.maybe ) );
-  args.push( _.trait.prototype( prototype, { new : false } ) );
+  // args.push( _.trait.typed( _.maybe ) );
+  // args.push( _.trait.prototype( prototype, { new : false } ) );
+  args.push( _.trait.typed({ val : _.maybe, prototype, new : false }) );
 
   var blueprint = _.blueprint._define({ args, amending });
 
@@ -12286,8 +12348,9 @@ function traitPrototypeTraitTyped( test )
   prototype.constructor = constructor1;
   var construction = Object.create( prototype );
   var args = [];
-  args.push( _.trait.prototype( prototype, { new : false } ) );
-  args.push( _.trait.typed( 1 ) );
+  // args.push( _.trait.prototype( prototype, { new : false } ) );
+  // args.push( _.trait.typed( 1 ) );
+  args.push( _.trait.typed({ val : 1, prototype, new : false }) );
 
   var blueprint = _.blueprint._define({ args, amending });
 
@@ -12321,8 +12384,9 @@ function traitPrototypeTraitTyped( test )
   prototype.constructor = constructor1;
   var construction = Object.create( prototype );
   var args = [];
-  args.push( _.trait.typed( 1 ) );
-  args.push( _.trait.prototype( prototype, { new : false } ) );
+  // args.push( _.trait.typed( 1 ) );
+  // args.push( _.trait.prototype( prototype, { new : false } ) );
+  args.push( _.trait.typed({ val : 1, prototype, new : false }) );
 
   var blueprint = _.blueprint._define({ args, amending });
 
@@ -12365,6 +12429,41 @@ traitPrototypeTraitTyped.description =
 `
   - extending prototyped object with explicitly defined prototype
   -- does not throw errors
+`
+
+//
+
+function traitTypedAmendConstruction( test )
+{
+
+  eachCase({ amending : 'extend' });
+  // eachCase({ amending : 'supplement' });
+  /* xxx */
+
+  /* - */
+
+  function eachCase( tops )
+  {
+
+    /* */
+
+    test.case = `amending : ${_.toStr( tops.amending )}, pure map, typed : 1`;
+    var amendation = _.trait.typed( 1 );
+    var dstConstruction = Object.create( null );
+    _.construction[ tops.amending ]( dstConstruction, amendation );
+    test.identical( _.prototype.each( dstConstruction ).length, 3 );
+    test.true( _.prototype.each( dstConstruction )[ 1 ] !== Object.prototype );
+    test.true( _.prototype.each( dstConstruction )[ 2 ] === _.Construction.prototype );
+
+    /* */
+
+  }
+
+}
+
+traitExtendableAmendConstruction.description =
+`
+- Amend construction with trait::typed
 `
 
 //
@@ -12471,19 +12570,93 @@ function traitExtendableAmendConstruction( test )
 
     /* */
 
-    test.case = `${tops.propKind}, typed : ${_.toStr( tops.typed )}`;
+    test.case = `amending : ${_.toStr( tops.amending )}, pure map, extendable : 1`;
 
     var amendation = _.trait.extendable( 1 );
     var dstConstruction = Object.create( null );
-    debugger; _global_.debugger = 1;
     _.construction[ tops.amending ]( dstConstruction, amendation );
-    debugger;
-    amendation.a = 2;
-    exp =
+    dstConstruction.a = 2;
+    var exp =
     {
       a : 2,
     }
     test.identical( dstConstruction, exp );
+
+    /* */
+
+    test.case = `amending : ${_.toStr( tops.amending )}, pure map, extendable : 0`;
+
+    var amendation = _.trait.extendable( 0 );
+    var dstConstruction = Object.create( null );
+    _.construction[ tops.amending ]( dstConstruction, amendation );
+    test.shouldThrowErrorSync( () => dstConstruction.a = 2 );
+    var exp =
+    {
+    }
+    test.identical( dstConstruction, exp );
+
+    /* */
+
+    test.case = `amending : ${_.toStr( tops.amending )}, polluted map, extendable : 1`;
+
+    var amendation = _.trait.extendable( 1 );
+    var dstConstruction = {};
+    _.construction[ tops.amending ]( dstConstruction, amendation );
+    dstConstruction.a = 2;
+    var exp =
+    {
+      a : 2,
+    }
+    test.identical( dstConstruction, exp );
+
+    /* */
+
+    test.case = `amending : ${_.toStr( tops.amending )}, polluted map, extendable : 0`;
+
+    var amendation = _.trait.extendable( 0 );
+    var dstConstruction = {};
+    _.construction[ tops.amending ]( dstConstruction, amendation );
+    test.shouldThrowErrorSync( () => dstConstruction.a = 2 );
+    var exp =
+    {
+    }
+    test.identical( dstConstruction, exp );
+
+    /* */
+
+    test.case = `amending : ${_.toStr( tops.amending )}, object, extendable : 1`;
+
+    var amendation = _.trait.extendable( 1 );
+    var prototype = Object.create( null );
+    var dstConstruction = Object.create( prototype );
+    _.construction[ tops.amending ]( dstConstruction, amendation );
+    dstConstruction.a = 2;
+    var exp =
+    {
+      a : 2,
+    }
+    test.identical( _.property.all( dstConstruction ), exp );
+
+    /* */
+
+    test.case = `amending : ${_.toStr( tops.amending )}, object, extendable : 0`;
+
+    var amendation = _.trait.extendable( 0 );
+    var prototype = Object.create( null );
+    var dstConstruction = Object.create( prototype );
+    _.construction[ tops.amending ]( dstConstruction, amendation );
+    test.shouldThrowErrorSync( () => dstConstruction.a = 2 );
+    var exp =
+    {
+    }
+    test.identical( _.property.all( dstConstruction ), exp );
+
+    prototype.a = 2;
+    var exp =
+    {
+      a : 2,
+    }
+    test.identical( _.property.all( dstConstruction ), exp );
 
     /* */
 
@@ -15568,6 +15741,7 @@ let Self =
     traitWithConstructorExtendObjectWithDefinition,
     traitWithConstructorTraitPrototypeTraitTyped,
     traitPrototypeTraitTyped,
+    traitTypedAmendConstruction,
     traitExtendable,
     traitExtendableAmendConstruction,
 

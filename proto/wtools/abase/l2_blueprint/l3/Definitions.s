@@ -874,24 +874,12 @@ _.routineEr( _statics, _singleArgumentHead );
 
 //
 
-// function nothing_head( routine, args )
-// {
-//   let o = args[ 0 ];
-//
-//   o = _.routineOptions( routine, o );
-//
-//   _.assert( arguments.length === 2 );
-//   _.assert( args.length === 0 || args.length === 1 );
-//
-//   return o;
-// }
-
 function nothing_body( o )
 {
 
   _.assertRoutineOptions( nothing_body, arguments );
   o.definitionGroup = 'definition.unnamed';
-  o.constructionAmend = constructionAmend;
+  // o.constructionAmend = constructionAmend;
   o.blueprintAmend = blueprintAmend;
   o.blueprint = false;
 
@@ -902,9 +890,9 @@ function nothing_body( o )
   Object.freeze( definition );
   return definition;
 
-  function constructionAmend( construction, key )
-  {
-  }
+  // function constructionAmend( construction, key )
+  // {
+  // }
 
   function blueprintAmend( op )
   {
@@ -1015,10 +1003,22 @@ function inherit( o )
   _.assert( _.blueprint.isDefinitive( o.val ) );
   let result = [];
   result.push( _.define.extension( o.val ) );
-  result.push( _.trait.prototype( o.val ) );
 
-  if( !o.val.Traits.typed )
-  result.push( _.trait.typed() );
+  // result.push( _.trait.prototype( o.val ) );
+  // if( !o.val.Traits.typed )
+  // result.push( _.trait.typed() );
+
+  // debugger;
+  if( o.val.Traits.typed )
+  {
+    result.push( _.trait.typed( o.val.Traits.typed.val, { prototype : o.val } ) );
+  }
+  else
+  {
+    result.push( _.trait.typed( true, { prototype : o.val } ) );
+  }
+
+  // result.push( _.trait.typed( true, { prototype : o.val } ) );
 
   return result;
 }
@@ -1039,7 +1039,7 @@ function _constant_functor() /* xxx : test with blueprint? */
   prototype.toVal = toVal;
   _.property.hide( prototype, 'asAccessorSuite' );
   _.property.hide( prototype, 'toVal' );
-  _.property.hide( prototype, 'constructionAmend' );
+  // _.property.hide( prototype, 'constructionAmend' );
   _.definition.retype( prototype );
   Object.freeze( prototype );
 
