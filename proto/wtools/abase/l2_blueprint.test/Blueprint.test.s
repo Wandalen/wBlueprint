@@ -11231,6 +11231,11 @@ function traitPrototype( test )
 
   test.case = 'prototype null, but typed';
 
+  _.Blueprint
+  ({
+    typed : _.trait.typed({ val : true, prototype : null, new : 0 }),
+  });
+
   if( Config.debug )
   test.shouldThrowErrorSync( () =>
   {
