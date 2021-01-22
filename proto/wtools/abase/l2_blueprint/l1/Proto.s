@@ -15,6 +15,13 @@ let _ = _global_.wTools;
  * @module Tools/base/Proto
  */
 
+function _of( object )
+{
+  return Object.getPrototypeOf( object );
+}
+
+//
+
 /**
  * Iterate through prototypes.
  * @param {object} proto - prototype
@@ -41,37 +48,6 @@ function each( proto, onEach )
 
   return result;
 }
-
-//
-
-// function prototypeEach_deprecated( proto, onEach )
-// {
-//   let result = [];
-//
-//   _.assert( _.routineIs( onEach ) || !onEach );
-//   _.assert( _.objectIs( proto ) );
-//   _.assert( arguments.length === 1 || arguments.length === 2 );
-//
-//   do
-//   {
-//
-//     if( onEach )
-//     onEach.call( this, proto );
-//
-//     result.push( proto );
-//
-//     let parent = _.parentOf( proto );
-//
-//     proto = parent ? parent.prototype : null;
-//
-//     if( proto && proto.constructor === Object )
-//     proto = null;
-//
-//   }
-//   while( proto );
-//
-//   return result;
-// }
 
 //
 
@@ -105,20 +81,17 @@ function hasPrototype( srcProto, insProto )
  * @namespace Tools.prototype
  */
 
-function hasProperty( srcPrototype, names ) /* xxx qqq : names could be only string */
+function hasProperty( srcPrototype, name ) /* yyy qqq : names could be only string */
 {
-  names = _nameFielded( names );
-  _.assert( _.objectIs( srcPrototype ) );
+
+  _.assert( !_.primitiveIs( srcPrototype ) );
+  _.assert( _.strIs( name ) );
 
   do
   {
     let has = true;
-    for( let n in names )
-    if( !_ObjectHasOwnProperty.call( srcPrototype, n ) )
-    {
-      has = false;
-      break;
-    }
+    if( !Object.hasOwnProperty.call( srcPrototype, name ) )
+    has = false;
     if( has )
     return srcPrototype;
 
@@ -129,6 +102,103 @@ function hasProperty( srcPrototype, names ) /* xxx qqq : names could be only str
   return null;
 }
 
+// {
+//   names = _nameFielded( names );
+//   _.assert( _.objectIs( srcPrototype ) );
+//
+//   do
+//   {
+//     let has = true;
+//     for( let n in names )
+//     if( !Object.hasOwnProperty.call( srcPrototype, n ) )
+//     {
+//       has = false;
+//       break;
+//     }
+//     if( has )
+//     return srcPrototype;
+//
+//     srcPrototype = Object.getPrototypeOf( srcPrototype );
+//   }
+//   while( srcPrototype !== Object.prototype && srcPrototype );
+//
+//   return null;
+// }
+
+//
+
+function isSubPrototypeOf( sub, parent )
+{
+
+  _.assert( !!parent );
+  _.assert( !!sub );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
+
+  if( parent === sub )
+  return true;
+
+  return Object.isPrototypeOf.call( parent, sub );
+}
+
+function propertyDescriptorActiveGet( object, name )
+{
+  let result = Object.create( null );
+  result.object = null;
+  result.descriptor = null;
+
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
+
+  do
+  {
+    let descriptor = Object.getOwnPropertyDescriptor( object, name );
+    if( descriptor && !( 'value' in descriptor ) )
+    {
+      result.descriptor = descriptor;
+      result.object = object;
+      return result;
+    }
+    object = Object.getPrototypeOf( object );
+  }
+  while( object );
+
+  return result;
+}
+
+//
+
+function _isStandardEntity( src )
+{
+  if( src === Object.prototype )
+  return true;
+  return false;
+}
+
+//
+
+function propertyDescriptorGet( object, name )
+{
+  let result = Object.create( null );
+  result.object = null;
+  result.descriptor = null;
+
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
+
+  do
+  {
+    let descriptor = Object.getOwnPropertyDescriptor( object, name );
+    if( descriptor )
+    {
+      result.descriptor = descriptor;
+      result.object = object;
+      return result;
+    }
+    object = Object.getPrototypeOf( object );
+  }
+  while( object );
+
+  return result;
+}
+
 // --
 // define
 // --
@@ -136,11 +206,17 @@ function hasProperty( srcPrototype, names ) /* xxx qqq : names could be only str
 let PrototypeExtension =
 {
 
+  of : _of,
   each,
-  // prototypeEach_deprecated,
 
   hasProperty,
   hasPrototype,
+
+  isSubPrototypeOf,
+  _isStandardEntity,
+
+  propertyDescriptorActiveGet,
+  propertyDescriptorGet,
 
 }
 
