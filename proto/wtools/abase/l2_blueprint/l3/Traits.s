@@ -398,8 +398,8 @@ function typed_body( o )
     else
     {
 
-      if( _global_.debugger )
-      debugger;
+      // if( _global_.debugger )
+      // debugger;
 
       if( _.blueprint.is( trait.prototype ) )
       {
@@ -425,8 +425,8 @@ function typed_body( o )
     }
 
     let effectiveTyped = !!trait.val && prototype !== null;
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
 
     if( trait.val === _.maybe && !trait.prototype )
     effectiveTyped = false;
@@ -452,8 +452,8 @@ function typed_body( o )
     _.assert( _.fuzzyIs( o.blueprint.Traits.typed.val ) );
     _.assert( o.blueprint.Typed === o.blueprint.Traits.typed.val || o.blueprint.Traits.typed.val === _.maybe );
 
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
 
     let prototype;
 
@@ -755,42 +755,64 @@ function withConstructor( o )
   function blueprintForm2( o )
   {
 
+    if( _global_.debugger )
+    debugger;
+
     if( !o.blueprint.Traits.withConstructor.val )
     return;
-    if( o.amending === 'supplement' && _.mapOnlyOwnKey( o.blueprint.prototype, 'constructor' ) )
-    return;
 
-    _.assert( !_.primitiveIs( o.blueprint.prototype ) );
-    _.assert( o.blueprint.prototype !== Object.prototype, 'Constructor of `Object.prototype` should not be rewritten' );
+    let prototyped = o.blueprint.prototype && o.blueprint.prototype !== Object.prototype;
+
+    // _.assert
+    // (
+    //     !_.primitiveIs( o.blueprint.prototype ), () =>
+    //     `Only prototyped blueprint can have constructor in prototype. But ${_.blueprint.qnameOf( o.blueprint )} is not prototyped.`
+    // );
+    // _.assert( o.blueprint.prototype !== Object.prototype, 'Constructor of `Object.prototype` should not be rewritten' );
     _.assert( _.routineIs( o.blueprint.Make ) );
     _.assert( _.fuzzyIs( o.blueprint.Typed ) );
 
-    let properties =
+    if( prototyped )
+    if( o.amending !== 'supplement' || !_.mapOnlyOwnKey( o.blueprint.prototype, 'constructor' ) )
     {
-      value : o.blueprint.Make,
-      enumerable : false,
-      configurable : false,
-      writable : false,
-    };
-    Object.defineProperty( o.blueprint.prototype, 'constructor', properties );
+      // xxx : cover
+      // if( o.amending === 'supplement' && _.mapOnlyOwnKey( o.blueprint.prototype, 'constructor' ) )
+      // return;
+      let properties =
+      {
+        value : o.blueprint.Make,
+        enumerable : false,
+        configurable : false,
+        writable : false,
+      };
+      Object.defineProperty( o.blueprint.prototype, 'constructor', properties );
+    }
 
+    let prototype = o.blueprint.prototype;
+    let supplementing = o.amending === 'supplement';
     let constructor = o.blueprint.Make;
     let typed = o.blueprint.Typed;
-
-    if( typed !== true )
+    // if( typed !== true )
+    /* xxx : add optimizing condition */
     {
       _.blueprint._routineAdd( o.blueprint, 'initEnd', initEnd );
     }
 
     function initEnd( genesis )
     {
+
+      if( _global_.debugger )
+      debugger;
+
       _.assert( !_.primitiveIs( genesis.construction ) );
       if( genesis.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, 'constructor' ) )
       return;
-      if( typed === _.maybe )
+      // if( typed === _.maybe )
+      if( typed )
       {
-        let prototype = Object.getPrototypeOf( genesis.construction );
-        if( prototype && prototype.constructor === constructor )
+        let prototype2 = Object.getPrototypeOf( genesis.construction );
+        // if( prototype2 && prototype2.constructor === constructor )
+        if( prototype2 && prototype2 === prototype )
         return;
       }
       let properties =

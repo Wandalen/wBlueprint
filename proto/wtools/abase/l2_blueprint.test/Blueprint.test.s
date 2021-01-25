@@ -11689,7 +11689,7 @@ function traitTypePrototype( test )
     // prototype : _.trait.prototype( proto1, { new : 1 } ),
   });
 
-  var instance3 = _.blueprint.construct( Blueprint3 );
+   var instance3 = _.blueprint.construct( Blueprint3 );
   test.identical( _.prototype.each( instance3 ).length, 1 );
   test.true( _.prototype.each( instance3 )[ 0 ] === instance3 );
 
@@ -11744,11 +11744,6 @@ function traitTypePrototype( test )
 function traitTypedTrivial( test )
 {
 
-  function rfield( arg )
-  {
-    return 'x' + arg;
-  }
-
   /* */
 
   test.case = 'blueprint with untyped instance, implicit';
@@ -11763,7 +11758,7 @@ function traitTypedTrivial( test )
   test.identical( _.construction.isInstanceOf( instance, Blueprint ), _.maybe );
   test.identical( _.blueprint.isBlueprintOf( Blueprint, instance ), _.maybe );
 
-  test.identical( instance instanceof Blueprint.Make, false );
+  // test.identical( instance instanceof Blueprint.Make, false );
   test.identical( Object.getPrototypeOf( instance ), null );
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
@@ -11792,7 +11787,7 @@ function traitTypedTrivial( test )
   test.identical( _.construction.isInstanceOf( instance, Blueprint ), _.maybe );
   test.identical( _.blueprint.isBlueprintOf( Blueprint, instance ), _.maybe );
 
-  test.identical( instance instanceof Blueprint.Make, false );
+  // test.identical( instance instanceof Blueprint.Make, false );
   test.identical( Object.getPrototypeOf( instance ), null );
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
@@ -11840,6 +11835,11 @@ function traitTypedTrivial( test )
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
 
   /* */
+
+  function rfield( arg )
+  {
+    return 'x' + arg;
+  }
 
 }
 
@@ -13676,11 +13676,54 @@ function traitWithConstructorBasic( test )
 
   /* */
 
+  // if( Config.debug )
+  // {
+  //
+  //   test.case = 'typed:0';
+  //   test.shouldThrowErrorSync
+  //   (
+  //     () =>
+  //     {
+  //       _.Blueprint
+  //       ({
+  //         typed : _.trait.typed({ val : false }),
+  //         withConstructor : _.trait.withConstructor(),
+  //       });
+  //     },
+  //     ( err ) => test.identical
+  //     (
+  //       err.originalMessage,
+  //       'Only prototyped blueprint can have constructor in prototype. But Blueprint:: is not prototyped.'
+  //     )
+  //   )
+  //
+  //   test.case = 'typed:maybe';
+  //   test.shouldThrowErrorSync
+  //   (
+  //     () =>
+  //     {
+  //       _.Blueprint
+  //       ({
+  //         typed : _.trait.typed({ val : _.maybe }),
+  //         withConstructor : _.trait.withConstructor(),
+  //       });
+  //     },
+  //     ( err ) => test.identical
+  //     (
+  //       err.originalMessage,
+  //       'Only prototyped blueprint can have constructor in prototype. But Blueprint:: is not prototyped.'
+  //     )
+  //   )
+  //
+  // }
+
+  /* */
+
   test.case = 'unnamed blueprint, typed:0';
 
   var Blueprint1 = _.Blueprint
   ({
-    typed : _.trait.typed({ val : false }),
+    typed : _.trait.typed({ val : 0 }),
     withConstructor : _.trait.withConstructor(),
     field1 : 'b1',
     field2 : 'b1',
@@ -13688,18 +13731,16 @@ function traitWithConstructorBasic( test )
     s2 : s( 'b1' ),
   });
   test.true( Blueprint1.prototype === Blueprint1.Make.prototype );
-  test.true( Blueprint1.Make === Blueprint1.prototype.constructor );
+  // test.true( Blueprint1.Make === Blueprint1.prototype.constructor );
   test.true( Blueprint1.constructor === undefined );
   test.identical( Blueprint1.Make.name, 'Construction' );
 
   test.description = 'instance1'; /* */
 
   var instance1 = Blueprint1.Make();
-  test.identical( instance1 instanceof Blueprint1.Make, false );
+  // test.identical( instance1 instanceof Blueprint1.Make, true );
   test.true( _.routineIs( instance1.constructor ) );
   test.identical( instance1.constructor.name, 'Construction' );
-  test.true( instance1.constructor === Blueprint1.Make );
-  test.true( instance1.constructor === Blueprint1.prototype.constructor );
 
   test.identical( _.prototype.each( instance1 ).length, 1 );
   var exp =
@@ -13708,80 +13749,60 @@ function traitWithConstructorBasic( test )
     'field1' : 'b1',
     'field2' : 'b1',
   }
+  test.identical( _.property.all( instance1 ), exp );
+  var exp =
+  {
+    constructor : instance1.constructor,
+    'field1' : 'b1',
+    'field2' : 'b1',
+  }
   test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
+  // var exp =
+  // {
+  //   constructor : Blueprint1.prototype.constructor,
+  //   's1' : 'b1',
+  //   's2' : 'b1',
+  // }
+  // test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
+  // var exp =
+  // {
+  // }
+  // test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
 
   test.description = 'instance2'; /* */
 
   var instance2 = instance1.constructor();
-  test.identical( instance2 instanceof Blueprint1.Make, false );
+  test.identical( instance2 instanceof Blueprint1.Make, true );
   test.true( _.routineIs( instance2.constructor ) );
   test.identical( instance2.constructor.name, 'Construction' );
-  test.true( instance2.constructor === Blueprint1.Make );
-  test.true( instance2.constructor === Blueprint1.prototype.constructor );
 
-  test.identical( _.prototype.each( instance2 ).length, 1 );
+  test.identical( _.prototype.each( instance2 ).length, 3 );
   var exp =
   {
-    constructor : instance1.constructor,
+    constructor : Blueprint1.prototype.constructor,
+    'field1' : 'b1',
+    'field2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
+  }
+  test.identical( _.property.all( instance2 ), exp );
+  var exp =
+  {
     'field1' : 'b1',
     'field2' : 'b1',
   }
   test.identical( propertyOwn( _.prototype.each( instance2 )[ 0 ] ), exp );
-
-  /* */
-
-  test.case = 'named blueprint, typed:0';
-
-  var Blueprint1 = _.Blueprint
-  ({
-    typed : _.trait.typed({ val : false }),
-    withConstructor : _.trait.withConstructor(),
-    name : _.trait.name( 'Blueprint1X' ),
-    field1 : 'b1',
-    field2 : 'b1',
-    s1 : s( 'b1' ),
-    s2 : s( 'b1' ),
-  });
-  test.true( Blueprint1.prototype === Blueprint1.Make.prototype );
-  test.true( Blueprint1.Make === Blueprint1.prototype.constructor );
-  test.true( Blueprint1.constructor === undefined );
-  test.identical( Blueprint1.Make.name, 'Blueprint1X' );
-
-  test.description = 'instance1'; /* */
-
-  var instance1 = Blueprint1.Make();
-  test.identical( instance1 instanceof Blueprint1.Make, false );
-  test.true( _.routineIs( instance1.constructor ) );
-  test.identical( instance1.constructor.name, 'Blueprint1X' );
-  test.true( instance1.constructor === Blueprint1.Make );
-  test.true( instance1.constructor === Blueprint1.prototype.constructor );
-
-  test.identical( _.prototype.each( instance1 ).length, 1 );
   var exp =
   {
-    constructor : instance1.constructor,
-    'field1' : 'b1',
-    'field2' : 'b1',
+    constructor : Blueprint1.prototype.constructor,
+    's1' : 'b1',
+    's2' : 'b1',
   }
-  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
-
-  test.description = 'instance2'; /* */
-
-  var instance2 = instance1.constructor();
-  test.identical( instance2 instanceof Blueprint1.Make, false );
-  test.true( _.routineIs( instance2.constructor ) );
-  test.identical( instance2.constructor.name, 'Blueprint1X' );
-  test.true( instance2.constructor === Blueprint1.Make );
-  test.true( instance2.constructor === Blueprint1.prototype.constructor );
-
-  test.identical( _.prototype.each( instance2 ).length, 1 );
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 1 ] ), exp );
   var exp =
   {
-    constructor : instance1.constructor,
-    'field1' : 'b1',
-    'field2' : 'b1',
   }
-  test.identical( propertyOwn( _.prototype.each( instance2 )[ 0 ] ), exp );
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 2 ] ), exp );
 
   /* */
 
@@ -13878,6 +13899,184 @@ function traitWithConstructorBasic( test )
   var Blueprint1 = _.Blueprint
   ({
     typed : _.trait.typed({ val : true }),
+    withConstructor : _.trait.withConstructor(),
+    name : _.trait.name( 'Blueprint1X' ),
+    field1 : 'b1',
+    field2 : 'b1',
+    s1 : s( 'b1' ),
+    s2 : s( 'b1' ),
+  });
+
+  test.true( Blueprint1.prototype === Blueprint1.Make.prototype );
+  test.true( Blueprint1.Make === Blueprint1.prototype.constructor );
+  test.true( Blueprint1.constructor === undefined );
+  test.identical( Blueprint1.Make.name, 'Blueprint1X' );
+
+  test.description = 'instance1'; /* */
+
+  var instance1 = Blueprint1.Make();
+  test.identical( instance1 instanceof Blueprint1.Make, true );
+  test.true( _.routineIs( instance1.constructor ) );
+  test.identical( instance1.constructor.name, 'Blueprint1X' );
+
+  test.identical( _.prototype.each( instance1 ).length, 3 );
+  var exp =
+  {
+    constructor : Blueprint1.prototype.constructor,
+    'field1' : 'b1',
+    'field2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
+  }
+  test.identical( _.property.all( instance1 ), exp );
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b1',
+  }
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
+  var exp =
+  {
+    constructor : Blueprint1.prototype.constructor,
+    's1' : 'b1',
+    's2' : 'b1',
+  }
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
+  var exp =
+  {
+  }
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
+
+  test.description = 'instance2'; /* */
+
+  var instance2 = instance1.constructor();
+  test.identical( instance2 instanceof Blueprint1.Make, true );
+  test.true( _.routineIs( instance2.constructor ) );
+  test.identical( instance2.constructor.name, 'Blueprint1X' );
+
+  test.identical( _.prototype.each( instance2 ).length, 3 );
+  var exp =
+  {
+    constructor : Blueprint1.prototype.constructor,
+    'field1' : 'b1',
+    'field2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
+  }
+  test.identical( _.property.all( instance2 ), exp );
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b1',
+  }
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 0 ] ), exp );
+  var exp =
+  {
+    constructor : Blueprint1.prototype.constructor,
+    's1' : 'b1',
+    's2' : 'b1',
+  }
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 1 ] ), exp );
+  var exp =
+  {
+  }
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 2 ] ), exp );
+
+  /* */
+
+  test.case = 'unnamed blueprint, typed:maybe, prototype:true';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed({ val : _.maybe, prototype : true }),
+    withConstructor : _.trait.withConstructor(),
+    field1 : 'b1',
+    field2 : 'b1',
+    s1 : s( 'b1' ),
+    s2 : s( 'b1' ),
+  });
+  test.true( Blueprint1.prototype === Blueprint1.Make.prototype );
+  test.true( Blueprint1.Make === Blueprint1.prototype.constructor );
+  test.true( Blueprint1.constructor === undefined );
+  test.identical( Blueprint1.Make.name, 'Construction' );
+
+  test.description = 'instance1'; /* */
+
+  var instance1 = Blueprint1.Make();
+  test.identical( instance1 instanceof Blueprint1.Make, true );
+  test.true( _.routineIs( instance1.constructor ) );
+  test.identical( instance1.constructor.name, 'Construction' );
+
+  test.identical( _.prototype.each( instance1 ).length, 3 );
+  var exp =
+  {
+    constructor : Blueprint1.prototype.constructor,
+    'field1' : 'b1',
+    'field2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
+  }
+  test.identical( _.property.all( instance1 ), exp );
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b1',
+  }
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
+  var exp =
+  {
+    constructor : Blueprint1.prototype.constructor,
+    's1' : 'b1',
+    's2' : 'b1',
+  }
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
+  var exp =
+  {
+  }
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
+
+  test.description = 'instance2'; /* */
+
+  var instance2 = instance1.constructor();
+  test.identical( instance2 instanceof Blueprint1.Make, true );
+  test.true( _.routineIs( instance2.constructor ) );
+  test.identical( instance2.constructor.name, 'Construction' );
+
+  test.identical( _.prototype.each( instance2 ).length, 3 );
+  var exp =
+  {
+    constructor : Blueprint1.prototype.constructor,
+    'field1' : 'b1',
+    'field2' : 'b1',
+    's1' : 'b1',
+    's2' : 'b1',
+  }
+  test.identical( _.property.all( instance2 ), exp );
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b1',
+  }
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 0 ] ), exp );
+  var exp =
+  {
+    constructor : Blueprint1.prototype.constructor,
+    's1' : 'b1',
+    's2' : 'b1',
+  }
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 1 ] ), exp );
+  var exp =
+  {
+  }
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 2 ] ), exp );
+
+  /* */
+
+  test.case = 'named blueprint, typed:maybe, prototype:true';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed({ val : _.maybe, prototype : true }),
     withConstructor : _.trait.withConstructor(),
     name : _.trait.name( 'Blueprint1X' ),
     field1 : 'b1',
@@ -14113,6 +14312,385 @@ function traitWithConstructorExtendObjectWithDefinition( test )
   function act( tops )
   {
 
+    /* - */
+
+    test.case = `method:${tops.amending}, pure map`;
+
+    var extension = [ _.trait.withConstructor() ];
+    var dstContainer = Object.create( null );
+
+    _.construction[ tops.amending ]( dstContainer, extension );
+    test.true( _.routineIs( dstContainer.constructor ) );
+    test.identical( dstContainer.constructor.name, 'Construction' );
+
+    test.identical( _.prototype.each( dstContainer ).length, 1 );
+    var exp =
+    {
+      constructor : dstContainer.constructor,
+    }
+    test.identical( propertyOwn( _.property.all( dstContainer ) ), exp );
+
+    /* */
+
+    test.case = `method:${tops.amending}, pure map, typed:1`;
+
+    var extension = [ _.trait.withConstructor(), _.trait.typed() ];
+    var dstContainer = Object.create( null );
+
+    _.construction[ tops.amending ]( dstContainer, extension );
+    test.true( _.routineIs( dstContainer.constructor ) );
+    test.identical( dstContainer.constructor.name, 'Construction' );
+
+    test.identical( _.prototype.each( dstContainer ).length, 3 );
+    var exp =
+    {
+      constructor : dstContainer.constructor,
+    }
+    test.identical( propertyOwn( _.property.all( dstContainer ) ), exp );
+
+    /* */
+
+    test.case = `method:${tops.amending}, pure map, replacing`;
+
+    var extension = [ _.trait.withConstructor() ];
+    var dstContainer = Object.create( null );
+    dstContainer.constructor = constructor1;
+
+    _.construction[ tops.amending ]( dstContainer, extension );
+    test.true( _.routineIs( dstContainer.constructor ) );
+    test.identical( dstContainer.constructor.name, tops.amending === 'extend' ? 'Construction' : 'constructor1' );
+
+    test.identical( _.prototype.each( dstContainer ).length, 1 );
+    var exp =
+    {
+      constructor : tops.amending === 'extend' ? dstContainer.constructor : constructor1,
+    }
+    test.identical( _.property.all( dstContainer ), exp );
+
+    /* */
+
+    test.case = `method:${tops.amending}, pure map, replacing, typed : 1`;
+
+    var extension = [ _.trait.withConstructor(), _.trait.typed() ];
+    var dstContainer = Object.create( null );
+    dstContainer.constructor = constructor1;
+
+    _.construction[ tops.amending ]( dstContainer, extension );
+    test.true( _.routineIs( dstContainer.constructor ) );
+
+    test.identical( _.prototype.each( dstContainer ).length, 3 );
+    var exp =
+    {
+      constructor : constructor1,
+    }
+    test.identical( _.property.onlyOwn( _.prototype.each( dstContainer )[ 0 ], { onlyEnumerable : 0 } ), exp );
+    var exp =
+    {
+      constructor : _.prototype.of( dstContainer ).constructor,
+    }
+    test.identical( _.property.onlyOwn( _.prototype.each( dstContainer )[ 1 ], { onlyEnumerable : 0 } ), exp );
+    test.identical( _.prototype.of( dstContainer ).constructor.name, 'Construction' );
+
+    /* - */
+
+    test.case = `method:${tops.amending}, polluted map`;
+
+    var extension = [ _.trait.withConstructor() ];
+    var dstContainer = {};
+
+    var keysBefore = _.mapAllKeys( Object.prototype );
+    _.construction[ tops.amending ]( dstContainer, extension );
+    var keysAfter = _.mapAllKeys( Object.prototype );
+    test.identical( keysAfter, keysBefore );
+
+    test.true( _.routineIs( dstContainer.constructor ) );
+    test.identical( dstContainer.constructor.name, 'Construction' );
+    test.identical( _.prototype.each( dstContainer ).length, 2 );
+    test.true( _.prototype.each( dstContainer )[ 1 ] === Object.prototype );
+    var exp =
+    {
+      constructor : dstContainer.constructor,
+    }
+    test.identical( propertyOwn( _.property.all( dstContainer, { onlyOwn : 1 } ) ), exp );
+
+    /* */
+
+    test.case = `method:${tops.amending}, polluted map, typed:1`;
+
+    var extension = [ _.trait.withConstructor(), _.trait.typed() ];
+    var dstContainer = {};
+
+    var keysBefore = _.mapAllKeys( Object.prototype );
+    _.construction[ tops.amending ]( dstContainer, extension );
+    var keysAfter = _.mapAllKeys( Object.prototype );
+    test.identical( keysAfter, keysBefore );
+
+    test.true( _.routineIs( dstContainer.constructor ) );
+    test.identical( dstContainer.constructor.name, 'Construction' );
+    test.identical( _.prototype.each( dstContainer ).length, 3 );
+    var exp =
+    {
+      constructor : dstContainer.constructor,
+    }
+    test.identical( propertyOwn( _.property.all( dstContainer ) ), exp );
+
+    /* */
+
+    test.case = `method:${tops.amending}, polluted map, replacing`;
+
+    var extension = [ _.trait.withConstructor() ];
+    var dstContainer = {};
+    dstContainer.constructor = constructor1;
+
+    var keysBefore = _.mapAllKeys( Object.prototype );
+    _.construction[ tops.amending ]( dstContainer, extension );
+    var keysAfter = _.mapAllKeys( Object.prototype );
+    test.identical( keysAfter, keysBefore );
+
+    test.true( _.routineIs( dstContainer.constructor ) );
+    test.identical( dstContainer.constructor.name, tops.amending === 'extend' ? 'Construction' : 'constructor1' );
+    test.identical( _.prototype.each( dstContainer ).length, 2 );
+    test.true( _.prototype.each( dstContainer )[ 1 ] === Object.prototype );
+    var exp =
+    {
+      constructor : tops.amending === 'extend' ? dstContainer.constructor : constructor1,
+    }
+    test.identical( _.property.all( dstContainer, { onlyOwn : 1 } ), exp );
+
+    /* */
+
+    test.case = `method:${tops.amending}, polluted map, replacing, typed : 1`;
+
+    var extension = [ _.trait.withConstructor(), _.trait.typed() ];
+    var dstContainer = {};
+    dstContainer.constructor = constructor1;
+
+    var keysBefore = _.mapAllKeys( Object.prototype );
+    _.construction[ tops.amending ]( dstContainer, extension );
+    var keysAfter = _.mapAllKeys( Object.prototype );
+    test.identical( keysAfter, keysBefore );
+
+    test.true( _.routineIs( dstContainer.constructor ) );
+    test.identical( _.prototype.each( dstContainer ).length, 3 );
+    var exp =
+    {
+      constructor : constructor1,
+    }
+    test.identical( _.property.onlyOwn( _.prototype.each( dstContainer )[ 0 ], { onlyEnumerable : 0 } ), exp );
+    var exp =
+    {
+      constructor : _.prototype.of( dstContainer ).constructor,
+    }
+    test.identical( _.property.onlyOwn( _.prototype.each( dstContainer )[ 1 ], { onlyEnumerable : 0 } ), exp );
+    test.identical( _.prototype.of( dstContainer ).constructor.name, 'Construction' );
+
+    /* - */
+
+    test.case = `method:${tops.amending}, object`;
+
+    var extension = [ _.trait.withConstructor() ];
+    var proto = {};
+    var dstContainer = Object.create( proto );
+
+    var keysBefore = _.mapAllKeys( Object.prototype );
+    _.construction[ tops.amending ]( dstContainer, extension );
+    var keysAfter = _.mapAllKeys( Object.prototype );
+    test.identical( keysAfter, keysBefore );
+
+    test.true( _.routineIs( dstContainer.constructor ) );
+    test.identical( dstContainer.constructor.name, 'Construction' );
+    test.identical( _.prototype.each( dstContainer ).length, 3 );
+    test.true( _.prototype.each( dstContainer )[ 1 ] === proto );
+    test.true( _.prototype.each( dstContainer )[ 2 ] === Object.prototype );
+
+    var exp =
+    {
+    }
+    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 0 ] ), exp );
+
+    var exp =
+    {
+      constructor : dstContainer.constructor
+    }
+    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 1 ] ), exp );
+
+    /* */
+
+    test.case = `method:${tops.amending}, object, typed:1`;
+
+    var extension = [ _.trait.withConstructor(), _.trait.typed() ];
+    var proto = {};
+    var dstContainer = Object.create( proto );
+
+    var keysBefore = _.mapAllKeys( Object.prototype );
+    _.construction[ tops.amending ]( dstContainer, extension );
+    var keysAfter = _.mapAllKeys( Object.prototype );
+    test.identical( keysAfter, keysBefore );
+
+    test.true( _.routineIs( dstContainer.constructor ) );
+    test.identical( dstContainer.constructor.name, 'Construction' );
+    test.identical( _.prototype.each( dstContainer ).length, 3 );
+    test.true( _.prototype.each( dstContainer )[ 2 ] === _.Construction.prototype );
+
+    var exp =
+    {
+    }
+    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 0 ] ), exp );
+
+    var exp =
+    {
+      constructor : dstContainer.constructor
+    }
+    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 1 ] ), exp );
+
+    /* */
+
+    test.case = `method:${tops.amending}, object with constructor in prototype`;
+
+    var extension = [ _.trait.withConstructor() ];
+    var proto = { constructor : constructor1 };
+    var dstContainer = Object.create( proto );
+
+    var keysBefore = _.mapAllKeys( Object.prototype );
+    _.construction[ tops.amending ]( dstContainer, extension );
+    var keysAfter = _.mapAllKeys( Object.prototype );
+    test.identical( keysAfter, keysBefore );
+
+    test.true( _.routineIs( dstContainer.constructor ) );
+    test.identical( _.prototype.each( dstContainer ).length, 3 );
+    test.true( _.prototype.each( dstContainer )[ 1 ] === proto );
+    test.true( _.prototype.each( dstContainer )[ 2 ] === Object.prototype );
+
+    var exp =
+    {
+    }
+    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 0 ] ), exp );
+    test.identical( _.prototype.each( dstContainer )[ 0 ].constructor.name, tops.amending === 'extend' ? 'Construction' : 'constructor1' );
+
+    var exp =
+    {
+      constructor : dstContainer.constructor
+    }
+    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 1 ] ), exp );
+    test.identical( _.prototype.each( dstContainer )[ 1 ].constructor.name, tops.amending === 'extend' ? 'Construction' : 'constructor1' );
+
+    /* */
+
+    test.case = `method:${tops.amending}, object with constructor in prototype, typed`;
+
+    var extension = [ _.trait.withConstructor(), _.trait.typed() ];
+    var proto = { constructor : constructor1 };
+    var dstContainer = Object.create( proto );
+
+    var keysBefore = _.mapAllKeys( Object.prototype );
+    _.construction[ tops.amending ]( dstContainer, extension );
+    var keysAfter = _.mapAllKeys( Object.prototype );
+    test.identical( keysAfter, keysBefore );
+
+    test.true( _.routineIs( dstContainer.constructor ) );
+    test.identical( _.prototype.each( dstContainer ).length, 3 );
+    test.true( _.prototype.each( dstContainer )[ 2 ] === _.Construction.prototype );
+
+    var exp =
+    {
+    }
+    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 0 ] ), exp );
+    test.identical( _.prototype.each( dstContainer )[ 0 ].constructor.name, 'Construction' );
+
+    var exp =
+    {
+      constructor : dstContainer.constructor
+    }
+    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 1 ] ), exp );
+    test.identical( _.prototype.each( dstContainer )[ 1 ].constructor.name, 'Construction' );
+
+    /* */
+
+    test.case = `method:${tops.amending}, object with constructor in instance`;
+
+    var extension = [ _.trait.withConstructor() ];
+    var proto = {};
+    var dstContainer = Object.create( proto );
+    dstContainer.constructor = constructor1;
+
+    var keysBefore = _.mapAllKeys( Object.prototype );
+    _.construction[ tops.amending ]( dstContainer, extension );
+    var keysAfter = _.mapAllKeys( Object.prototype );
+    test.identical( keysAfter, keysBefore );
+
+    test.true( _.routineIs( dstContainer.constructor ) );
+    test.identical( _.prototype.each( dstContainer ).length, 3 );
+    test.true( _.prototype.each( dstContainer )[ 1 ] === proto );
+    test.true( _.prototype.each( dstContainer )[ 2 ] === Object.prototype );
+
+    var exp =
+    {
+      constructor : dstContainer.constructor,
+    }
+    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 0 ] ), exp );
+    test.identical( _.prototype.each( dstContainer )[ 0 ].constructor.name, 'constructor1' );
+
+    var exp =
+    {
+      constructor : _.prototype.each( dstContainer )[ 1 ].constructor,
+    }
+    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 1 ] ), exp );
+    test.identical( _.prototype.each( dstContainer )[ 1 ].constructor.name, 'Construction' );
+
+    /* */
+
+    test.case = `method:${tops.amending}, object with constructor in instance`;
+
+    var extension = [ _.trait.withConstructor(), _.trait.typed() ];
+    var proto = {};
+    var dstContainer = Object.create( proto );
+    dstContainer.constructor = constructor1;
+
+    var keysBefore = _.mapAllKeys( Object.prototype );
+    _.construction[ tops.amending ]( dstContainer, extension );
+    var keysAfter = _.mapAllKeys( Object.prototype );
+    test.identical( keysAfter, keysBefore );
+
+    test.true( _.routineIs( dstContainer.constructor ) );
+    test.identical( _.prototype.each( dstContainer ).length, 3 );
+    test.true( _.prototype.each( dstContainer )[ 1 ] !== proto );
+    test.true( _.prototype.each( dstContainer )[ 2 ] === _.Construction.prototype );
+
+    var exp =
+    {
+      constructor : dstContainer.constructor,
+    }
+    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 0 ] ), exp );
+    test.identical( _.prototype.each( dstContainer )[ 0 ].constructor.name, 'constructor1' );
+
+    var exp =
+    {
+      constructor : _.prototype.each( dstContainer )[ 1 ].constructor,
+    }
+    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 1 ] ), exp );
+    test.identical( _.prototype.each( dstContainer )[ 1 ].constructor.name, 'Construction' );
+
+    /* */
+
+  }
+
+  function constructor1(){}
+
+}
+
+//
+
+function traitWithConstructorExtendObjectWithDefinitionAlternatives( test )
+{
+  let context = this;
+  let s = _.define.static;
+
+  act({ amending : 'extend' });
+  act({ amending : 'supplement' });
+
+  function act( tops )
+  {
+
     /* */
 
     test.case = `method:${tops.amending}, pure map by definition`;
@@ -14120,10 +14698,10 @@ function traitWithConstructorExtendObjectWithDefinition( test )
     var extension = _.trait.withConstructor();
     var dstContainer = Object.create( null );
 
-    _.construction[ tops.amending ]( dstContainer, extension );
+    _.construction[ tops.amending ]( dstContainer, extension ),
+
     test.true( _.routineIs( dstContainer.constructor ) );
     test.identical( dstContainer.constructor.name, 'Construction' );
-
     test.identical( _.prototype.each( dstContainer ).length, 1 );
     var exp =
     {
@@ -14150,7 +14728,29 @@ function traitWithConstructorExtendObjectWithDefinition( test )
     {
       constructor : dstContainer.constructor,
     }
-    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 0 ] ), exp );
+    test.identical( propertyOwn( _.property.all( dstContainer ) ), exp );
+
+    /* */
+
+    test.case = `method:${tops.amending}, typed:1, pure map by map of definition`;
+
+    var extension =
+    ({
+      withConstructor : _.trait.withConstructor(),
+      typed : _.trait.typed(),
+    });
+    var dstContainer = Object.create( null );
+
+    _.construction[ tops.amending ]( dstContainer, extension );
+    test.true( _.routineIs( dstContainer.constructor ) );
+    test.identical( dstContainer.constructor.name, 'Construction' );
+
+    test.identical( _.prototype.each( dstContainer ).length, 3 );
+    var exp =
+    {
+      constructor : dstContainer.constructor,
+    }
+    test.identical( propertyOwn( _.property.all( dstContainer ) ), exp );
 
     /* */
 
@@ -14168,141 +14768,25 @@ function traitWithConstructorExtendObjectWithDefinition( test )
     {
       constructor : dstContainer.constructor,
     }
-    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 0 ] ), exp );
+    test.identical( propertyOwn( _.property.all( dstContainer ) ), exp );
 
     /* */
 
-    test.case = `method:${tops.amending}, pure map by definition, replacing`;
+    test.case = `method:${tops.amending}, typed:1, pure map by array of definition`;
 
-    var extension = _.trait.withConstructor();
+    var extension = [ _.trait.withConstructor(), _.trait.typed() ];
     var dstContainer = Object.create( null );
-    dstContainer.constructor = constructor1;
 
     _.construction[ tops.amending ]( dstContainer, extension );
-    test.true( _.routineIs( dstContainer.constructor ) );
-    test.identical( dstContainer.constructor.name, tops.amending === 'extend' ? 'Construction' : 'constructor1' );
-
-    test.identical( _.prototype.each( dstContainer ).length, 1 );
-    var exp =
-    {
-      constructor : tops.amending === 'extend' ? dstContainer.constructor : constructor1,
-    }
-    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 0 ] ), exp );
-
-    /* */
-
-    test.case = `method:${tops.amending}, polluted map by definition`;
-
-    var extension = _.trait.withConstructor();
-    var dstContainer = {};
-
-    var keysBefore = _.mapAllKeys( Object.prototype );
-    if( tops.amending === 'supplement' )
-    _.construction[ tops.amending ]( dstContainer, extension );
-    else
-    test.shouldThrowErrorSync( () => _.construction[ tops.amending ]( dstContainer, extension ) );
-    var keysAfter = _.mapAllKeys( Object.prototype );
-    test.identical( keysAfter, keysBefore );
-
-    test.true( _.routineIs( dstContainer.constructor ) );
-    test.identical( dstContainer.constructor.name, 'Object' );
-    test.true( _.prototype.of( dstContainer ) === Object.prototype );
-
-    test.identical( _.prototype.each( dstContainer ).length, 2 );
-    var exp =
-    {
-    }
-    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 0 ] ), exp );
-
-    /* */
-
-    test.case = `method:${tops.amending}, prototyped object by definition`;
-
-    var extension = _.trait.withConstructor();
-    var proto = {};
-    var dstContainer = Object.create( proto );
-
-    var keysBefore = _.mapAllKeys( Object.prototype );
-    _.construction[ tops.amending ]( dstContainer, extension );
-    var keysAfter = _.mapAllKeys( Object.prototype );
-    test.identical( keysAfter, keysBefore );
-
     test.true( _.routineIs( dstContainer.constructor ) );
     test.identical( dstContainer.constructor.name, 'Construction' );
-    test.true( _.prototype.of( dstContainer ) !== Object.prototype );
+
     test.identical( _.prototype.each( dstContainer ).length, 3 );
-
     var exp =
     {
+      constructor : dstContainer.constructor,
     }
-    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 0 ] ), exp );
-
-    var exp =
-    {
-      constructor : dstContainer.constructor
-    }
-    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 1 ] ), exp );
-
-    /* */
-
-    test.case = `method:${tops.amending}, prototyped object with constructor in prototype by definition`;
-
-    var extension = _.trait.withConstructor();
-    var proto = { constructor : constructor1 };
-    var dstContainer = Object.create( proto );
-
-    var keysBefore = _.mapAllKeys( Object.prototype );
-    _.construction[ tops.amending ]( dstContainer, extension );
-    var keysAfter = _.mapAllKeys( Object.prototype );
-    test.identical( keysAfter, keysBefore );
-
-    test.true( _.routineIs( dstContainer.constructor ) );
-    test.identical( dstContainer.constructor.name, tops.amending === 'extend' ? 'Construction' : 'constructor1' );
-    test.true( _.prototype.of( dstContainer ) !== Object.prototype );
-    test.identical( _.prototype.each( dstContainer ).length, 3 );
-
-    var exp =
-    {
-    }
-    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 0 ] ), exp );
-
-    var exp =
-    {
-      constructor : dstContainer.constructor
-    }
-    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 1 ] ), exp );
-
-    /* */
-
-    test.case = `method:${tops.amending}, prototyped object with constructor in instance by definition`;
-
-    var extension = _.trait.withConstructor();
-    var proto = {};
-    var dstContainer = Object.create( proto );
-    dstContainer.constructor = constructor1;
-
-    var keysBefore = _.mapAllKeys( Object.prototype );
-    _.construction[ tops.amending ]( dstContainer, extension );
-    var keysAfter = _.mapAllKeys( Object.prototype );
-    test.identical( keysAfter, keysBefore );
-
-    test.true( _.routineIs( dstContainer.constructor ) );
-    test.identical( dstContainer.constructor.name, 'constructor1' );
-    test.identical( _.prototype.of( dstContainer ).constructor.name, 'Construction' );
-    test.true( _.prototype.of( dstContainer ) !== Object.prototype );
-    test.identical( _.prototype.each( dstContainer ).length, 3 );
-
-    var exp =
-    {
-      constructor : constructor1,
-    }
-    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 0 ] ), exp );
-
-    var exp =
-    {
-      constructor : _.prototype.of( dstContainer ).constructor
-    }
-    test.identical( propertyOwn( _.prototype.each( dstContainer )[ 1 ] ), exp );
+    test.identical( propertyOwn( _.property.all( dstContainer ) ), exp );
 
     /* */
 
@@ -17852,6 +18336,7 @@ let Self =
     traitName,
     traitWithConstructorBasic,
     traitWithConstructorExtendObjectWithDefinition,
+    traitWithConstructorExtendObjectWithDefinitionAlternatives,
     traitWithConstructorTraitPrototypeTraitTyped,
     traitPrototypeTraitTyped,
     traitExtendable,

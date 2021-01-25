@@ -134,8 +134,8 @@ function _define( o )
   defContext.stage = 'blueprintForm1';
   _.blueprint._form( defContext );
 
-  if( _global_.debugger )
-  debugger;
+  // if( _global_.debugger )
+  // debugger;
 
   runtime.Typed = blueprint.Traits.typed.val;
   runtime._MakingTyped = false;
