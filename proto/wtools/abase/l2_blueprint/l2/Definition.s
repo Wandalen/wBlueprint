@@ -103,9 +103,11 @@ function _traitMake( kind, o )
 
   let definition = new _.Definition( o );
 
+  _.assert( definition.blueprintAmend === undefined );
+
   Object.preventExtensions( definition );
-  if( definition.blueprint === false )
-  Object.freeze( definition );
+  // if( definition.blueprint === false ) /* xxx */
+  // Object.freeze( definition );
   return definition;
 
   // function constructionAmend( dst, key, amending )
@@ -142,6 +144,8 @@ function _definitionMake( kind, o )
   o.blueprint = null;
 
   let definition = new _.Definition( o );
+
+  _.assert( definition.blueprintAmend === undefined );
 
   Object.preventExtensions( definition );
   return definition;

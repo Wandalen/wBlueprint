@@ -66,7 +66,10 @@ function amend( o )
   let amending = o.amending;
   let blueprint = blueprintLook( o.src, null );
 
-  if( !blueprint )
+  if( _global_.debugger )
+  debugger;
+
+  if( !blueprint ) /* xxx : bad if */
   {
     let defs = [];
     let prototype = _.prototype.of( o.dstConstruction );
@@ -77,20 +80,16 @@ function amend( o )
     {
       let opts = Object.create( null );
       opts.val = _.maybe;
-      if( prototype ) /* xxx : cover */
+      if( prototype && prototype !== Object.prototype ) /* xxx : remove? */
       {
         opts.prototype = prototype;
         opts.new = false;
       }
+      opts._dstConstruction = o.dstConstruction;
       defs[ add ]( _.trait.typed( opts ) );
     }
 
     defs[ add ]( _.trait.extendable( true ) );
-
-    // if( prototype )
-    // defs[ add ]( _.trait.prototype( prototype, { new : false } ) ); /* xxx : cover */
-    // defs[ add ]( _.trait.extendable( true ) );
-    // defs[ add ]( _.trait.typed( _.maybe ) ); /* xxx : cover */
 
     blueprint = _.blueprint._define({ args : defs, amending : o.amending });
   }
@@ -339,13 +338,20 @@ function _make3( genesis )
   {
     let wasNull = genesis.construction === null
     genesis.construction = genesis.runtime._RuntimeRoutinesMap.allocate( genesis );
-    if( genesis.runtime.Typed && wasNull )
+    _.assert
+    (
+         // genesis.runtime._MakingTyped === false
+      // || 
+      genesis.runtime.Make.prototype === null
+      || genesis.construction instanceof genesis.runtime.Make
+    );
+    if( genesis.runtime._MakingTyped && wasNull )
     return genesis.construction;
   }
   else _.assert( genesis.constructing === false );
 
-  if( genesis.runtime.Typed === true )
-  _.assert( genesis.runtime.Make.prototype === null || genesis.construction instanceof genesis.runtime.Make );
+  // if( genesis.runtime.Typed === true )
+  // _.assert( genesis.runtime.Make.prototype === null || genesis.construction instanceof genesis.runtime.Make );
   // else if( genesis.runtime.Typed === false ) /* yyy */
   // _.assert( genesis.runtime.Make.prototype === null || !( genesis.construction instanceof genesis.runtime.Make ) );
 
@@ -386,8 +392,14 @@ function _make( construction, runtime, args )
 {
 
   _.assert( arguments.length === 3 );
+  _.assert( _.boolIs( runtime._MakingTyped ) );
 
-  if( !runtime.Typed && construction instanceof runtime.Make )
+  // if( runtime.Make.prototype === null )
+  // debugger;
+
+  // if( !runtime.Typed && construction instanceof runtime.Make ) /* xxx */
+  // if( !runtime.Typed && runtime.Make.prototype !== null && construction instanceof runtime.Make )
+  if( !runtime._MakingTyped && runtime.Make.prototype !== null && construction instanceof runtime.Make )
   {
     construction = null;
   }

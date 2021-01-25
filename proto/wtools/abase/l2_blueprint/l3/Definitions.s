@@ -255,6 +255,9 @@ function prop_body( o )
       configurable : definition.configurable,
     };
 
+    if( prototype === null )
+    return o.blueprint;
+
     _.assert( _.boolIs( definition.configurable ) );
     _.assert( _.boolIs( definition.enumerable ) );
     _.assert( !_.boolLikeFalse( definition.accessor ) );
@@ -335,9 +338,9 @@ function prop_body( o )
 
     /* xxx : introduce option::preservingValue? */
     let val2;
-    if( o.amending === 'supplement' && prototype[ name ] !== undefined )
+    if( prototype && o.amending === 'supplement' && prototype[ name ] !== undefined )
     val2 = prototype[ name ];
-    else if( definition.val === _.nothing )
+    else if( prototype && definition.val === _.nothing )
     val2 = prototype[ name ];
     else
     val2 = definition.toVal( _.escape.undo( definition.val ) );
@@ -360,7 +363,8 @@ function prop_body( o )
       opts.value = val2;
     }
     Object.defineProperty( o.blueprint.Make, name, opts );
-    Object.defineProperty( o.blueprint.prototype, name, opts );
+    if( prototype !== null )
+    Object.defineProperty( prototype, name, opts );
 
     return o.blueprint;
   }
@@ -385,11 +389,12 @@ function prop_body( o )
     let o2, normalizedAsuite;
 
     _.assert( _.fuzzyIs( blueprint.Typed ) );
+    // _.assert( _.boolIs( blueprint.Typed ) );
 
     if( _global_.debugger )
     debugger;
 
-    if( blueprint.Typed )
+    if( blueprint.Traits.typed.val && blueprint.prototype ) /* xxx */
     {
       o2 = _.accessor.declareSingle
       ({
@@ -409,12 +414,13 @@ function prop_body( o )
       _.accessor._objectInitStorage( blueprint.prototype, normalizedAsuite ); /* xxx : remove the call and introduce maybe extra option of declareSingle */
     }
 
-    if( blueprint.Typed === true )
-    return constructionInitTyped;
-    else if( blueprint.Typed === false )
-    return constructionInitUntyped;
-    else if( blueprint.Typed === _.maybe )
+    /* xxx */
+    if( blueprint.Traits.typed.val === _.maybe )
     return constructionInitMaybe;
+    if( blueprint.Traits.typed.val === true && blueprint.prototype )
+    return constructionInitTyped;
+    else if( blueprint.Traits.typed.val === false || blueprint.prototype === null || blueprint.Traits.typed.val && !blueprint.prototype )
+    return constructionInitUntyped;
     else _.assert( 0 );
 
     function constructionInitTyped( genesis )
@@ -473,6 +479,11 @@ function prop_body( o )
 
     function constructionInitMaybe( genesis )
     {
+      if( prototype === null )
+      {
+        constructionInitUntyped( genesis );
+        return;
+      }
       let prototype2 = Object.getPrototypeOf( genesis.construction );
       if( prototype2 === prototype )
       {
@@ -880,7 +891,8 @@ function nothing_body( o )
   _.assertRoutineOptions( nothing_body, arguments );
   o.definitionGroup = 'definition.unnamed';
   // o.constructionAmend = constructionAmend;
-  o.blueprintAmend = blueprintAmend;
+  // o.blueprintAmend = blueprintAmend;
+  o.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
   o.blueprint = false;
 
   let definition = _.definition._definitionMake( 'nothing', o );
@@ -893,9 +905,14 @@ function nothing_body( o )
   // function constructionAmend( construction, key )
   // {
   // }
+  //
+  // function blueprintAmend( op )
+  // {
+  // }
 
-  function blueprintAmend( op )
+  function blueprintDefinitionRewrite( op )
   {
+    // _.assert( 0, 'not implemented' );
   }
 
 }
@@ -926,8 +943,7 @@ function _amendment_body( o )
   _.assert( _.blueprintIsDefinitive( o.val ) );
 
   o.definitionGroup = 'definition.unnamed';
-  // o.constructionAmend = constructionAmend;
-  o.blueprintAmend = blueprintAmend;
+  o.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
   o.blueprint = false;
 
   let definition = _.definition._definitionMake( 'amend', o );
@@ -937,19 +953,17 @@ function _amendment_body( o )
   Object.freeze( definition );
   return definition;
 
-  // function constructionAmend( construction, key )
-  // {
-  //   _.assert( 0, 'not implemented' ); /* zzz */
-  // }
-
-  function blueprintAmend( op )
+  function blueprintDefinitionRewrite( op )
   {
     let definition = this;
     let blueprint = op.blueprint;
-
+    if( _global_.debugger )
+    debugger;
     return _.blueprint._amend
     ({
-      ... op,
+      blueprint : op.blueprint,
+      blueprintDepth : op.blueprintDepth,
+
       extension : definition.val,
       amending : op.amending === 'extend' ? definition.amending : op.amending, /* zzz : cover? */
       blueprintAction : 'amend',
@@ -1001,24 +1015,32 @@ function inherit( o )
   o = { val : arguments[ 0 ] };
   _.routineOptions( inherit, o );
   _.assert( _.blueprint.isDefinitive( o.val ) );
+
+  // let result = _.definition.forInheritance( o.val );
+  // return result;
+
   let result = [];
   result.push( _.define.extension( o.val ) );
 
-  // result.push( _.trait.prototype( o.val ) );
-  // if( !o.val.Traits.typed )
-  // result.push( _.trait.typed() );
+  if( _global_.debugger )
+  debugger;
 
-  // debugger;
+  let prototype = null;
+  if( o.val.prototype ) /* xxx : rename prototype -> Prototype? */
+  prototype = o.val;
+
   if( o.val.Traits.typed )
   {
-    result.push( _.trait.typed( o.val.Traits.typed.val, { prototype : o.val } ) );
+    if( prototype )
+    result.push( _.trait.typed( o.val.Traits.typed.val || true, { prototype : prototype, new : 1 } ) );
+    else
+    result.push( _.trait.typed( o.val.Traits.typed.val || true, { prototype : o.val.Traits.typed.val } ) );
   }
   else
   {
-    result.push( _.trait.typed( true, { prototype : o.val } ) );
+    result.push( _.trait.typed( true ) );
+    // result.push( _.trait.typed( true, { prototype : o.val } ) );
   }
-
-  // result.push( _.trait.typed( true, { prototype : o.val } ) );
 
   return result;
 }

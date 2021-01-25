@@ -60,6 +60,15 @@ function compileSourceCode( blueprint )
 
 //
 
+function defineConstructor()
+{
+  let blueprint = _.blueprint.define( ... arguments );
+  _.assert( _.routineIs( blueprint.Make ) );
+  return blueprint.Make;
+}
+
+//
+
 function define()
 {
   return _.blueprint._define({ args : arguments, amending : 'extend' });
@@ -77,9 +86,11 @@ function _define( o )
   runtime._RuntimeRoutinesMap = Object.create( null );
   runtime.PropsExtension = Object.create( null );
   runtime.PropsSupplementation = Object.create( null );
-  runtime.prototype = Object.create( _.Construction.prototype );
+  runtime.prototype = null;
+  runtime.Reprototyping = null;
   runtime.Name = null;
   runtime.Typed = null;
+  runtime._MakingTyped = null;
   runtime.Make = null;
   runtime.MakeEach = MakeEach;
   runtime.From = From;
@@ -95,6 +106,7 @@ function _define( o )
   blueprint._UnnamedDefinitionsArray = [];
   Object.preventExtensions( blueprint );
 
+  /* xxx : remove the cycle */
   for( let a = 0 ; a < o.args.length ; a++ )
   {
     _.blueprint._amend
@@ -113,7 +125,7 @@ function _define( o )
   let defaultSupplement =
   [
     _.trait.extendable( false ),
-    _.trait.typed( false ),
+    _.trait.typed({ val : false, prototype : false }),
   ]
 
   _.blueprint._supplement( blueprint, defaultSupplement );
@@ -122,7 +134,18 @@ function _define( o )
   defContext.stage = 'blueprintForm1';
   _.blueprint._form( defContext );
 
-  runtime.Typed = blueprint.Traits.typed ? blueprint.Traits.typed.val : false;
+  if( _global_.debugger )
+  debugger;
+
+  runtime.Typed = blueprint.Traits.typed.val;
+  runtime._MakingTyped = false;
+  runtime._MakingTyped = false;
+  if( blueprint.Traits.typed.val === true )
+  runtime._MakingTyped = true;
+  else if( blueprint.Traits.typed.val === _.maybe && blueprint.Traits.typed.prototype && blueprint.Traits.typed.prototype !== Object.prototype )
+  runtime._MakingTyped = true;
+  runtime.Reprototyping = blueprint.Traits.typed.prototype;
+
   let Name = blueprint.Name || 'Construction';
   let Construction =
   {
@@ -217,8 +240,11 @@ function _amend( o )
 - amendWithBlueprint2
 - amendWithDefinition
 - amendWithNamedDefinition
-- amendWithTrait
+- blueprintNamedDefinitionRewrite
 - amendWithUnnamedDefinition
+- blueprintUnnamedDefinitionRewrite
+- amendWithTrait
+- blueprintTraitRewrite
 - amendWithPrimitive
 - definitionCloneMaybe
 - definitionDepthCheck
@@ -287,13 +313,15 @@ function _amend( o )
     }
     else if( o.blueprintAction === 'inherit' )
     {
-      let extension =
-      {
-        extension : _.define.extension( o.extension ),
-        // prototype : _.trait.prototype( o.extension ),
-        // typed : _.trait.typed( true ),
-        typed : _.trait.typed( true, { prototype : o.extension } ),
-      };
+      let extension = _.define.inherit( srcBlueprint );
+      // _.definition.forInheritance( o.extension );
+      // let extension =
+      // {
+      //   extension : _.define.extension( o.extension ),
+      //   // prototype : _.trait.prototype( o.extension ),
+      //   // typed : _.trait.typed( true ),
+      //   typed : _.trait.typed( true, { prototype : o.extension } ),
+      // };
       _amendAct( extension );
     }
     else
@@ -351,54 +379,257 @@ function _amend( o )
 
   /* */
 
-  function amendWithNamedDefinition( definition, name )
+  function amendWithNamedDefinition( srcDefinition, name )
   {
-    _.assert( definition.definitionGroup === 'definition.named' );
-    _.assert( _.strDefined( name ) || _.strDefined( definition.name ) );
-    _.assert( name === null || definition.name === null || name === definition.name );
+    _.assert( srcDefinition.definitionGroup === 'definition.named' );
+    _.assert( _.strDefined( name ) || _.strDefined( srcDefinition.name ) );
+    _.assert( name === null || srcDefinition.name === null || name === srcDefinition.name );
+
+    if( name && name !== srcDefinition.name )
+    srcDefinition.name = name;
+
+    if( _global_.debugger )
+    debugger;
+    let dstDefinition = o.blueprint._NamedDefinitionsMap[ name ] || null;
+
+    srcDefinition = definitionCloneMaybe( srcDefinition );
+
+    let blueprintDefinitionRewrite2 = ( dstDefinition && dstDefinition.blueprintDefinitionRewrite ) || ( srcDefinition && srcDefinition.blueprintDefinitionRewrite );
+
+    _.assert( _.strDefined( srcDefinition.name ) );
+
+    let o2 = _.mapExtend( null, o );
+    o2.blueprintDefinitionRewrite = blueprintNamedDefinitionRewrite;
+    // o2.dstDefinition = dstDefinition;
+    // o2.srcDefinition = srcDefinition;
+    o2.name = srcDefinition.name;
+    o2.definitionGroup = 'definition.named';
 
     if( o.amending === 'supplement' )
-    if( o.blueprint._NamedDefinitionsMap[ name ] !== undefined )
-    return;
+    {
+      o2.primeDefinition = dstDefinition;
+      o2.secondaryDefinition = srcDefinition;
+    }
+    else
+    {
+      o2.primeDefinition = srcDefinition;
+      o2.secondaryDefinition = dstDefinition;
+    }
 
-    definition = definitionCloneMaybe( definition );
+    if( blueprintDefinitionRewrite2 )
+    {
+      _.assert( !dstDefinition || _.routineIs( dstDefinition.blueprintDefinitionRewrite ) );
+      _.assert( _.routineIs( srcDefinition.blueprintDefinitionRewrite ) );
+      srcDefinition.blueprintDefinitionRewrite( o2 );
+    }
+    else
+    {
+      o2.blueprintDefinitionRewrite( o2 );
+    }
 
-    if( name && name !== definition.name )
-    definition.name = name;
-    _.assert( _.strDefined( definition.name ) );
-    o.blueprint._NamedDefinitionsMap[ definition.name ] = definition;
-
-    if( definition.blueprintAmend )
-    definition.blueprintAmend( o );
   }
 
   /* */
 
-  function amendWithUnnamedDefinition( definition )
+  function blueprintNamedDefinitionRewrite( op )
   {
-    _.assert( definition.definitionGroup === 'definition.unnamed' );
-    definition = definitionCloneMaybe( definition );
-    o.blueprint._UnnamedDefinitionsArray.push( definition );
-    if( definition.blueprintAmend )
-    definition.blueprintAmend( o );
+
+    // if( op.amending === 'supplement' )
+    // if( op.blueprint._NamedDefinitionsMap[ op.dstDefinition.name ] !== undefined )
+    // return;
+
+    // if( op.amending === 'supplement' )
+    // if( op.dstDefinition.name )
+    // return;
+    //
+    // op.blueprint._NamedDefinitionsMap[ op.name ] = op.srcDefinition;
+
+    if( _global_.debugger )
+    debugger;
+
+    if( op.secondaryDefinition && !op.primeDefinition )
+    op.blueprint._NamedDefinitionsMap[ op.name ] = op.secondaryDefinition;
+    else
+    op.blueprint._NamedDefinitionsMap[ op.name ] = op.primeDefinition;
+
   }
 
   /* */
 
-  function amendWithTrait( definition, key )
+  function amendWithUnnamedDefinition( srcDefinition )
   {
-    _.assert( _.strIs( definition.kind ) );
+    _.assert( srcDefinition.definitionGroup === 'definition.unnamed' );
+
+    // srcDefinition = definitionCloneMaybe( srcDefinition );
+    // o.blueprint._UnnamedDefinitionsArray.push( srcDefinition );
+    // if( srcDefinition.blueprintAmend )
+    // srcDefinition.blueprintAmend( o );
+
+    let dstDefinition = o.blueprint.Traits[ srcDefinition.kind ] || null;
+
+    srcDefinition = definitionCloneMaybe( srcDefinition );
+
+    let blueprintDefinitionRewrite2 = ( dstDefinition && dstDefinition.blueprintDefinitionRewrite ) || ( srcDefinition && srcDefinition.blueprintDefinitionRewrite );
+
+    let o2 = _.mapExtend( null, o );
+    o2.blueprintDefinitionRewrite = blueprintUnnamedDefinitionRewrite;
+    // o2.dstDefinition = dstDefinition;
+    // o2.srcDefinition = srcDefinition;
+    // o2.name = srcDefinition.name;
+    o2.definitionGroup = 'definition.unnamed';
 
     if( o.amending === 'supplement' )
-    if( o.blueprint.Traits[ definition.kind ] !== undefined )
-    return;
+    {
+      o2.primeDefinition = dstDefinition;
+      o2.secondaryDefinition = srcDefinition;
+    }
+    else
+    {
+      o2.primeDefinition = srcDefinition;
+      o2.secondaryDefinition = dstDefinition;
+    }
 
-    definition = definitionCloneMaybe( definition );
+    if( blueprintDefinitionRewrite2 )
+    {
+      _.assert( !dstDefinition || _.routineIs( dstDefinition.blueprintDefinitionRewrite ) );
+      _.assert( _.routineIs( srcDefinition.blueprintDefinitionRewrite ) );
+      srcDefinition.blueprintDefinitionRewrite( o2 );
+    }
+    else
+    {
+      o2.blueprintDefinitionRewrite( o2 );
+    }
 
-    o.blueprint.Traits[ definition.kind ] = definition;
+  }
 
-    if( definition.blueprintAmend )
-    definition.blueprintAmend( o );
+  /* */
+
+  function blueprintUnnamedDefinitionRewrite( op )
+  {
+    _.arrayAppendOnceStrictly( o.blueprint._UnnamedDefinitionsArray, op.primeDefinition || op.secondaryDefinition );
+  }
+
+  /* */
+
+  function amendWithTrait( srcDefinition, key )
+  {
+    _.assert( _.strIs( srcDefinition.kind ) );
+
+    srcDefinition = definitionCloneMaybe( srcDefinition );
+
+    let dstDefinition = o.blueprint.Traits[ srcDefinition.kind ] || null;
+    let blueprintDefinitionRewrite2 = ( dstDefinition && dstDefinition.blueprintDefinitionRewrite ) || ( srcDefinition && srcDefinition.blueprintDefinitionRewrite );
+
+    _.assert( dstDefinition === null || _.definitionIs( dstDefinition ) );
+
+    let o2 = _.mapExtend( null, o );
+    o2.blueprintDefinitionRewrite = blueprintTraitRewrite;
+    o2.kind = srcDefinition.kind;
+    // o2.dstDefinition = dstDefinition;
+    // o2.srcDefinition = srcDefinition;
+
+    if( o.amending === 'supplement' )
+    {
+      o2.primeDefinition = dstDefinition;
+      o2.secondaryDefinition = srcDefinition;
+    }
+    else
+    {
+      o2.primeDefinition = srcDefinition;
+      o2.secondaryDefinition = dstDefinition;
+    }
+
+    if( blueprintDefinitionRewrite2 )
+    {
+      // let o2 = _.mapExtend( null, o );
+
+      _.assert( !dstDefinition || _.routineIs( dstDefinition.blueprintDefinitionRewrite ) );
+      _.assert( _.routineIs( srcDefinition.blueprintDefinitionRewrite ) );
+
+      // o2.dstDefinition = dstDefinition;
+      // o2.srcDefinition = srcDefinition;
+      //
+      // if( o.amending === 'supplement' )
+      // {
+      //   o2.primeDefinition = dstDefinition;
+      //   o2.secondaryDefinition = srcDefinition;
+      // }
+      // else
+      // {
+      //   o2.primeDefinition = srcDefinition;
+      //   o2.secondaryDefinition = dstDefinition;
+      // }
+
+      srcDefinition.blueprintDefinitionRewrite( o2 );
+
+    }
+    else
+    {
+
+      o2.blueprintDefinitionRewrite( o2 );
+
+      // if( !dstDefinition || o.amending !== 'supplement' )
+      // dstDefinition = srcDefinition;
+
+      // if( !dstDefinition || o.amending !== 'supplement' )
+      // o.blueprint.Traits[ srcDefinition.kind ] = srcDefinition;
+
+    }
+
+    // if( o.amending === 'supplement' )
+    // if( dstDefinition !== undefined )
+    // {
+    //
+    //   if( dstDefinition.blueprintDefinitionRewrite )
+    //   {
+    //
+    //     _.assert( _.routineIs( srcDefinition.blueprintDefinitionRewrite ) );
+    //     let o2 = _.mapExtend( null, o );
+    //
+    //     o2.primeDefinition = dstDefinition;
+    //     o2.secondaryDefinition = srcDefinition;
+    //
+    //     if( dstDefinition.blueprintDefinitionRewrite( o2 ) === false )
+    //     return;
+    //
+    //   }
+    //   else
+    //   {
+    //     return
+    //   }
+    //
+    // }
+    //
+    // // if( o.amending === 'extend' ) /* xxx */
+    // if( dstDefinition && dstDefinition.blueprintDefinitionRewrite )
+    // {
+    //   _.assert( _.routineIs( srcDefinition.blueprintDefinitionRewrite ) );
+    //   let o2 = _.mapExtend( null, o );
+    //
+    //   o2.primeDefinition = srcDefinition;
+    //   o2.secondaryDefinition = dstDefinition;
+    //
+    //   if( dstDefinition.blueprintDefinitionRewrite( o2 ) === false )
+    //   return;
+    // }
+    // else
+    // {
+    //   o.blueprint.Traits[ srcDefinition.kind ] = srcDefinition;
+    // }
+    //
+    // if( srcDefinition.blueprintAmend )
+    // srcDefinition.blueprintAmend( o );
+
+  }
+
+  /* */
+
+  function blueprintTraitRewrite( op )
+  {
+    if( op.secondaryDefinition && !op.primeDefinition )
+    op.blueprint.Traits[ op.kind ] = op.secondaryDefinition;
+    else
+    op.blueprint.Traits[ op.kind ] = op.primeDefinition;
   }
 
   /* */
@@ -569,7 +800,7 @@ function _validate( blueprint )
     _.routineIs( blueprint._RuntimeRoutinesMap.retype )
     , `Each blueprint should have handler::retype, but definition::${blueprint.name} does not have`
   );
-  _.assert( blueprint.Traits.typed ? blueprint.Typed === blueprint.Traits.typed.val : true );
+  _.assert( !blueprint.Traits.typed || blueprint.Typed === blueprint.Traits.typed.val || blueprint.Traits.typed.val === _.maybe );
 }
 
 //
@@ -624,11 +855,18 @@ function eachDefinition( blueprint, onEach )
 
 //
 
-function defineConstructor()
+function nameOf( blueprint )
 {
-  let blueprint = _.blueprint.define( ... arguments );
-  _.assert( _.routineIs( blueprint.Make ) );
-  return blueprint.Make;
+  _.assert( _.blueprint.is( blueprint ) );
+  return blueprint.Name;
+}
+
+//
+
+function qnameOf( blueprint )
+{
+  _.assert( _.blueprint.is( blueprint ) );
+  return `Blueprint::${blueprint.Name || ''}`;
 }
 
 //
@@ -730,7 +968,9 @@ var BlueprintExtension =
   isDefinitive,
   isRuntime,
   isBlueprintOf,
+
   compileSourceCode,
+  defineConstructor,
   define,
   _define,
   _amend,
@@ -742,10 +982,10 @@ var BlueprintExtension =
   _validate,
 
   _routineAdd,
-
   eachDefinition,
 
-  defineConstructor,
+  nameOf,
+  qnameOf,
   constructorOf,
   retyperOf,
   construct,
