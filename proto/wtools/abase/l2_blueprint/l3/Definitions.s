@@ -127,7 +127,7 @@ function prop_head( routine, args )
 
   if( o.static === null )
   o.static = false;
-  else
+  else if( _.boolLike( o.static ) )
   o.static = !!o.static;
 
   if( o.blueprintDepthLimit === null )
@@ -154,7 +154,7 @@ function prop_head( routine, args )
   _.assert( _.boolIs( o.writable ) || o.writable === null );
   _.assert( _.boolIs( o.configurable ) );
   _.assert( _.boolIs( o.enumerable ) );
-  _.assert( _.boolIs( o.static ) );
+  _.assert( _.fuzzyIs( o.static ) );
 
   return o;
 }
@@ -344,28 +344,62 @@ function prop_body( o )
     else
     val2 = definition.toVal( _.escape.undo( definition.val ) );
 
-    if( definition.writable || definition.writable === null )
+    if( prototype )
     {
-      opts.get = () =>
+      if( definition.writable || definition.writable === null )
       {
-        return val2;
+        opts.get = () =>
+        {
+          return val2;
+        }
+        opts.set = ( src ) =>
+        {
+          val2 = src;
+          return src;
+        }
       }
-      opts.set = ( src ) =>
+      else
       {
-        val2 = src;
-        return src;
+        opts.writable = false;
+        opts.value = val2;
       }
+      Object.defineProperty( o.blueprint.Make, name, opts );
+      if( prototype !== null )
+      Object.defineProperty( prototype, name, opts );
     }
-    else
+
+    if( definition.static === _.maybe )
     {
-      opts.writable = false;
-      opts.value = val2;
+      _.blueprint._routineAdd( o.blueprint, 'constructionInit', propInit );
+      debugger;
     }
-    Object.defineProperty( o.blueprint.Make, name, opts );
-    if( prototype !== null )
-    Object.defineProperty( prototype, name, opts );
 
     return o.blueprint;
+
+    function propInit( genesis )
+    {
+      debugger;
+      if( _global_.debugger )
+      debugger;
+      _.assert( !_.primitiveIs( genesis.construction ) );
+      if( genesis.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, name ) )
+      return;
+      // if( typed )
+      {
+        let prototype2 = Object.getPrototypeOf( genesis.construction );
+        if( prototype2 && prototype2 === prototype )
+        return;
+      }
+      let properties =
+      {
+        value : val2,
+        enumerable : false,
+        configurable : false,
+        writable : false,
+      };
+      Object.defineProperty( genesis.construction, name, properties );
+    }
+
   }
 
   /* */

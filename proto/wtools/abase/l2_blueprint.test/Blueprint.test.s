@@ -1855,7 +1855,9 @@ function definePropStaticMaybeAmendConstruction( test )
     var extension = { s1 : _.define.prop( 1, { static : _.maybe } ) };
     var dstContainer = Object.create( null );
 
+    debugger;
     _.construction[ tops.amending ]( dstContainer, extension );
+    debugger;
 
     test.identical( _.prototype.each( dstContainer ).length, 1 );
     var exp =
@@ -1863,6 +1865,7 @@ function definePropStaticMaybeAmendConstruction( test )
       s1 : 1,
     }
     test.identical( propertyOwn( _.property.all( dstContainer ) ), exp );
+    // xxx
 
     /* */
 

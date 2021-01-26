@@ -54,124 +54,6 @@ callable.defaults =
 
 //
 
-// function prototype_body( o )
-// {
-//   _.routineOptions( prototype_body, o );
-//
-//   if( o.new === null )
-//   o.new = _.blueprint.is( o.val );
-//
-//   if( _.boolLike( o.val ) )
-//   o.val = !!o.val;
-//
-//   _.assert( arguments.length === 0 || arguments.length === 1 );
-//   _.assert( _.boolLike( o.new ) );
-//   _.assert( o.val === null || _.boolIs( o.val ) || !_.primitiveIs( o.val ) );
-//
-//   o.blueprintForm1 = blueprintForm1;
-//   o.blueprintForm2 = blueprintForm2;
-//   o.blueprint = false;
-//
-//   return _.definition._traitMake( 'prototype', o );
-//
-//   /* */
-//
-//   function blueprintForm1( o )
-//   {
-//     let prototype;
-//
-//     _.assert( o.blueprint.Make === null );
-//     _.assert( _.objectIs( o.blueprint.prototype ) );
-//
-//     if( _.boolIs( o.blueprint.Traits.prototype.val ) )
-//     {
-//       /* xxx : take into account option::new */
-//       /* xxx : take into account true/false */
-//       /* xxx : merge traits typed and prototype */
-//       return;
-//     }
-//
-//     if( _.blueprint.is( o.blueprint.Traits.prototype.val ) )
-//     {
-//       prototype = o.blueprint.Traits.prototype.val.prototype;
-//       _.assert( _.routineIs( o.blueprint.Traits.prototype.val.Make ) );
-//       _.assert( _.objectIs( o.blueprint.Traits.prototype.val.prototype ) );
-//     }
-//     else
-//     {
-//       prototype = o.blueprint.Traits.prototype.val;
-//     }
-//     if( o.blueprint.Traits.prototype.new )
-//     o.blueprint.Runtime.prototype = Object.create( prototype );
-//     else
-//     o.blueprint.Runtime.prototype = prototype;
-//   }
-//
-//   /* */
-//
-//   function blueprintForm2( o )
-//   {
-//     let prototype;
-//
-//     _.assert( _.fuzzyIs( o.blueprint.Typed ) );
-//
-//     if( _.boolIs( o.blueprint.Traits.prototype.val ) )
-//     {
-//       return;
-//     }
-//
-//     if( _.blueprint.is( o.blueprint.Traits.prototype.val ) )
-//     {
-//       prototype = o.blueprint.Traits.prototype.val.prototype;
-//       _.assert( _.blueprint.isDefinitive( o.blueprint.Traits.prototype.val ) );
-//       _.assert( _.routineIs( o.blueprint.Make ) );
-//       _.assert( _.routineIs( o.blueprint.Traits.prototype.val.Make ) );
-//       Object.setPrototypeOf( o.blueprint.Make, o.blueprint.Traits.prototype.val.Make );
-//     }
-//     else
-//     {
-//       prototype = o.blueprint.Traits.prototype.val;
-//       _.assert( prototype !== null || !o.blueprint.Typed, 'Object with null prototype cant be typed' );
-//       if( prototype && Object.hasOwnProperty.call( prototype, 'constructor' ) && _.routineIs( prototype.constructor ) )
-//       if( o.blueprint.Make !== prototype.constructor )
-//       Object.setPrototypeOf( o.blueprint.Make, prototype.constructor );
-//     }
-//
-//     /* yyy */
-//     // if( Config.debug )
-//     // if( prototype !== null && o.blueprint.Typed === false )
-//     // _.blueprint._routineAdd( o.blueprint, 'initEnd', notPrototyped );
-//
-//     // function notPrototyped( genesis )
-//     // {
-//     //   if( _global_.debugger )
-//     //   debugger;
-//     //   _.assert
-//     //   (
-//     //     Object.getPrototypeOf( genesis.construction ) !== prototype,
-//     //     'trait::typed is false, but construction has prototype defined by trait::prototype'
-//     //   );
-//     // }
-//
-//   }
-//
-//   /* */
-//
-// }
-//
-// prototype_body.defaults =
-// {
-//   val : null,
-//   new : null,
-// }
-//
-// let prototype = _.routineUnite( _pairArgumentsHead, prototype_body );
-
-//
-
-// function typed( o )
-// {
-
 /*
 
 == typed:0
@@ -405,7 +287,6 @@ function typed_body( o )
       {
         prototype = trait.prototype.prototype;
         _.assert( _.routineIs( trait.prototype.Make ) );
-        // _.assert( _.objectIs( trait.prototype.prototype ) || trait.prototype.prototype === null );
         _.assert
         (
             _.objectIs( trait.prototype.prototype )
@@ -704,24 +585,6 @@ function typed_body( o )
 
   /* */
 
-  // function retypeToMap( genesis )
-  // {
-  //   if( _global_.debugger )
-  //   debugger;
-  //   if( genesis.construction )
-  //   {
-  //     Object.setPrototypeOf( genesis.construction, null );
-  //   }
-  //   else if( genesis.construction === null )
-  //   {
-  //     genesis.construction = new( _.constructorJoin( genesis.runtime.Make, genesis.args ) );
-  //     // genesis.construction = new( _.constructorJoin( genesis.runtime.Make, [] ) );
-  //   }
-  //   return genesis.construction;
-  // }
-
-  /* */
-
 }
 
 typed_body.defaults =
@@ -763,21 +626,12 @@ function withConstructor( o )
 
     let prototyped = o.blueprint.prototype && o.blueprint.prototype !== Object.prototype;
 
-    // _.assert
-    // (
-    //     !_.primitiveIs( o.blueprint.prototype ), () =>
-    //     `Only prototyped blueprint can have constructor in prototype. But ${_.blueprint.qnameOf( o.blueprint )} is not prototyped.`
-    // );
-    // _.assert( o.blueprint.prototype !== Object.prototype, 'Constructor of `Object.prototype` should not be rewritten' );
     _.assert( _.routineIs( o.blueprint.Make ) );
     _.assert( _.fuzzyIs( o.blueprint.Typed ) );
 
     if( prototyped )
     if( o.amending !== 'supplement' || !_.mapOnlyOwnKey( o.blueprint.prototype, 'constructor' ) )
     {
-      // xxx : cover
-      // if( o.amending === 'supplement' && _.mapOnlyOwnKey( o.blueprint.prototype, 'constructor' ) )
-      // return;
       let properties =
       {
         value : o.blueprint.Make,
@@ -800,18 +654,14 @@ function withConstructor( o )
 
     function initEnd( genesis )
     {
-
       if( _global_.debugger )
       debugger;
-
       _.assert( !_.primitiveIs( genesis.construction ) );
       if( genesis.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, 'constructor' ) )
       return;
-      // if( typed === _.maybe )
       if( typed )
       {
         let prototype2 = Object.getPrototypeOf( genesis.construction );
-        // if( prototype2 && prototype2.constructor === constructor )
         if( prototype2 && prototype2 === prototype )
         return;
       }
