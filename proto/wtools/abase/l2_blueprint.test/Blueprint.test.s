@@ -13771,8 +13771,10 @@ function traitWithConstructorBasic( test )
 
   test.description = 'instance2'; /* */
 
+  debugger; _global_.debugger = 1;
   var instance2 = instance1.constructor();
-  test.identical( instance2 instanceof Blueprint1.Make, true );
+  debugger;
+  // test.identical( instance2 instanceof Blueprint1.Make, true );
   test.true( _.routineIs( instance2.constructor ) );
   test.identical( instance2.constructor.name, 'Construction' );
 
@@ -13803,6 +13805,8 @@ function traitWithConstructorBasic( test )
   {
   }
   test.identical( propertyOwn( _.prototype.each( instance2 )[ 2 ] ), exp );
+
+  debugger; return; xxx
 
   /* */
 

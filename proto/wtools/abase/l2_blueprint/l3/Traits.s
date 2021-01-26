@@ -572,7 +572,7 @@ function typed_body( o )
   {
     if( _global_.debugger )
     debugger;
-    if( genesis.construction && genesis.construction instanceof genesis.runtime.Make )
+    if( genesis.construction && genesis.runtime.Make.prototype !== null && genesis.construction instanceof genesis.runtime.Make )
     genesis.construction = Object.create( null );
     else if( genesis.construction === null )
     genesis.construction = Object.create( null );
