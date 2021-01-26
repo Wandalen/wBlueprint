@@ -209,7 +209,6 @@ function prop_body( o )
         blueprint : o.blueprint,
         name : o.propName,
         amending : o.amending
-        // val : definition.toVal( definition.val ),
       }
       if( optionsHasAccessor( definition ) )
       _declareStaticWithAccessor( o2 );
@@ -890,8 +889,6 @@ function nothing_body( o )
 
   _.assertRoutineOptions( nothing_body, arguments );
   o.definitionGroup = 'definition.unnamed';
-  // o.constructionAmend = constructionAmend;
-  // o.blueprintAmend = blueprintAmend;
   o.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
   o.blueprint = false;
 
@@ -902,17 +899,8 @@ function nothing_body( o )
   Object.freeze( definition );
   return definition;
 
-  // function constructionAmend( construction, key )
-  // {
-  // }
-  //
-  // function blueprintAmend( op )
-  // {
-  // }
-
   function blueprintDefinitionRewrite( op )
   {
-    // _.assert( 0, 'not implemented' );
   }
 
 }

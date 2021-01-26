@@ -1835,6 +1835,385 @@ function definePropStaticInheritance( test )
 
 //
 
+/* xxx yyy : write it */
+// function traitWithConstructorAmendConstruction( test )
+function definePropStaticMaybeAmendConstruction( test )
+{
+  let context = this;
+  let s = _.define.static;
+
+  act({ amending : 'extend' });
+  act({ amending : 'supplement' });
+
+  function act( tops )
+  {
+
+    /* - */
+
+    test.case = `method:${tops.amending}, pure map`;
+
+    var extension = { s1 : _.define.prop( 1, { static : _.maybe } ) };
+    var dstContainer = Object.create( null );
+
+    _.construction[ tops.amending ]( dstContainer, extension );
+
+    test.identical( _.prototype.each( dstContainer ).length, 1 );
+    var exp =
+    {
+      s1 : 1,
+    }
+    test.identical( propertyOwn( _.property.all( dstContainer ) ), exp );
+
+    /* */
+
+    // test.case = `method:${tops.amending}, pure map, typed:1`;
+    //
+    // var extension = [ _.trait.withConstructor(), _.trait.typed() ];
+    // var dstContainer = Object.create( null );
+    //
+    // _.construction[ tops.amending ]( dstContainer, extension );
+    // test.true( _.routineIs( dstContainer.constructor ) );
+    // test.identical( dstContainer.constructor.name, 'Construction' );
+    //
+    // test.identical( _.prototype.each( dstContainer ).length, 3 );
+    // var exp =
+    // {
+    //   constructor : dstContainer.constructor,
+    // }
+    // test.identical( propertyOwn( _.property.all( dstContainer ) ), exp );
+    //
+    // /* */
+    //
+    // test.case = `method:${tops.amending}, pure map, replacing`;
+    //
+    // var extension = [ _.trait.withConstructor() ];
+    // var dstContainer = Object.create( null );
+    // dstContainer.constructor = constructor1;
+    //
+    // _.construction[ tops.amending ]( dstContainer, extension );
+    // test.true( _.routineIs( dstContainer.constructor ) );
+    // test.identical( dstContainer.constructor.name, tops.amending === 'extend' ? 'Construction' : 'constructor1' );
+    //
+    // test.identical( _.prototype.each( dstContainer ).length, 1 );
+    // var exp =
+    // {
+    //   constructor : tops.amending === 'extend' ? dstContainer.constructor : constructor1,
+    // }
+    // test.identical( _.property.all( dstContainer ), exp );
+    //
+    // /* */
+    //
+    // test.case = `method:${tops.amending}, pure map, replacing, typed : 1`;
+    //
+    // var extension = [ _.trait.withConstructor(), _.trait.typed() ];
+    // var dstContainer = Object.create( null );
+    // dstContainer.constructor = constructor1;
+    //
+    // _.construction[ tops.amending ]( dstContainer, extension );
+    // test.true( _.routineIs( dstContainer.constructor ) );
+    //
+    // test.identical( _.prototype.each( dstContainer ).length, 3 );
+    // var exp =
+    // {
+    //   constructor : constructor1,
+    // }
+    // test.identical( _.property.onlyOwn( _.prototype.each( dstContainer )[ 0 ], { onlyEnumerable : 0 } ), exp );
+    // var exp =
+    // {
+    //   constructor : _.prototype.of( dstContainer ).constructor,
+    // }
+    // test.identical( _.property.onlyOwn( _.prototype.each( dstContainer )[ 1 ], { onlyEnumerable : 0 } ), exp );
+    // test.identical( _.prototype.of( dstContainer ).constructor.name, 'Construction' );
+    //
+    // /* - */
+    //
+    // test.case = `method:${tops.amending}, polluted map`;
+    //
+    // var extension = [ _.trait.withConstructor() ];
+    // var dstContainer = {};
+    //
+    // var keysBefore = _.mapAllKeys( Object.prototype );
+    // _.construction[ tops.amending ]( dstContainer, extension );
+    // var keysAfter = _.mapAllKeys( Object.prototype );
+    // test.identical( keysAfter, keysBefore );
+    //
+    // test.true( _.routineIs( dstContainer.constructor ) );
+    // test.identical( dstContainer.constructor.name, 'Construction' );
+    // test.identical( _.prototype.each( dstContainer ).length, 2 );
+    // test.true( _.prototype.each( dstContainer )[ 1 ] === Object.prototype );
+    // var exp =
+    // {
+    //   constructor : dstContainer.constructor,
+    // }
+    // test.identical( propertyOwn( _.property.all( dstContainer, { onlyOwn : 1 } ) ), exp );
+    //
+    // /* */
+    //
+    // test.case = `method:${tops.amending}, polluted map, typed:1`;
+    //
+    // var extension = [ _.trait.withConstructor(), _.trait.typed() ];
+    // var dstContainer = {};
+    //
+    // var keysBefore = _.mapAllKeys( Object.prototype );
+    // _.construction[ tops.amending ]( dstContainer, extension );
+    // var keysAfter = _.mapAllKeys( Object.prototype );
+    // test.identical( keysAfter, keysBefore );
+    //
+    // test.true( _.routineIs( dstContainer.constructor ) );
+    // test.identical( dstContainer.constructor.name, 'Construction' );
+    // test.identical( _.prototype.each( dstContainer ).length, 3 );
+    // var exp =
+    // {
+    //   constructor : dstContainer.constructor,
+    // }
+    // test.identical( propertyOwn( _.property.all( dstContainer ) ), exp );
+    //
+    // /* */
+    //
+    // test.case = `method:${tops.amending}, polluted map, replacing`;
+    //
+    // var extension = [ _.trait.withConstructor() ];
+    // var dstContainer = {};
+    // dstContainer.constructor = constructor1;
+    //
+    // var keysBefore = _.mapAllKeys( Object.prototype );
+    // _.construction[ tops.amending ]( dstContainer, extension );
+    // var keysAfter = _.mapAllKeys( Object.prototype );
+    // test.identical( keysAfter, keysBefore );
+    //
+    // test.true( _.routineIs( dstContainer.constructor ) );
+    // test.identical( dstContainer.constructor.name, tops.amending === 'extend' ? 'Construction' : 'constructor1' );
+    // test.identical( _.prototype.each( dstContainer ).length, 2 );
+    // test.true( _.prototype.each( dstContainer )[ 1 ] === Object.prototype );
+    // var exp =
+    // {
+    //   constructor : tops.amending === 'extend' ? dstContainer.constructor : constructor1,
+    // }
+    // test.identical( _.property.all( dstContainer, { onlyOwn : 1 } ), exp );
+    //
+    // /* */
+    //
+    // test.case = `method:${tops.amending}, polluted map, replacing, typed : 1`;
+    //
+    // var extension = [ _.trait.withConstructor(), _.trait.typed() ];
+    // var dstContainer = {};
+    // dstContainer.constructor = constructor1;
+    //
+    // var keysBefore = _.mapAllKeys( Object.prototype );
+    // _.construction[ tops.amending ]( dstContainer, extension );
+    // var keysAfter = _.mapAllKeys( Object.prototype );
+    // test.identical( keysAfter, keysBefore );
+    //
+    // test.true( _.routineIs( dstContainer.constructor ) );
+    // test.identical( _.prototype.each( dstContainer ).length, 3 );
+    // var exp =
+    // {
+    //   constructor : constructor1,
+    // }
+    // test.identical( _.property.onlyOwn( _.prototype.each( dstContainer )[ 0 ], { onlyEnumerable : 0 } ), exp );
+    // var exp =
+    // {
+    //   constructor : _.prototype.of( dstContainer ).constructor,
+    // }
+    // test.identical( _.property.onlyOwn( _.prototype.each( dstContainer )[ 1 ], { onlyEnumerable : 0 } ), exp );
+    // test.identical( _.prototype.of( dstContainer ).constructor.name, 'Construction' );
+    //
+    // /* - */
+    //
+    // test.case = `method:${tops.amending}, object`;
+    //
+    // var extension = [ _.trait.withConstructor() ];
+    // var proto = {};
+    // var dstContainer = Object.create( proto );
+    //
+    // var keysBefore = _.mapAllKeys( Object.prototype );
+    // _.construction[ tops.amending ]( dstContainer, extension );
+    // var keysAfter = _.mapAllKeys( Object.prototype );
+    // test.identical( keysAfter, keysBefore );
+    //
+    // test.true( _.routineIs( dstContainer.constructor ) );
+    // test.identical( dstContainer.constructor.name, 'Construction' );
+    // test.identical( _.prototype.each( dstContainer ).length, 3 );
+    // test.true( _.prototype.each( dstContainer )[ 1 ] === proto );
+    // test.true( _.prototype.each( dstContainer )[ 2 ] === Object.prototype );
+    //
+    // var exp =
+    // {
+    // }
+    // test.identical( propertyOwn( _.prototype.each( dstContainer )[ 0 ] ), exp );
+    //
+    // var exp =
+    // {
+    //   constructor : dstContainer.constructor
+    // }
+    // test.identical( propertyOwn( _.prototype.each( dstContainer )[ 1 ] ), exp );
+    //
+    // /* */
+    //
+    // test.case = `method:${tops.amending}, object, typed:1`;
+    //
+    // var extension = [ _.trait.withConstructor(), _.trait.typed() ];
+    // var proto = {};
+    // var dstContainer = Object.create( proto );
+    //
+    // var keysBefore = _.mapAllKeys( Object.prototype );
+    // _.construction[ tops.amending ]( dstContainer, extension );
+    // var keysAfter = _.mapAllKeys( Object.prototype );
+    // test.identical( keysAfter, keysBefore );
+    //
+    // test.true( _.routineIs( dstContainer.constructor ) );
+    // test.identical( dstContainer.constructor.name, 'Construction' );
+    // test.identical( _.prototype.each( dstContainer ).length, 3 );
+    // test.true( _.prototype.each( dstContainer )[ 2 ] === _.Construction.prototype );
+    //
+    // var exp =
+    // {
+    // }
+    // test.identical( propertyOwn( _.prototype.each( dstContainer )[ 0 ] ), exp );
+    //
+    // var exp =
+    // {
+    //   constructor : dstContainer.constructor
+    // }
+    // test.identical( propertyOwn( _.prototype.each( dstContainer )[ 1 ] ), exp );
+    //
+    // /* */
+    //
+    // test.case = `method:${tops.amending}, object with constructor in prototype`;
+    //
+    // var extension = [ _.trait.withConstructor() ];
+    // var proto = { constructor : constructor1 };
+    // var dstContainer = Object.create( proto );
+    //
+    // var keysBefore = _.mapAllKeys( Object.prototype );
+    // _.construction[ tops.amending ]( dstContainer, extension );
+    // var keysAfter = _.mapAllKeys( Object.prototype );
+    // test.identical( keysAfter, keysBefore );
+    //
+    // test.true( _.routineIs( dstContainer.constructor ) );
+    // test.identical( _.prototype.each( dstContainer ).length, 3 );
+    // test.true( _.prototype.each( dstContainer )[ 1 ] === proto );
+    // test.true( _.prototype.each( dstContainer )[ 2 ] === Object.prototype );
+    //
+    // var exp =
+    // {
+    // }
+    // test.identical( propertyOwn( _.prototype.each( dstContainer )[ 0 ] ), exp );
+    // test.identical( _.prototype.each( dstContainer )[ 0 ].constructor.name, tops.amending === 'extend' ? 'Construction' : 'constructor1' );
+    //
+    // var exp =
+    // {
+    //   constructor : dstContainer.constructor
+    // }
+    // test.identical( propertyOwn( _.prototype.each( dstContainer )[ 1 ] ), exp );
+    // test.identical( _.prototype.each( dstContainer )[ 1 ].constructor.name, tops.amending === 'extend' ? 'Construction' : 'constructor1' );
+    //
+    // /* */
+    //
+    // test.case = `method:${tops.amending}, object with constructor in prototype, typed`;
+    //
+    // var extension = [ _.trait.withConstructor(), _.trait.typed() ];
+    // var proto = { constructor : constructor1 };
+    // var dstContainer = Object.create( proto );
+    //
+    // var keysBefore = _.mapAllKeys( Object.prototype );
+    // _.construction[ tops.amending ]( dstContainer, extension );
+    // var keysAfter = _.mapAllKeys( Object.prototype );
+    // test.identical( keysAfter, keysBefore );
+    //
+    // test.true( _.routineIs( dstContainer.constructor ) );
+    // test.identical( _.prototype.each( dstContainer ).length, 3 );
+    // test.true( _.prototype.each( dstContainer )[ 2 ] === _.Construction.prototype );
+    //
+    // var exp =
+    // {
+    // }
+    // test.identical( propertyOwn( _.prototype.each( dstContainer )[ 0 ] ), exp );
+    // test.identical( _.prototype.each( dstContainer )[ 0 ].constructor.name, 'Construction' );
+    //
+    // var exp =
+    // {
+    //   constructor : dstContainer.constructor
+    // }
+    // test.identical( propertyOwn( _.prototype.each( dstContainer )[ 1 ] ), exp );
+    // test.identical( _.prototype.each( dstContainer )[ 1 ].constructor.name, 'Construction' );
+    //
+    // /* */
+    //
+    // test.case = `method:${tops.amending}, object with constructor in instance`;
+    //
+    // var extension = [ _.trait.withConstructor() ];
+    // var proto = {};
+    // var dstContainer = Object.create( proto );
+    // dstContainer.constructor = constructor1;
+    //
+    // var keysBefore = _.mapAllKeys( Object.prototype );
+    // _.construction[ tops.amending ]( dstContainer, extension );
+    // var keysAfter = _.mapAllKeys( Object.prototype );
+    // test.identical( keysAfter, keysBefore );
+    //
+    // test.true( _.routineIs( dstContainer.constructor ) );
+    // test.identical( _.prototype.each( dstContainer ).length, 3 );
+    // test.true( _.prototype.each( dstContainer )[ 1 ] === proto );
+    // test.true( _.prototype.each( dstContainer )[ 2 ] === Object.prototype );
+    //
+    // var exp =
+    // {
+    //   constructor : dstContainer.constructor,
+    // }
+    // test.identical( propertyOwn( _.prototype.each( dstContainer )[ 0 ] ), exp );
+    // test.identical( _.prototype.each( dstContainer )[ 0 ].constructor.name, 'constructor1' );
+    //
+    // var exp =
+    // {
+    //   constructor : _.prototype.each( dstContainer )[ 1 ].constructor,
+    // }
+    // test.identical( propertyOwn( _.prototype.each( dstContainer )[ 1 ] ), exp );
+    // test.identical( _.prototype.each( dstContainer )[ 1 ].constructor.name, 'Construction' );
+    //
+    // /* */
+    //
+    // test.case = `method:${tops.amending}, object with constructor in instance`;
+    //
+    // var extension = [ _.trait.withConstructor(), _.trait.typed() ];
+    // var proto = {};
+    // var dstContainer = Object.create( proto );
+    // dstContainer.constructor = constructor1;
+    //
+    // var keysBefore = _.mapAllKeys( Object.prototype );
+    // _.construction[ tops.amending ]( dstContainer, extension );
+    // var keysAfter = _.mapAllKeys( Object.prototype );
+    // test.identical( keysAfter, keysBefore );
+    //
+    // test.true( _.routineIs( dstContainer.constructor ) );
+    // test.identical( _.prototype.each( dstContainer ).length, 3 );
+    // test.true( _.prototype.each( dstContainer )[ 1 ] !== proto );
+    // test.true( _.prototype.each( dstContainer )[ 2 ] === _.Construction.prototype );
+    //
+    // var exp =
+    // {
+    //   constructor : dstContainer.constructor,
+    // }
+    // test.identical( propertyOwn( _.prototype.each( dstContainer )[ 0 ] ), exp );
+    // test.identical( _.prototype.each( dstContainer )[ 0 ].constructor.name, 'constructor1' );
+    //
+    // var exp =
+    // {
+    //   constructor : _.prototype.each( dstContainer )[ 1 ].constructor,
+    // }
+    // test.identical( propertyOwn( _.prototype.each( dstContainer )[ 1 ] ), exp );
+    // test.identical( _.prototype.each( dstContainer )[ 1 ].constructor.name, 'Construction' );
+
+    /* */
+
+  }
+
+  function constructor1(){}
+
+}
+
+//
+
 function definePropEnumerable( test )
 {
   let context = this;
@@ -13676,49 +14055,6 @@ function traitWithConstructorBasic( test )
 
   /* */
 
-  // if( Config.debug )
-  // {
-  //
-  //   test.case = 'typed:0';
-  //   test.shouldThrowErrorSync
-  //   (
-  //     () =>
-  //     {
-  //       _.Blueprint
-  //       ({
-  //         typed : _.trait.typed({ val : false }),
-  //         withConstructor : _.trait.withConstructor(),
-  //       });
-  //     },
-  //     ( err ) => test.identical
-  //     (
-  //       err.originalMessage,
-  //       'Only prototyped blueprint can have constructor in prototype. But Blueprint:: is not prototyped.'
-  //     )
-  //   )
-  //
-  //   test.case = 'typed:maybe';
-  //   test.shouldThrowErrorSync
-  //   (
-  //     () =>
-  //     {
-  //       _.Blueprint
-  //       ({
-  //         typed : _.trait.typed({ val : _.maybe }),
-  //         withConstructor : _.trait.withConstructor(),
-  //       });
-  //     },
-  //     ( err ) => test.identical
-  //     (
-  //       err.originalMessage,
-  //       'Only prototyped blueprint can have constructor in prototype. But Blueprint:: is not prototyped.'
-  //     )
-  //   )
-  //
-  // }
-
-  /* */
-
   test.case = 'unnamed blueprint, typed:0';
 
   var Blueprint1 = _.Blueprint
@@ -13731,14 +14067,12 @@ function traitWithConstructorBasic( test )
     s2 : s( 'b1' ),
   });
   test.true( Blueprint1.prototype === Blueprint1.Make.prototype );
-  // test.true( Blueprint1.Make === Blueprint1.prototype.constructor );
   test.true( Blueprint1.constructor === undefined );
   test.identical( Blueprint1.Make.name, 'Construction' );
 
   test.description = 'instance1'; /* */
 
   var instance1 = Blueprint1.Make();
-  // test.identical( instance1 instanceof Blueprint1.Make, true );
   test.true( _.routineIs( instance1.constructor ) );
   test.identical( instance1.constructor.name, 'Construction' );
 
@@ -13757,56 +14091,21 @@ function traitWithConstructorBasic( test )
     'field2' : 'b1',
   }
   test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
-  // var exp =
-  // {
-  //   constructor : Blueprint1.prototype.constructor,
-  //   's1' : 'b1',
-  //   's2' : 'b1',
-  // }
-  // test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
-  // var exp =
-  // {
-  // }
-  // test.identical( propertyOwn( _.prototype.each( instance1 )[ 2 ] ), exp );
 
   test.description = 'instance2'; /* */
 
-  debugger; _global_.debugger = 1;
   var instance2 = instance1.constructor();
-  debugger;
-  // test.identical( instance2 instanceof Blueprint1.Make, true );
   test.true( _.routineIs( instance2.constructor ) );
   test.identical( instance2.constructor.name, 'Construction' );
 
-  test.identical( _.prototype.each( instance2 ).length, 3 );
+  test.identical( _.prototype.each( instance2 ).length, 1 );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
-    'field1' : 'b1',
-    'field2' : 'b1',
-    's1' : 'b1',
-    's2' : 'b1',
-  }
-  test.identical( _.property.all( instance2 ), exp );
-  var exp =
-  {
+    constructor : instance2.constructor,
     'field1' : 'b1',
     'field2' : 'b1',
   }
   test.identical( propertyOwn( _.prototype.each( instance2 )[ 0 ] ), exp );
-  var exp =
-  {
-    constructor : Blueprint1.prototype.constructor,
-    's1' : 'b1',
-    's2' : 'b1',
-  }
-  test.identical( propertyOwn( _.prototype.each( instance2 )[ 1 ] ), exp );
-  var exp =
-  {
-  }
-  test.identical( propertyOwn( _.prototype.each( instance2 )[ 2 ] ), exp );
-
-  debugger; return; xxx
 
   /* */
 
@@ -13985,6 +14284,53 @@ function traitWithConstructorBasic( test )
   {
   }
   test.identical( propertyOwn( _.prototype.each( instance2 )[ 2 ] ), exp );
+
+  /* */
+
+  test.case = 'unnamed blueprint, typed:maybe, prototype:false';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    typed : _.trait.typed({ val : _.maybe, prototype : false }),
+    withConstructor : _.trait.withConstructor(),
+    field1 : 'b1',
+    field2 : 'b1',
+    s1 : s( 'b1' ),
+    s2 : s( 'b1' ),
+  });
+  test.true( Blueprint1.prototype === Blueprint1.Make.prototype );
+  test.true( Blueprint1.constructor === undefined );
+  test.identical( Blueprint1.Make.name, 'Construction' );
+
+  test.description = 'instance1'; /* */
+
+  var instance1 = Blueprint1.Make();
+  test.true( _.routineIs( instance1.constructor ) );
+  test.identical( instance1.constructor.name, 'Construction' );
+
+  test.identical( _.prototype.each( instance1 ).length, 1 );
+  var exp =
+  {
+    'field1' : 'b1',
+    'field2' : 'b1',
+    constructor : instance1.constructor,
+  }
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
+
+  test.description = 'instance2'; /* */
+
+  var instance2 = instance1.constructor();
+  test.true( _.routineIs( instance2.constructor ) );
+  test.identical( instance2.constructor.name, 'Construction' );
+
+  test.identical( _.prototype.each( instance2 ).length, 1 );
+  var exp =
+  {
+    constructor : instance2.constructor,
+    'field1' : 'b1',
+    'field2' : 'b1',
+  }
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 0 ] ), exp );
 
   /* */
 
@@ -14305,7 +14651,8 @@ traitWithConstructorBasic.description =
 
 //
 
-function traitWithConstructorExtendObjectWithDefinition( test )
+/* xxx yyy : make similar test routines for static:maybe */
+function traitWithConstructorAmendConstruction( test )
 {
   let context = this;
   let s = _.define.static;
@@ -14684,7 +15031,8 @@ function traitWithConstructorExtendObjectWithDefinition( test )
 
 //
 
-function traitWithConstructorExtendObjectWithDefinitionAlternatives( test )
+/* xxx yyy : make similar test routines for static:maybe */
+function traitWithConstructorAmendConstructionAlternatives( test )
 {
   let context = this;
   let s = _.define.static;
@@ -18290,6 +18638,7 @@ let Self =
     defineProps,
     definePropStaticBasic,
     definePropStaticInheritance,
+    definePropStaticMaybeAmendConstruction, /* yyy */
     definePropEnumerable,
     definePropWritable,
     definePropConfigurable,
@@ -18339,8 +18688,8 @@ let Self =
     traitTypedPrototypeBlueprint,
     traitName,
     traitWithConstructorBasic,
-    traitWithConstructorExtendObjectWithDefinition,
-    traitWithConstructorExtendObjectWithDefinitionAlternatives,
+    traitWithConstructorAmendConstruction, /* yyy */
+    traitWithConstructorAmendConstructionAlternatives, /* yyy */
     traitWithConstructorTraitPrototypeTraitTyped,
     traitPrototypeTraitTyped,
     traitExtendable,
