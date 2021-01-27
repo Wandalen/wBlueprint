@@ -16034,7 +16034,7 @@ function constructWithArgumentMapUndeclaredFields( test )
   test.true( instance !== opts );
   var exp = { field1 : rfield, fieldBad : 13 }
   test.identical( instance, exp );
-  test.identical( instance instanceof Blueprint.Make, false );
+  // test.identical( instance instanceof Blueprint.Make, false );
 
   /* */
 
@@ -16068,7 +16068,7 @@ function constructWithArgumentMapUndeclaredFields( test )
   test.true( instance !== opts );
   var exp = { field1 : rfield, fieldBad : 13 }
   test.identical( instance, exp );
-  test.identical( instance instanceof Blueprint.Make, false );
+  // test.identical( instance instanceof Blueprint.Make, false );
 
   /* */
 
@@ -16180,7 +16180,7 @@ function constructWithArgumentInstance( test )
   test.identical( _.construction.isInstanceOf( instance2, Blueprint ), _.maybe );
   test.identical( _.blueprint.isBlueprintOf( Blueprint, instance2 ), _.maybe );
 
-  test.identical( instance2 instanceof Blueprint.Make, false );
+  // test.identical( instance2 instanceof Blueprint.Make, false );
   test.identical( Object.getPrototypeOf( instance2 ), null );
   test.identical( instance2.constructor, undefined );
   var prototypes = _.prototype.each( instance2 );
@@ -16260,7 +16260,7 @@ function constructWithArgumentInstance( test )
   test.identical( _.construction.isInstanceOf( instance2, Blueprint ), _.maybe );
   test.identical( _.blueprint.isBlueprintOf( Blueprint, instance2 ), _.maybe );
 
-  test.identical( instance2 instanceof Blueprint.Make, false );
+  // test.identical( instance2 instanceof Blueprint.Make, false );
   test.identical( Object.getPrototypeOf( instance2 ), null );
   test.identical( instance2.constructor, undefined );
   var prototypes = _.prototype.each( instance2 );
@@ -16352,15 +16352,15 @@ function makeEachBasic( test )
   test.true( _.arrayIs( instances ) );
   var exp = { field1 : 1 }
   test.containsOnly( instances[ 0 ], exp );
-  test.identical( instances[ 0 ] instanceof Blueprint.Make, false );
+  // test.identical( instances[ 0 ] instanceof Blueprint.Make, false );
   test.true( instances[ 0 ] !== args[ 0 ] );
   var exp = { field1 : 2 }
   test.containsOnly( instances[ 1 ], exp );
-  test.identical( instances[ 1 ] instanceof Blueprint.Make, false );
+  // test.identical( instances[ 1 ] instanceof Blueprint.Make, false );
   test.true( instances[ 1 ] !== args[ 1 ] );
   var exp = { field1 : rfield }
   test.containsOnly( instances[ 2 ], exp );
-  test.identical( instances[ 2 ] instanceof Blueprint.Make, false );
+  // test.identical( instances[ 2 ] instanceof Blueprint.Make, false );
   test.true( instances[ 2 ] !== args[ 2 ] );
 
   /* */
@@ -16404,15 +16404,15 @@ function makeEachBasic( test )
   test.true( _.arrayIs( instances ) );
   var exp = { field1 : 1 }
   test.containsOnly( instances[ 0 ], exp );
-  test.identical( instances[ 0 ] instanceof Blueprint.Make, false );
+  // test.identical( instances[ 0 ] instanceof Blueprint.Make, false );
   test.true( instances[ 0 ] !== args[ 0 ] );
   var exp = { field1 : 2 }
   test.containsOnly( instances[ 1 ], exp );
-  test.identical( instances[ 1 ] instanceof Blueprint.Make, false );
+  // test.identical( instances[ 1 ] instanceof Blueprint.Make, false );
   test.true( instances[ 1 ] !== args[ 1 ] );
   var exp = { field1 : rfield }
   test.containsOnly( instances[ 2 ], exp );
-  test.identical( instances[ 2 ] instanceof Blueprint.Make, false );
+  // test.identical( instances[ 2 ] instanceof Blueprint.Make, false );
   test.true( instances[ 2 ] !== args[ 2 ] );
 
   /* */
@@ -16476,15 +16476,15 @@ function fromEachBasic( test )
   test.true( _.arrayIs( instances ) );
   var exp = { field1 : 1 }
   test.containsOnly( instances[ 0 ], exp );
-  test.identical( instances[ 0 ] instanceof Blueprint.Make, false );
+  // test.identical( instances[ 0 ] instanceof Blueprint.Make, false );
   test.true( instances[ 0 ] === args[ 0 ] );
   var exp = { field1 : 2 }
   test.containsOnly( instances[ 1 ], exp );
-  test.identical( instances[ 1 ] instanceof Blueprint.Make, false );
+  // test.identical( instances[ 1 ] instanceof Blueprint.Make, false );
   test.true( instances[ 1 ] === args[ 1 ] );
   var exp = { field1 : rfield }
   test.containsOnly( instances[ 2 ], exp );
-  test.identical( instances[ 2 ] instanceof Blueprint.Make, false );
+  // test.identical( instances[ 2 ] instanceof Blueprint.Make, false );
   test.true( instances[ 2 ] === args[ 2 ] );
 
   /* */
@@ -16528,15 +16528,15 @@ function fromEachBasic( test )
   test.true( _.arrayIs( instances ) );
   var exp = { field1 : 1 }
   test.containsOnly( instances[ 0 ], exp );
-  test.identical( instances[ 0 ] instanceof Blueprint.Make, false );
+  // test.identical( instances[ 0 ] instanceof Blueprint.Make, false );
   test.true( instances[ 0 ] === args[ 0 ] );
   var exp = { field1 : 2 }
   test.containsOnly( instances[ 1 ], exp );
-  test.identical( instances[ 1 ] instanceof Blueprint.Make, false );
+  // test.identical( instances[ 1 ] instanceof Blueprint.Make, false );
   test.true( instances[ 1 ] === args[ 1 ] );
   var exp = { field1 : rfield }
   test.containsOnly( instances[ 2 ], exp );
-  test.identical( instances[ 2 ] instanceof Blueprint.Make, false );
+  // test.identical( instances[ 2 ] instanceof Blueprint.Make, false );
   test.true( instances[ 2 ] === args[ 2 ] );
 
   /* */
@@ -16600,15 +16600,15 @@ function retypeEachBasic( test )
   test.true( _.arrayIs( instances ) );
   var exp = { field1 : 1 }
   test.containsOnly( instances[ 0 ], exp );
-  test.identical( instances[ 0 ] instanceof Blueprint.Make, false );
+  // test.identical( instances[ 0 ] instanceof Blueprint.Make, false );
   test.true( instances[ 0 ] === args[ 0 ] );
   var exp = { field1 : 2 }
   test.containsOnly( instances[ 1 ], exp );
-  test.identical( instances[ 1 ] instanceof Blueprint.Make, false );
+  // test.identical( instances[ 1 ] instanceof Blueprint.Make, false );
   test.true( instances[ 1 ] === args[ 1 ] );
   var exp = { field1 : rfield }
   test.containsOnly( instances[ 2 ], exp );
-  test.identical( instances[ 2 ] instanceof Blueprint.Make, false );
+  // test.identical( instances[ 2 ] instanceof Blueprint.Make, false );
   test.true( instances[ 2 ] === args[ 2 ] );
 
   /* */
@@ -16652,15 +16652,15 @@ function retypeEachBasic( test )
   test.true( _.arrayIs( instances ) );
   var exp = { field1 : 1 }
   test.containsOnly( instances[ 0 ], exp );
-  test.identical( instances[ 0 ] instanceof Blueprint.Make, false );
+  // test.identical( instances[ 0 ] instanceof Blueprint.Make, false );
   test.true( instances[ 0 ] === args[ 0 ] );
   var exp = { field1 : 2 }
   test.containsOnly( instances[ 1 ], exp );
-  test.identical( instances[ 1 ] instanceof Blueprint.Make, false );
+  // test.identical( instances[ 1 ] instanceof Blueprint.Make, false );
   test.true( instances[ 1 ] === args[ 1 ] );
   var exp = { field1 : rfield }
   test.containsOnly( instances[ 2 ], exp );
-  test.identical( instances[ 2 ] instanceof Blueprint.Make, false );
+  // test.identical( instances[ 2 ] instanceof Blueprint.Make, false );
   test.true( instances[ 2 ] === args[ 2 ] );
 
   /* */
@@ -16815,9 +16815,55 @@ function helperConstructAndNew( test )
 function defineReusingSingleBlueprint( test )
 {
 
+  /* */
+
+  test.case = 'basic';
+
   var Blueprint1 = _.Blueprint
   ({
     field1 : null,
+  });
+
+  var Blueprint2 = _.Blueprint( Blueprint1 );
+  var instance = _.blueprint.construct( Blueprint2 );
+  instance.field1 = '1';
+
+  test.shouldThrowErrorSync( () =>
+  {
+    instance.field2 = 2;
+  });
+
+  var prototypes = _.prototype.each( _.Blueprint );
+  test.identical( prototypes.length, 1 );
+  test.true( prototypes[ 0 ] === _.Blueprint );
+  var prototypes = _.prototype.each( Blueprint2 );
+  test.identical( prototypes.length, 3 );
+  test.true( prototypes[ 0 ] === Blueprint2 );
+  test.true( prototypes[ 1 ] === Blueprint2.Runtime );
+  test.true( prototypes[ 2 ] === _.Blueprint.prototype );
+  var prototypes = _.prototype.each( instance );
+  test.identical( prototypes.length, 3 );
+  test.true( prototypes[ 0 ] === instance );
+  test.true( prototypes[ 1 ] === Blueprint2.Make.prototype );
+  test.true( prototypes[ 2 ] === _.Construction.prototype );
+
+  test.true( Blueprint1.Make.prototype === null );
+  test.true( _.prototype.hasPrototype( instance, Blueprint2.Make.prototype ) );
+  test.true( _.objectIs( instance ) );
+  test.true( !_.mapIs( instance ) );
+  test.true( _.mapLike( instance ) );
+  test.true( !_.instanceIs( instance ) );
+  test.identical( _.mapKeys( instance ), [ 'field1' ] );
+  test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
+
+  /* */
+
+  test.case = 'basic';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    field1 : null,
+    typed : _.trait.typed(),
   });
 
   var Blueprint2 = _.Blueprint( Blueprint1 );
@@ -16853,6 +16899,8 @@ function defineReusingSingleBlueprint( test )
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
 
+  /* */
+
 }
 
 defineReusingSingleBlueprint.description =
@@ -16868,11 +16916,13 @@ function defineReusingMultipleBlueprints( test )
   var Blueprint1 = _.Blueprint
   ({
     field1 : null,
+    typed : _.trait.typed( 1 ),
   });
 
   var Blueprint2 = _.Blueprint
   ({
     field2 : null,
+    typed : _.trait.typed( 1 ),
   });
 
   var Blueprint3 = _.Blueprint( Blueprint1, Blueprint2, { field3 : '3' } );
@@ -16934,7 +16984,9 @@ function makeAlternativeRoutinesUntyped( test )
   });
   test.true( Blueprint1.constructor === undefined );
   test.true( Blueprint1.Runtime.constructor === undefined );
-  test.true( Blueprint1.prototype.constructor === undefined );
+  test.true( Blueprint1.prototype === null );
+  test.true( Blueprint1.Make.prototype === null );
+  // test.true( Blueprint1.prototype.constructor === undefined );
   test.true( Blueprint1.Make === Blueprint1.Runtime.Make );
 
   act({ method : 'Make' });

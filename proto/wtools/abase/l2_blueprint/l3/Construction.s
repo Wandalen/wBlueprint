@@ -341,7 +341,7 @@ function _make3( genesis )
     _.assert
     (
          // genesis.runtime._MakingTyped === false
-      // || 
+      // ||
       genesis.runtime.Make.prototype === null
       || genesis.construction instanceof genesis.runtime.Make
     );
@@ -443,7 +443,7 @@ function _from( construction, runtime, args )
     let isInstance = _.construction.isInstanceOf( construction, runtime );
     _.assert( arguments.length === 3 );
     _.assert( isInstance === false || isInstance === _.maybe );
-    _.assert( !( construction instanceof runtime.Make ) );
+    _.assert( runtime.Make.prototype === null || !( construction instanceof runtime.Make ) );
     _.assert( !( construction instanceof runtime.From ), 'Use no "new" to call routine::From' );
   }
 

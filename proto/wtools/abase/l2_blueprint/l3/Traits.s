@@ -25,7 +25,6 @@ function _pairArgumentsHead( routine, args )
   o = _.routineOptions( routine, o );
 
   _.assert( arguments.length === 2 );
-  // _.assert( args.length === 1 || args.length === 2 ); /* yyy */
   _.assert( args.length === 0 || args.length === 1 || args.length === 2 );
   _.assert( args[ 1 ] === undefined || _.mapIs( args[ 1 ] ) );
 
@@ -164,9 +163,6 @@ function typed_body( o )
   o.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
   // o.blueprint = false; /* xxx */
 
-  // if( _global_.debugger )
-  // debugger;
-
   let val = o.val;
   let allocate;
   let retype;
@@ -197,9 +193,6 @@ function typed_body( o )
     let trait = o.blueprint.Traits.typed;
 
     /**/
-
-    // if( _global_.debugger )
-    // debugger;
 
     if( _.boolLike( trait.new ) )
     trait.new = !!trait.new;
@@ -253,9 +246,6 @@ function typed_body( o )
     _.assert( o.blueprint.Make === null );
     _.assert( o.blueprint.Runtime.prototype === null );
 
-    // if( _global_.debugger )
-    // debugger;
-
     if( _.boolIs( trait.prototype ) )
     {
 
@@ -280,9 +270,6 @@ function typed_body( o )
     else
     {
 
-      // if( _global_.debugger )
-      // debugger;
-
       if( _.blueprint.is( trait.prototype ) )
       {
         prototype = trait.prototype.prototype;
@@ -306,8 +293,6 @@ function typed_body( o )
     }
 
     let effectiveTyped = !!trait.val && prototype !== null;
-    // if( _global_.debugger )
-    // debugger;
 
     if( trait.val === _.maybe && !trait.prototype )
     effectiveTyped = false;
@@ -332,9 +317,6 @@ function typed_body( o )
     _.assert( o.blueprint.Traits.typed.val === val );
     _.assert( _.fuzzyIs( o.blueprint.Traits.typed.val ) );
     _.assert( o.blueprint.Typed === o.blueprint.Traits.typed.val || o.blueprint.Traits.typed.val === _.maybe );
-
-    // if( _global_.debugger )
-    // debugger;
 
     let prototype;
 
@@ -502,13 +484,6 @@ function typed_body( o )
       // if( genesis.runtime.Make.prototype === null || !( genesis.construction instanceof genesis.runtime.Make ) ) /* xxx : optimize */
       Object.setPrototypeOf( genesis.construction, genesis.runtime.Make.prototype );
 
-      // _.assert
-      // (
-      //      genesis.runtime.Typed === _.maybe
-      //   || genesis.runtime.Make.prototype === null
-      //   || genesis.construction instanceof genesis.runtime.Make
-      // );
-
     }
 
     return genesis.construction;
@@ -522,9 +497,7 @@ function typed_body( o )
     debugger;
     if( genesis.construction === null )
     {
-      _.assert( 0, 'not tested' );
       genesis.construction = new( _.constructorJoin( genesis.runtime.Make, genesis.args ) );
-      // genesis.construction = new( _.constructorJoin( genesis.runtime.Make, [] ) );
     }
     else if( genesis.construction )
     {
