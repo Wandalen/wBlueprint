@@ -278,13 +278,33 @@ function prop_body( o )
     if( _global_.debugger )
     debugger;
 
+    // let val2;
+    // if( o.amending === 'supplement' && Object.hasOwnProperty.call( prototype, name ) )
+    // val2 = prototype[ name ];
+    // else if( val === _.nothing )
+    // val2 = prototype[ name ];
+    // else
+    // val2 = definition.toVal( definition.val );
+
     let val2;
     if( o.amending === 'supplement' && Object.hasOwnProperty.call( prototype, name ) )
-    val2 = prototype[ name ];
+    {
+      val2 = prototype[ name ];
+    }
     else if( val === _.nothing )
-    val2 = prototype[ name ];
+    {
+      if( Object.hasOwnProperty.call( prototype, name ) )
+      val2 = prototype[ name ];
+      else /* keep nothing for declareSingle */
+      {
+        debugger;
+        val2 = val;
+      }
+    }
     else
-    val2 = definition.toVal( definition.val );
+    {
+      val2 = toVal( _.escape.undo( val ) ); /* xxx : cover escape */
+    }
 
     let o2 =
     {
@@ -292,7 +312,7 @@ function prop_body( o )
       object : prototype,
       methods : definition.methods,
       suite : definition.accessor,
-      val : val2,
+      val : _.escape.do( val2 ),
       storingStrategy : definition.storingStrategy,
       enumerable : definition.enumerable,
       configurable : definition.configurable,
@@ -475,27 +495,54 @@ function prop_body( o )
       //   val : val2,
       // });
 
-      if( val !== _.nothing )
+      let val2;
+      if( genesis.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, name ) )
       {
-        let val2;
-
-        if( prototype && o.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, name ) )
         val2 = genesis.construction[ name ];
-        else if( val === _.nothing )
-        val2 = genesis.construction[ name ];
-        else
-        val2 = toVal( _.escape.undo( val ) );
-
-        // if( val2 !== _.nothing )
-        _.accessor._objectSetValue
-        ({
-          object : genesis.construction,
-          normalizedAsuite,
-          storingStrategy,
-          name,
-          val : val2,
-        });
       }
+      else if( val === _.nothing )
+      {
+        if( Object.hasOwnProperty.call( genesis.construction, name ) )
+        val2 = genesis.construction[ name ];
+        else /* keep nothing for declareSingle */
+        val2 = val;
+      }
+      else
+      {
+        val2 = toVal( _.escape.undo( val ) );
+      }
+
+      if( val2 !== _.nothing )
+      _.accessor._objectSetValue
+      ({
+        object : genesis.construction,
+        normalizedAsuite,
+        storingStrategy,
+        name,
+        val : val2,
+      });
+
+      // if( val !== _.nothing )
+      // {
+      //   let val2;
+      //
+      //   if( prototype && o.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, name ) )
+      //   val2 = genesis.construction[ name ];
+      //   else if( val === _.nothing )
+      //   val2 = genesis.construction[ name ];
+      //   else
+      //   val2 = toVal( _.escape.undo( val ) );
+      //
+      //   // if( val2 !== _.nothing )
+      //   _.accessor._objectSetValue
+      //   ({
+      //     object : genesis.construction,
+      //     normalizedAsuite,
+      //     storingStrategy,
+      //     name,
+      //     val : val2,
+      //   });
+      // }
 
     }
 
