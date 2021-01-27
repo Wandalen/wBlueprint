@@ -7579,7 +7579,7 @@ function definePropAccessorRewriting( test )
   test.identical( blueprint1.prototype.f1, 1 );
   test.identical( blueprint1.Make.f1, 1 );
   test.identical( blueprint2.prototype.f1, 1 );
-  test.identical( blueprint2.Make.f1, 1 ); debugger;
+  test.identical( blueprint2.Make.f1, 1 );
 
   test.true( Object.hasOwnProperty.call( instance1, '_' ) );
   test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
@@ -7718,10 +7718,10 @@ function definePropConstructionAmendWithBlueprint( test )
   {
     tops.typed = 0;
     eachVal( tops );
-    // tops.typed = 1;
-    // eachVal( tops );
-    // tops.typed = _.maybe;
-    // eachVal( tops );
+    tops.typed = 1;
+    eachVal( tops );
+    tops.typed = _.maybe;
+    eachVal( tops );
   }
 
   function eachVal( tops )
@@ -7729,286 +7729,28 @@ function definePropConstructionAmendWithBlueprint( test )
     if( tops.typed === undefined )
     tops.typed = 0;
 
-    // tops.val = 1;
-    // act( tops );
-    // tops.val = _.nothing;
-    // act( tops );
-    // tops.val = undefined;
-    // act( tops );
+    tops.val = 1;
+    act( tops );
+    tops.val = _.nothing;
+    act( tops );
+    tops.val = undefined;
+    act( tops );
     tops.val = _.undefined;
     act( tops );
-    // tops.val = null;
-    // act( tops );
-    // tops.val = _.null;
-    // act( tops );
+    tops.val = null;
+    act( tops );
+    tops.val = _.null;
+    act( tops );
   }
 
   function act( tops )
   {
 
-    // _.assert( _.fuzzyLike( tops.typed ) );
-    //
-    // /* */
-    //
-    // test.case = `typed : ${_.toStr( tops.typed )}, static : 0, props, amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
-    //
-    // var dstContainer =
-    // {
-    //   f2 : 0,
-    // }
-    //
-    // var extension = _.Blueprint
-    // ({
-    //   typed : _.trait.typed( tops.typed ),
-    //   f1 : _.define.prop( tops.val, { static : 0 } ),
-    //   f2 : _.define.prop( tops.val, { static : 0 } ),
-    // });
-    //
-    // var keysBefore = _.mapAllKeys( Object.prototype );
-    // _.construction[ tops.amending ]( dstContainer, extension );
-    // var keysAfter = _.mapAllKeys( Object.prototype );
-    // test.identical( keysAfter, keysBefore );
-    //
-    // var exp =
-    // {
-    //   'f1' : 1,
-    //   'f2' : 1,
-    // }
-    //
-    // if( tops.val === _.undefined || tops.val === undefined || tops.val === _.nothing )
-    // {
-    //   exp.f1 = undefined;
-    //   if( tops.val === _.undefined )
-    //   exp.f2 = undefined;
-    // }
-    // else if( tops.val === _.null || tops.val === null )
-    // {
-    //   exp.f1 = null;
-    //   exp.f2 = null;
-    // }
-    // if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
-    // exp.f2 = 0;
-    //
-    // test.identical( _.property.of( dstContainer ), exp );
-    // test.true( dstContainer._ === undefined );
-    // if( tops.typed === 1 )
-    // test.true( _.prototype.of( dstContainer ) === extension.prototype );
-    // else
-    // test.true( _.prototype.of( dstContainer ) === Object.prototype );
-    //
-    // var got = Object.getOwnPropertyDescriptor( dstContainer, 'f1' );
-    // var exp =
-    // {
-    //   'enumerable' : true,
-    //   'configurable' : true,
-    //   'writable' : true,
-    //   'value' : 1,
-    // }
-    //
-    // if( tops.val === _.undefined || tops.val === undefined || tops.val === _.nothing )
-    // exp.value = undefined;
-    // else if( tops.val === _.null || tops.val === null )
-    // exp.value = null;
-    //
-    // test.identical( got, exp );
-    // test.true( _.undefinedIs( got.get ) );
-    // test.true( _.undefinedIs( got.set ) );
-    //
-    // var got = Object.getOwnPropertyDescriptor( dstContainer, 'f2' );
-    // var exp =
-    // {
-    //   'enumerable' : true,
-    //   'configurable' : true,
-    //   'writable' : true,
-    //   'value' : 1,
-    // }
-    //
-    // if( tops.val === _.undefined )
-    // exp.value = undefined;
-    // else if( tops.val === _.null || tops.val === null )
-    // exp.value = null;
-    // if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
-    // exp.value = 0;
-    //
-    // test.identical( got, exp );
-    // test.true( _.undefinedIs( got.get ) );
-    // test.true( _.undefinedIs( got.set ) );
-    //
-    // /* */
-    //
-    // test.case = `typed : ${_.toStr( tops.typed )}, static : 0, ordinary ( not props ), amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
-    //
-    // var dstContainer =
-    // {
-    //   f2 : 0,
-    // }
-    //
-    // var extension = _.Blueprint
-    // ({
-    //   typed : _.trait.typed( tops.typed ),
-    //   f1 : _.define.prop( tops.val, { static : 0, valToIns : 'shallow' } ),
-    //   f2 : _.define.prop( tops.val, { static : 0, valToIns : 'shallow' } ),
-    // });
-    //
-    // var keysBefore = _.mapAllKeys( Object.prototype );
-    // _.construction[ tops.amending ]( dstContainer, extension );
-    // var keysAfter = _.mapAllKeys( Object.prototype );
-    // test.identical( keysAfter, keysBefore );
-    //
-    // var exp =
-    // {
-    //   'f1' : 1,
-    //   'f2' : 1,
-    // }
-    // if( tops.val === _.undefined || tops.val === undefined || tops.val === _.nothing )
-    // {
-    //   exp.f1 = undefined;
-    //   if( tops.val === _.undefined )
-    //   exp.f2 = undefined;
-    // }
-    // else if( tops.val === _.null || tops.val === null )
-    // {
-    //   exp.f1 = null;
-    //   exp.f2 = null;
-    // }
-    // if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
-    // exp.f2 = 0;
-    //
-    // test.identical( _.property.of( dstContainer ), exp );
-    // test.true( dstContainer._ === undefined );
-    // if( tops.typed === 1 )
-    // test.true( _.prototype.of( dstContainer ) === extension.prototype );
-    // else
-    // test.true( _.prototype.of( dstContainer ) === Object.prototype );
-    // test.true( dstContainer._ === undefined );
-    //
-    // var got = Object.getOwnPropertyDescriptor( dstContainer, 'f1' );
-    // var exp =
-    // {
-    //   'enumerable' : true,
-    //   'configurable' : true,
-    //   'writable' : true,
-    //   'value' : 1,
-    // }
-    //
-    // if( tops.val === _.undefined || tops.val === undefined || tops.val === _.nothing )
-    // exp.value = undefined;
-    // else if( tops.val === _.null || tops.val === null )
-    // exp.value = null;
-    //
-    // test.identical( got, exp );
-    // test.true( _.undefinedIs( got.get ) );
-    // test.true( _.undefinedIs( got.set ) );
-    //
-    // var got = Object.getOwnPropertyDescriptor( dstContainer, 'f2' );
-    // var exp =
-    // {
-    //   'enumerable' : true,
-    //   'configurable' : true,
-    //   'writable' : true,
-    //   'value' : 1,
-    // }
-    //
-    // if( tops.val === _.undefined )
-    // exp.value = undefined;
-    // else if( tops.val === _.null || tops.val === null )
-    // exp.value = null;
-    // if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
-    // exp.value = 0;
-    //
-    // test.identical( got, exp );
-    // test.true( _.undefinedIs( got.get ) );
-    // test.true( _.undefinedIs( got.set ) );
-    //
-    // /* */
-    //
-    // test.case = `typed : ${_.toStr( tops.typed )}, static : 0, configurable : 0, amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
-    //
-    // var dstContainer =
-    // {
-    //   f2 : 0,
-    // }
-    //
-    // var extension = _.Blueprint
-    // ({
-    //   typed : _.trait.typed( tops.typed ),
-    //   f1 : _.define.prop( tops.val, { static : 0, configurable : 0 } ),
-    //   f2 : _.define.prop( tops.val, { static : 0, configurable : 0 } ),
-    // });
-    //
-    // var keysBefore = _.mapAllKeys( Object.prototype );
-    // _.construction[ tops.amending ]( dstContainer, extension );
-    // var keysAfter = _.mapAllKeys( Object.prototype );
-    // test.identical( keysAfter, keysBefore );
-    //
-    // var exp =
-    // {
-    //   'f1' : 1,
-    //   'f2' : 1,
-    // }
-    // if( tops.val === _.undefined || tops.val === undefined || tops.val === _.nothing )
-    // {
-    //   exp.f1 = undefined;
-    //   if( tops.val === _.undefined )
-    //   exp.f2 = undefined;
-    // }
-    // else if( tops.val === _.null || tops.val === null )
-    // {
-    //   exp.f1 = null;
-    //   exp.f2 = null;
-    // }
-    // if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
-    // exp.f2 = 0;
-    //
-    // test.identical( _.property.of( dstContainer ), exp );
-    // test.true( dstContainer._ === undefined );
-    // if( tops.typed === 1 )
-    // test.true( _.prototype.of( dstContainer ) === extension.prototype );
-    // else
-    // test.true( _.prototype.of( dstContainer ) === Object.prototype );
-    // test.true( dstContainer._ === undefined );
-    //
-    // var got = Object.getOwnPropertyDescriptor( dstContainer, 'f1' );
-    // var exp =
-    // {
-    //   'enumerable' : true,
-    //   'configurable' : false,
-    //   'writable' : true,
-    //   'value' : 1,
-    // }
-    //
-    // if( tops.val === _.undefined || tops.val === undefined || tops.val === _.nothing )
-    // exp.value = undefined;
-    // else if( tops.val === _.null || tops.val === null )
-    // exp.value = null;
-    //
-    // test.identical( got, exp );
-    // test.true( _.undefinedIs( got.get ) );
-    // test.true( _.undefinedIs( got.set ) );
-    //
-    // var got = Object.getOwnPropertyDescriptor( dstContainer, 'f2' );
-    // var exp =
-    // {
-    //   'enumerable' : true,
-    //   'configurable' : false,
-    //   'writable' : true,
-    //   'value' : 1,
-    // }
-    //
-    // if( tops.val === _.undefined )
-    // exp.value = undefined;
-    // else if( tops.val === _.null || tops.val === null )
-    // exp.value = null;
-    // if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
-    // exp.value = 0;
-    //
-    // test.identical( got, exp );
-    // test.true( _.undefinedIs( got.get ) );
-    // test.true( _.undefinedIs( got.set ) );
+    _.assert( _.fuzzyLike( tops.typed ) );
 
     /* */
 
-    test.case = `typed : ${_.toStr( tops.typed )}, static : 0, accessor : 1, amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
+    test.case = `typed : ${_.toStr( tops.typed )}, static : 0, props, amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
 
     var dstContainer =
     {
@@ -8018,14 +7760,12 @@ function definePropConstructionAmendWithBlueprint( test )
     var extension = _.Blueprint
     ({
       typed : _.trait.typed( tops.typed ),
-      f1 : _.define.prop( tops.val, { static : 0, accessor : 1 } ),
-      f2 : _.define.prop( tops.val, { static : 0, accessor : 1 } ),
+      f1 : _.define.prop( tops.val, { static : 0 } ),
+      f2 : _.define.prop( tops.val, { static : 0 } ),
     });
 
     var keysBefore = _.mapAllKeys( Object.prototype );
-    debugger; _global_.debugger = 1;
     _.construction[ tops.amending ]( dstContainer, extension );
-    debugger;
     var keysAfter = _.mapAllKeys( Object.prototype );
     test.identical( keysAfter, keysBefore );
 
@@ -8049,7 +7789,265 @@ function definePropConstructionAmendWithBlueprint( test )
     if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
     exp.f2 = 0;
 
-    test.identical( _.property.of( dstContainer ), exp ); debugger; /* xxx */
+    test.identical( _.property.of( dstContainer ), exp );
+    test.true( dstContainer._ === undefined );
+    if( tops.typed === 1 )
+    test.true( _.prototype.of( dstContainer ) === extension.prototype );
+    else
+    test.true( _.prototype.of( dstContainer ) === Object.prototype );
+
+    var got = Object.getOwnPropertyDescriptor( dstContainer, 'f1' );
+    var exp =
+    {
+      'enumerable' : true,
+      'configurable' : true,
+      'writable' : true,
+      'value' : 1,
+    }
+
+    if( tops.val === _.undefined || tops.val === undefined || tops.val === _.nothing )
+    exp.value = undefined;
+    else if( tops.val === _.null || tops.val === null )
+    exp.value = null;
+
+    test.identical( got, exp );
+    test.true( _.undefinedIs( got.get ) );
+    test.true( _.undefinedIs( got.set ) );
+
+    var got = Object.getOwnPropertyDescriptor( dstContainer, 'f2' );
+    var exp =
+    {
+      'enumerable' : true,
+      'configurable' : true,
+      'writable' : true,
+      'value' : 1,
+    }
+
+    if( tops.val === _.undefined )
+    exp.value = undefined;
+    else if( tops.val === _.null || tops.val === null )
+    exp.value = null;
+    if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
+    exp.value = 0;
+
+    test.identical( got, exp );
+    test.true( _.undefinedIs( got.get ) );
+    test.true( _.undefinedIs( got.set ) );
+
+    /* */
+
+    test.case = `typed : ${_.toStr( tops.typed )}, static : 0, ordinary ( not props ), amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
+
+    var dstContainer =
+    {
+      f2 : 0,
+    }
+
+    var extension = _.Blueprint
+    ({
+      typed : _.trait.typed( tops.typed ),
+      f1 : _.define.prop( tops.val, { static : 0, valToIns : 'shallow' } ),
+      f2 : _.define.prop( tops.val, { static : 0, valToIns : 'shallow' } ),
+    });
+
+    var keysBefore = _.mapAllKeys( Object.prototype );
+    _.construction[ tops.amending ]( dstContainer, extension );
+    var keysAfter = _.mapAllKeys( Object.prototype );
+    test.identical( keysAfter, keysBefore );
+
+    var exp =
+    {
+      'f1' : 1,
+      'f2' : 1,
+    }
+    if( tops.val === _.undefined || tops.val === undefined || tops.val === _.nothing )
+    {
+      exp.f1 = undefined;
+      if( tops.val === _.undefined )
+      exp.f2 = undefined;
+    }
+    else if( tops.val === _.null || tops.val === null )
+    {
+      exp.f1 = null;
+      exp.f2 = null;
+    }
+    if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
+    exp.f2 = 0;
+
+    test.identical( _.property.of( dstContainer ), exp );
+    test.true( dstContainer._ === undefined );
+    if( tops.typed === 1 )
+    test.true( _.prototype.of( dstContainer ) === extension.prototype );
+    else
+    test.true( _.prototype.of( dstContainer ) === Object.prototype );
+    test.true( dstContainer._ === undefined );
+
+    var got = Object.getOwnPropertyDescriptor( dstContainer, 'f1' );
+    var exp =
+    {
+      'enumerable' : true,
+      'configurable' : true,
+      'writable' : true,
+      'value' : 1,
+    }
+
+    if( tops.val === _.undefined || tops.val === undefined || tops.val === _.nothing )
+    exp.value = undefined;
+    else if( tops.val === _.null || tops.val === null )
+    exp.value = null;
+
+    test.identical( got, exp );
+    test.true( _.undefinedIs( got.get ) );
+    test.true( _.undefinedIs( got.set ) );
+
+    var got = Object.getOwnPropertyDescriptor( dstContainer, 'f2' );
+    var exp =
+    {
+      'enumerable' : true,
+      'configurable' : true,
+      'writable' : true,
+      'value' : 1,
+    }
+
+    if( tops.val === _.undefined )
+    exp.value = undefined;
+    else if( tops.val === _.null || tops.val === null )
+    exp.value = null;
+    if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
+    exp.value = 0;
+
+    test.identical( got, exp );
+    test.true( _.undefinedIs( got.get ) );
+    test.true( _.undefinedIs( got.set ) );
+
+    /* */
+
+    test.case = `typed : ${_.toStr( tops.typed )}, static : 0, configurable : 0, amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
+
+    var dstContainer =
+    {
+      f2 : 0,
+    }
+
+    var extension = _.Blueprint
+    ({
+      typed : _.trait.typed( tops.typed ),
+      f1 : _.define.prop( tops.val, { static : 0, configurable : 0 } ),
+      f2 : _.define.prop( tops.val, { static : 0, configurable : 0 } ),
+    });
+
+    var keysBefore = _.mapAllKeys( Object.prototype );
+    _.construction[ tops.amending ]( dstContainer, extension );
+    var keysAfter = _.mapAllKeys( Object.prototype );
+    test.identical( keysAfter, keysBefore );
+
+    var exp =
+    {
+      'f1' : 1,
+      'f2' : 1,
+    }
+    if( tops.val === _.undefined || tops.val === undefined || tops.val === _.nothing )
+    {
+      exp.f1 = undefined;
+      if( tops.val === _.undefined )
+      exp.f2 = undefined;
+    }
+    else if( tops.val === _.null || tops.val === null )
+    {
+      exp.f1 = null;
+      exp.f2 = null;
+    }
+    if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
+    exp.f2 = 0;
+
+    test.identical( _.property.of( dstContainer ), exp );
+    test.true( dstContainer._ === undefined );
+    if( tops.typed === 1 )
+    test.true( _.prototype.of( dstContainer ) === extension.prototype );
+    else
+    test.true( _.prototype.of( dstContainer ) === Object.prototype );
+    test.true( dstContainer._ === undefined );
+
+    var got = Object.getOwnPropertyDescriptor( dstContainer, 'f1' );
+    var exp =
+    {
+      'enumerable' : true,
+      'configurable' : false,
+      'writable' : true,
+      'value' : 1,
+    }
+
+    if( tops.val === _.undefined || tops.val === undefined || tops.val === _.nothing )
+    exp.value = undefined;
+    else if( tops.val === _.null || tops.val === null )
+    exp.value = null;
+
+    test.identical( got, exp );
+    test.true( _.undefinedIs( got.get ) );
+    test.true( _.undefinedIs( got.set ) );
+
+    var got = Object.getOwnPropertyDescriptor( dstContainer, 'f2' );
+    var exp =
+    {
+      'enumerable' : true,
+      'configurable' : false,
+      'writable' : true,
+      'value' : 1,
+    }
+
+    if( tops.val === _.undefined )
+    exp.value = undefined;
+    else if( tops.val === _.null || tops.val === null )
+    exp.value = null;
+    if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
+    exp.value = 0;
+
+    test.identical( got, exp );
+    test.true( _.undefinedIs( got.get ) );
+    test.true( _.undefinedIs( got.set ) );
+
+    /* */
+
+    test.case = `typed : ${_.toStr( tops.typed )}, static : 0, accessor : 1, amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
+
+    var dstContainer =
+    {
+      f2 : 0,
+    }
+
+    var extension = _.Blueprint
+    ({
+      typed : _.trait.typed( tops.typed ),
+      f1 : _.define.prop( tops.val, { static : 0, accessor : 1 } ),
+      f2 : _.define.prop( tops.val, { static : 0, accessor : 1 } ),
+    });
+
+    var keysBefore = _.mapAllKeys( Object.prototype );
+    _.construction[ tops.amending ]( dstContainer, extension );
+    var keysAfter = _.mapAllKeys( Object.prototype );
+    test.identical( keysAfter, keysBefore );
+
+    var exp =
+    {
+      'f1' : 1,
+      'f2' : 1,
+    }
+
+    if( tops.val === _.undefined || tops.val === undefined || tops.val === _.nothing )
+    {
+      exp.f1 = undefined;
+      if( tops.val === _.undefined )
+      exp.f2 = undefined;
+    }
+    else if( tops.val === _.null || tops.val === null )
+    {
+      exp.f1 = null;
+      exp.f2 = null;
+    }
+    if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
+    exp.f2 = 0;
+
+    test.identical( _.property.of( dstContainer ), exp );
     test.true( _.mapIs( dstContainer._ ) ^ tops.typed === 1 );
     test.true( _.mapIs( dstContainer ) ^ tops.typed === 1 );
 
@@ -8078,8 +8076,6 @@ function definePropConstructionAmendWithBlueprint( test )
     test.identical( got, exp );
     test.true( _.routineIs( got.get ) );
     test.true( _.routineIs( got.set ) );
-
-    debugger; return; xxx
 
     /* */
 
@@ -11092,63 +11088,63 @@ function defineAmendmentPropInheritance( test )
 
   /* */
 
-  // test.case = 'untyped';
-  //
-  // var Blueprint1 = _.Blueprint
-  // ({
-  //   s1 : _.define.prop( '1', { static : 1 } ),
-  //   f1 : _.define.prop( '1', { static : 0 } ),
-  // });
-  //
-  // test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([ 'f1', 's1' ]) );
-  // test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/amending' ) ]), new Set([]) );
-  // test.identical( Blueprint1._UnnamedDefinitionsArray.length, 0 );
-  //
-  // var Blueprint2 = _.Blueprint
-  // ({
-  //   s2 : _.define.prop( '2', { static : 1 } ),
-  //   f2 : _.define.prop( '2', { static : 0 } ),
-  //   extension : _.define.supplementation( Blueprint1 ),
-  // });
-  //
-  // test.identical( new Set([ ... _.mapKeys( Blueprint2._NamedDefinitionsMap ) ]), new Set([ 'f1', 'f2', 's2' ]) );
-  // test.identical( new Set([ ... select( Blueprint2._UnnamedDefinitionsArray, '*/amending' ) ]), new Set([]) ); debugger;
-  // test.identical( Blueprint2._UnnamedDefinitionsArray.length, 0 );
-  //
-  // var Blueprint3 = _.Blueprint
-  // ({
-  //   s3 : _.define.prop( '3', { static : 1 } ),
-  //   f3 : _.define.prop( '3', { static : 0 } ),
-  //   extension : _.define.extension( Blueprint2 ),
-  // });
-  //
-  // test.identical( new Set([ ... _.mapKeys( Blueprint3._NamedDefinitionsMap ) ]), new Set([ 'f1', 'f2', 'f3', 's3' ]) );
-  // test.identical( new Set([ ... select( Blueprint3._UnnamedDefinitionsArray, '*/amending' ) ]), new Set([]) );
-  // test.identical( Blueprint3._UnnamedDefinitionsArray.length, 0 );
-  //
-  // var instance1 = _.blueprint.construct( Blueprint1 );
-  // var exp =
-  // {
-  //   f1 : '1',
-  // }
-  // test.identical( _.property.all( instance1 ), exp );
-  //
-  // var instance2 = _.blueprint.construct( Blueprint2 );
-  // var exp =
-  // {
-  //   f2 : '2',
-  //   f1 : '1',
-  // }
-  // test.identical( _.property.all( instance2 ), exp );
-  //
-  // var instance3 = _.blueprint.construct( Blueprint3 );
-  // var exp =
-  // {
-  //   f3 : '3',
-  //   f2 : '2',
-  //   f1 : '1',
-  // }
-  // test.identical( _.property.all( instance3 ), exp );
+  test.case = 'untyped';
+
+  var Blueprint1 = _.Blueprint
+  ({
+    s1 : _.define.prop( '1', { static : 1 } ),
+    f1 : _.define.prop( '1', { static : 0 } ),
+  });
+
+  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([ 'f1', 's1' ]) );
+  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/amending' ) ]), new Set([]) );
+  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 0 );
+
+  var Blueprint2 = _.Blueprint
+  ({
+    s2 : _.define.prop( '2', { static : 1 } ),
+    f2 : _.define.prop( '2', { static : 0 } ),
+    extension : _.define.supplementation( Blueprint1 ),
+  });
+
+  test.identical( new Set([ ... _.mapKeys( Blueprint2._NamedDefinitionsMap ) ]), new Set([ 'f1', 'f2', 's2' ]) );
+  test.identical( new Set([ ... select( Blueprint2._UnnamedDefinitionsArray, '*/amending' ) ]), new Set([]) );
+  test.identical( Blueprint2._UnnamedDefinitionsArray.length, 0 );
+
+  var Blueprint3 = _.Blueprint
+  ({
+    s3 : _.define.prop( '3', { static : 1 } ),
+    f3 : _.define.prop( '3', { static : 0 } ),
+    extension : _.define.extension( Blueprint2 ),
+  });
+
+  test.identical( new Set([ ... _.mapKeys( Blueprint3._NamedDefinitionsMap ) ]), new Set([ 'f1', 'f2', 'f3', 's3' ]) );
+  test.identical( new Set([ ... select( Blueprint3._UnnamedDefinitionsArray, '*/amending' ) ]), new Set([]) );
+  test.identical( Blueprint3._UnnamedDefinitionsArray.length, 0 );
+
+  var instance1 = _.blueprint.construct( Blueprint1 );
+  var exp =
+  {
+    f1 : '1',
+  }
+  test.identical( _.property.all( instance1 ), exp );
+
+  var instance2 = _.blueprint.construct( Blueprint2 );
+  var exp =
+  {
+    f2 : '2',
+    f1 : '1',
+  }
+  test.identical( _.property.all( instance2 ), exp );
+
+  var instance3 = _.blueprint.construct( Blueprint3 );
+  var exp =
+  {
+    f3 : '3',
+    f2 : '2',
+    f1 : '1',
+  }
+  test.identical( _.property.all( instance3 ), exp );
 
   /* */
 
@@ -11173,7 +11169,7 @@ function defineAmendmentPropInheritance( test )
   });
 
   test.identical( new Set([ ... _.mapKeys( Blueprint2._NamedDefinitionsMap ) ]), new Set([ 'f1', 'f2', 's2' ]) );
-  test.identical( new Set([ ... select( Blueprint2._UnnamedDefinitionsArray, '*/amending' ) ]), new Set([]) ); debugger;
+  test.identical( new Set([ ... select( Blueprint2._UnnamedDefinitionsArray, '*/amending' ) ]), new Set([]) );
   test.identical( Blueprint2._UnnamedDefinitionsArray.length, 0 );
 
   var Blueprint3 = _.Blueprint
@@ -13230,7 +13226,6 @@ set custom prototype
       () => _.construction[ tops.amending ]( dstContainer, extension ),
       ( err ) =>
       {
-        debugger;
         test.identical( err.originalMessage, 'Object with null prototype cant be typed' )
       }
     );
@@ -13320,7 +13315,6 @@ set custom prototype
       },
       ( err ) =>
       {
-        debugger;
         test.identical( err.originalMessage, 'Object with null prototype cant be typed' )
       }
     );
@@ -13413,7 +13407,6 @@ set custom prototype
       },
       ( err ) =>
       {
-        debugger;
         test.identical( err.originalMessage, 'Object with null prototype cant be typed' )
       }
     );
@@ -15764,8 +15757,7 @@ function constructWithoutHelper( test )
   test.identical( _.construction.isInstanceOf( instance, Blueprint ), _.maybe );
   test.identical( _.blueprint.isBlueprintOf( Blueprint, instance ), _.maybe );
 
-  // test.identical( instance instanceof Blueprint.Make, false );
-  test.identical( Object.getPrototypeOf( instance ), null ); debugger;
+  test.identical( Object.getPrototypeOf( instance ), null );
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
   test.identical( prototypes.length, 1 );

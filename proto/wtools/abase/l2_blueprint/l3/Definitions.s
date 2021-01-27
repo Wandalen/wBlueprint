@@ -457,23 +457,46 @@ function prop_body( o )
       debugger;
       _.accessor._objectInitStorage( genesis.construction, normalizedAsuite );
 
-      let val2;
-      if( prototype && o.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, name ) )
-      val2 = genesis.construction[ name ];
-      else if( val === _.nothing )
-      val2 = genesis.construction[ name ];
-      else
-      val2 = toVal( _.escape.undo( val ) );
+      // let val2;
+      // if( prototype && o.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, name ) )
+      // val2 = genesis.construction[ name ];
+      // else if( val === _.nothing )
+      // val2 = genesis.construction[ name ];
+      // else
+      // val2 = toVal( _.escape.undo( val ) );
+      //
+      // if( val2 !== _.nothing )
+      // _.accessor._objectSetValue
+      // ({
+      //   object : genesis.construction,
+      //   normalizedAsuite,
+      //   storingStrategy,
+      //   name,
+      //   val : val2,
+      // });
 
-      if( val2 !== _.nothing )
-      _.accessor._objectSetValue
-      ({
-        object : genesis.construction,
-        normalizedAsuite,
-        storingStrategy,
-        name,
-        val : val2,
-      });
+      if( val !== _.nothing )
+      {
+        let val2;
+
+        if( prototype && o.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, name ) )
+        val2 = genesis.construction[ name ];
+        else if( val === _.nothing )
+        val2 = genesis.construction[ name ];
+        else
+        val2 = toVal( _.escape.undo( val ) );
+
+        // if( val2 !== _.nothing )
+        _.accessor._objectSetValue
+        ({
+          object : genesis.construction,
+          normalizedAsuite,
+          storingStrategy,
+          name,
+          val : val2,
+        });
+      }
+
     }
 
     function constructionInitUntyped( genesis )
@@ -491,12 +514,20 @@ function prop_body( o )
 
       let val2;
       if( genesis.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, name ) )
-      val2 = genesis.construction[ name ];
+      {
+        val2 = genesis.construction[ name ];
+      }
       else if( val === _.nothing )
-      val2 = genesis.construction[ name ];
+      {
+        if( Object.hasOwnProperty.call( genesis.construction, name ) )
+        val2 = genesis.construction[ name ];
+        else /* keep nothing for declareSingle */
+        val2 = val;
+      }
       else
-      val2 = toVal( val );
-      // val2 = toVal( _.escape.undo( val ) );
+      {
+        val2 = toVal( _.escape.undo( val ) );
+      }
 
       _.accessor.declareSingle
       ({
@@ -505,7 +536,7 @@ function prop_body( o )
         suite : accessor ? _.mapExtend( null, accessor ) : false,
         storingStrategy,
         name,
-        val : val2,
+        val : _.escape.do( val2 ),
         enumerable,
         configurable,
         writable,

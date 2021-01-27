@@ -314,14 +314,6 @@ function _amend( o )
     else if( o.blueprintAction === 'inherit' )
     {
       let extension = _.define.inherit( srcBlueprint );
-      // _.definition.forInheritance( o.extension );
-      // let extension =
-      // {
-      //   extension : _.define.extension( o.extension ),
-      //   // prototype : _.trait.prototype( o.extension ),
-      //   // typed : _.trait.typed( true ),
-      //   typed : _.trait.typed( true, { prototype : o.extension } ),
-      // };
       _amendAct( extension );
     }
     else
@@ -388,8 +380,6 @@ function _amend( o )
     if( name && name !== srcDefinition.name )
     srcDefinition.name = name;
 
-    // if( _global_.debugger )
-    // debugger;
     let dstDefinition = o.blueprint._NamedDefinitionsMap[ name ] || null;
 
     srcDefinition = definitionCloneMaybe( srcDefinition );
@@ -400,8 +390,6 @@ function _amend( o )
 
     let o2 = _.mapExtend( null, o );
     o2.blueprintDefinitionRewrite = blueprintNamedDefinitionRewrite;
-    // o2.dstDefinition = dstDefinition;
-    // o2.srcDefinition = srcDefinition;
     o2.name = srcDefinition.name;
     o2.definitionGroup = 'definition.named';
 
@@ -434,19 +422,6 @@ function _amend( o )
   function blueprintNamedDefinitionRewrite( op )
   {
 
-    // if( op.amending === 'supplement' )
-    // if( op.blueprint._NamedDefinitionsMap[ op.dstDefinition.name ] !== undefined )
-    // return;
-
-    // if( op.amending === 'supplement' )
-    // if( op.dstDefinition.name )
-    // return;
-    //
-    // op.blueprint._NamedDefinitionsMap[ op.name ] = op.srcDefinition;
-
-    if( _global_.debugger )
-    debugger;
-
     if( op.secondaryDefinition && !op.primeDefinition )
     op.blueprint._NamedDefinitionsMap[ op.name ] = op.secondaryDefinition;
     else
@@ -460,11 +435,6 @@ function _amend( o )
   {
     _.assert( srcDefinition.definitionGroup === 'definition.unnamed' );
 
-    // srcDefinition = definitionCloneMaybe( srcDefinition );
-    // o.blueprint._UnnamedDefinitionsArray.push( srcDefinition );
-    // if( srcDefinition.blueprintAmend )
-    // srcDefinition.blueprintAmend( o );
-
     let dstDefinition = o.blueprint.Traits[ srcDefinition.kind ] || null;
 
     srcDefinition = definitionCloneMaybe( srcDefinition );
@@ -473,9 +443,6 @@ function _amend( o )
 
     let o2 = _.mapExtend( null, o );
     o2.blueprintDefinitionRewrite = blueprintUnnamedDefinitionRewrite;
-    // o2.dstDefinition = dstDefinition;
-    // o2.srcDefinition = srcDefinition;
-    // o2.name = srcDefinition.name;
     o2.definitionGroup = 'definition.unnamed';
 
     if( o.amending === 'supplement' )
@@ -525,8 +492,6 @@ function _amend( o )
     let o2 = _.mapExtend( null, o );
     o2.blueprintDefinitionRewrite = blueprintTraitRewrite;
     o2.kind = srcDefinition.kind;
-    // o2.dstDefinition = dstDefinition;
-    // o2.srcDefinition = srcDefinition;
 
     if( o.amending === 'supplement' )
     {
@@ -541,25 +506,9 @@ function _amend( o )
 
     if( blueprintDefinitionRewrite2 )
     {
-      // let o2 = _.mapExtend( null, o );
 
       _.assert( !dstDefinition || _.routineIs( dstDefinition.blueprintDefinitionRewrite ) );
       _.assert( _.routineIs( srcDefinition.blueprintDefinitionRewrite ) );
-
-      // o2.dstDefinition = dstDefinition;
-      // o2.srcDefinition = srcDefinition;
-      //
-      // if( o.amending === 'supplement' )
-      // {
-      //   o2.primeDefinition = dstDefinition;
-      //   o2.secondaryDefinition = srcDefinition;
-      // }
-      // else
-      // {
-      //   o2.primeDefinition = srcDefinition;
-      //   o2.secondaryDefinition = dstDefinition;
-      // }
-
       srcDefinition.blueprintDefinitionRewrite( o2 );
 
     }
@@ -568,57 +517,7 @@ function _amend( o )
 
       o2.blueprintDefinitionRewrite( o2 );
 
-      // if( !dstDefinition || o.amending !== 'supplement' )
-      // dstDefinition = srcDefinition;
-
-      // if( !dstDefinition || o.amending !== 'supplement' )
-      // o.blueprint.Traits[ srcDefinition.kind ] = srcDefinition;
-
     }
-
-    // if( o.amending === 'supplement' )
-    // if( dstDefinition !== undefined )
-    // {
-    //
-    //   if( dstDefinition.blueprintDefinitionRewrite )
-    //   {
-    //
-    //     _.assert( _.routineIs( srcDefinition.blueprintDefinitionRewrite ) );
-    //     let o2 = _.mapExtend( null, o );
-    //
-    //     o2.primeDefinition = dstDefinition;
-    //     o2.secondaryDefinition = srcDefinition;
-    //
-    //     if( dstDefinition.blueprintDefinitionRewrite( o2 ) === false )
-    //     return;
-    //
-    //   }
-    //   else
-    //   {
-    //     return
-    //   }
-    //
-    // }
-    //
-    // // if( o.amending === 'extend' ) /* xxx */
-    // if( dstDefinition && dstDefinition.blueprintDefinitionRewrite )
-    // {
-    //   _.assert( _.routineIs( srcDefinition.blueprintDefinitionRewrite ) );
-    //   let o2 = _.mapExtend( null, o );
-    //
-    //   o2.primeDefinition = srcDefinition;
-    //   o2.secondaryDefinition = dstDefinition;
-    //
-    //   if( dstDefinition.blueprintDefinitionRewrite( o2 ) === false )
-    //   return;
-    // }
-    // else
-    // {
-    //   o.blueprint.Traits[ srcDefinition.kind ] = srcDefinition;
-    // }
-    //
-    // if( srcDefinition.blueprintAmend )
-    // srcDefinition.blueprintAmend( o );
 
   }
 
