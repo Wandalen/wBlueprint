@@ -437,10 +437,7 @@ function typed_body( o )
     debugger;
 
     if( genesis.runtime.Make.prototype === null && !_.mapIsPure( genesis.construction ) )
-    {
-      debugger;
-      genesis.construction = Object.create( null );
-    }
+    genesis.construction = Object.create( null );
     else if( genesis.construction && genesis.runtime.Make.prototype !== null && genesis.construction instanceof genesis.runtime.Make )
     genesis.construction = Object.create( null );
     else if( genesis.construction === null )
