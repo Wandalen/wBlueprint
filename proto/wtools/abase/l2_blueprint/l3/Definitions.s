@@ -187,11 +187,22 @@ function prop_body( o )
   _.assert( !Object.isExtensible( definition ) );
   return definition;
 
-  /* */
+  /* -
+
+- blueprintForm2
+- _declareStaticWithAccessor
+- _declareStaticWithoutAccessor
+- _declareStaticMaybe
+- _declareWithAccessor
+- _declareOrdinary
+- _declareUnordinary
+- optionsHasAccessor
+
+  */
 
   function blueprintForm2( o )
   {
-    let constructionInit = null;
+    // let constructionInit = null;
 
     _.assert( _.strDefined( o.propName ) || _.strDefined( ext.name ) );
     _.assert( o.propName === null || definition.name === null || o.propName === definition.name );
@@ -215,13 +226,21 @@ function prop_body( o )
       else
       _declareStaticWithoutAccessor( o2 );
     }
-    else
+
+    if( definition.static === false || definition.static === _.maybe )
     {
       if( optionsHasAccessor( definition ) )
       {
-        constructionInit = constructionInitAccessor_functor( o.blueprint, definition );
+        _declareWithAccessor( o.blueprint, definition );
       }
-      else if( definition.valToIns === 'val' && definition.enumerable && definition.configurable && ( definition.writable || definition.writable === null ) )
+      else if
+      (
+           definition.static === true
+        && definition.valToIns === 'val'
+        && definition.enumerable
+        && definition.configurable
+        && ( definition.writable || definition.writable === null )
+      )
       {
         if( definition.val === _.nothing )
         o.blueprint.PropsSupplementation[ o.propName ] = undefined;
@@ -230,14 +249,12 @@ function prop_body( o )
       }
       else if( definition.enumerable && definition.configurable && ( definition.writable || definition.writable === null ) )
       {
-        constructionInit = constructionInitOrdinary_functor( o.blueprint, definition );
+        _declareOrdinary( o.blueprint, definition );
       }
       else
       {
-        constructionInit = constructionInitUnordinary_functor( o.blueprint, definition );
+        _declareUnordinary( o.blueprint, definition );
       }
-      if( constructionInit !== null )
-      _.blueprint._routineAdd( o.blueprint, 'constructionInit', constructionInit );
     }
 
   }
@@ -246,16 +263,20 @@ function prop_body( o )
 
   function _declareStaticWithAccessor( o )
   {
-    let prototype = o.blueprint.prototype;
-    let name = o.name;
+    const prototype = o.blueprint.prototype;
+    const name = o.name;
+
+    // if( definition.static === _.maybe )
+    // _declareStaticMaybe( o );
+
+    if( prototype === null )
+    return o.blueprint;
+
     let opts =
     {
       enumerable : definition.enumerable,
       configurable : definition.configurable,
     };
-
-    if( prototype === null )
-    return o.blueprint;
 
     _.assert( _.boolIs( definition.configurable ) );
     _.assert( _.boolIs( definition.enumerable ) );
@@ -266,7 +287,8 @@ function prop_body( o )
     debugger;
 
     let val2;
-    if( o.amending === 'supplement' && prototype[ name ] !== undefined )
+    // if( o.amending === 'supplement' && prototype[ name ] !== undefined ) // yyy
+    if( o.amending === 'supplement' && Object.hasOwnProperty.call( prototype, name ) )
     val2 = prototype[ name ];
     else if( val === _.nothing )
     val2 = prototype[ name ];
@@ -320,12 +342,17 @@ function prop_body( o )
 
   function _declareStaticWithoutAccessor( o )
   {
-    let prototype = o.blueprint.prototype;
-    let name = o.name;
+    const prototype = o.blueprint.prototype;
+    const name = o.name;
+    const enumerable = definition.enumerable;
+    const configurable = definition.configurable;
+    const writable = definition.writable;
+    const toVal = definition.toVal;
+
     let opts =
     {
-      enumerable : definition.enumerable,
-      configurable : definition.configurable,
+      enumerable,
+      configurable,
     };
 
     _.assert( _.boolIs( definition.configurable ) );
@@ -336,16 +363,20 @@ function prop_body( o )
     debugger;
 
     /* xxx : introduce option::preservingValue? */
-    let val2;
-    if( prototype && o.amending === 'supplement' && prototype[ name ] !== undefined )
-    val2 = prototype[ name ];
-    else if( prototype && definition.val === _.nothing )
-    val2 = prototype[ name ];
-    else
-    val2 = definition.toVal( _.escape.undo( definition.val ) );
+
+    let val = definition.val;
 
     if( prototype )
     {
+      let val2;
+      // if( prototype && o.amending === 'supplement' && prototype[ name ] !== undefined ) // yyy
+      if( prototype && o.amending === 'supplement' && Object.hasOwnProperty.call( prototype, name ) )
+      val2 = prototype[ name ];
+      else if( prototype && val === _.nothing )
+      val2 = prototype[ name ];
+      else
+      val2 = definition.toVal( _.escape.undo( val ) );
+
       if( definition.writable || definition.writable === null )
       {
         opts.get = () =>
@@ -368,43 +399,147 @@ function prop_body( o )
       Object.defineProperty( prototype, name, opts );
     }
 
-    if( definition.static === _.maybe )
-    {
-      _.blueprint._routineAdd( o.blueprint, 'constructionInit', propInit );
-      debugger;
-    }
+    // if( definition.static === _.maybe )
+    // _declareStaticMaybe( o );
+    // if( definition.static === _.maybe )
+    // {
+    //   _.blueprint._routineAdd( o.blueprint, 'constructionInit', propInit );
+    //   debugger;
+    // }
 
     return o.blueprint;
 
-    function propInit( genesis )
-    {
-      debugger;
-      if( _global_.debugger )
-      debugger;
-      _.assert( !_.primitiveIs( genesis.construction ) );
-      if( genesis.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, name ) )
-      return;
-      // if( typed )
-      {
-        let prototype2 = Object.getPrototypeOf( genesis.construction );
-        if( prototype2 && prototype2 === prototype )
-        return;
-      }
-      let properties =
-      {
-        value : val2,
-        enumerable : false,
-        configurable : false,
-        writable : false,
-      };
-      Object.defineProperty( genesis.construction, name, properties );
-    }
+    // function propInit( genesis )
+    // {
+    //   debugger;
+    //   if( _global_.debugger )
+    //   debugger;
+    //   _.assert( !_.primitiveIs( genesis.construction ) );
+    //
+    //   // if( genesis.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, name ) )
+    //   // return;
+    //
+    //   let prototype2 = Object.getPrototypeOf( genesis.construction );
+    //   if( prototype2 && prototype2 === prototype )
+    //   return;
+    //
+    //   let val2;
+    //   if( genesis.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, name ) )
+    //   val2 = genesis.construction[ name ]; /* xxx : cover */
+    //   else if( val === _.nothing )
+    //   val2 = genesis.construction[ name ]; /* xxx : cover */
+    //   else
+    //   val2 = toVal( _.escape.undo( val ) ); /* xxx : cover */
+    //
+    //   let properties =
+    //   {
+    //     value : val2,
+    //     enumerable,
+    //     configurable,
+    //     writable,
+    //   };
+    //   Object.defineProperty( genesis.construction, name, properties );
+    // }
 
   }
 
   /* */
 
-  function constructionInitAccessor_functor( blueprint, definition )
+  // function _declareStaticMaybe( o )
+  // {
+  //   const prototype = o.blueprint.prototype;
+  //   const name = o.name;
+  //   const enumerable = definition.enumerable;
+  //   const configurable = definition.configurable;
+  //   const writable = definition.writable;
+  //   const toVal = definition.toVal;
+  //   const combining = definition.combining;
+  //   const addingMethods = definition.addingMethods;
+  //   const methods = definition.methods;
+  //   const accessor = definition.accessor;
+  //   const storingStrategy = definition.storingStrategy;
+  //
+  //   _.assert( definition.static === _.maybe );
+  //
+  //   // if( definition.static === _.maybe )
+  //   // {
+  //     _.blueprint._routineAdd( o.blueprint, 'constructionInit', propInit );
+  //     // debugger;
+  //   // }
+  //
+  //   return o.blueprint;
+  //
+  //   function propInit( genesis )
+  //   {
+  //     // debugger;
+  //     if( _global_.debugger )
+  //     debugger;
+  //     _.assert( !_.primitiveIs( genesis.construction ) );
+  //
+  //     // if( genesis.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, name ) )
+  //     // return;
+  //
+  //     let prototype2 = Object.getPrototypeOf( genesis.construction );
+  //     if( prototype2 && prototype2 === prototype )
+  //     return;
+  //
+  //     let val2;
+  //     if( genesis.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, name ) )
+  //     val2 = genesis.construction[ name ]; /* xxx : cover */
+  //     else if( val === _.nothing )
+  //     val2 = genesis.construction[ name ]; /* xxx : cover */
+  //     else
+  //     val2 = toVal( _.escape.undo( val ) ); /* xxx : cover */
+  //
+  //     let properties =
+  //     {
+  //       value : val2,
+  //       enumerable,
+  //       configurable,
+  //       writable,
+  //     };
+  //     Object.defineProperty( genesis.construction, name, properties );
+  //   }
+  //
+  //   // function constructionInitUntyped( genesis )
+  //   // {
+  //   //   if( _global_.debugger )
+  //   //   debugger;
+  //   //
+  //   //   let prototype2 = Object.getPrototypeOf( genesis.construction );
+  //   //   if( prototype2 && prototype2 === prototype )
+  //   //   return;
+  //   //
+  //   //   let val2;
+  //   //   if( genesis.amending === 'supplement' && genesis.construction[ name ] !== undefined )
+  //   //   val2 = genesis.construction[ name ];
+  //   //   else if( val === _.nothing )
+  //   //   val2 = genesis.construction[ name ];
+  //   //   else
+  //   //   val2 = toVal( val );
+  //   //
+  //   //   debugger;
+  //   //   _.accessor.declareSingle
+  //   //   ({
+  //   //     object : genesis.construction,
+  //   //     methods,
+  //   //     suite : accessor ? _.mapExtend( null, accessor ) : false,
+  //   //     storingStrategy,
+  //   //     name,
+  //   //     val : val2,
+  //   //     enumerable,
+  //   //     configurable,
+  //   //     writable,
+  //   //     combining,
+  //   //     addingMethods,
+  //   //   });
+  //   // }
+  //
+  // }
+
+  /* */
+
+  function _declareWithAccessor( blueprint, definition )
   {
     const toVal = definition.toVal;
     const name = definition.name;
@@ -417,24 +552,24 @@ function prop_body( o )
     const addingMethods = definition.addingMethods;
     const accessor = definition.accessor;
     const val = definition.val;
+    const isStatic = definition.static;
     const prototype = blueprint.prototype;
 
     let o2, normalizedAsuite;
 
     _.assert( _.fuzzyIs( blueprint.Typed ) );
-    // _.assert( _.boolIs( blueprint.Typed ) );
 
     if( _global_.debugger )
     debugger;
 
-    if( blueprint.Traits.typed.val && blueprint.prototype ) /* xxx */
+    if( !isStatic && blueprint.Traits.typed.val && blueprint.prototype ) /* xxx */
     {
       o2 = _.accessor.declareSingle
       ({
         name,
         object : blueprint.prototype,
         methods,
-        suite : _.mapExtend( null, accessor ),
+        suite : accessor ? _.mapExtend( null, accessor ) : false,
         storingStrategy,
         storageIniting : false,
         enumerable,
@@ -448,13 +583,18 @@ function prop_body( o )
     }
 
     /* xxx */
-    if( blueprint.Traits.typed.val === _.maybe )
-    return constructionInitMaybe;
-    if( blueprint.Traits.typed.val === true && blueprint.prototype )
-    return constructionInitTyped;
+    let constructionInit;
+    if( isStatic ) /* xxx : optimize condition */
+    constructionInit = constructionInitUntyped;
+    else if( blueprint.Traits.typed.val === _.maybe )
+    constructionInit = constructionInitMaybe;
+    else if( blueprint.Traits.typed.val === true && blueprint.prototype )
+    constructionInit = constructionInitTyped;
     else if( blueprint.Traits.typed.val === false || blueprint.prototype === null || blueprint.Traits.typed.val && !blueprint.prototype )
-    return constructionInitUntyped;
+    constructionInit = constructionInitUntyped;
     else _.assert( 0 );
+
+    _.blueprint._routineAdd( blueprint, 'constructionInit', constructionInit );
 
     function constructionInitTyped( genesis )
     {
@@ -463,12 +603,14 @@ function prop_body( o )
       _.accessor._objectInitStorage( genesis.construction, normalizedAsuite );
 
       let val2;
-      if( genesis.amending === 'supplement' && genesis.construction[ name ] !== undefined )
+      // if( genesis.amending === 'supplement' && genesis.construction[ name ] !== undefined ) // yyy
+      if( prototype && o.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, name ) )
       val2 = genesis.construction[ name ];
       else if( val === _.nothing )
       val2 = genesis.construction[ name ];
       else
-      val2 = toVal( val );
+      val2 = toVal( _.escape.undo( val ) );
+      // val2 = toVal( val );
 
       if( val2 !== _.nothing )
       _.accessor._objectSetValue
@@ -486,19 +628,29 @@ function prop_body( o )
       if( _global_.debugger )
       debugger;
 
+      if( isStatic )
+      {
+        debugger;
+        let prototype2 = Object.getPrototypeOf( genesis.construction );
+        if( prototype2 && prototype2 === prototype )
+        return;
+      }
+
       let val2;
-      if( genesis.amending === 'supplement' && genesis.construction[ name ] !== undefined )
+      // if( genesis.amending === 'supplement' && genesis.construction[ name ] !== undefined )
+      if( genesis.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, name ) )
       val2 = genesis.construction[ name ];
       else if( val === _.nothing )
       val2 = genesis.construction[ name ];
       else
-      val2 = toVal( val );
+      val2 = toVal( _.escape.undo( val ) );
+      // val2 = toVal( val );
 
       _.accessor.declareSingle
       ({
         object : genesis.construction,
         methods,
-        suite : _.mapExtend( null, accessor ),
+        suite : accessor ? _.mapExtend( null, accessor ) : false,
         storingStrategy,
         name,
         val : val2,
@@ -532,50 +684,107 @@ function prop_body( o )
 
   /* */
 
-  function constructionInitOrdinary_functor( blueprint, definition )
+  function _declareOrdinary( blueprint, definition )
   {
     const toVal = definition.toVal;
     const name = definition.name;
-    const val = _.escape.undo( definition.val );
-    return function constructionInit( genesis )
+    const isStatic = definition.static;
+    const prototype = blueprint.prototype;
+    const val = definition.val;
+    // const val = _.escape.undo( definition.val );
+
+    _.blueprint._routineAdd( blueprint, 'constructionInit', constructionInit );
+
+    function constructionInit( genesis )
     {
       if( _global_.debugger )
       debugger;
-      if( genesis.amending === 'supplement' && genesis.construction[ name ] !== undefined )
-      genesis.construction[ name ] = genesis.construction[ name ];
-      /* it is important to set. property could be owned by prototype */
+
+      if( isStatic )
+      {
+        debugger;
+        let prototype2 = Object.getPrototypeOf( genesis.construction );
+        if( prototype2 && prototype2 === prototype )
+        return;
+      }
+
+      let val2;
+      // if( genesis.amending === 'supplement' && genesis.construction[ name ] !== undefined ) /* xxx : own? */ yyy
+      if( genesis.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, name ) )
+      val2 = genesis.construction[ name ];
       else if( val === _.nothing )
-      genesis.construction[ name ] = genesis.construction[ name ];
-      /* it is important to set. property could be owned by prototype */
+      val2 = genesis.construction[ name ];
       else
-      genesis.construction[ name ] = toVal( val );
+      val2 = toVal( _.escape.undo( val ) );
+      // val2 = toVal( val );
+
+      /* it is important to set. property could be owned by prototype */
+      genesis.construction[ name ] = val2;
+
+      // if( genesis.amending === 'supplement' && genesis.construction[ name ] !== undefined )
+      // genesis.construction[ name ] = genesis.construction[ name ];
+      // /* it is important to set. property could be owned by prototype */
+      // else if( val === _.nothing )
+      // genesis.construction[ name ] = genesis.construction[ name ];
+      // /* it is important to set. property could be owned by prototype */
+      // else
+      // genesis.construction[ name ] = toVal( val );
     }
   }
 
   /* */
 
-  function constructionInitUnordinary_functor( blueprint, definition )
+  function _declareUnordinary( blueprint, definition )
   {
     const enumerable = definition.enumerable;
     const configurable = definition.configurable;
     const writable = definition.writable === null ? true : definition.writable;
     const toVal = definition.toVal;
     const name = definition.name;
-    const val = _.escape.undo( definition.val );
-    return function constructionInit( genesis )
+    const isStatic = definition.static;
+    // const val = _.escape.undo( definition.val );
+    const val = definition.val;
+    const prototype = blueprint.prototype;
+
+    _.blueprint._routineAdd( blueprint, 'constructionInit', constructionInit );
+
+    function constructionInit( genesis )
     {
+      if( _global_.debugger )
+      debugger;
+
+      if( isStatic )
+      {
+        debugger;
+        let prototype2 = Object.getPrototypeOf( genesis.construction );
+        if( prototype2 && prototype2 === prototype )
+        return;
+      }
+
       const opts =
       {
         enumerable,
         configurable,
         writable,
       };
-      if( genesis.amending === 'supplement' && genesis.construction[ name ] !== undefined )
-      opts.value = genesis.construction[ name ];
+
+      let val2;
+      // if( genesis.amending === 'supplement' && genesis.construction[ name ] !== undefined ) // yyy
+      if( genesis.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, name ) )
+      val2 = genesis.construction[ name ];
       else if( val === _.nothing )
-      opts.value = genesis.construction[ name ];
+      val2 = genesis.construction[ name ];
       else
-      opts.value = toVal( val );
+      val2 = toVal( _.escape.undo( val ) );
+
+      // if( genesis.amending === 'supplement' && genesis.construction[ name ] !== undefined )
+      // opts.value = genesis.construction[ name ];
+      // else if( val === _.nothing )
+      // opts.value = genesis.construction[ name ];
+      // else
+      // opts.value = toVal( val );
+
+      opts.value = val2;
       Object.defineProperty( genesis.construction, name, opts );
     }
   }
@@ -671,7 +880,7 @@ static          : [ 0 , 1 ]                                                     
 enumerable      : [ 0 , 1 ]                                                                                 @default : 1
 configurable    : [ 0 , 1 ]                                                                                 @default : 1
 writable        : [ 0 , 1 ]                                                                                 @default : 1
-toVal   : routine                                                                                   @default : null
+toVal           : routine                                                                                   @default : null
 collection      : [ scalar , array , map ]                                                                  @default : scalar
 insToIns        : [ val , shallow , deep ]                                                                  @default : val
 datToIns        : [ val , shallow , deep ]                                                                  @default : val

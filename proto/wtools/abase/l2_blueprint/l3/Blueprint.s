@@ -388,8 +388,8 @@ function _amend( o )
     if( name && name !== srcDefinition.name )
     srcDefinition.name = name;
 
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
     let dstDefinition = o.blueprint._NamedDefinitionsMap[ name ] || null;
 
     srcDefinition = definitionCloneMaybe( srcDefinition );

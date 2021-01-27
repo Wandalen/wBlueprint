@@ -453,7 +453,13 @@ function typed_body( o )
   {
     if( _global_.debugger )
     debugger;
-    if( genesis.construction && genesis.runtime.Make.prototype !== null && genesis.construction instanceof genesis.runtime.Make )
+
+    if( genesis.runtime.Make.prototype === null && !_.mapIsPure( genesis.construction ) )
+    {
+      debugger;
+      genesis.construction = Object.create( null );
+    }
+    else if( genesis.construction && genesis.runtime.Make.prototype !== null && genesis.construction instanceof genesis.runtime.Make )
     genesis.construction = Object.create( null );
     else if( genesis.construction === null )
     genesis.construction = Object.create( null );
@@ -657,14 +663,14 @@ function withConstructor( o )
       if( _global_.debugger )
       debugger;
       _.assert( !_.primitiveIs( genesis.construction ) );
-      if( genesis.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, 'constructor' ) )
-      return;
       if( typed )
       {
         let prototype2 = Object.getPrototypeOf( genesis.construction );
         if( prototype2 && prototype2 === prototype )
         return;
       }
+      if( genesis.amending === 'supplement' && Object.hasOwnProperty.call( genesis.construction, 'constructor' ) )
+      return;
       let properties =
       {
         value : constructor,
