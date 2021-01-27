@@ -495,7 +495,8 @@ function prop_body( o )
       else if( val === _.nothing )
       val2 = genesis.construction[ name ];
       else
-      val2 = toVal( _.escape.undo( val ) );
+      val2 = toVal( val );
+      // val2 = toVal( _.escape.undo( val ) );
 
       _.accessor.declareSingle
       ({

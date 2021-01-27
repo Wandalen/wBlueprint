@@ -66,9 +66,6 @@ function amend( o )
   let amending = o.amending;
   let blueprint = blueprintLook( o.src, null );
 
-  if( _global_.debugger )
-  debugger;
-
   if( !blueprint ) /* xxx : bad if */
   {
     let defs = [];

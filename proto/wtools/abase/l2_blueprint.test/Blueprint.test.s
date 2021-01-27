@@ -7712,6 +7712,8 @@ function definePropConstructionAmendWithBlueprint( test )
   // eachTyped({ amending : 'supplement' });
   // xxx
 
+
+
   function eachTyped( tops )
   {
     tops.typed = 0;
@@ -8021,7 +8023,9 @@ function definePropConstructionAmendWithBlueprint( test )
     });
 
     var keysBefore = _.mapAllKeys( Object.prototype );
+    debugger; _global_.debugger = 1;
     _.construction[ tops.amending ]( dstContainer, extension );
+    debugger;
     var keysAfter = _.mapAllKeys( Object.prototype );
     test.identical( keysAfter, keysBefore );
 
