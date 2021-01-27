@@ -15774,15 +15774,12 @@ function constructWithoutHelper( test )
   /* */
 
   test.case = 'with new, blueprint with untyped instance';
-  debugger;
   var Blueprint = _.Blueprint
   ({
     field1 : rfield,
     typed : _.trait.typed( false ),
   });
-  debugger; _global_.debugger = 1;
   var instance = new Blueprint.Make();
-  debugger;
 
   test.identical( _.blueprint.isDefinitive( Blueprint ), true );
   test.identical( _.construction.isTyped( instance ), false );
@@ -15876,7 +15873,7 @@ function constructWithArgumentMap( test )
   test.identical( _.construction.isInstanceOf( instance, Blueprint ), _.maybe );
   test.identical( _.blueprint.isBlueprintOf( Blueprint, instance ), _.maybe );
 
-  test.identical( instance instanceof Blueprint.Make, false );
+  // test.identical( instance instanceof Blueprint.Make, false );
   test.identical( Object.getPrototypeOf( instance ), null );
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
@@ -15949,7 +15946,7 @@ function constructWithArgumentMap( test )
   test.identical( _.construction.isInstanceOf( instance, Blueprint ), _.maybe );
   test.identical( _.blueprint.isBlueprintOf( Blueprint, instance ), _.maybe );
 
-  test.identical( instance instanceof Blueprint.Make, false );
+  // test.identical( instance instanceof Blueprint.Make, false );
   test.identical( Object.getPrototypeOf( instance ), null );
   test.identical( instance.constructor, undefined );
   var prototypes = _.prototype.each( instance );
