@@ -7709,7 +7709,7 @@ function definePropConstructionAmendWithBlueprint( test )
 {
 
   let escapedNothing = _.escape.nothing;
-  let escapedEscapedNothing = _.escape.dir( _.escape.nothing );
+  let escapedEscapedNothing = _.escape.left( _.escape.nothing );
 
   eachTyped({ amending : 'extend' });
   // eachTyped({ amending : 'supplement' });

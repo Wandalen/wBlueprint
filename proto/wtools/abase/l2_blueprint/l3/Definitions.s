@@ -240,7 +240,7 @@ function prop_body( o )
         if( definition.val === _.nothing )
         o.blueprint.PropsSupplementation[ o.propName ] = undefined;
         else
-        o.blueprint.PropsExtension[ o.propName ] = _.escape.rev( definition.val );
+        o.blueprint.PropsExtension[ o.propName ] = _.escape.right( definition.val );
       }
       else if( definition.enumerable && definition.configurable && ( definition.writable || definition.writable === null ) )
       {
@@ -354,7 +354,7 @@ function prop_body( o )
 
     if( prototype )
     {
-      let val2 = _.escape.rev( valFrom( prototype, name, o.amending ) );
+      let val2 = _.escape.right( valFrom( prototype, name, o.amending ) );
 
       if( definition.writable || definition.writable === null )
       {
@@ -453,7 +453,7 @@ function prop_body( o )
         normalizedAsuite,
         storingStrategy,
         name,
-        val : _.escape.rev( val2 ),
+        val : _.escape.right( val2 ),
       });
 
     }
@@ -532,7 +532,7 @@ function prop_body( o )
         return;
       }
 
-      let val2 = _.escape.rev( valFrom( genesis.construction, name, genesis.amending ) );
+      let val2 = _.escape.right( valFrom( genesis.construction, name, genesis.amending ) );
       /* it is important to set even if value as it was before setting. property could be owned by prototype */
       genesis.construction[ name ] = val2;
     }
@@ -572,7 +572,7 @@ function prop_body( o )
         writable,
       };
 
-      let val2 = _.escape.rev( valFrom( genesis.construction, name, genesis.amending ) );
+      let val2 = _.escape.right( valFrom( genesis.construction, name, genesis.amending ) );
       opts.value = val2;
       Object.defineProperty( genesis.construction, name, opts );
     }
@@ -586,13 +586,13 @@ function prop_body( o )
     let val2;
     if( amending === 'supplement' && Object.hasOwnProperty.call( object, name ) )
     {
-      val2 = _.escape.dir( object[ name ] );
+      val2 = _.escape.left( object[ name ] );
     }
     else if( val === _.nothing )
     {
       if( Object.hasOwnProperty.call( object, name ) )
       {
-        val2 = _.escape.dir( object[ name ] );
+        val2 = _.escape.left( object[ name ] );
       }
       else /* keep nothing for declareSingle */
       {
@@ -601,7 +601,7 @@ function prop_body( o )
     }
     else
     {
-      val2 = _.escape.dir( toVal( _.escape.rev( val ) ) ); /* xxx : cover escape */
+      val2 = _.escape.left( toVal( _.escape.right( val ) ) ); /* xxx : cover escape */
     }
     return val2;
   }
