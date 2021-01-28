@@ -8325,9 +8325,7 @@ function definePropConstructionAmendWithBlueprint( test )
         else
         {
           test.identical( _.prototype.of( dstContainer ).f1, 1 );
-          debugger;
           test.identical( _.prototype.of( dstContainer ).f2, 0 );
-          debugger;
           test.identical( dstContainer.f1, 1 );
           test.identical( dstContainer.f2, 0 );
         }

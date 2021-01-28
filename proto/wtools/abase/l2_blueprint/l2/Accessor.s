@@ -848,7 +848,7 @@ function _objectSetValue( o )
   if( descriptor && descriptor.configurable && descriptor.get == undefined && descriptor.set === undefined )
   delete o.object[ o.name ];
 
-  let val2 = _.escape.undo( o.val );
+  let val2 = _.escape.rev( o.val );
 
   if( o.normalizedAsuite.put )
   {
