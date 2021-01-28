@@ -256,6 +256,32 @@ function prop_body( o )
 
   /* */
 
+  function valFrom( object, name, val )
+  {
+    let val2;
+    if( o.amending === 'supplement' && Object.hasOwnProperty.call( object, name ) )
+    {
+      val2 = object[ name ];
+    }
+    else if( val === _.nothing )
+    {
+      if( Object.hasOwnProperty.call( object, name ) )
+      val2 = object[ name ];
+      else /* keep nothing for declareSingle */
+      {
+        debugger;
+        val2 = val;
+      }
+    }
+    else
+    {
+      val2 = toVal( _.escape.undo( val ) ); /* xxx : cover escape */
+    }
+    return val2;
+  }
+
+  /* */
+
   function _declareStaticWithAccessor( o )
   {
     const prototype = o.blueprint.prototype;
@@ -286,25 +312,27 @@ function prop_body( o )
     // else
     // val2 = definition.toVal( definition.val );
 
-    let val2;
-    if( o.amending === 'supplement' && Object.hasOwnProperty.call( prototype, name ) )
-    {
-      val2 = prototype[ name ];
-    }
-    else if( val === _.nothing )
-    {
-      if( Object.hasOwnProperty.call( prototype, name ) )
-      val2 = prototype[ name ];
-      else /* keep nothing for declareSingle */
-      {
-        debugger;
-        val2 = val;
-      }
-    }
-    else
-    {
-      val2 = toVal( _.escape.undo( val ) ); /* xxx : cover escape */
-    }
+    // let val2;
+    // if( o.amending === 'supplement' && Object.hasOwnProperty.call( prototype, name ) )
+    // {
+    //   val2 = prototype[ name ];
+    // }
+    // else if( val === _.nothing )
+    // {
+    //   if( Object.hasOwnProperty.call( prototype, name ) )
+    //   val2 = prototype[ name ];
+    //   else /* keep nothing for declareSingle */
+    //   {
+    //     debugger;
+    //     val2 = val;
+    //   }
+    // }
+    // else
+    // {
+    //   val2 = toVal( _.escape.undo( val ) ); /* xxx : cover escape */
+    // }
+
+    let val2 = valFrom( prototype, name, val );
 
     let o2 =
     {
