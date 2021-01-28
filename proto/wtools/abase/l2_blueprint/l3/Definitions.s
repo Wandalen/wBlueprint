@@ -90,7 +90,7 @@ function _pairArgumentsHead( routine, args )
 
 let _toVal = Object.create( null );
 _toVal.val = function val( val ) { return val }
-_toVal.shallow = function shallow( val ) { return _.entityMake( val ) }
+_toVal.shallow = function shallow( val ) { return _.entity.make( val ) }
 _toVal.deep = function deep( val ) { return _.replicate({ src : val }) }
 _toVal.call = function call( val ) { return val() }
 _toVal.new = function nw( val ) { return new val() }
