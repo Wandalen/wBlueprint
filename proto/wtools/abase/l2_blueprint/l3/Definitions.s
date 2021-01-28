@@ -177,9 +177,9 @@ function prop_body( o )
 
   /* */
 
-  let val = o.val;
-  let toVal = o.toVal = _toVal[ o.valToIns ];
-  let definition = _.definition._definitionMake( 'prop', o );
+  const val = o.val; /* xxx : remove? */
+  const toVal = o.toVal = _toVal[ o.valToIns ];
+  const definition = _.definition._definitionMake( 'prop', o );
   _.assert( _.routineIs( toVal ), () => `Unknown toVal::${definition.valToIns} )` );
 
   /* */
@@ -195,7 +195,7 @@ function prop_body( o )
 - _declareWithAccessor
 - _declareOrdinary
 - _declareUnordinary
-- optionsHasAccessor
+- valFrom
 
   */
 
@@ -216,7 +216,7 @@ function prop_body( o )
         name : o.propName,
         amending : o.amending
       }
-      if( optionsHasAccessor( definition ) )
+      if( !!definition.accessor )
       _declareStaticWithAccessor( o2 );
       else
       _declareStaticWithoutAccessor( o2 );
@@ -224,7 +224,7 @@ function prop_body( o )
 
     if( definition.static === false || definition.static === _.maybe )
     {
-      if( optionsHasAccessor( definition ) )
+      if( !!definition.accessor )
       {
         _declareWithAccessor( o.blueprint, definition );
       }
@@ -256,36 +256,11 @@ function prop_body( o )
 
   /* */
 
-  function valFrom( object, name, val )
-  {
-    let val2;
-    if( o.amending === 'supplement' && Object.hasOwnProperty.call( object, name ) )
-    {
-      val2 = object[ name ];
-    }
-    else if( val === _.nothing )
-    {
-      if( Object.hasOwnProperty.call( object, name ) )
-      val2 = object[ name ];
-      else /* keep nothing for declareSingle */
-      {
-        debugger;
-        val2 = val;
-      }
-    }
-    else
-    {
-      val2 = toVal( _.escape.undo( val ) ); /* xxx : cover escape */
-    }
-    return val2;
-  }
-
-  /* */
-
   function _declareStaticWithAccessor( o )
   {
     const prototype = o.blueprint.prototype;
     const name = o.name;
+    const val = definition.val;
 
     if( prototype === null )
     return o.blueprint;
@@ -332,7 +307,8 @@ function prop_body( o )
     //   val2 = toVal( _.escape.undo( val ) ); /* xxx : cover escape */
     // }
 
-    let val2 = valFrom( prototype, name, val );
+    // let val2 = valFrom( prototype, name, val );
+    let val2 = valFrom( prototype, name, o.amending );
 
     let o2 =
     {
@@ -728,9 +704,31 @@ function prop_body( o )
 
   /* */
 
-  function optionsHasAccessor( op )
+  function valFrom( object, name, amending )
   {
-    return !!op.accessor;
+    const val = definition.val;
+    let val2;
+    if( amending === 'supplement' && Object.hasOwnProperty.call( object, name ) )
+    {
+      val2 = object[ name ];
+    }
+    else if( val === _.nothing )
+    {
+      if( Object.hasOwnProperty.call( object, name ) )
+      {
+        val2 = object[ name ];
+      }
+      else /* keep nothing for declareSingle */
+      {
+        debugger;
+        val2 = val;
+      }
+    }
+    else
+    {
+      val2 = toVal( _.escape.undo( val ) ); /* xxx : cover escape */
+    }
+    return val2;
   }
 
   /* */
