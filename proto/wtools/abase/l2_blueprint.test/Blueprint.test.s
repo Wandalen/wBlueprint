@@ -7912,7 +7912,7 @@ function definePropConstructionAmendWithBlueprint( test )
     if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
     exp.f2 = 0;
 
-    test.identical( _.property.of( dstContainer ), exp );
+    test.identical( _.property.of( dstContainer ), exp ); debugger;
     test.true( dstContainer._ === undefined );
     if( tops.typed === 1 )
     test.true( _.prototype.of( dstContainer ) === extension.prototype );
