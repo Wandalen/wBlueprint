@@ -17,6 +17,7 @@ let _ = _global_.wTools;
 
 function _of( object )
 {
+  // _.assert( !!object );
   return Object.getPrototypeOf( object );
 }
 
@@ -34,17 +35,16 @@ function each( proto, onEach )
   let result = [];
 
   _.assert( _.routineIs( onEach ) || !onEach );
-  _.assert( !_.primitiveIs( proto ) );
+  _.assert( !_.primitiveIs( proto ) || proto === null );
   _.assert( arguments.length === 1 || arguments.length === 2 );
 
-  do
+  while( proto )
   {
     if( onEach )
     onEach.call( this, proto );
     result.push( proto );
     proto = Object.getPrototypeOf( proto );
   }
-  while( proto );
 
   return result;
 }
@@ -147,6 +147,7 @@ function propertyDescriptorActiveGet( object, name )
   result.descriptor = null;
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
+  _.assert( !!object, 'No object' );
 
   do
   {

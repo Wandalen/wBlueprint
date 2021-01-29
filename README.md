@@ -8,7 +8,7 @@ Classes defining tool on steroids. Make possible multiple inheritances, removing
 git clone https://github.com/Wandalen/wBlueprint
 cd wBlueprint
 npm install
-node sample/Sample.s
+node sample/trivial/Sample.s
 ```
 
 ## To add to your project

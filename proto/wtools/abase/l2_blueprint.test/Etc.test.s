@@ -1,4 +1,4 @@
-( function _Proto_test_s_( ) {
+( function _Etc_test_s_( ) {
 
 'use strict';
 
@@ -145,6 +145,38 @@ function constructorIs( t )
 
 }
 
+//
+
+function prototypeEach( test )
+{
+
+  test.case = 'pure map';
+  var src = Object.create( null );
+  var got = _.prototype.each( src );
+  var exp = [ src ];
+  test.identical( got, exp );
+
+  test.case = 'polluted map';
+  var src = {};
+  var got = _.prototype.each( src );
+  var exp = [ src, Object.prototype ];
+  test.identical( got, exp );
+
+  test.case = 'prototyped';
+  var prototype = Object.create( null );
+  var src = Object.create( prototype );
+  var got = _.prototype.each( src );
+  var exp = [ src, prototype ];
+  test.identical( got, exp );
+
+  test.case = 'null';
+  var src = null;
+  var got = _.prototype.each( src );
+  var exp = [];
+  test.identical( got, exp );
+
+}
+
 // --
 // declare
 // --
@@ -161,6 +193,8 @@ let Self =
     instanceIs,
     prototypeIs,
     constructorIs,
+
+    prototypeEach, /* qqq : implement full coverage */
 
   },
 
