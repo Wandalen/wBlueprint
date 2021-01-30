@@ -88,7 +88,7 @@ function amend( o )
 
     defs[ add ]( _.trait.extendable( true ) );
 
-    blueprint = _.blueprint._define({ args : defs, amending : o.amending });
+    blueprint = _.blueprint._define({ src : defs, amending : o.amending });
   }
 
   constructionBlueprintExtend( o.dstConstruction, blueprint, null );

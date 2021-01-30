@@ -13980,6 +13980,210 @@ function traitTypedPrototypeBlueprint( test )
 
 //
 
+function traitTypedPrototype( test )
+{
+
+  /* */
+
+  test.case = 'typed:maybe, prototype:explicit, order:( prototype, typed )';
+
+  var amending = 'extend';
+  var prototype = Object.create( null );
+  prototype.constructor = constructor1;
+  var construction = Object.create( prototype );
+  var args = [];
+  args.push( _.trait.typed({ val : _.maybe, prototype, new : false }) );
+
+  var blueprint = _.blueprint._define({ src : args, amending });
+
+  _.construction._init
+  ({
+    constructing : false,
+    construction,
+    amending,
+    runtime : blueprint.Runtime,
+  });
+
+  test.identical( _.prototype.each( construction ).length, 2 );
+  test.identical( construction.constructor.name, 'constructor1' );
+
+  var exp =
+  {
+  }
+  test.identical( propertyOwn( _.prototype.each( construction )[ 0 ] ), exp );
+  var exp =
+  {
+    constructor : constructor1,
+  }
+  test.identical( propertyOwn( _.prototype.each( construction )[ 1 ] ), exp );
+
+  /* */
+
+  test.case = 'typed:maybe, prototype:explicit, order:( typed, prototype )';
+
+  var amending = 'extend';
+  var prototype = Object.create( null );
+  prototype.constructor = constructor1;
+  var construction = Object.create( prototype );
+  var args = [];
+  args.push( _.trait.typed({ val : _.maybe, prototype, new : false }) );
+
+  var blueprint = _.blueprint._define({ src : args, amending });
+
+  _.construction._init
+  ({
+    constructing : false,
+    construction,
+    amending,
+    runtime : blueprint.Runtime,
+  });
+
+  test.identical( _.prototype.each( construction ).length, 2 );
+  test.identical( construction.constructor.name, 'constructor1' );
+
+  var exp =
+  {
+  }
+  test.identical( propertyOwn( _.prototype.each( construction )[ 0 ] ), exp );
+  var exp =
+  {
+    constructor : constructor1,
+  }
+  test.identical( propertyOwn( _.prototype.each( construction )[ 1 ] ), exp );
+
+  /* */
+
+  test.case = 'typed:1, prototype:explicit, order:( prototype, typed )';
+
+  var amending = 'extend';
+  var prototype = Object.create( null );
+  prototype.constructor = constructor1;
+  var construction = Object.create( prototype );
+  var args = [];
+  args.push( _.trait.typed({ val : 1, prototype, new : false }) );
+
+  var blueprint = _.blueprint._define({ src : args, amending });
+
+  _.construction._init
+  ({
+    constructing : false,
+    construction,
+    amending,
+    runtime : blueprint.Runtime,
+  });
+
+  test.identical( _.prototype.each( construction ).length, 2 );
+  test.identical( construction.constructor.name, 'constructor1' );
+
+  var exp =
+  {
+  }
+  test.identical( propertyOwn( _.prototype.each( construction )[ 0 ] ), exp );
+  var exp =
+  {
+    constructor : constructor1,
+  }
+  test.identical( propertyOwn( _.prototype.each( construction )[ 1 ] ), exp );
+
+  /* */
+
+  test.case = 'typed:1, prototype:explicit, order:( typed, prototype )';
+
+  var amending = 'extend';
+  var prototype = Object.create( null );
+  prototype.constructor = constructor1;
+  var construction = Object.create( prototype );
+  var args = [];
+  args.push( _.trait.typed({ val : 1, prototype, new : false }) );
+
+  var blueprint = _.blueprint._define({ src : args, amending });
+
+  _.construction._init
+  ({
+    constructing : false,
+    construction,
+    amending,
+    runtime : blueprint.Runtime,
+  });
+
+  test.identical( _.prototype.each( construction ).length, 2 );
+  test.identical( construction.constructor.name, 'constructor1' );
+
+  var exp =
+  {
+  }
+  test.identical( propertyOwn( _.prototype.each( construction )[ 0 ] ), exp );
+  var exp =
+  {
+    constructor : constructor1,
+  }
+  test.identical( propertyOwn( _.prototype.each( construction )[ 1 ] ), exp );
+
+  /* */
+
+  function constructor1()
+  {
+  }
+
+  /* */
+
+  function constructor2()
+  {
+  }
+
+}
+
+traitTypedPrototype.description =
+`
+  - extending prototyped object with explicitly defined prototype
+  -- does not throw errors
+`
+
+//
+
+function traitTypedLogistic( test )
+{
+
+  eachCase({ typed : 1 });
+
+  function eachCase( tops )
+  {
+
+    /* */
+
+    test.case = `typed:${_.toStr( tops.typed )}, basic`;
+    var trait = _.trait.typed({ val : tops.typed });
+    test.true( !Object.isExtensible( trait ) );
+    test.true( !Object.isFrozen( trait ) );
+    test.true( trait._blueprint === null );
+
+    var blueprint1 = _.Blueprint( trait );
+
+    test.true( !Object.isExtensible( trait ) );
+    test.true( Object.isFrozen( trait ) );
+    test.true( trait._blueprint === blueprint1 );
+    test.true( trait === blueprint1.Traits.typed ); debugger;
+
+    var instance1 = blueprint1.Make();
+    test.identical( _.prototype.each( instance1 ).length, 3 );
+
+    /* */
+
+  }
+
+}
+
+traitTypedLogistic.description =
+`
+  - checks reusability of the same trait
+  - checks implemtination is optimal and does not make extra copy of a trait
+  - checks implemtination is safe and freeze trait when it supposed to be frozen
+`
+
+// --
+// other traits
+// --
+
 function traitName( test )
 {
   let context = this;
@@ -14743,7 +14947,6 @@ traitWithConstructorBasic.description =
 
 //
 
-/* xxx yyy : make similar test routines for static:maybe */
 function traitWithConstructorAmendConstruction( test )
 {
   let context = this;
@@ -15123,7 +15326,6 @@ function traitWithConstructorAmendConstruction( test )
 
 //
 
-/* xxx yyy : make similar test routines for static:maybe */
 function traitWithConstructorAmendConstructionAlternatives( test )
 {
   let context = this;
@@ -15264,7 +15466,7 @@ function traitWithConstructorTraitPrototypeTraitTyped( test )
     var args = [];
     tops.order.forEach( ( name ) => traitAdd( args, name, prototype ) );
 
-    var blueprint = _.blueprint._define({ args, amending });
+    var blueprint = _.blueprint._define({ src : args, amending });
 
     _.construction._init
     ({
@@ -15298,13 +15500,6 @@ function traitWithConstructorTraitPrototypeTraitTyped( test )
     else if( name === 'typed' )
     args.push( _.trait.typed({ val : _.maybe, prototype, new : false }) );
     else _.assert( 0 );
-    // if( name === 'withConstructor' )
-    // args.push( _.trait.withConstructor( 1 ) );
-    // else if( name === 'prototype' )
-    // args.push( _.trait.prototype( prototype, { new : false } ) );
-    // else if( name === 'typed' )
-    // args.push( _.trait.typed( _.maybe ) );
-    // else _.assert( 0 );
   }
 
   /* */
@@ -15328,175 +15523,6 @@ traitWithConstructorTraitPrototypeTraitTyped.description =
   - mixing of traits::withConstructor, trait::typed and option::prototype
   -- does not throw error
   -- order does not matter
-`
-
-//
-
-function traitPrototypeTraitTyped( test )
-{
-
-  /* */
-
-  test.case = 'typed:maybe, prototype:explicit, order:( prototype, typed )';
-
-  var amending = 'extend';
-  var prototype = Object.create( null );
-  prototype.constructor = constructor1;
-  var construction = Object.create( prototype );
-  var args = [];
-  // args.push( _.trait.prototype( prototype, { new : false } ) );
-  // args.push( _.trait.typed( _.maybe ) );
-  args.push( _.trait.typed({ val : _.maybe, prototype, new : false }) );
-
-  var blueprint = _.blueprint._define({ args, amending });
-
-  _.construction._init
-  ({
-    constructing : false,
-    construction,
-    amending,
-    runtime : blueprint.Runtime,
-  });
-
-  test.identical( _.prototype.each( construction ).length, 2 );
-  test.identical( construction.constructor.name, 'constructor1' );
-
-  var exp =
-  {
-  }
-  test.identical( propertyOwn( _.prototype.each( construction )[ 0 ] ), exp );
-  var exp =
-  {
-    constructor : constructor1,
-  }
-  test.identical( propertyOwn( _.prototype.each( construction )[ 1 ] ), exp );
-
-  /* */
-
-  test.case = 'typed:maybe, prototype:explicit, order:( typed, prototype )';
-
-  var amending = 'extend';
-  var prototype = Object.create( null );
-  prototype.constructor = constructor1;
-  var construction = Object.create( prototype );
-  var args = [];
-  // args.push( _.trait.typed( _.maybe ) );
-  // args.push( _.trait.prototype( prototype, { new : false } ) );
-  args.push( _.trait.typed({ val : _.maybe, prototype, new : false }) );
-
-  var blueprint = _.blueprint._define({ args, amending });
-
-  _.construction._init
-  ({
-    constructing : false,
-    construction,
-    amending,
-    runtime : blueprint.Runtime,
-  });
-
-  test.identical( _.prototype.each( construction ).length, 2 );
-  test.identical( construction.constructor.name, 'constructor1' );
-
-  var exp =
-  {
-  }
-  test.identical( propertyOwn( _.prototype.each( construction )[ 0 ] ), exp );
-  var exp =
-  {
-    constructor : constructor1,
-  }
-  test.identical( propertyOwn( _.prototype.each( construction )[ 1 ] ), exp );
-
-  /* */
-
-  test.case = 'typed:1, prototype:explicit, order:( prototype, typed )';
-
-  var amending = 'extend';
-  var prototype = Object.create( null );
-  prototype.constructor = constructor1;
-  var construction = Object.create( prototype );
-  var args = [];
-  // args.push( _.trait.prototype( prototype, { new : false } ) );
-  // args.push( _.trait.typed( 1 ) );
-  args.push( _.trait.typed({ val : 1, prototype, new : false }) );
-
-  var blueprint = _.blueprint._define({ args, amending });
-
-  _.construction._init
-  ({
-    constructing : false,
-    construction,
-    amending,
-    runtime : blueprint.Runtime,
-  });
-
-  test.identical( _.prototype.each( construction ).length, 2 );
-  test.identical( construction.constructor.name, 'constructor1' );
-
-  var exp =
-  {
-  }
-  test.identical( propertyOwn( _.prototype.each( construction )[ 0 ] ), exp );
-  var exp =
-  {
-    constructor : constructor1,
-  }
-  test.identical( propertyOwn( _.prototype.each( construction )[ 1 ] ), exp );
-
-  /* */
-
-  test.case = 'typed:1, prototype:explicit, order:( typed, prototype )';
-
-  var amending = 'extend';
-  var prototype = Object.create( null );
-  prototype.constructor = constructor1;
-  var construction = Object.create( prototype );
-  var args = [];
-  // args.push( _.trait.typed( 1 ) );
-  // args.push( _.trait.prototype( prototype, { new : false } ) );
-  args.push( _.trait.typed({ val : 1, prototype, new : false }) );
-
-  var blueprint = _.blueprint._define({ args, amending });
-
-  _.construction._init
-  ({
-    constructing : false,
-    construction,
-    amending,
-    runtime : blueprint.Runtime,
-  });
-
-  test.identical( _.prototype.each( construction ).length, 2 );
-  test.identical( construction.constructor.name, 'constructor1' );
-
-  var exp =
-  {
-  }
-  test.identical( propertyOwn( _.prototype.each( construction )[ 0 ] ), exp );
-  var exp =
-  {
-    constructor : constructor1,
-  }
-  test.identical( propertyOwn( _.prototype.each( construction )[ 1 ] ), exp );
-
-  /* */
-
-  function constructor1()
-  {
-  }
-
-  /* */
-
-  function constructor2()
-  {
-  }
-
-}
-
-traitPrototypeTraitTyped.description =
-`
-  - extending prototyped object with explicitly defined prototype
-  -- does not throw errors
 `
 
 //
@@ -18781,7 +18807,7 @@ let Self =
     defineProps,
     definePropStaticBasic,
     definePropStaticInheritance,
-    definePropStaticMaybeAmendConstruction, /* yyy */
+    definePropStaticMaybeAmendConstruction,
     definePropEnumerable,
     definePropWritable,
     definePropConfigurable,
@@ -18829,12 +18855,16 @@ let Self =
     traitTypedBasic, /* critical */
     traitTypedConstructionAmend, /* critical */
     traitTypedPrototypeBlueprint,
+    traitTypedPrototype,
+    traitTypedLogistic,
+
+    // other traits
+
     traitName,
     traitWithConstructorBasic,
-    traitWithConstructorAmendConstruction, /* yyy */
+    traitWithConstructorAmendConstruction,
     traitWithConstructorAmendConstructionAlternatives,
     traitWithConstructorTraitPrototypeTraitTyped,
-    traitPrototypeTraitTyped,
     traitExtendable,
     traitExtendableAmendConstruction,
 

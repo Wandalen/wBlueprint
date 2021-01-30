@@ -71,7 +71,7 @@ function defineConstructor()
 
 function define()
 {
-  return _.blueprint._define({ args : arguments, amending : 'extend' });
+  return _.blueprint._define({ src : arguments, amending : 'extend' });
 }
 
 //
@@ -107,16 +107,24 @@ function _define( o )
   Object.preventExtensions( blueprint );
 
   /* xxx : remove the cycle */
-  for( let a = 0 ; a < o.args.length ; a++ )
-  {
-    _.blueprint._amend
-    ({
-      blueprint,
-      extension : o.args[ a ],
-      amending : o.amending,
-      blueprintAction : 'inherit',
-    });
-  }
+  // for( let a = 0 ; a < o.args.length ; a++ )
+  // {
+  //   _.blueprint._amend
+  //   ({
+  //     blueprint,
+  //     extension : o.args[ a ],
+  //     amending : o.amending,
+  //     blueprintAction : 'inherit',
+  //   });
+  // }
+
+  _.blueprint._amend
+  ({
+    blueprint,
+    extension : o.src,
+    amending : o.amending,
+    blueprintAction : 'inherit',
+  });
 
   let defContext = Object.create( null );
   defContext.blueprint = blueprint;
@@ -133,9 +141,6 @@ function _define( o )
   _.blueprint._associateDefinitions( blueprint );
   defContext.stage = 'blueprintForm1';
   _.blueprint._form( defContext );
-
-  // if( _global_.debugger )
-  // debugger;
 
   runtime.Typed = blueprint.Traits.typed.val;
   runtime._MakingTyped = false;
@@ -214,7 +219,7 @@ function _define( o )
 
 _define.defaults =
 {
-  args : null,
+  src : null,
   amending : 'extend'
 }
 
@@ -363,7 +368,7 @@ function _amend( o )
   {
     if( _.traitIs( definition ) )
     amendWithTrait( definition, name );
-    else if( definition.definitionGroup === 'definition.named' )
+    else if( definition.defGroup === 'definition.named' )
     amendWithNamedDefinition( definition, name );
     else
     amendWithUnnamedDefinition( definition, name );
@@ -373,12 +378,15 @@ function _amend( o )
 
   function amendWithNamedDefinition( srcDefinition, name )
   {
-    _.assert( srcDefinition.definitionGroup === 'definition.named' );
+    _.assert( srcDefinition.defGroup === 'definition.named' );
     _.assert( _.strDefined( name ) || _.strDefined( srcDefinition.name ) );
     _.assert( name === null || srcDefinition.name === null || name === srcDefinition.name );
 
     if( name && name !== srcDefinition.name )
-    srcDefinition.name = name;
+    {
+      _.assert( !Object.isFrozen( srcDefinition ) );
+      srcDefinition.name = name;
+    }
 
     let dstDefinition = o.blueprint._NamedDefinitionsMap[ name ] || null;
 
@@ -391,7 +399,7 @@ function _amend( o )
     let o2 = _.mapExtend( null, o );
     o2.blueprintDefinitionRewrite = blueprintNamedDefinitionRewrite;
     o2.name = srcDefinition.name;
-    o2.definitionGroup = 'definition.named';
+    o2.defGroup = 'definition.named';
 
     if( o.amending === 'supplement' )
     {
@@ -433,7 +441,7 @@ function _amend( o )
 
   function amendWithUnnamedDefinition( srcDefinition )
   {
-    _.assert( srcDefinition.definitionGroup === 'definition.unnamed' );
+    _.assert( srcDefinition.defGroup === 'definition.unnamed' );
 
     let dstDefinition = o.blueprint.Traits[ srcDefinition.kind ] || null;
 
@@ -443,7 +451,7 @@ function _amend( o )
 
     let o2 = _.mapExtend( null, o );
     o2.blueprintDefinitionRewrite = blueprintUnnamedDefinitionRewrite;
-    o2.definitionGroup = 'definition.unnamed';
+    o2.defGroup = 'definition.unnamed';
 
     if( o.amending === 'supplement' )
     {
@@ -552,17 +560,17 @@ function _amend( o )
 
   /* */
 
-  function definitionCloneMaybe( defenition )
+  function definitionCloneMaybe( defenition ) /* xxx : introduce standard clone? */
   {
-    if( defenition.blueprint )
+    if( defenition._blueprint )
     {
       defenition = defenition.clone();
-      if( defenition.blueprint )
-      defenition.blueprint = null;
+      if( defenition._blueprint )
+      defenition._blueprint = null;
       if( defenition._ )
       defenition._ = Object.create( null );
     }
-    _.assert( defenition.blueprint === null || defenition.blueprint === false );
+    _.assert( defenition._blueprint === null || defenition._blueprint === false );
     return defenition;
   }
 
@@ -622,13 +630,16 @@ function _associateDefinitions( blueprint )
 
   _.blueprint.eachDefinition( blueprint, ( blueprint, definition, key ) =>
   {
-    if( definition.blueprint === false )
-    return;
-    _.assert( definition.blueprint === null || definition.blueprint === false );
+    if( definition._blueprint === false )
+    {
+      _.assert( Object.isFrozen( definition ) );
+      return;
+    }
+    _.assert( definition._blueprint === null );
     if( definition.kind === 'extend' ) /* xxx */
     debugger;
     _.assert( !Object.isFrozen( definition ) );
-    definition.blueprint = blueprint;
+    definition._blueprint = blueprint;
   });
 
   return blueprint;
@@ -688,6 +699,10 @@ function _preventExtensions( blueprint )
 
 function _validate( blueprint )
 {
+
+  if( !Config.debug )
+  return;
+
   _.assert( _.blueprint.isDefinitive( blueprint ) );
   _.assert
   (
@@ -700,6 +715,19 @@ function _validate( blueprint )
     , `Each blueprint should have handler::retype, but definition::${blueprint.name} does not have`
   );
   _.assert( !blueprint.Traits.typed || blueprint.Typed === blueprint.Traits.typed.val || blueprint.Traits.typed.val === _.maybe );
+
+  _.blueprint.eachDefinition( blueprint, ( blueprint, definition, key ) =>
+  {
+    if( definition._blueprint === false )
+    {
+      _.assert( Object.isFrozen( definition ) );
+      return;
+    }
+    // _.assert( definition._blueprint === blueprint );
+    // _.assert( !Object.isExtensible( definition ) );
+    // _.assert( Object.isFrozen( definition ) );
+  });
+
 }
 
 //

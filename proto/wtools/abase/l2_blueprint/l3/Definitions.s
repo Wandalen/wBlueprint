@@ -16,6 +16,7 @@ let PropOptionsLogic =
   // after           : null,
   blueprintDepthLimit : null,
   blueprintDepthReserve : 0,
+  _blueprint : false,
 }
 
 let PropOptionsDescriptor =
@@ -170,10 +171,11 @@ function prop_body( o )
   _.assert( _.boolIs( o.writable ) || o.writable === null );
   _.assert( _.boolIs( o.configurable ) );
   _.assert( _.boolIs( o.enumerable ) );
+  _.assert( o._blueprint !== undefined );
 
-  o.definitionGroup = 'definition.named';
+  o.defGroup = 'definition.named';
   o.blueprintForm2 = blueprintForm2;
-  o.blueprint = false;
+  // o._blueprint = false;
 
   /* */
 
@@ -274,7 +276,7 @@ function prop_body( o )
     _.assert( _.boolIs( definition.configurable ) );
     _.assert( _.boolIs( definition.enumerable ) );
     _.assert( !_.boolLikeFalse( definition.accessor ) );
-    _.assert( !_.prototype._isStandardEntity( prototype ), 'Attempt to pollute _global_.Object.prototype' ); /* xxx : cover */
+    _.assert( !_.prototype._isStandardEntity( prototype ), 'Attempt to pollute _global_.Object.prototype' );
 
     if( _global_.debugger )
     debugger;
@@ -614,9 +616,6 @@ function prop_body( o )
 prop_body.defaults =
 {
 
-  name            : null,
-  val             : _.nothing,
-
   ... PropOptionsLogic,
   /*
   order           : 0,
@@ -624,6 +623,7 @@ prop_body.defaults =
   // after           : null,
   blueprintDepthLimit : null,
   blueprintDepthReserve : 0,
+  _blueprint : false,
   */
 
   ... PropOptionsDescriptor,
@@ -655,6 +655,10 @@ prop_body.defaults =
   // put             : null,
   // set             : null,
   */
+
+  name            : null,
+  val             : _.nothing,
+  _blueprint       : null,
 
 }
 
@@ -928,9 +932,9 @@ function nothing_body( o )
 {
 
   _.assertRoutineOptions( nothing_body, arguments );
-  o.definitionGroup = 'definition.unnamed';
+  o.defGroup = 'definition.unnamed';
   o.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
-  o.blueprint = false;
+  // o.blueprint = false;
 
   let definition = _.definition._definitionMake( 'nothing', o );
 
@@ -950,6 +954,7 @@ nothing_body.defaults =
   ... PropOptionsLogic,
   blueprintDepthReserve : -1,
   blueprintDepthLimit : 1,
+  _blueprint : false,
 }
 
 let nothing = _.routineUnite( _singleArgumentHead, nothing_body );
@@ -970,9 +975,9 @@ function _amendment_body( o )
   _.assert( _.objectIs( o.val ) );
   _.assert( _.blueprintIsDefinitive( o.val ) );
 
-  o.definitionGroup = 'definition.unnamed';
+  o.defGroup = 'definition.unnamed';
   o.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
-  o.blueprint = false;
+  // o.blueprint = false;
 
   let definition = _.definition._definitionMake( 'amend', o );
 
@@ -1007,6 +1012,7 @@ _amendment_body.defaults =
   val : null,
   blueprintDepthReserve : 0,
   blueprintDepthLimit : 1,
+  _blueprint : false,
 }
 
 let _amendment = _.routineUnite( _amendment_head, _amendment_body );
@@ -1083,7 +1089,7 @@ inherit.defaults =
 function _constant_functor() /* xxx : test with blueprint? */
 {
   let prototype = Object.create( null );
-  prototype.definitionGroup = 'definition.named';
+  prototype.defGroup = 'definition.named';
   prototype.subKind = 'constant';
   prototype.asAccessorSuite = asAccessorSuite;
   prototype.toVal = toVal;

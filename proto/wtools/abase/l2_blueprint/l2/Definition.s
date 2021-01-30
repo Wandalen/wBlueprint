@@ -39,7 +39,7 @@ function Definition( o )
   else
   return new( _.constructorJoin( Definition, arguments ) );
   _.mapExtend( this, o );
-  _.assert( _.longHas( _.definition.DefinitionGroup, o.definitionGroup ) );
+  _.assert( _.longHas( _.definition.DefinitionGroup, o.defGroup ) );
   return this;
 }
 
@@ -81,16 +81,17 @@ function toVal( definition )
 
 //
 
-function _traitMake( kind, o )
+function _traitMake( kind, o ) /* xxx : reuse _definitionMake */
 {
 
   _.assert( arguments.length === 2 );
   _.assert( _.strDefined( kind ) );
   _.assert( _.mapIs( o ) );
-  _.assert( o.blueprint === undefined || o.blueprint === false );
+  // _.assert( o._blueprint === undefined || o._blueprint === null || o._blueprint === false );
+  _.assert( o._blueprint === null || o._blueprint === false );
 
-  if( !o.definitionGroup )
-  o.definitionGroup = 'trait';
+  if( !o.defGroup )
+  o.defGroup = 'trait';
   if( !o.kind )
   o.kind = kind;
   // if( !o.constructionAmend ) /* yyy */
@@ -98,16 +99,21 @@ function _traitMake( kind, o )
   //   o.constructionAmend = constructionAmend;
   //   // console.log( `Generated _amendDefinitionWithoutMethod for ${o.kind}` );
   // }
-  if( o.blueprint === undefined )
-  o.blueprint = null;
+  if( o._blueprint === undefined )
+  o._blueprint = null;
 
   let definition = new _.Definition( o );
-
+  // let definition = _.definition.retype( o ); /* xxx : use */
+  // _.assert( definition ==== o );
   _.assert( definition.blueprintAmend === undefined );
+  _.assert( definition.constructionAmend === undefined );
+  _.assert( definition.blueprint === undefined );
 
+  if( definition._blueprint === false ) /* xxx */
+  Object.freeze( definition );
+  else
   Object.preventExtensions( definition );
-  // if( definition.blueprint === false ) /* xxx */
-  // Object.freeze( definition );
+
   return definition;
 
   // function constructionAmend( dst, key, amending )
@@ -132,22 +138,31 @@ function _definitionMake( kind, o )
   _.assert( arguments.length === 2 );
   _.assert( _.strDefined( kind ) );
   _.assert( _.mapIs( o ) );
-  _.assert( o.blueprint === undefined || o.blueprint === false );
+  // _.assert( o._blueprint === undefined || o._blueprint === null || o._blueprint === false );
+  _.assert( o._blueprint === null || o._blueprint === false );
 
-  if( !o.definitionGroup )
-  o.definitionGroup = 'definition.unnamed';
+  if( !o.defGroup )
+  o.defGroup = 'definition.unnamed';
   if( !o.kind )
   o.kind = kind;
   // if( !o.constructionAmend ) /* yyy */
   // o.constructionAmend = constructionAmend;
-  if( o.blueprint === undefined )
-  o.blueprint = null;
+  if( o._blueprint === undefined )
+  o._blueprint = null;
 
   let definition = new _.Definition( o );
 
   _.assert( definition.blueprintAmend === undefined );
+  _.assert( definition.constructionAmend === undefined );
+  _.assert( definition.blueprint === undefined );
 
+  // Object.preventExtensions( definition );
+
+  if( definition._blueprint === false ) /* xxx */
+  Object.freeze( definition );
+  else
   Object.preventExtensions( definition );
+
   return definition;
 
   // function constructionAmend( dst, key, amending )

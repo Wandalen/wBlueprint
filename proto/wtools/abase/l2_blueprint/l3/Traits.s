@@ -41,7 +41,7 @@ function callable( o )
   _.assert( arguments.length === 1 );
   _.assert( _.routineIs( o.val ) );
 
-  o.blueprint = false;
+  // o.blueprint = false;
 
   return _.definition._traitMake( 'callable', o );
 }
@@ -49,6 +49,7 @@ function callable( o )
 callable.defaults =
 {
   callback : null,
+  _blueprint : false,
 }
 
 //
@@ -161,7 +162,7 @@ function typed_body( o )
   o.blueprintForm1 = blueprintForm1;
   o.blueprintForm2 = blueprintForm2;
   o.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
-  // o.blueprint = false; /* xxx */
+  // o._blueprint = false; /* xxx */
 
   let val = o.val;
   let allocate;
@@ -569,6 +570,7 @@ typed_body.defaults =
   prototype : _.nothing,
   new : null,
   _dstConstruction : _.nothing,
+  _blueprint : null,
 }
 
 let typed = _.routineUnite( typed_head, typed_body );
@@ -585,7 +587,7 @@ function withConstructor( o )
 
   o.val = !!o.val;
   o.blueprintForm2 = blueprintForm2;
-  o.blueprint = false;
+  o._blueprint = false;
 
   return _.definition._traitMake( 'withConstructor', o );
 
@@ -675,11 +677,11 @@ function extendable( o )
   _.assert( _.boolIs( o.val ) );
 
   o.blueprintForm2 = blueprintForm2;
-  o.blueprint = false;
+  // o._blueprint = false;
 
   return _.definition._traitMake( 'extendable', o );
 
-  function blueprintForm2( o )
+  function blueprintForm2( o ) /* xxx : use op */
   {
     _.assert( _.boolIs( o.blueprint.Traits.extendable.val ) );
     if( o.blueprint.Traits.extendable.val )
@@ -697,6 +699,7 @@ function extendable( o )
 extendable.defaults =
 {
   val : true,
+  _blueprint : false,
 }
 
 //
@@ -710,7 +713,7 @@ function name( o )
   _.assert( _.strIs( o.val ) );
 
   o.blueprintForm1 = blueprintForm1;
-  o.blueprint = false;
+  // o.blueprint = false;
 
   let def = _.definition._traitMake( 'name', o );
   return def;
@@ -726,6 +729,7 @@ function name( o )
 name.defaults =
 {
   val : null,
+  _blueprint : false,
 }
 
 // --
@@ -743,9 +747,8 @@ let TraitExtension =
 {
 
   callable,
-  // prototype,
   typed,
-  withConstructor,
+  withConstructor, /* xxx : reuse static:maybe _.define.prop() ?*/
   extendable,
   name,
 
