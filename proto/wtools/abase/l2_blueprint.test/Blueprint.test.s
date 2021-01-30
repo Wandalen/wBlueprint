@@ -1833,8 +1833,6 @@ function definePropStaticInheritance( test )
 
 //
 
-/* xxx yyy : write it */
-// function traitWithConstructorAmendConstruction( test )
 function definePropStaticMaybeAmendConstruction( test )
 {
   let context = this;
@@ -6632,6 +6630,7 @@ definePropAccessorConstructionAmend.description =
 `
 
 definePropAccessorConstructionAmend.timeOut = 30000;
+definePropAccessorConstructionAmend.rapidity = 1;
 
 //
 
@@ -7080,387 +7079,313 @@ function definePropAccessorRewriting( test )
 
   /* */
 
-  // test.case = 'overriding static:1 by static:1, typed : true';
-  //
-  // var blueprint1 = _.blueprint.define
-  // ({
-  //   typed : _.trait.typed( true ),
-  //   f1 : _.define.prop( 1, { accessor : 1, static : 1 } ),
-  // });
-  // var blueprint2 = _.blueprint.define
-  // ({
-  //   inherit : _.define.inherit( blueprint1 ),
-  //   f1 : _.define.prop( 2, { accessor : 1, static : 1, combining : 'rewrite' } ),
-  // });
-  // var instance1 = blueprint2.Make();
-  //
-  // test.description = 'instance'; /* */
-  //
-  // test.identical( instance1.f1, 2 );
-  // test.identical( blueprint1.prototype.f1, 1 );
-  // test.identical( blueprint1.Make.f1, 1 );
-  // test.identical( blueprint2.prototype.f1, 2 );
-  // test.identical( blueprint2.Make.f1, 2 );
-  //
-  // test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
-  // test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
-  // test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
-  // test.identical( _.prototype.each( instance1 ).length, 4 );
-  // var exp =
-  // {
-  // }
-  // test.identical( _.property.of( instance1 ), exp );
-  // var exp =
-  // {
-  //   'f1' : 1,
-  // }
-  // test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
-  // var exp =
-  // {
-  //   'f1' : 2,
-  // }
-  // test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
-  //
-  // test.description = 'instance set f1'; /* */
-  //
-  // instance1.f1 = 3;
-  //
-  // test.identical( instance1.f1, 3 );
-  // test.identical( blueprint1.prototype.f1, 1 );
-  // test.identical( blueprint1.Make.f1, 1 );
-  // test.identical( blueprint2.prototype.f1, 3 );
-  // test.identical( blueprint2.Make.f1, 3 );
-  //
-  // test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
-  // test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
-  // test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
-  // test.identical( _.prototype.each( instance1 ).length, 4 );
-  // var exp =
-  // {
-  //   'f1' : 3,
-  // }
-  // test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
-  // var exp =
-  // {
-  //   'f1' : 1,
-  // }
-  // test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
-  // var exp =
-  // {
-  //   'f1' : 3,
-  // }
-  // test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
-  //
-  // test.description = 'blueprint1.prototype set f1'; /* */
-  //
-  // blueprint1.prototype.f1 = 5;
-  //
-  // test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
-  // test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
-  // test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
-  // test.identical( instance1.f1, 3 );
-  // test.identical( blueprint1.prototype.f1, 5 );
-  // test.identical( blueprint1.Make.f1, 5 );
-  // test.identical( blueprint2.prototype.f1, 3 );
-  // test.identical( blueprint2.Make.f1, 3 );
-  //
-  // test.identical( _.prototype.each( instance1 ).length, 4 );
-  // var exp =
-  // {
-  //   'f1' : 3,
-  // }
-  // test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
-  // var exp =
-  // {
-  //   'f1' : 5,
-  // }
-  // test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
-  // var exp =
-  // {
-  //   'f1' : 3,
-  // }
-  // test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
-  //
-  // test.description = 'blueprint2.prototype set f1'; /* */
-  //
-  // blueprint2.prototype.f1 = 6;
-  //
-  // test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
-  // test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
-  // test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
-  // test.identical( instance1.f1, 6 );
-  // test.identical( blueprint1.prototype.f1, 5 );
-  // test.identical( blueprint1.Make.f1, 5 );
-  // test.identical( blueprint2.prototype.f1, 6 );
-  // test.identical( blueprint2.Make.f1, 6 );
-  //
-  // test.identical( _.prototype.each( instance1 ).length, 4 );
-  // var exp =
-  // {
-  //   'f1' : 6,
-  // }
-  // test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
-  // var exp =
-  // {
-  //   'f1' : 5,
-  // }
-  // test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
-  // var exp =
-  // {
-  //   'f1' : 6,
-  // }
-  // test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
-  // xxx
-  //
-  // /* */
-  //
-  // test.case = 'overriding static:1 by static:1, typed : false';
-  //
-  // var blueprint1 = _.blueprint.define
-  // ({
-  //   typed : _.trait.typed( false ),
-  //   f1 : _.define.prop( 1, { accessor : 1, static : 1 } ),
-  // });
-  // var blueprint2 = _.blueprint.define
-  // ({
-  //   inherit : _.define.inherit( blueprint1 ),
-  //   f1 : _.define.prop( 2, { accessor : 1, static : 1, combining : 'rewrite' } ),
-  // });
-  // var instance1 = blueprint2.Make();
-  //
-  // test.description = 'instance'; /* */
-  //
-  // test.identical( blueprint1.prototype, null );
-  // // test.identical( blueprint2.prototype, null );
-  // test.identical( instance1.f1, 2 );
-  // // test.identical( blueprint1.prototype.f1, 1 );
-  // // test.identical( blueprint1.Make.f1, 1 );
-  // test.identical( blueprint2.prototype.f1, 2 );
-  // test.identical( blueprint2.Make.f1, 2 );
-  //
-  // test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
-  // // test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
-  // test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
-  // test.identical( _.prototype.each( instance1 ).length, 3 );
-  // var exp =
-  // {
-  // }
-  // test.identical( _.property.of( instance1 ), exp );
-  // // var exp =
-  // // {
-  // //   'f1' : 1,
-  // // }
-  // // test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
-  // var exp =
-  // {
-  //   'f1' : 2,
-  // }
-  // test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
-  //
-  // test.description = 'instance set f1'; /* */
-  //
-  // instance1.f1 = 3;
-  // // test.shouldThrowErrorSync( () => instance1.f1 = 3 );
-  //
-  // test.identical( instance1.f1, 3 );
-  // // test.identical( blueprint1.prototype.f1, 1 );
-  // // test.identical( blueprint1.Make.f1, 1 );
-  // test.identical( blueprint2.prototype.f1, 3 );
-  // test.identical( blueprint2.Make.f1, 3 );
-  //
-  // test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
-  // // test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
-  // test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
-  // test.identical( _.prototype.each( instance1 ).length, 3 );
-  // // var exp =
-  // // {
-  // //   'f1' : 1,
-  // // }
-  // // test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
-  // // var exp =
-  // // {
-  // //   'f1' : 2,
-  // // }
-  // // test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
-  //
-  // // test.description = 'blueprint1.prototype set f1'; /* */
-  // //
-  // // blueprint1.prototype.f1 = 5;
-  // //
-  // // test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
-  // // // test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
-  // // // test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
-  // // test.identical( instance1.f1, undefined );
-  // // // test.identical( blueprint1.prototype.f1, 5 );
-  // // // test.identical( blueprint1.Make.f1, 5 );
-  // // // test.identical( blueprint2.prototype.f1, 2 );
-  // // // test.identical( blueprint2.Make.f1, 2 );
-  // //
-  // // test.identical( _.prototype.each( instance1 ).length, 1 );
-  // // // var exp =
-  // // // {
-  // // //   'f1' : 5,
-  // // // }
-  // // // test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
-  // // // var exp =
-  // // // {
-  // // //   'f1' : 2,
-  // // // }
-  // // // test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
-  // //
-  // // test.description = 'blueprint2.prototype set f1'; /* */
-  // //
-  // // blueprint2.prototype.f1 = 6;
-  // //
-  // // test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
-  // // // test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
-  // // // test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
-  // // // test.identical( instance1.f1, undefined );
-  // // // test.identical( blueprint1.prototype.f1, 5 );
-  // // // test.identical( blueprint1.Make.f1, 5 );
-  // // // test.identical( blueprint2.prototype.f1, 6 );
-  // // // test.identical( blueprint2.Make.f1, 6 );
-  // //
-  // // // test.identical( _.prototype.each( instance1 ).length, 1 );
-  // // // var exp =
-  // // // {
-  // // //   'f1' : 5,
-  // // // }
-  // // // test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
-  // // // var exp =
-  // // // {
-  // // //   'f1' : 6,
-  // // // }
-  // // // test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
-  //
-  // /* */
-  //
-  // test.case = 'overriding static:0 by static:0, typed : true';
-  //
-  // var blueprint1 = _.blueprint.define
-  // ({
-  //   typed : _.trait.typed( true ),
-  //   f1 : _.define.prop( 1, { accessor : 1, static : 0 } ),
-  // });
-  // var blueprint2 = _.blueprint.define
-  // ({
-  //   inherit : _.define.inherit( blueprint1 ),
-  //   f1 : _.define.prop( 2, { accessor : 1, static : 0, combining : 'rewrite' } ),
-  // });
-  // var instance1 = blueprint2.Make();
-  //
-  // test.description = 'instance'; /* */
-  //
-  // test.identical( instance1.f1, 2 );
-  // test.identical( blueprint1.prototype.f1, undefined );
-  // test.identical( blueprint1.Make.f1, undefined );
-  // test.identical( blueprint2.prototype.f1, undefined );
-  // test.identical( blueprint2.Make.f1, undefined );
-  //
-  // test.true( Object.hasOwnProperty.call( instance1, '_' ) );
-  // test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
-  // test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
-  // test.identical( _.prototype.each( instance1 ).length, 4 );
-  // var exp =
-  // {
-  //   'f1' : 2,
-  // }
-  // test.identical( _.property.of( instance1 ), exp );
-  // var exp =
-  // {
-  // }
-  // test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
-  // var exp =
-  // {
-  // }
-  // test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
-  //
-  // test.description = 'instance set f1'; /* */
-  //
-  // instance1.f1 = 3;
-  //
-  // test.identical( instance1.f1, 3 );
-  // test.identical( blueprint1.prototype.f1, undefined );
-  // test.identical( blueprint1.Make.f1, undefined );
-  // test.identical( blueprint2.prototype.f1, undefined );
-  // test.identical( blueprint2.Make.f1, undefined );
-  //
-  // test.true( Object.hasOwnProperty.call( instance1, '_' ) );
-  // test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
-  // test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
-  // test.identical( _.prototype.each( instance1 ).length, 4 );
-  // var exp =
-  // {
-  //   'f1' : 3,
-  // }
-  // test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
-  // var exp =
-  // {
-  // }
-  // test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
-  // var exp =
-  // {
-  // }
-  // test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
-  //
-  // test.description = 'blueprint2.prototype set f1'; /* */
-  //
-  // blueprint2.prototype.f1 = 5;
-  //
-  // test.true( Object.hasOwnProperty.call( instance1, '_' ) );
-  // test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
-  // test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
-  // test.identical( instance1.f1, 3 );
-  // test.identical( blueprint1.prototype.f1, undefined );
-  // test.identical( blueprint1.Make.f1, undefined );
-  // test.identical( blueprint2.prototype.f1, 5 );
-  // test.identical( blueprint2.Make.f1, undefined );
-  //
-  // test.identical( _.prototype.each( instance1 ).length, 4 );
-  // var exp =
-  // {
-  //   'f1' : 3,
-  // }
-  // test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
-  // var exp =
-  // {
-  // }
-  // test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
-  // var exp =
-  // {
-  //   'f1' : 5,
-  // }
-  // test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
-  //
-  // test.description = 'blueprint1.prototype set f1'; /* */
-  //
-  // blueprint1.prototype.f1 = 6;
-  //
-  // test.true( Object.hasOwnProperty.call( instance1, '_' ) );
-  // test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
-  // test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
-  // test.identical( instance1.f1, 3 );
-  // test.identical( blueprint1.prototype.f1, 6 );
-  // test.identical( blueprint1.Make.f1, undefined );
-  // test.identical( blueprint2.prototype.f1, 5 );
-  // test.identical( blueprint2.Make.f1, undefined );
-  //
-  // test.identical( _.prototype.each( instance1 ).length, 4 );
-  // var exp =
-  // {
-  //   'f1' : 3,
-  // }
-  // test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
-  // var exp =
-  // {
-  //   'f1' : 6,
-  // }
-  // test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
-  // var exp =
-  // {
-  //   'f1' : 5,
-  // }
-  // test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+  test.case = 'overriding static:1 by static:1, typed : true';
+
+  var blueprint1 = _.blueprint.define
+  ({
+    typed : _.trait.typed( true ),
+    f1 : _.define.prop( 1, { accessor : 1, static : 1 } ),
+  });
+  var blueprint2 = _.blueprint.define
+  ({
+    inherit : _.define.inherit( blueprint1 ),
+    f1 : _.define.prop( 2, { accessor : 1, static : 1, combining : 'rewrite' } ),
+  });
+  var instance1 = blueprint2.Make();
+
+  test.description = 'instance'; /* */
+
+  test.identical( instance1.f1, 2 );
+  test.identical( blueprint1.prototype.f1, 1 );
+  test.identical( blueprint1.Make.f1, 1 );
+  test.identical( blueprint2.prototype.f1, 2 );
+  test.identical( blueprint2.Make.f1, 2 );
+
+  test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( _.prototype.each( instance1 ).length, 4 );
+  var exp =
+  {
+  }
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 1,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 2,
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'instance set f1'; /* */
+
+  instance1.f1 = 3;
+
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint1.prototype.f1, 1 );
+  test.identical( blueprint1.Make.f1, 1 );
+  test.identical( blueprint2.prototype.f1, 3 );
+  test.identical( blueprint2.Make.f1, 3 );
+
+  test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( _.prototype.each( instance1 ).length, 4 );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 1,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'blueprint1.prototype set f1'; /* */
+
+  blueprint1.prototype.f1 = 5;
+
+  test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint1.prototype.f1, 5 );
+  test.identical( blueprint1.Make.f1, 5 );
+  test.identical( blueprint2.prototype.f1, 3 );
+  test.identical( blueprint2.Make.f1, 3 );
+
+  test.identical( _.prototype.each( instance1 ).length, 4 );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 5,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'blueprint2.prototype set f1'; /* */
+
+  blueprint2.prototype.f1 = 6;
+
+  test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( instance1.f1, 6 );
+  test.identical( blueprint1.prototype.f1, 5 );
+  test.identical( blueprint1.Make.f1, 5 );
+  test.identical( blueprint2.prototype.f1, 6 );
+  test.identical( blueprint2.Make.f1, 6 );
+
+  test.identical( _.prototype.each( instance1 ).length, 4 );
+  var exp =
+  {
+    'f1' : 6,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 5,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 6,
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  /* */
+
+  test.case = 'overriding static:1 by static:1, typed : false';
+
+  var blueprint1 = _.blueprint.define
+  ({
+    typed : _.trait.typed( false ),
+    f1 : _.define.prop( 1, { accessor : 1, static : 1 } ),
+  });
+  var blueprint2 = _.blueprint.define
+  ({
+    inherit : _.define.inherit( blueprint1 ),
+    f1 : _.define.prop( 2, { accessor : 1, static : 1, combining : 'rewrite' } ),
+  });
+  var instance1 = blueprint2.Make();
+
+  test.description = 'instance'; /* */
+
+  test.identical( blueprint1.prototype, null );
+  test.identical( instance1.f1, 2 );
+  test.identical( blueprint2.prototype.f1, 2 );
+  test.identical( blueprint2.Make.f1, 2 );
+
+  test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( _.prototype.each( instance1 ).length, 3 );
+  var exp =
+  {
+  }
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+    'f1' : 2,
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'instance set f1'; /* */
+
+  instance1.f1 = 3;
+
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint2.prototype.f1, 3 );
+  test.identical( blueprint2.Make.f1, 3 );
+
+  test.true( !Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( _.prototype.each( instance1 ).length, 3 );
+
+  /* */
+
+  test.case = 'overriding static:0 by static:0, typed : true';
+
+  var blueprint1 = _.blueprint.define
+  ({
+    typed : _.trait.typed( true ),
+    f1 : _.define.prop( 1, { accessor : 1, static : 0 } ),
+  });
+  var blueprint2 = _.blueprint.define
+  ({
+    inherit : _.define.inherit( blueprint1 ),
+    f1 : _.define.prop( 2, { accessor : 1, static : 0, combining : 'rewrite' } ),
+  });
+  var instance1 = blueprint2.Make();
+
+  test.description = 'instance'; /* */
+
+  test.identical( instance1.f1, 2 );
+  test.identical( blueprint1.prototype.f1, undefined );
+  test.identical( blueprint1.Make.f1, undefined );
+  test.identical( blueprint2.prototype.f1, undefined );
+  test.identical( blueprint2.Make.f1, undefined );
+
+  test.true( Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( _.prototype.each( instance1 ).length, 4 );
+  var exp =
+  {
+    'f1' : 2,
+  }
+  test.identical( _.property.of( instance1 ), exp );
+  var exp =
+  {
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'instance set f1'; /* */
+
+  instance1.f1 = 3;
+
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint1.prototype.f1, undefined );
+  test.identical( blueprint1.Make.f1, undefined );
+  test.identical( blueprint2.prototype.f1, undefined );
+  test.identical( blueprint2.Make.f1, undefined );
+
+  test.true( Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( _.prototype.each( instance1 ).length, 4 );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'blueprint2.prototype set f1'; /* */
+
+  blueprint2.prototype.f1 = 5;
+
+  test.true( Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint1.prototype.f1, undefined );
+  test.identical( blueprint1.Make.f1, undefined );
+  test.identical( blueprint2.prototype.f1, 5 );
+  test.identical( blueprint2.Make.f1, undefined );
+
+  test.identical( _.prototype.each( instance1 ).length, 4 );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 5,
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+
+  test.description = 'blueprint1.prototype set f1'; /* */
+
+  blueprint1.prototype.f1 = 6;
+
+  test.true( Object.hasOwnProperty.call( instance1, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint1.prototype, '_' ) );
+  test.true( Object.hasOwnProperty.call( blueprint2.prototype, '_' ) );
+  test.identical( instance1.f1, 3 );
+  test.identical( blueprint1.prototype.f1, 6 );
+  test.identical( blueprint1.Make.f1, undefined );
+  test.identical( blueprint2.prototype.f1, 5 );
+  test.identical( blueprint2.Make.f1, undefined );
+
+  test.identical( _.prototype.each( instance1 ).length, 4 );
+  var exp =
+  {
+    'f1' : 3,
+  }
+  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 6,
+  }
+  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  var exp =
+  {
+    'f1' : 5,
+  }
+  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
 
   /* */
 
@@ -12978,6 +12903,9 @@ function traitTypedBasic( test )
 
 }
 
+traitTypedBasic.timeOut = 30000;
+traitTypedBasic.rapidity = 1;
+
 //
 
 function traitTypedConstructionAmend( test )
@@ -13908,6 +13836,7 @@ create typed
 }
 
 traitTypedConstructionAmend.timeOut = 30000;
+traitTypedConstructionAmend.rapidity = 1;
 
 //
 
@@ -18864,7 +18793,7 @@ let Self =
     definePropStaticAccessorBasic,
     definePropAccessorBasic,
     definePropAccessorTypedMaybe,
-    definePropAccessorConstructionAmend, /* xxx */
+    definePropAccessorConstructionAmend, /* critical */
     definePropAccessorAlternativeOptions,
     definePropAccessorStaticNonStatic,
     definePropAccessorRewriting,
@@ -18897,8 +18826,8 @@ let Self =
 
     traitTypePrototype,
     traitTypedTrivial,
-    traitTypedBasic, /* xxx */
-    traitTypedConstructionAmend, /* xxx */
+    traitTypedBasic, /* critical */
+    traitTypedConstructionAmend, /* critical */
     traitTypedPrototypeBlueprint,
     traitName,
     traitWithConstructorBasic,
