@@ -453,7 +453,8 @@ function prop_body( o )
         normalizedAsuite,
         storingStrategy,
         name,
-        val : _.escape.right( val2 ),
+        val : val2,
+        // val : _.escape.right( val2 ),
       });
 
     }
