@@ -7716,10 +7716,10 @@ function definePropConstructionAmendWithBlueprint( test )
 
   function eachTyped( tops )
   {
-    tops.typed = 0;
-    eachVal( tops );
-    // tops.typed = 1;
+    // tops.typed = 0;
     // eachVal( tops );
+    tops.typed = 1;
+    eachVal( tops );
     // tops.typed = _.maybe;
     // eachVal( tops );
   }
@@ -7858,117 +7858,115 @@ function definePropConstructionAmendWithBlueprint( test )
     // test.identical( got, exp );
     // test.true( _.undefinedIs( got.get ) );
     // test.true( _.undefinedIs( got.set ) );
-
-    /* */
-
-    test.case = `typed : ${_.toStr( tops.typed )}, static : 0, ordinary ( not props ), amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
-
-    var dstContainer =
-    {
-      f2 : 0,
-    }
-
-    var extension = _.Blueprint
-    ({
-      typed : _.trait.typed( tops.typed ),
-      f1 : _.define.prop( tops.val, { static : 0, valToIns : 'shallow' } ),
-      f2 : _.define.prop( tops.val, { static : 0, valToIns : 'shallow' } ),
-    });
-
-    var keysBefore = _.mapAllKeys( Object.prototype );
-    debugger;
-    _.construction[ tops.amending ]( dstContainer, extension );
-    debugger;
-    var keysAfter = _.mapAllKeys( Object.prototype );
-    test.identical( keysAfter, keysBefore );
-
-    var exp =
-    {
-      'f1' : 1,
-      'f2' : 1,
-    }
-    if( tops.val === _.undefined || tops.val === undefined || tops.val === _.nothing )
-    {
-      exp.f1 = undefined;
-      if( tops.val === _.undefined )
-      exp.f2 = undefined;
-    }
-    else if( tops.val === _.null || tops.val === null )
-    {
-      exp.f1 = null;
-      exp.f2 = null;
-    }
-    else if( tops.val === escapedNothing )
-    {
-      exp.f1 = _.nothing;
-      exp.f2 = _.nothing;
-    }
-    else if( tops.val === escapedEscapedNothing )
-    {
-      exp.f1 = escapedNothing;
-      exp.f2 = escapedNothing;
-    }
-
-    if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
-    exp.f2 = 0;
-
-    test.identical( _.property.of( dstContainer ), exp ); debugger;
-    test.true( dstContainer._ === undefined );
-    if( tops.typed === 1 )
-    test.true( _.prototype.of( dstContainer ) === extension.prototype );
-    else
-    test.true( _.prototype.of( dstContainer ) === Object.prototype );
-    test.true( dstContainer._ === undefined );
-
-    var got = Object.getOwnPropertyDescriptor( dstContainer, 'f1' );
-    var exp =
-    {
-      'enumerable' : true,
-      'configurable' : true,
-      'writable' : true,
-      'value' : 1,
-    }
-
-    if( tops.val === _.undefined || tops.val === undefined || tops.val === _.nothing )
-    exp.value = undefined;
-    else if( tops.val === _.null || tops.val === null )
-    exp.value = null;
-    else if( tops.val === escapedNothing )
-    exp.value = _.nothing;
-    else if( tops.val === escapedEscapedNothing )
-    exp.value = _.escapedNothing;
-
-    test.identical( got, exp );
-    test.true( _.undefinedIs( got.get ) );
-    test.true( _.undefinedIs( got.set ) );
-
-    var got = Object.getOwnPropertyDescriptor( dstContainer, 'f2' );
-    var exp =
-    {
-      'enumerable' : true,
-      'configurable' : true,
-      'writable' : true,
-      'value' : 1,
-    }
-
-    if( tops.val === _.undefined )
-    exp.value = undefined;
-    else if( tops.val === _.null || tops.val === null )
-    exp.value = null;
-    else if( tops.val === escapedNothing )
-    exp.value = _.nothing;
-    else if( tops.val === escapedEscapedNothing )
-    exp.value = _.escapedNothing;
-
-    if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
-    exp.value = 0;
-
-    test.identical( got, exp );
-    test.true( _.undefinedIs( got.get ) );
-    test.true( _.undefinedIs( got.set ) );
-
-    /* */
-
+    //
+    // /* */
+    //
+    // test.case = `typed : ${_.toStr( tops.typed )}, static : 0, ordinary ( not props ), amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
+    //
+    // var dstContainer =
+    // {
+    //   f2 : 0,
+    // }
+    //
+    // var extension = _.Blueprint
+    // ({
+    //   typed : _.trait.typed( tops.typed ),
+    //   f1 : _.define.prop( tops.val, { static : 0, valToIns : 'shallow' } ),
+    //   f2 : _.define.prop( tops.val, { static : 0, valToIns : 'shallow' } ),
+    // });
+    //
+    // var keysBefore = _.mapAllKeys( Object.prototype );
+    // _.construction[ tops.amending ]( dstContainer, extension );
+    // var keysAfter = _.mapAllKeys( Object.prototype );
+    // test.identical( keysAfter, keysBefore );
+    //
+    // var exp =
+    // {
+    //   'f1' : 1,
+    //   'f2' : 1,
+    // }
+    // if( tops.val === _.undefined || tops.val === undefined || tops.val === _.nothing )
+    // {
+    //   exp.f1 = undefined;
+    //   if( tops.val === _.undefined )
+    //   exp.f2 = undefined;
+    // }
+    // else if( tops.val === _.null || tops.val === null )
+    // {
+    //   exp.f1 = null;
+    //   exp.f2 = null;
+    // }
+    // else if( tops.val === escapedNothing )
+    // {
+    //   exp.f1 = _.nothing;
+    //   exp.f2 = _.nothing;
+    // }
+    // else if( tops.val === escapedEscapedNothing )
+    // {
+    //   exp.f1 = escapedNothing;
+    //   exp.f2 = escapedNothing;
+    // }
+    //
+    // if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
+    // exp.f2 = 0;
+    //
+    // test.identical( _.property.of( dstContainer ), exp ); debugger;
+    // test.true( dstContainer._ === undefined );
+    // if( tops.typed === 1 )
+    // test.true( _.prototype.of( dstContainer ) === extension.prototype );
+    // else
+    // test.true( _.prototype.of( dstContainer ) === Object.prototype );
+    // test.true( dstContainer._ === undefined );
+    //
+    // var got = Object.getOwnPropertyDescriptor( dstContainer, 'f1' );
+    // var exp =
+    // {
+    //   'enumerable' : true,
+    //   'configurable' : true,
+    //   'writable' : true,
+    //   'value' : 1,
+    // }
+    //
+    // if( tops.val === _.undefined || tops.val === undefined || tops.val === _.nothing )
+    // exp.value = undefined;
+    // else if( tops.val === _.null || tops.val === null )
+    // exp.value = null;
+    // else if( tops.val === escapedNothing )
+    // exp.value = _.nothing;
+    // else if( tops.val === escapedEscapedNothing )
+    // exp.value = escapedNothing;
+    //
+    // test.identical( got, exp );
+    // test.true( _.undefinedIs( got.get ) );
+    // test.true( _.undefinedIs( got.set ) );
+    //
+    // var got = Object.getOwnPropertyDescriptor( dstContainer, 'f2' );
+    // var exp =
+    // {
+    //   'enumerable' : true,
+    //   'configurable' : true,
+    //   'writable' : true,
+    //   'value' : 1,
+    // }
+    //
+    // if( tops.val === _.undefined )
+    // exp.value = undefined;
+    // else if( tops.val === _.null || tops.val === null )
+    // exp.value = null;
+    // else if( tops.val === escapedNothing )
+    // exp.value = _.nothing;
+    // else if( tops.val === escapedEscapedNothing )
+    // exp.value = escapedNothing;
+    //
+    // if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
+    // exp.value = 0;
+    //
+    // test.identical( got, exp );
+    // test.true( _.undefinedIs( got.get ) );
+    // test.true( _.undefinedIs( got.set ) );
+    //
+    // /* */
+    //
     // test.case = `typed : ${_.toStr( tops.typed )}, static : 0, configurable : 0, amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
     //
     // var dstContainer =
@@ -8004,6 +8002,17 @@ function definePropConstructionAmendWithBlueprint( test )
     //   exp.f1 = null;
     //   exp.f2 = null;
     // }
+    // else if( tops.val === escapedNothing )
+    // {
+    //   exp.f1 = _.nothing;
+    //   exp.f2 = _.nothing;
+    // }
+    // else if( tops.val === escapedEscapedNothing )
+    // {
+    //   exp.f1 = escapedNothing;
+    //   exp.f2 = escapedNothing;
+    // }
+    //
     // if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
     // exp.f2 = 0;
     //
@@ -8028,6 +8037,10 @@ function definePropConstructionAmendWithBlueprint( test )
     // exp.value = undefined;
     // else if( tops.val === _.null || tops.val === null )
     // exp.value = null;
+    // else if( tops.val === escapedNothing )
+    // exp.value = _.nothing;
+    // else if( tops.val === escapedEscapedNothing )
+    // exp.value = escapedNothing;
     //
     // test.identical( got, exp );
     // test.true( _.undefinedIs( got.get ) );
@@ -8046,55 +8059,72 @@ function definePropConstructionAmendWithBlueprint( test )
     // exp.value = undefined;
     // else if( tops.val === _.null || tops.val === null )
     // exp.value = null;
+    // else if( tops.val === escapedNothing )
+    // exp.value = _.nothing;
+    // else if( tops.val === escapedEscapedNothing )
+    // exp.value = escapedNothing;
+    //
     // if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
     // exp.value = 0;
     //
     // test.identical( got, exp );
     // test.true( _.undefinedIs( got.get ) );
     // test.true( _.undefinedIs( got.set ) );
-    //
-    // /* */
-    //
-    // test.case = `typed : ${_.toStr( tops.typed )}, static : 0, accessor : 1, amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
-    //
-    // var dstContainer =
-    // {
-    //   f2 : 0,
-    // }
-    //
-    // var extension = _.Blueprint
-    // ({
-    //   typed : _.trait.typed( tops.typed ),
-    //   f1 : _.define.prop( tops.val, { static : 0, accessor : 1 } ),
-    //   f2 : _.define.prop( tops.val, { static : 0, accessor : 1 } ),
-    // });
-    //
-    // var keysBefore = _.mapAllKeys( Object.prototype );
-    // _.construction[ tops.amending ]( dstContainer, extension );
-    // var keysAfter = _.mapAllKeys( Object.prototype );
-    // test.identical( keysAfter, keysBefore );
-    //
-    // var exp =
-    // {
-    //   'f1' : 1,
-    //   'f2' : 1,
-    // }
-    //
-    // if( tops.val === _.undefined || tops.val === undefined || tops.val === _.nothing )
-    // {
-    //   exp.f1 = undefined;
-    //   if( tops.val === _.undefined )
-    //   exp.f2 = undefined;
-    // }
-    // else if( tops.val === _.null || tops.val === null )
-    // {
-    //   exp.f1 = null;
-    //   exp.f2 = null;
-    // }
-    // if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
-    // exp.f2 = 0;
-    //
-    // test.identical( _.property.of( dstContainer ), exp );
+
+    /* xxx */
+
+    test.case = `typed : ${_.toStr( tops.typed )}, static : 0, accessor : 1, amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
+
+    var dstContainer =
+    {
+      f2 : 0,
+    }
+
+    var extension = _.Blueprint
+    ({
+      typed : _.trait.typed( tops.typed ),
+      f1 : _.define.prop( tops.val, { static : 0, accessor : 1 } ),
+      f2 : _.define.prop( tops.val, { static : 0, accessor : 1 } ),
+    });
+
+    debugger; _global_.debugger = 1;
+
+    var keysBefore = _.mapAllKeys( Object.prototype );
+    _.construction[ tops.amending ]( dstContainer, extension );
+    var keysAfter = _.mapAllKeys( Object.prototype );
+    test.identical( keysAfter, keysBefore );
+
+    var exp =
+    {
+      'f1' : 1,
+      'f2' : 1,
+    }
+
+    if( tops.val === _.undefined || tops.val === undefined || tops.val === _.nothing )
+    {
+      exp.f1 = undefined;
+      if( tops.val === _.undefined )
+      exp.f2 = undefined;
+    }
+    else if( tops.val === _.null || tops.val === null )
+    {
+      exp.f1 = null;
+      exp.f2 = null;
+    }
+    else if( tops.val === escapedNothing )
+    {
+      exp.f1 = _.nothing;
+      exp.f2 = _.nothing;
+    }
+    else if( tops.val === escapedEscapedNothing )
+    {
+      exp.f1 = escapedNothing;
+      exp.f2 = escapedNothing;
+    }
+    if( tops.amending === 'supplement' || tops.val === undefined || tops.val === _.nothing )
+    exp.f2 = 0;
+
+    test.identical( _.property.of( dstContainer ), exp ); debugger;
     // test.true( _.mapIs( dstContainer._ ) ^ tops.typed === 1 );
     // test.true( _.mapIs( dstContainer ) ^ tops.typed === 1 );
     //
@@ -8123,9 +8153,9 @@ function definePropConstructionAmendWithBlueprint( test )
     // test.identical( got, exp );
     // test.true( _.routineIs( got.get ) );
     // test.true( _.routineIs( got.set ) );
-    //
-    // /* */
-    //
+
+    /* xxx */
+
     // if( tops.typed === 1 )
     // {
     //
@@ -8162,6 +8192,22 @@ function definePropConstructionAmendWithBlueprint( test )
     //     test.identical( _.prototype.of( dstContainer ).f2, null );
     //
     //     test.identical( dstContainer.f1, null );
+    //     test.identical( dstContainer.f2, 0 );
+    //   }
+    //   else if( tops.val === escapedNothing )
+    //   {
+    //     test.identical( _.prototype.of( dstContainer ).f1, _.nothing );
+    //     test.identical( _.prototype.of( dstContainer ).f2, _.nothing );
+    //
+    //     test.identical( dstContainer.f1, _.nothing );
+    //     test.identical( dstContainer.f2, 0 );
+    //   }
+    //   else if( tops.val === escapedEscapedNothing )
+    //   {
+    //     test.identical( _.prototype.of( dstContainer ).f1, _.escape.nothing );
+    //     test.identical( _.prototype.of( dstContainer ).f2, _.escape.nothing );
+    //
+    //     test.identical( dstContainer.f1, _.escape.nothing );
     //     test.identical( dstContainer.f2, 0 );
     //   }
     //   else
@@ -8286,6 +8332,20 @@ function definePropConstructionAmendWithBlueprint( test )
     //     test.identical( dstContainer.f1, null );
     //     test.identical( dstContainer.f2, null );
     //   }
+    //   else if( tops.val === escapedNothing )
+    //   {
+    //     test.identical( _.prototype.of( dstContainer ).f1, _.nothing );
+    //     test.identical( _.prototype.of( dstContainer ).f2, _.nothing );
+    //     test.identical( dstContainer.f1, _.nothing );
+    //     test.identical( dstContainer.f2, _.nothing );
+    //   }
+    //   else if( tops.val === escapedEscapedNothing )
+    //   {
+    //     test.identical( _.prototype.of( dstContainer ).f1, _.escape.nothing );
+    //     test.identical( _.prototype.of( dstContainer ).f2, _.escape.nothing );
+    //     test.identical( dstContainer.f1, _.escape.nothing );
+    //     test.identical( dstContainer.f2, _.escape.nothing );
+    //   }
     //   else
     //   {
     //     test.identical( _.prototype.of( dstContainer ).f1, 1 );
@@ -8402,6 +8462,20 @@ function definePropConstructionAmendWithBlueprint( test )
     //       test.identical( _.prototype.of( dstContainer ).f2, null );
     //       test.identical( dstContainer.f1, null );
     //       test.identical( dstContainer.f2, null );
+    //     }
+    //     else if( tops.val === escapedNothing )
+    //     {
+    //       test.identical( _.prototype.of( dstContainer ).f1, _.nothing );
+    //       test.identical( _.prototype.of( dstContainer ).f2, _.nothing );
+    //       test.identical( dstContainer.f1, _.nothing );
+    //       test.identical( dstContainer.f2, _.nothing );
+    //     }
+    //     else if( tops.val === escapedEscapedNothing )
+    //     {
+    //       test.identical( _.prototype.of( dstContainer ).f1, _.escape.nothing );
+    //       test.identical( _.prototype.of( dstContainer ).f2, _.escape.nothing );
+    //       test.identical( dstContainer.f1, _.escape.nothing );
+    //       test.identical( dstContainer.f2, _.escape.nothing );
     //     }
     //     else
     //     {
@@ -8520,6 +8594,20 @@ function definePropConstructionAmendWithBlueprint( test )
     //       test.identical( _.prototype.of( dstContainer ).f2, null );
     //       test.identical( dstContainer.f1, null );
     //       test.identical( dstContainer.f2, null );
+    //     }
+    //     else if( tops.val === escapedNothing )
+    //     {
+    //       test.identical( _.prototype.of( dstContainer ).f1, _.nothing );
+    //       test.identical( _.prototype.of( dstContainer ).f2, _.nothing );
+    //       test.identical( dstContainer.f1, _.nothing );
+    //       test.identical( dstContainer.f2, _.nothing );
+    //     }
+    //     else if( tops.val === escapedEscapedNothing )
+    //     {
+    //       test.identical( _.prototype.of( dstContainer ).f1, _.escape.nothing );
+    //       test.identical( _.prototype.of( dstContainer ).f2, _.escape.nothing );
+    //       test.identical( dstContainer.f1, _.escape.nothing );
+    //       test.identical( dstContainer.f2, _.escape.nothing );
     //     }
     //     else
     //     {
