@@ -223,7 +223,7 @@ function blueprintInheritManually( test )
   var Blueprint2 = _.Blueprint
   ({
     extension : _.define.extension( Blueprint1 ),
-    typed : _.trait.typed({ val : Blueprint1.Traits.typed.val, prototype : Blueprint1 }),
+    typed : _.trait.typed({ val : Blueprint1.TraitsMap.typed.val, prototype : Blueprint1 }),
     // prototype : _.trait.prototype( Blueprint1 ),
     field2 : 'b2',
     field3 : 'b2',
@@ -812,12 +812,12 @@ function blueprintInheritSingle( test )
     ({
       field1 : 1,
     });
-    test.identical( Blueprint1.Traits.typed.val, false );
-    test.true( Blueprint1.Traits.typed.prototype === false );
+    test.identical( Blueprint1.TraitsMap.typed.val, false );
+    test.true( Blueprint1.TraitsMap.typed.prototype === false );
 
     var Blueprint2 = _.Blueprint( Blueprint1 );
-    test.identical( Blueprint2.Traits.typed.val, true );
-    test.true( Blueprint2.Traits.typed.prototype === false );
+    test.identical( Blueprint2.TraitsMap.typed.val, true );
+    test.true( Blueprint2.TraitsMap.typed.prototype === false );
 
     var instance1 = _.blueprint.construct( Blueprint1 );
     test.identical( _.prototype.each( instance1 ).length, 1 );
@@ -839,12 +839,12 @@ function blueprintInheritSingle( test )
       type : _.trait.typed( 1 ),
       field1 : 1,
     });
-    test.identical( Blueprint1.Traits.typed.val, true );
-    test.true( Blueprint1.Traits.typed.prototype === true );
+    test.identical( Blueprint1.TraitsMap.typed.val, true );
+    test.true( Blueprint1.TraitsMap.typed.prototype === true );
 
     var Blueprint2 = _.Blueprint( Blueprint1 );
-    test.identical( Blueprint2.Traits.typed.val, true );
-    test.true( Blueprint2.Traits.typed.prototype === Blueprint1 );
+    test.identical( Blueprint2.TraitsMap.typed.val, true );
+    test.true( Blueprint2.TraitsMap.typed.prototype === Blueprint1 );
 
     var instance1 = _.blueprint.construct( Blueprint1 );
     test.identical( _.prototype.each( instance1 ).length, 3 );
@@ -869,12 +869,12 @@ function blueprintInheritSingle( test )
       type : _.trait.typed({ val : 1, prototype : 1 }),
       field1 : 1,
     });
-    test.identical( Blueprint1.Traits.typed.val, true );
-    test.true( Blueprint1.Traits.typed.prototype === true );
+    test.identical( Blueprint1.TraitsMap.typed.val, true );
+    test.true( Blueprint1.TraitsMap.typed.prototype === true );
 
     var Blueprint2 = _.Blueprint( Blueprint1 );
-    test.identical( Blueprint2.Traits.typed.val, true );
-    test.true( Blueprint2.Traits.typed.prototype === Blueprint1 );
+    test.identical( Blueprint2.TraitsMap.typed.val, true );
+    test.true( Blueprint2.TraitsMap.typed.prototype === Blueprint1 );
 
     var instance1 = _.blueprint.construct( Blueprint1 );
     test.identical( _.prototype.each( instance1 ).length, 3 );
@@ -899,12 +899,12 @@ function blueprintInheritSingle( test )
       type : _.trait.typed({ val : 1, prototype : 0 }),
       field1 : 1,
     });
-    test.identical( Blueprint1.Traits.typed.val, true );
-    test.true( Blueprint1.Traits.typed.prototype === false );
+    test.identical( Blueprint1.TraitsMap.typed.val, true );
+    test.true( Blueprint1.TraitsMap.typed.prototype === false );
 
     var Blueprint2 = _.Blueprint( Blueprint1 );
-    test.identical( Blueprint2.Traits.typed.val, true );
-    test.true( Blueprint2.Traits.typed.prototype === Blueprint1 );
+    test.identical( Blueprint2.TraitsMap.typed.val, true );
+    test.true( Blueprint2.TraitsMap.typed.prototype === Blueprint1 );
 
     var instance1 = _.blueprint.construct( Blueprint1 );
     test.identical( _.prototype.each( instance1 ).length, 3 );
@@ -955,9 +955,9 @@ function blueprintInheritMultiple( test )
     });
 
     var Blueprint3 = _.Blueprint( Blueprint1, Blueprint2 );
-    test.identical( Blueprint3.Traits.typed.val, true );
-    test.true( Blueprint3.Traits.typed.prototype === Blueprint2 );
-    test.identical( Blueprint3.Traits.typed.new, true );
+    test.identical( Blueprint3.TraitsMap.typed.val, true );
+    test.true( Blueprint3.TraitsMap.typed.prototype === Blueprint2 );
+    test.identical( Blueprint3.TraitsMap.typed.new, true );
 
     var instance3 = _.blueprint.construct( Blueprint3 );
     test.identical( _.prototype.each( instance3 ).length, 4 );
@@ -987,9 +987,9 @@ function blueprintInheritMultiple( test )
     });
 
     var Blueprint3 = _.Blueprint( Blueprint1, Blueprint2 );
-    test.identical( Blueprint3.Traits.typed.val, true );
-    test.true( Blueprint3.Traits.typed.prototype === false );
-    test.identical( Blueprint3.Traits.typed.new, false );
+    test.identical( Blueprint3.TraitsMap.typed.val, true );
+    test.true( Blueprint3.TraitsMap.typed.prototype === false );
+    test.identical( Blueprint3.TraitsMap.typed.new, false );
 
     var instance3 = _.blueprint.construct( Blueprint3 );
     test.identical( _.prototype.each( instance3 ).length, 3 );
@@ -1018,9 +1018,9 @@ function blueprintInheritMultiple( test )
     });
 
     var Blueprint3 = _.Blueprint( Blueprint1, Blueprint2 );
-    test.identical( Blueprint3.Traits.typed.val, true );
-    test.true( Blueprint3.Traits.typed.prototype === Blueprint2 );
-    test.identical( Blueprint3.Traits.typed.new, true );
+    test.identical( Blueprint3.TraitsMap.typed.val, true );
+    test.true( Blueprint3.TraitsMap.typed.prototype === Blueprint2 );
+    test.identical( Blueprint3.TraitsMap.typed.new, true );
 
     var instance3 = _.blueprint.construct( Blueprint3 );
     test.identical( _.prototype.each( instance3 ).length, 4 );
@@ -1050,9 +1050,9 @@ function blueprintInheritMultiple( test )
     });
 
     var Blueprint3 = _.Blueprint( Blueprint1, Blueprint2 );
-    test.identical( Blueprint3.Traits.typed.val, true );
-    test.identical( Blueprint3.Traits.typed.prototype, false );
-    test.identical( Blueprint3.Traits.typed.new, false );
+    test.identical( Blueprint3.TraitsMap.typed.val, true );
+    test.identical( Blueprint3.TraitsMap.typed.prototype, false );
+    test.identical( Blueprint3.TraitsMap.typed.new, false );
 
     var instance3 = _.blueprint.construct( Blueprint3 );
     test.identical( _.prototype.each( instance3 ).length, 3 );
@@ -1097,9 +1097,9 @@ function blueprintInheritMultipleAlternatives( test )
     });
 
     var Blueprint3 = _.Blueprint( Blueprint1, Blueprint2 );
-    test.identical( Blueprint3.Traits.typed.val, true );
-    test.true( Blueprint3.Traits.typed.prototype === Blueprint2 );
-    test.identical( Blueprint3.Traits.typed.new, true );
+    test.identical( Blueprint3.TraitsMap.typed.val, true );
+    test.true( Blueprint3.TraitsMap.typed.prototype === Blueprint2 );
+    test.identical( Blueprint3.TraitsMap.typed.new, true );
 
     var instance3 = _.blueprint.construct( Blueprint3 );
     test.identical( _.prototype.each( instance3 ).length, 4 );
@@ -1125,9 +1125,9 @@ function blueprintInheritMultipleAlternatives( test )
     });
 
     var Blueprint3 = _.Blueprint([ Blueprint1, Blueprint2 ]);
-    test.identical( Blueprint3.Traits.typed.val, true );
-    test.true( Blueprint3.Traits.typed.prototype === Blueprint2 );
-    test.identical( Blueprint3.Traits.typed.new, true );
+    test.identical( Blueprint3.TraitsMap.typed.val, true );
+    test.true( Blueprint3.TraitsMap.typed.prototype === Blueprint2 );
+    test.identical( Blueprint3.TraitsMap.typed.new, true );
 
     var instance3 = _.blueprint.construct( Blueprint3 );
     test.identical( _.prototype.each( instance3 ).length, 4 );
@@ -1153,9 +1153,9 @@ function blueprintInheritMultipleAlternatives( test )
     });
 
     var Blueprint3 = _.Blueprint({ b1 : Blueprint1, b2 : Blueprint2 });
-    test.identical( Blueprint3.Traits.typed.val, true );
-    test.true( Blueprint3.Traits.typed.prototype === Blueprint2 );
-    test.identical( Blueprint3.Traits.typed.new, true );
+    test.identical( Blueprint3.TraitsMap.typed.val, true );
+    test.true( Blueprint3.TraitsMap.typed.prototype === Blueprint2 );
+    test.identical( Blueprint3.TraitsMap.typed.new, true );
 
     var instance3 = _.blueprint.construct( Blueprint3 );
     test.identical( _.prototype.each( instance3 ).length, 4 );
@@ -11168,9 +11168,9 @@ function defineAmendmentPropInheritance( test )
     f1 : _.define.prop( '1', { static : 0 } ),
   });
 
-  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([ 'f1', 's1' ]) );
-  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/amending' ) ]), new Set([]) );
-  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 0 );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.NamedMap ) ]), new Set([ 'f1', 's1' ]) );
+  test.identical( new Set([ ... select( Blueprint1.UnnamedArray, '*/amending' ) ]), new Set([]) );
+  test.identical( Blueprint1.UnnamedArray.length, 0 );
 
   var Blueprint2 = _.Blueprint
   ({
@@ -11179,9 +11179,9 @@ function defineAmendmentPropInheritance( test )
     extension : _.define.supplementation( Blueprint1 ),
   });
 
-  test.identical( new Set([ ... _.mapKeys( Blueprint2._NamedDefinitionsMap ) ]), new Set([ 'f1', 'f2', 's2' ]) );
-  test.identical( new Set([ ... select( Blueprint2._UnnamedDefinitionsArray, '*/amending' ) ]), new Set([]) );
-  test.identical( Blueprint2._UnnamedDefinitionsArray.length, 0 );
+  test.identical( new Set([ ... _.mapKeys( Blueprint2.NamedMap ) ]), new Set([ 'f1', 'f2', 's2' ]) );
+  test.identical( new Set([ ... select( Blueprint2.UnnamedArray, '*/amending' ) ]), new Set([]) );
+  test.identical( Blueprint2.UnnamedArray.length, 0 );
 
   var Blueprint3 = _.Blueprint
   ({
@@ -11190,9 +11190,9 @@ function defineAmendmentPropInheritance( test )
     extension : _.define.extension( Blueprint2 ),
   });
 
-  test.identical( new Set([ ... _.mapKeys( Blueprint3._NamedDefinitionsMap ) ]), new Set([ 'f1', 'f2', 'f3', 's3' ]) );
-  test.identical( new Set([ ... select( Blueprint3._UnnamedDefinitionsArray, '*/amending' ) ]), new Set([]) );
-  test.identical( Blueprint3._UnnamedDefinitionsArray.length, 0 );
+  test.identical( new Set([ ... _.mapKeys( Blueprint3.NamedMap ) ]), new Set([ 'f1', 'f2', 'f3', 's3' ]) );
+  test.identical( new Set([ ... select( Blueprint3.UnnamedArray, '*/amending' ) ]), new Set([]) );
+  test.identical( Blueprint3.UnnamedArray.length, 0 );
 
   var instance1 = _.blueprint.construct( Blueprint1 );
   var exp =
@@ -11229,9 +11229,9 @@ function defineAmendmentPropInheritance( test )
     f1 : _.define.prop( '1', { static : 0 } ),
   });
 
-  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([ 'f1', 's1' ]) );
-  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/amending' ) ]), new Set([]) );
-  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 0 );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.NamedMap ) ]), new Set([ 'f1', 's1' ]) );
+  test.identical( new Set([ ... select( Blueprint1.UnnamedArray, '*/amending' ) ]), new Set([]) );
+  test.identical( Blueprint1.UnnamedArray.length, 0 );
 
   var Blueprint2 = _.Blueprint
   ({
@@ -11240,9 +11240,9 @@ function defineAmendmentPropInheritance( test )
     extension : _.define.supplementation( Blueprint1 ),
   });
 
-  test.identical( new Set([ ... _.mapKeys( Blueprint2._NamedDefinitionsMap ) ]), new Set([ 'f1', 'f2', 's2' ]) );
-  test.identical( new Set([ ... select( Blueprint2._UnnamedDefinitionsArray, '*/amending' ) ]), new Set([]) );
-  test.identical( Blueprint2._UnnamedDefinitionsArray.length, 0 );
+  test.identical( new Set([ ... _.mapKeys( Blueprint2.NamedMap ) ]), new Set([ 'f1', 'f2', 's2' ]) );
+  test.identical( new Set([ ... select( Blueprint2.UnnamedArray, '*/amending' ) ]), new Set([]) );
+  test.identical( Blueprint2.UnnamedArray.length, 0 );
 
   var Blueprint3 = _.Blueprint
   ({
@@ -11251,9 +11251,9 @@ function defineAmendmentPropInheritance( test )
     extension : _.define.extension( Blueprint2 ),
   });
 
-  test.identical( new Set([ ... _.mapKeys( Blueprint3._NamedDefinitionsMap ) ]), new Set([ 'f1', 'f2', 'f3', 's3' ]) );
-  test.identical( new Set([ ... select( Blueprint3._UnnamedDefinitionsArray, '*/amending' ) ]), new Set([]) );
-  test.identical( Blueprint3._UnnamedDefinitionsArray.length, 0 );
+  test.identical( new Set([ ... _.mapKeys( Blueprint3.NamedMap ) ]), new Set([ 'f1', 'f2', 'f3', 's3' ]) );
+  test.identical( new Set([ ... select( Blueprint3.UnnamedArray, '*/amending' ) ]), new Set([]) );
+  test.identical( Blueprint3.UnnamedArray.length, 0 );
 
   var instance1 = _.blueprint.construct( Blueprint1 );
   var exp =
@@ -11304,17 +11304,24 @@ function defineNothing( test )
 
   test.case = 'basic';
 
+  var nothing = _.define.nothing();
+  test.true( _.definition.is( nothing ) );
+  test.true( Object.isFrozen( nothing ) );
+
+  /* */
+
+  test.case = 'blueprint';
+
   var Blueprint1 = _.Blueprint
   ({
     nothing : _.define.nothing(),
     f1 : '1',
   });
 
-  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
-  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
-  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([]) );
-  // test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ /*'nothing'*/ ]) );
-  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 0 );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.TraitsMap ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.NamedMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1.UnnamedArray, '*/kind' ) ]), new Set([]) );
+  test.identical( Blueprint1.UnnamedArray.length, 0 );
 
   var instance1 = _.blueprint.construct( Blueprint1 );
   var exp =
@@ -11339,10 +11346,10 @@ function defineNothing( test )
     extension : _.define.extension( Blueprint1 ),
   });
 
-  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
-  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
-  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([]) );
-  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 0 );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.TraitsMap ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.NamedMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1.UnnamedArray, '*/kind' ) ]), new Set([]) );
+  test.identical( Blueprint1.UnnamedArray.length, 0 );
 
   var instance2 = _.blueprint.construct( Blueprint2 );
   var exp =
@@ -11373,10 +11380,10 @@ function constructionExtendWithBlueprintWithNothing( test )
     f1 : '1',
   });
 
-  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
-  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
-  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ /*'nothing'*/ ]) );
-  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 0 );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.TraitsMap ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.NamedMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1.UnnamedArray, '*/kind' ) ]), new Set([ /*'nothing'*/ ]) );
+  test.identical( Blueprint1.UnnamedArray.length, 0 );
 
   var construction1 = Object.create( null )
   test.true( Object.isExtensible( construction1 ) );
@@ -11406,10 +11413,10 @@ function constructionExtendWithBlueprintWithNothing( test )
     f1 : '1',
   });
 
-  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
-  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
-  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ /*'nothing'*/ ]) );
-  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 0 );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.TraitsMap ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.NamedMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1.UnnamedArray, '*/kind' ) ]), new Set([ /*'nothing'*/ ]) );
+  test.identical( Blueprint1.UnnamedArray.length, 0 );
 
   var construction1 = {};
   test.true( Object.isExtensible( construction1 ) );
@@ -11439,10 +11446,10 @@ function constructionExtendWithBlueprintWithNothing( test )
     f1 : '1',
   });
 
-  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
-  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
-  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ /*'nothing'*/ ]) );
-  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 0 );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.TraitsMap ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.NamedMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1.UnnamedArray, '*/kind' ) ]), new Set([ /*'nothing'*/ ]) );
+  test.identical( Blueprint1.UnnamedArray.length, 0 );
 
   var construction1 = Object.create( null )
   test.true( Object.isExtensible( construction1 ) );
@@ -11472,10 +11479,10 @@ function constructionExtendWithBlueprintWithNothing( test )
     f1 : '1',
   });
 
-  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
-  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
-  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ /*'nothing'*/ ]) );
-  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 0 );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.TraitsMap ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.NamedMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1.UnnamedArray, '*/kind' ) ]), new Set([ /*'nothing'*/ ]) );
+  test.identical( Blueprint1.UnnamedArray.length, 0 );
 
   var construction1 = {};
   test.true( Object.isExtensible( construction1 ) );
@@ -11505,10 +11512,10 @@ function constructionExtendWithBlueprintWithNothing( test )
     f1 : '1',
   });
 
-  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
-  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
-  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ /*'nothing'*/ ]) );
-  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 0 );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.TraitsMap ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.NamedMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1.UnnamedArray, '*/kind' ) ]), new Set([ /*'nothing'*/ ]) );
+  test.identical( Blueprint1.UnnamedArray.length, 0 );
 
   var prototype1 = Object.create( null );
   var construction1 = Object.create( prototype1 );
@@ -11539,10 +11546,10 @@ function constructionExtendWithBlueprintWithNothing( test )
     f1 : '1',
   });
 
-  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
-  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
-  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ /*'nothing'*/ ]) );
-  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 0 );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.TraitsMap ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.NamedMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1.UnnamedArray, '*/kind' ) ]), new Set([ /*'nothing'*/ ]) );
+  test.identical( Blueprint1.UnnamedArray.length, 0 );
 
   var prototype1 = Object.create( null );
   var construction1 = Object.create( prototype1 );
@@ -11573,10 +11580,10 @@ function constructionExtendWithBlueprintWithNothing( test )
     f1 : '1',
   });
 
-  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
-  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
-  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ /*'nothing'*/ ]) );
-  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 0 );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.TraitsMap ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.NamedMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1.UnnamedArray, '*/kind' ) ]), new Set([ /*'nothing'*/ ]) );
+  test.identical( Blueprint1.UnnamedArray.length, 0 );
 
   var construction1 = Object.create( null )
   test.true( Object.isExtensible( construction1 ) );
@@ -11606,10 +11613,10 @@ function constructionExtendWithBlueprintWithNothing( test )
     f1 : '1',
   });
 
-  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
-  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
-  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ /*'nothing'*/ ]) );
-  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 0 );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.TraitsMap ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.NamedMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1.UnnamedArray, '*/kind' ) ]), new Set([ /*'nothing'*/ ]) );
+  test.identical( Blueprint1.UnnamedArray.length, 0 );
 
   var construction1 = {};
   test.true( Object.isExtensible( construction1 ) );
@@ -11639,10 +11646,10 @@ function constructionExtendWithBlueprintWithNothing( test )
     f1 : '1',
   });
 
-  test.identical( new Set([ ... _.mapKeys( Blueprint1.Traits ) ]), new Set([ 'extendable', 'typed' ]) );
-  test.identical( new Set([ ... _.mapKeys( Blueprint1._NamedDefinitionsMap ) ]), new Set([]) );
-  test.identical( new Set([ ... select( Blueprint1._UnnamedDefinitionsArray, '*/kind' ) ]), new Set([ /*'nothing'*/ ]) );
-  test.identical( Blueprint1._UnnamedDefinitionsArray.length, 0 );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.TraitsMap ) ]), new Set([ 'extendable', 'typed' ]) );
+  test.identical( new Set([ ... _.mapKeys( Blueprint1.NamedMap ) ]), new Set([]) );
+  test.identical( new Set([ ... select( Blueprint1.UnnamedArray, '*/kind' ) ]), new Set([ /*'nothing'*/ ]) );
+  test.identical( Blueprint1.UnnamedArray.length, 0 );
 
   var prototype1 = Object.create( null );
   var construction1 = Object.create( prototype1 );
@@ -14162,7 +14169,7 @@ function traitTypedLogistic( test )
     test.true( !Object.isExtensible( trait ) );
     test.true( Object.isFrozen( trait ) );
     test.true( trait._blueprint === blueprint1 );
-    test.true( trait === blueprint1.Traits.typed ); debugger;
+    test.true( trait === blueprint1.TraitsMap.typed );
 
     var instance1 = blueprint1.Make();
     test.identical( _.prototype.each( instance1 ).length, 3 );

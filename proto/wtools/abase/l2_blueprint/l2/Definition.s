@@ -45,9 +45,23 @@ function Definition( o )
 
 Object.setPrototypeOf( Definition, null );
 Definition.prototype = Object.create( null );
-Definition.prototype.clone = function()
+Definition.prototype.cloneShallow = function()
 {
+  if( _global_.debugger )
+  debugger;
+
   let result = new Definition( this );
+
+  if( result._blueprint )
+  result._blueprint = null;
+  if( result._ )
+  result._ = Object.create( null );
+
+  if( result._blueprint === false )
+  Object.freeze( result );
+  else
+  Object.preventExtensions( result );
+
   return result;
 }
 
@@ -70,6 +84,25 @@ function toVal( definition )
   return definition.toVal( definition.val );
 }
 
+//
+
+function nameOf( definition )
+{
+  _.assert( _.definition.is( definition ) );
+  return `${definition.name || ''}`;
+}
+
+//
+
+function qnameOf( definition )
+{
+  _.assert( _.definition.is( definition ) );
+  let result = `${definition.defGroup}::${definition.kind}`;
+  if( definition.name !== undefined )
+  result += `::${definition.name || ''}`;
+  return result
+}
+
 // //
 //
 // function _constructionAmendCant( construction, key )
@@ -81,24 +114,19 @@ function toVal( definition )
 
 //
 
-function _traitMake( kind, o ) /* xxx : reuse _definitionMake */
+function _make( o ) /* xxx : reuse _unnamedMake */
 {
 
-  _.assert( arguments.length === 2 );
-  _.assert( _.strDefined( kind ) );
+  _.assert( arguments.length === 1 );
+  _.assert( _.strDefined( o.kind ) );
+  _.assert( _.strDefined( o.defGroup ) );
   _.assert( _.mapIs( o ) );
-  // _.assert( o._blueprint === undefined || o._blueprint === null || o._blueprint === false );
-  _.assert( o._blueprint === null || o._blueprint === false );
+  _.assert( o._blueprint === null || o._blueprint === false || _.blueprint.isDefinitive( o._blueprint ) );
 
-  if( !o.defGroup )
-  o.defGroup = 'trait';
-  if( !o.kind )
-  o.kind = kind;
-  // if( !o.constructionAmend ) /* yyy */
-  // {
-  //   o.constructionAmend = constructionAmend;
-  //   // console.log( `Generated _amendDefinitionWithoutMethod for ${o.kind}` );
-  // }
+  // if( !o.defGroup )
+  // o.defGroup = 'trait';
+  // if( !o.kind )
+  // o.kind = kind;
   if( o._blueprint === undefined )
   o._blueprint = null;
 
@@ -115,6 +143,58 @@ function _traitMake( kind, o ) /* xxx : reuse _definitionMake */
   Object.preventExtensions( definition );
 
   return definition;
+}
+
+_make.defaults =
+{
+  kind : null,
+  defGroup : null,
+  _blueprint : null,
+}
+
+//
+
+// function _unnamedMake( kind, o )
+function _unnamedMake( o )
+{
+  _.assert( arguments.length === 1 );
+  _.assert( !o.defGroup || o.defGroup === 'definition.unnamed' );
+  if( !o.defGroup )
+  o.defGroup = 'definition.unnamed';
+  return _.definition._make( o );
+
+  // _.assert( arguments.length === 2 );
+  // _.assert( _.strDefined( kind ) );
+  // _.assert( _.mapIs( o ) );
+  // // _.assert( o._blueprint === undefined || o._blueprint === null || o._blueprint === false );
+  // _.assert( o._blueprint === null || o._blueprint === false || _.blueprint.isDefinitive( o._blueprint ) );
+  //
+  // if( o.name === 'field1' )
+  // debugger;
+  //
+  // if( !o.defGroup )
+  // o.defGroup = 'definition.unnamed';
+  // if( !o.kind )
+  // o.kind = kind;
+  // // if( !o.constructionAmend ) /* yyy */
+  // // o.constructionAmend = constructionAmend;
+  // if( o._blueprint === undefined )
+  // o._blueprint = null;
+  //
+  // let definition = new _.Definition( o );
+  //
+  // _.assert( definition.blueprintAmend === undefined );
+  // _.assert( definition.constructionAmend === undefined );
+  // _.assert( definition.blueprint === undefined );
+  //
+  // // Object.preventExtensions( definition );
+  //
+  // if( definition._blueprint === false ) /* xxx */
+  // Object.freeze( definition );
+  // else
+  // Object.preventExtensions( definition );
+  //
+  // return definition;
 
   // function constructionAmend( dst, key, amending )
   // {
@@ -132,38 +212,57 @@ function _traitMake( kind, o ) /* xxx : reuse _definitionMake */
 
 //
 
-function _definitionMake( kind, o )
+function _namedMake( o )
 {
-
-  _.assert( arguments.length === 2 );
-  _.assert( _.strDefined( kind ) );
-  _.assert( _.mapIs( o ) );
-  // _.assert( o._blueprint === undefined || o._blueprint === null || o._blueprint === false );
-  _.assert( o._blueprint === null || o._blueprint === false );
-
+  _.assert( arguments.length === 1 );
+  _.assert( !o.defGroup || o.defGroup === 'definition.named' );
   if( !o.defGroup )
-  o.defGroup = 'definition.unnamed';
-  if( !o.kind )
-  o.kind = kind;
-  // if( !o.constructionAmend ) /* yyy */
-  // o.constructionAmend = constructionAmend;
-  if( o._blueprint === undefined )
-  o._blueprint = null;
+  o.defGroup = 'definition.named';
+  return _.definition._make( o );
+}
 
-  let definition = new _.Definition( o );
+//
 
-  _.assert( definition.blueprintAmend === undefined );
-  _.assert( definition.constructionAmend === undefined );
-  _.assert( definition.blueprint === undefined );
+// function _traitMake( kind, o ) /* xxx : reuse _unnamedMake */
+function _traitMake( o )
+{
+  _.assert( arguments.length === 1 );
+  _.assert( !o.defGroup || o.defGroup === 'trait' );
+  if( !o.defGroup )
+  o.defGroup = 'trait';
+  return _.definition._make( o );
 
+  // _.assert( arguments.length === 2 );
+  // _.assert( _.strDefined( kind ) );
+  // _.assert( _.mapIs( o ) );
+  // // _.assert( o._blueprint === undefined || o._blueprint === null || o._blueprint === false );
+  // _.assert( o._blueprint === null || o._blueprint === false || _.blueprint.isDefinitive( o._blueprint ) );
+  //
+  // if( !o.defGroup )
+  // o.defGroup = 'trait';
+  // if( !o.kind )
+  // o.kind = kind;
+  // // if( !o.constructionAmend ) /* yyy */
+  // // {
+  // //   o.constructionAmend = constructionAmend;
+  // //   // console.log( `Generated _amendDefinitionWithoutMethod for ${o.kind}` );
+  // // }
+  // if( o._blueprint === undefined )
+  // o._blueprint = null;
+  //
+  // let definition = new _.Definition( o );
+  // // let definition = _.definition.retype( o ); /* xxx : use */
+  // // _.assert( definition ==== o );
+  // _.assert( definition.blueprintAmend === undefined );
+  // _.assert( definition.constructionAmend === undefined );
+  // _.assert( definition.blueprint === undefined );
+  //
+  // if( definition._blueprint === false ) /* xxx */
+  // Object.freeze( definition );
+  // else
   // Object.preventExtensions( definition );
-
-  if( definition._blueprint === false ) /* xxx */
-  Object.freeze( definition );
-  else
-  Object.preventExtensions( definition );
-
-  return definition;
+  //
+  // return definition;
 
   // function constructionAmend( dst, key, amending )
   // {
@@ -198,9 +297,13 @@ let DefinitionExtension =
   is : _.definitionIs,
   retype,
   toVal,
+  nameOf,
+  qnameOf,
   // _constructionAmendCant,
+  _make,
+  _unnamedMake,
+  _namedMake,
   _traitMake,
-  _definitionMake,
 
   // fields
 
