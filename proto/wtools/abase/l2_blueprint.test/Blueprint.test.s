@@ -11871,7 +11871,7 @@ function defineConstantBasic( test )
     var def = _.define.constant( 1 );
     var blueprint1 = _.Blueprint({ c1 : def, typed : _.trait.typed( tops.typed ) });
     var instance1 = blueprint1.make();
-    if( tops.typed === 1 )
+    if( tops.typed === 1 ) /* xxx : maybe should created typed instance? */
     test.identical( _.prototype.each( instance1 ).length, 3 );
     else
     test.identical( _.prototype.each( instance1 ).length, 1 );
@@ -14258,10 +14258,9 @@ traitTypedPrototype.description =
 function traitTypedLogistic( test )
 {
 
-  eachCase({ typed : 1 });
   eachCase({ typed : 0 });
+  eachCase({ typed : 1 });
   eachCase({ typed : _.maybe });
-  /* xxx */
 
   function eachCase( tops )
   {
