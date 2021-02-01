@@ -36,19 +36,19 @@ function isInstanceOf( construction, runtime )
 {
 
   if( _.blueprint.isDefinitive( runtime ) )
-  runtime = runtime.Runtime;
+  runtime = runtime.runtime;
 
   _.assert( arguments.length === 2 );
   _.assert( _.blueprint.isRuntime( runtime ) );
-  _.assert( _.fuzzyLike( runtime.Typed ) );
-  _.assert( _.routineIs( runtime.Make ) );
+  _.assert( _.fuzzyLike( runtime.typed ) );
+  _.assert( _.routineIs( runtime.make ) );
 
   if( !construction )
   return false;
 
-  if( runtime.Typed && runtime.Make.prototype !== null )
+  if( runtime.typed && runtime.make.prototype !== null )
   {
-    return construction instanceof runtime.Make;
+    return construction instanceof runtime.make;
   }
 
   if( _.mapIs( construction ) )
@@ -149,7 +149,7 @@ function amend( o )
     _.construction._retype
     ({
       construction : dstConstruction,
-      runtime : blueprint.Runtime,
+      runtime : blueprint.runtime,
       amending,
     });
   }
@@ -244,7 +244,7 @@ function supplement( dstConstruction, src )
 //     constructing : false,
 //     construction : o.construction,
 //     amending : o.amending,
-//     runtime : blueprint.Runtime,
+//     runtime : blueprint.runtime,
 //   });
 //
 // }
@@ -285,7 +285,7 @@ function _make_head( routine, args )
     }
     else if( !_.construction.isInstanceOf( genesis.construction, genesis.runtime ) )
     {
-      _.assert( !( genesis.construction instanceof genesis.runtime.Retype ), 'Use no "new" to call routine::From' );
+      _.assert( !( genesis.construction instanceof genesis.runtime.retype ), 'Use no "new" to call routine::from' );
       genesis.construction = null;
     }
   }
@@ -304,7 +304,7 @@ function _make_head( routine, args )
   {
     let isInstance = _.construction.isInstanceOf( genesis.construction, genesis.runtime );
     _.assert( args.length === 1 || args.length === 3 );
-    _.assert( !( genesis.construction instanceof genesis.runtime.Retype ), 'Use no "new" to call routine::From' );
+    _.assert( !( genesis.construction instanceof genesis.runtime.retype ), 'Use no "new" to call routine::from' );
     _.assert( genesis.args.length === 0 || genesis.args.length === 1 );
     _.assert( genesis.runtime.makeCompiled === undefined, 'not implemented' );
   }
@@ -325,32 +325,32 @@ function _make3( genesis )
   _.assert( _.arrayLike( genesis.args ) );
   _.assert( genesis.args.length === 0 || genesis.args.length === 1 );
   _.assert( arguments.length === 1 );
-  _.assert( _.fuzzyIs( genesis.runtime.Typed ) );
+  _.assert( _.fuzzyIs( genesis.runtime.typed ) );
 
   if( genesis.constructing === 'retype' )
   {
-    genesis.construction = genesis.runtime._RuntimeRoutinesMap.retype( genesis );
+    genesis.construction = genesis.runtime._practiceMap.retype( genesis );
   }
   else if( genesis.constructing === 'allocate' )
   {
     let wasNull = genesis.construction === null
-    genesis.construction = genesis.runtime._RuntimeRoutinesMap.allocate( genesis );
+    genesis.construction = genesis.runtime._practiceMap.allocate( genesis );
     _.assert
     (
-         // genesis.runtime._MakingTyped === false
+         // genesis.runtime._makingTyped === false
       // ||
-      genesis.runtime.Make.prototype === null
-      || genesis.construction instanceof genesis.runtime.Make
+      genesis.runtime.make.prototype === null
+      || genesis.construction instanceof genesis.runtime.make
     );
-    if( genesis.runtime._MakingTyped && wasNull )
+    if( genesis.runtime._makingTyped && wasNull )
     return genesis.construction;
   }
   else _.assert( genesis.constructing === false );
 
-  // if( genesis.runtime.Typed === true )
-  // _.assert( genesis.runtime.Make.prototype === null || genesis.construction instanceof genesis.runtime.Make );
-  // else if( genesis.runtime.Typed === false ) /* yyy */
-  // _.assert( genesis.runtime.Make.prototype === null || !( genesis.construction instanceof genesis.runtime.Make ) );
+  // if( genesis.runtime.typed === true )
+  // _.assert( genesis.runtime.make.prototype === null || genesis.construction instanceof genesis.runtime.make );
+  // else if( genesis.runtime.typed === false ) /* yyy */
+  // _.assert( genesis.runtime.make.prototype === null || !( genesis.construction instanceof genesis.runtime.make ) );
 
   _.construction._init( genesis );
   _.construction._extendArguments( genesis );
@@ -389,14 +389,9 @@ function _make( construction, runtime, args )
 {
 
   _.assert( arguments.length === 3 );
-  _.assert( _.boolIs( runtime._MakingTyped ) );
+  _.assert( _.boolIs( runtime._makingTyped ) );
 
-  // if( runtime.Make.prototype === null )
-  // debugger;
-
-  // if( !runtime.Typed && construction instanceof runtime.Make ) /* xxx */
-  // if( !runtime.Typed && runtime.Make.prototype !== null && construction instanceof runtime.Make )
-  if( !runtime._MakingTyped && runtime.Make.prototype !== null && construction instanceof runtime.Make )
+  if( !runtime._makingTyped && runtime.make.prototype !== null && construction instanceof runtime.make )
   {
     construction = null;
   }
@@ -423,7 +418,7 @@ function _makeEach( construction, runtime, args )
   _.assert( arguments.length === 3 );
   for( let a = 0 ; a < args.length ; a++ )
   {
-    let construction = runtime.Make( args[ a ] );
+    let construction = runtime.make( args[ a ] );
     if( construction !== undefined )
     result.push( construction );
   }
@@ -440,8 +435,8 @@ function _from( construction, runtime, args )
     let isInstance = _.construction.isInstanceOf( construction, runtime );
     _.assert( arguments.length === 3 );
     _.assert( isInstance === false || isInstance === _.maybe );
-    _.assert( runtime.Make.prototype === null || !( construction instanceof runtime.Make ) );
-    _.assert( !( construction instanceof runtime.From ), 'Use no "new" to call routine::From' );
+    _.assert( runtime.make.prototype === null || !( construction instanceof runtime.make ) );
+    _.assert( !( construction instanceof runtime.from ), 'Use no "new" to call routine::from' );
   }
 
   if( _.construction.isInstanceOf( args[ 0 ], runtime ) )
@@ -469,7 +464,7 @@ function _fromEach( construction, runtime, args )
   _.assert( arguments.length === 3 );
   for( let a = 0 ; a < args.length ; a++ )
   {
-    let construction = runtime.From( args[ a ] );
+    let construction = runtime.from( args[ a ] );
     if( construction !== undefined )
     result.push( construction );
   }
@@ -485,7 +480,7 @@ function _retype_body( genesis )
   {
     let isInstance = _.construction.isInstanceOf( genesis.construction, genesis.runtime );
     _.assert( arguments.length === 1 );
-    _.assert( !( genesis.construction instanceof genesis.runtime.Retype ), 'Use no "new" to call routine::From' );
+    _.assert( !( genesis.construction instanceof genesis.runtime.retype ), 'Use no "new" to call routine::from' );
     _.assert( genesis.args.length === 0 || genesis.args.length === 1 );
     _.assert( genesis.runtime.makeCompiled === undefined, 'not implemented' );
   }
@@ -510,7 +505,7 @@ function _retypeEach( construction, runtime, args )
   _.assert( arguments.length === 3 );
   for( let a = 0 ; a < args.length ; a++ )
   {
-    let construction = runtime.Retype( args[ a ] );
+    let construction = runtime.retype( args[ a ] );
     if( construction !== undefined )
     result.push( construction );
   }
@@ -523,16 +518,16 @@ function _init( genesis )
 {
   _.assert( arguments.length === 1 );
 
-  if( genesis.runtime._RuntimeRoutinesMap.initBegin )
-  for( let i = 0 ; i < genesis.runtime._RuntimeRoutinesMap.initBegin.length ; i++ )
-  genesis.runtime._RuntimeRoutinesMap.initBegin[ i ]( genesis );
+  if( genesis.runtime._practiceMap.initBegin )
+  for( let i = 0 ; i < genesis.runtime._practiceMap.initBegin.length ; i++ )
+  genesis.runtime._practiceMap.initBegin[ i ]( genesis );
 
   _.construction._initFields( genesis );
   _.construction._initDefines( genesis );
 
-  if( genesis.runtime._RuntimeRoutinesMap.initEnd )
-  for( let i = 0 ; i < genesis.runtime._RuntimeRoutinesMap.initEnd.length ; i++ )
-  genesis.runtime._RuntimeRoutinesMap.initEnd[ i ]( genesis );
+  if( genesis.runtime._practiceMap.constructionInitEnd )
+  for( let i = 0 ; i < genesis.runtime._practiceMap.constructionInitEnd.length ; i++ )
+  genesis.runtime._practiceMap.constructionInitEnd[ i ]( genesis );
 
   return genesis;
 }
@@ -554,14 +549,14 @@ function _initFields( genesis )
   _.assert( _.blueprint.isRuntime( genesis.runtime ) );
   _.assert( arguments.length === 1 );
   _.assert( _.longHas( [ 'extend', 'supplement' ], genesis.amending ) );
-  _.assert( _.mapIs( genesis.runtime.PropsSupplementation ) );
+  _.assert( _.mapIs( genesis.runtime.propsSupplementation ) );
 
   if( genesis.amending === 'extend' )
-  _.mapExtend( genesis.construction, genesis.runtime.PropsExtension );
+  _.mapExtend( genesis.construction, genesis.runtime.propsExtension );
   else
-  _.mapSupplement( genesis.construction, genesis.runtime.PropsExtension );
+  _.mapSupplement( genesis.construction, genesis.runtime.propsExtension );
 
-  _.mapSupplement( genesis.construction, genesis.runtime.PropsSupplementation );
+  _.mapSupplement( genesis.construction, genesis.runtime.propsSupplementation );
 
   return genesis.construction;
 }
@@ -583,10 +578,10 @@ function _initDefines( genesis )
   _.assert( arguments.length === 1 );
   _.assert( _.longHas( [ 'extend', 'supplement' ], genesis.amending ) );
 
-  if( genesis.runtime._RuntimeRoutinesMap.constructionInit )
-  for( let i = 0 ; i < genesis.runtime._RuntimeRoutinesMap.constructionInit.length ; i++ )
+  if( genesis.runtime._practiceMap.constructionInit )
+  for( let i = 0 ; i < genesis.runtime._practiceMap.constructionInit.length ; i++ )
   {
-    let constructionInit = genesis.runtime._RuntimeRoutinesMap.constructionInit[ i ];
+    let constructionInit = genesis.runtime._practiceMap.constructionInit[ i ];
     constructionInit( genesis );
   }
 

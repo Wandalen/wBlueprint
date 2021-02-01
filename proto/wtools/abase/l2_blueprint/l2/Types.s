@@ -40,7 +40,7 @@ let ConstructionRuntimeRoutines =
   allocate : { multiple : 0 },
   retype : { multiple : 0 },
   initBegin : { multiple : 1 },
-  initEnd : { multiple : 1 },
+  constructionInitEnd : { multiple : 1 },
 }
 
 let DefinitionExtension =

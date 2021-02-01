@@ -3,7 +3,7 @@
 'use strict';
 
 /**
- * Classes defining tool on steroids. Make possible multiple inheritances, removing fields in descendants, defining the schema of structure, typeless objects, generating optimal code for definition, and many cool things alternatives cant do.
+ * Classes defining tool on steroids. make possible multiple inheritances, removing fields in descendants, defining the schema of structure, typeless objects, generating optimal code for definition, and many cool things alternatives cant do.
   @module Tools/base/Blueprint
 */
 

@@ -175,7 +175,7 @@ function prop_body( o )
 
   const toVal = o.toVal = _toVal[ o.valToIns ];
   _.assert( _.routineIs( toVal ), () => `Unknown toVal::${o.valToIns} )` );
-;
+
   o.blueprintForm1 = blueprintForm1;
   o.blueprintForm2 = blueprintForm2;
   o.kind = 'prop';
@@ -195,7 +195,7 @@ function prop_body( o )
 
   function blueprintForm1( op )
   {
-    _.assert( _.strDefined( op.propName ) || _.strDefined( ext.name ) );
+    _.assert( _.strDefined( op.propName ) || _.strDefined( op.definition.name ) );
     _.assert( op.propName === null || op.propName === op.definition.name );
     Object.freeze( op.definition );
   }
@@ -203,7 +203,7 @@ function prop_body( o )
   function blueprintForm2( op )
   {
 
-    _.assert( _.strDefined( op.propName ) || _.strDefined( ext.name ) );
+    _.assert( _.strDefined( op.propName ) || _.strDefined( op.definition.name ) );
     _.assert( op.propName === null || op.propName === op.definition.name );
 
     if( op.definition.static )
@@ -240,9 +240,9 @@ function prop_body( o )
     )
     {
       if( op.definition.val === _.nothing )
-      op.blueprint.PropsSupplementation[ op.propName ] = undefined;
+      op.blueprint.propsSupplementation[ op.propName ] = undefined;
       else
-      op.blueprint.PropsExtension[ op.propName ] = _.escape.right( op.definition.val );
+      op.blueprint.propsExtension[ op.propName ] = _.escape.right( op.definition.val );
     }
     else if( op.definition.enumerable && op.definition.configurable && ( op.definition.writable || op.definition.writable === null ) )
     {
@@ -320,7 +320,7 @@ function prop_body( o )
       }
     }
 
-    Object.defineProperty( op.blueprint.Make, name, opts );
+    Object.defineProperty( op.blueprint.make, name, opts );
 
     return op.blueprint;
   }
@@ -373,7 +373,7 @@ function prop_body( o )
         opts.writable = false;
         opts.value = val2;
       }
-      Object.defineProperty( op.blueprint.Make, name, opts );
+      Object.defineProperty( op.blueprint.make, name, opts );
       if( prototype !== null )
       Object.defineProperty( prototype, name, opts );
     }
@@ -400,7 +400,7 @@ function prop_body( o )
     const prototype = blueprint.prototype;
     let op2, normalizedAsuite;
 
-    _.assert( _.fuzzyIs( blueprint.Typed ) );
+    _.assert( _.fuzzyIs( blueprint.typed ) );
 
     if( _global_.debugger )
     debugger;
@@ -436,7 +436,7 @@ function prop_body( o )
     constructionInit = constructionInitUntyped;
     else _.assert( 0 );
 
-    _.blueprint._routineAdd( blueprint, 'constructionInit', constructionInit );
+    _.blueprint._practiceAdd( blueprint, 'constructionInit', constructionInit );
 
     function constructionInitTyped( genesis )
     {
@@ -535,7 +535,7 @@ function prop_body( o )
     const prototype = blueprint.prototype;
     const val = definition.val;
 
-    _.blueprint._routineAdd( blueprint, 'constructionInit', constructionInit );
+    _.blueprint._practiceAdd( blueprint, 'constructionInit', constructionInit );
 
     function constructionInit( genesis )
     {
@@ -569,7 +569,7 @@ function prop_body( o )
     const val = definition.val;
     const prototype = blueprint.prototype;
 
-    _.blueprint._routineAdd( blueprint, 'constructionInit', constructionInit );
+    _.blueprint._practiceAdd( blueprint, 'constructionInit', constructionInit );
 
     function constructionInit( genesis )
     {
@@ -1056,7 +1056,7 @@ function inherit( o )
   let result = [];
   result.push( _.define.extension( o.val ) );
   let prototype = null;
-  if( o.val.prototype ) /* xxx : rename prototype -> Prototype? */
+  if( o.val.prototype )
   prototype = o.val;
 
   if( o.val.TraitsMap.typed )
@@ -1081,23 +1081,20 @@ inherit.defaults =
 
 //
 
-function _constant_functor() /* xxx : test with blueprint? */
+function _constant_functor()
 {
   let prototype = Object.create( null );
   prototype.defGroup = 'definition.named';
+  prototype.kind = 'constant';
   prototype.subKind = 'constant';
   prototype.asAccessorSuite = asAccessorSuite;
   prototype.toVal = toVal;
-  _.property.hide( prototype, 'asAccessorSuite' );
+  prototype.blueprintForm1 = blueprintForm1;
+  prototype.blueprintForm2 = blueprintForm2;
+  _.property.hide( prototype, 'asAccessorSuite' ); /* xxx : use 3rd argument */
   _.property.hide( prototype, 'toVal' );
-  // _.property.hide( prototype, 'constructionAmend' );
   _.definition.retype( prototype );
   Object.freeze( prototype );
-
-  _constant.defaults =
-  {
-    val : null,
-  }
 
   return _constant;
 
@@ -1105,11 +1102,54 @@ function _constant_functor() /* xxx : test with blueprint? */
 
   function _constant( val )
   {
-    let o = Object.create( prototype );
-    o.val = val;
+    let definition = Object.create( prototype );
+    definition.val = val;
+    definition.name = null;
+    definition._blueprint = null;
+    Object.preventExtensions( definition );
     _.assert( arguments.length === 1 );
-    _.assert( o.val !== undefined );
-    return o;
+    _.assert( definition.val !== undefined );
+    return definition;
+  }
+
+  /* */
+
+  function blueprintForm1( op )
+  {
+    const val = op.definition.val;
+    const name = op.definition.name;
+    _.assert( _.strDefined( op.propName ) || _.strDefined( op.definition.name ) );
+    _.assert( op.propName === null || op.propName === op.definition.name );
+    Object.freeze( op.definition );
+  }
+
+  /* */
+
+  function blueprintForm2( op )
+  {
+    const val = op.definition.val;
+    const name = op.definition.name;
+
+    _.blueprint._practiceAdd( op.blueprint, 'constructionInit', constructionInitUntyped );
+
+    function constructionInitUntyped( genesis )
+    {
+      if( _global_.debugger )
+      debugger;
+
+      let val2 = val;
+
+      let opts =
+      {
+        enumerable : false,
+        configurable : false,
+        writable : false,
+        value : val2,
+      };
+
+      Object.defineProperty( genesis.construction, name, opts );
+    }
+
   }
 
   /* */

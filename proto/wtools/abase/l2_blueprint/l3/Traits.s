@@ -88,7 +88,8 @@ set custom prototype
 prototype:0
 preserve prototype of typed destination
 preserve as map if untyped destination
-create untyped
+create typed
+// create untyped -- xxx
 
 prototype:1
 set generated prototype if destination is typed
@@ -161,7 +162,6 @@ function typed_body( o )
   o.blueprintForm1 = blueprintForm1;
   o.blueprintForm2 = blueprintForm2;
   o.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
-  // o._blueprint = false; /* xxx */
 
   let val = o.val;
   let allocate;
@@ -169,14 +169,12 @@ function typed_body( o )
 
   o.kind = 'typed';
   return _.definition._traitMake( o );
-  // return _.definition._traitMake( 'typed', o );
 
 /* -
 
 - blueprintForm1
 - blueprintForm2
 - blueprintDefinitionRewrite
-- definitionClone
 - allocateTyped
 - allocateUntyped
 - retypeMaybe
@@ -231,24 +229,17 @@ function typed_body( o )
       , () => `Trait::typed should be either not false or prototype should be any of [ true, false, null ], but it is ${_.strType( trait.prototype )}`
     );
     _.assert( trait._blueprint === op.blueprint );
-    // trait._blueprint = op.blueprint;
 
     /**/
 
     if( trait._dstConstruction )
     {
-      // let opts = Object.create( null );
-      // opts.val = trait.val;
-      // opts.prototype = trait.prototype;
-      // opts.new = trait.new;
-      // opts._blueprint = op.blueprint;
-      // trait = op.blueprint.TraitsMap.typed = _.trait.typed( opts );/* xxx : use clone */
       trait._dstConstruction = _.nothing;
     }
 
     _.assert( trait._dstConstruction === _.nothing );
-    _.assert( op.blueprint.Make === null );
-    _.assert( op.blueprint.Runtime.prototype === null );
+    _.assert( op.blueprint.make === null );
+    _.assert( op.blueprint.runtime.prototype === null );
 
     if( _.boolIs( trait.prototype ) )
     {
@@ -262,14 +253,14 @@ function typed_body( o )
         if( trait.prototype === true )
         prototype = Object.create( _.Construction.prototype );
         else
-        prototype = op.blueprint.Runtime.prototype;
+        prototype = op.blueprint.runtime.prototype;
       }
       else
       {
         prototype = Object.create( _.Construction.prototype );
       }
 
-      op.blueprint.Runtime.prototype = prototype;
+      op.blueprint.runtime.prototype = prototype;
     }
     else
     {
@@ -277,7 +268,7 @@ function typed_body( o )
       if( _.blueprint.is( trait.prototype ) )
       {
         prototype = trait.prototype.prototype;
-        _.assert( _.routineIs( trait.prototype.Make ) );
+        _.assert( _.routineIs( trait.prototype.make ) );
         _.assert
         (
             _.objectIs( trait.prototype.prototype )
@@ -290,9 +281,9 @@ function typed_body( o )
       }
 
       if( trait.new && prototype )
-      op.blueprint.Runtime.prototype = Object.create( prototype );
+      op.blueprint.runtime.prototype = Object.create( prototype );
       else
-      op.blueprint.Runtime.prototype = prototype;
+      op.blueprint.runtime.prototype = prototype;
 
     }
 
@@ -308,8 +299,8 @@ function typed_body( o )
     if( trait.val === _.maybe )
     retype = retypeMaybe;
 
-    _.blueprint._routineAdd( op.blueprint, 'allocate', allocate );
-    _.blueprint._routineAdd( op.blueprint, 'retype', retype );
+    _.blueprint._practiceAdd( op.blueprint, 'allocate', allocate );
+    _.blueprint._practiceAdd( op.blueprint, 'retype', retype );
 
   }
 
@@ -322,32 +313,30 @@ function typed_body( o )
 
     _.assert( trait.val === val );
     _.assert( _.fuzzyIs( trait.val ) );
-    _.assert( op.blueprint.Typed === trait.val || trait.val === _.maybe );
+    _.assert( op.blueprint.typed === trait.val || trait.val === _.maybe );
     _.assert( trait._blueprint === op.blueprint );
-    _.assert( _.fuzzyIs( op.blueprint.Typed ) );
+    _.assert( _.fuzzyIs( op.blueprint.typed ) );
 
     Object.freeze( trait );
 
-    if( _.boolIs( trait.prototype ) ) /* xxx */
-    {
-      return;
-    }
+    if( _.boolIs( trait.prototype ) )
+    return;
 
     if( _.blueprint.is( trait.prototype ) )
     {
       prototype = trait.prototype.prototype;
       _.assert( _.blueprint.isDefinitive( trait.prototype ) );
-      _.assert( _.routineIs( op.blueprint.Make ) );
-      _.assert( _.routineIs( trait.prototype.Make ) );
-      Object.setPrototypeOf( op.blueprint.Make, trait.prototype.Make );
+      _.assert( _.routineIs( op.blueprint.make ) );
+      _.assert( _.routineIs( trait.prototype.make ) );
+      Object.setPrototypeOf( op.blueprint.make, trait.prototype.make );
     }
     else
     {
       prototype = trait.prototype;
-      _.assert( prototype !== null || op.blueprint.Typed !== true, 'Object with null prototype cant be typed' );
+      _.assert( prototype !== null || op.blueprint.typed !== true, 'Object with null prototype cant be typed' );
       if( prototype && Object.hasOwnProperty.call( prototype, 'constructor' ) && _.routineIs( prototype.constructor ) )
-      if( op.blueprint.Make !== prototype.constructor )
-      Object.setPrototypeOf( op.blueprint.Make, prototype.constructor );
+      if( op.blueprint.make !== prototype.constructor )
+      Object.setPrototypeOf( op.blueprint.make, prototype.constructor );
     }
 
   }
@@ -366,24 +355,30 @@ function typed_body( o )
       _.assert( op.primeDefinition._dstConstruction === _.nothing );
 
       let prototype = _.prototype.of( op.secondaryDefinition._dstConstruction );
-      let opts = Object.create( null ); /* xxx : use clone */
-      opts.val = op.primeDefinition.val;
-      opts.prototype = op.primeDefinition.prototype;
-      opts.new = op.primeDefinition.new;
+      let opts = op.primeDefinition.cloneShallow();
       opts._blueprint = op.blueprint;
 
       if( op.primeDefinition.val === true && op.primeDefinition.prototype === _.nothing )
       opts.prototype = true;
 
-      /* xxx : remove? */
-      if( prototype && prototype !== Object.prototype && op.primeDefinition.val && ( opts.prototype === _.nothing || opts.prototype === false ) )
+      if
+      (
+           prototype
+        && prototype !== Object.prototype
+        && op.primeDefinition.val
+        && ( opts.prototype === _.nothing || opts.prototype === false ) )
       {
 
         opts.prototype = prototype;
         opts.new = false;
 
       }
-      else if( !!op.secondaryDefinition._dstConstruction && ( _.boolIs( opts.prototype ) || opts.prototype === _.nothing ) && op.primeDefinition.val === _.maybe )
+      else if
+      (
+           !!op.secondaryDefinition._dstConstruction
+        && ( _.boolIs( opts.prototype ) || opts.prototype === _.nothing )
+        && op.primeDefinition.val === _.maybe
+      )
       {
 
         if( opts.prototype === _.nothing )
@@ -401,8 +396,7 @@ function typed_body( o )
 
       }
 
-      op.blueprint.TraitsMap[ op.primeDefinition.kind ] = _.trait.typed( opts ); /* xxx : use clone */
-
+      op.blueprint.TraitsMap[ op.primeDefinition.kind ] = opts;
       return;
     }
 
@@ -415,26 +409,14 @@ function typed_body( o )
 
   /* */
 
-  function definitionClone( secondaryDefinition, primeDefinition )
-  {
-    return _.trait.typed /* xxx : use clone here */
-    ({
-      val : primeDefinition.val,
-      new : primeDefinition.new,
-      prototype : secondaryDefinition.prototype,
-    });
-  }
-
-  /* */
-
   function allocateTyped( genesis )
   {
     if( _global_.debugger )
     debugger;
-    _.assert( !!genesis.runtime.Typed );
+    _.assert( !!genesis.runtime.typed );
     if( genesis.construction === null )
-    genesis.construction = new( _.constructorJoin( genesis.runtime.Make, genesis.args ) );
-    _.assert( genesis.construction === null || !genesis.runtime.Make.prototype || genesis.construction instanceof genesis.runtime.Make );
+    genesis.construction = new( _.constructorJoin( genesis.runtime.make, genesis.args ) );
+    _.assert( genesis.construction === null || !genesis.runtime.prototype || genesis.construction instanceof genesis.runtime.make );
     return genesis.construction;
   }
 
@@ -445,14 +427,14 @@ function typed_body( o )
     if( _global_.debugger )
     debugger;
 
-    if( genesis.runtime.Make.prototype === null && !_.mapIsPure( genesis.construction ) )
+    if( genesis.runtime.prototype === null && !_.mapIsPure( genesis.construction ) )
     genesis.construction = Object.create( null );
-    else if( genesis.construction && genesis.runtime.Make.prototype !== null && genesis.construction instanceof genesis.runtime.Make )
+    else if( genesis.construction && genesis.runtime.prototype !== null && genesis.construction instanceof genesis.runtime.make )
     genesis.construction = Object.create( null );
     else if( genesis.construction === null )
     genesis.construction = Object.create( null );
     _.assert( genesis.construction === null || _.mapIs( genesis.construction ) );
-    _.assert( genesis.runtime.Make.prototype === null || !( genesis.construction instanceof genesis.runtime.Make ) );
+    _.assert( genesis.runtime.prototype === null || !( genesis.construction instanceof genesis.runtime.make ) );
     return genesis.construction;
   }
 
@@ -465,7 +447,7 @@ function typed_body( o )
 
     if( genesis.construction === null )
     {
-      if( !genesis.runtime.Reprototyping || genesis.runtime.Make.prototype === null )
+      if( !genesis.runtime._reprototyping || genesis.runtime.prototype === null )
       {
         _.assert( 0, 'not tested' );
         genesis.construction = Object.create( null );
@@ -473,22 +455,21 @@ function typed_body( o )
       else
       {
         _.assert( 0, 'not tested' );
-        genesis.construction = new( _.constructorJoin( genesis.runtime.Make, genesis.args ) );
-        // genesis.construction = new( _.constructorJoin( genesis.runtime.Make, [] ) );
+        genesis.construction = new( _.constructorJoin( genesis.runtime.make, genesis.args ) );
       }
     }
     else if( _.mapIs( genesis.construction ) )
     {
-      if( genesis.runtime.Reprototyping === null || genesis.runtime.Reprototyping === true )
+      if( genesis.runtime._reprototyping === null || genesis.runtime._reprototyping === true )
       if( Object.getPrototypeOf( genesis.construction ) !== null )
       Object.setPrototypeOf( genesis.construction, null );
     }
     else
     {
 
-      if( genesis.runtime.Reprototyping )
-      // if( genesis.runtime.Make.prototype === null || !( genesis.construction instanceof genesis.runtime.Make ) ) /* xxx : optimize */
-      Object.setPrototypeOf( genesis.construction, genesis.runtime.Make.prototype );
+      if( genesis.runtime._reprototyping )
+      if( Object.getPrototypeOf( genesis.construction ) !== genesis.runtime.prototype )
+      Object.setPrototypeOf( genesis.construction, genesis.runtime.prototype );
 
     }
 
@@ -503,13 +484,13 @@ function typed_body( o )
     debugger;
     if( genesis.construction === null )
     {
-      genesis.construction = new( _.constructorJoin( genesis.runtime.Make, genesis.args ) );
+      genesis.construction = new( _.constructorJoin( genesis.runtime.make, genesis.args ) );
     }
     else if( genesis.construction )
     {
-      if( genesis.runtime.Reprototyping !== false || _.mapIs( genesis.construction ) )
-      if( genesis.runtime.Make.prototype === null || !( genesis.construction instanceof genesis.runtime.Make ) ) /* xxx : optimize */
-      Object.setPrototypeOf( genesis.construction, genesis.runtime.Make.prototype );
+      if( genesis.runtime._reprototyping !== false || _.mapIs( genesis.construction ) )
+      if( genesis.runtime.prototype === null || !( genesis.construction instanceof genesis.runtime.make ) )
+      Object.setPrototypeOf( genesis.construction, genesis.runtime.prototype );
     }
 
     _.assert
@@ -519,10 +500,10 @@ function typed_body( o )
 
     _.assert
     (
-      genesis.runtime.Reprototyping === false
-      || genesis.runtime.Typed === _.maybe
-      || genesis.runtime.Make.prototype === null
-      || genesis.construction instanceof genesis.runtime.Make
+      genesis.runtime._reprototyping === false
+      || genesis.runtime.typed === _.maybe
+      || genesis.runtime.prototype === null
+      || genesis.construction instanceof genesis.runtime.make
     );
     return genesis.construction;
   }
@@ -537,7 +518,7 @@ function typed_body( o )
     {
       let wasProto = Object.getPrototypeOf( genesis.construction );
       if( wasProto !== null && wasProto !== Object.prototype )
-      if( genesis.runtime.Typed !== _.maybe )
+      if( genesis.runtime.typed !== _.maybe )
       Object.setPrototypeOf( genesis.construction, null );
     }
     else if( genesis.construction === null )
@@ -557,7 +538,7 @@ function typed_body( o )
     if( genesis.construction )
     {
       let wasProto = Object.getPrototypeOf( genesis.construction );
-      if( genesis.runtime.Typed !== _.maybe )
+      if( genesis.runtime.typed !== _.maybe )
       Object.setPrototypeOf( genesis.construction, null );
     }
     else if( genesis.construction === null )
@@ -585,20 +566,18 @@ let typed = _.routineUnite( typed_head, typed_body );
 
 //
 
-function withConstructor( o )
+function constructor( o )
 {
   if( !_.mapIs( o ) )
   o = { val : arguments[ 0 ] };
-  _.routineOptions( withConstructor, o );
+  _.routineOptions( constructor, o );
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( _.boolLike( o.val ) );
 
   o.val = !!o.val;
   o.blueprintForm2 = blueprintForm2;
   o._blueprint = false;
-
-  /* xxx : rename? */
-  o.kind = 'withConstructor';
+  o.kind = 'constructor';
   return _.definition._traitMake( o );
 
   /* */
@@ -609,20 +588,20 @@ function withConstructor( o )
     if( _global_.debugger )
     debugger;
 
-    if( !op.blueprint.TraitsMap.withConstructor.val )
+    if( !op.blueprint.TraitsMap.constructor.val )
     return;
 
     let prototyped = op.blueprint.prototype && op.blueprint.prototype !== Object.prototype;
 
-    _.assert( _.routineIs( op.blueprint.Make ) );
-    _.assert( _.fuzzyIs( op.blueprint.Typed ) );
+    _.assert( _.routineIs( op.blueprint.make ) );
+    _.assert( _.fuzzyIs( op.blueprint.typed ) );
 
     if( prototyped )
     if( op.amending !== 'supplement' || !_.mapOnlyOwnKey( op.blueprint.prototype, 'constructor' ) )
     {
       let properties =
       {
-        value : op.blueprint.Make,
+        value : op.blueprint.make,
         enumerable : false,
         configurable : false,
         writable : false,
@@ -632,15 +611,14 @@ function withConstructor( o )
 
     let prototype = op.blueprint.prototype;
     let supplementing = op.amending === 'supplement';
-    let constructor = op.blueprint.Make;
-    let typed = op.blueprint.Typed;
-    // if( typed !== true )
-    /* xxx : add optimizing condition */
+    let constructor = op.blueprint.make;
+    let typed = op.blueprint.typed;
+    if( typed !== true )
     {
-      _.blueprint._routineAdd( op.blueprint, 'initEnd', initEnd );
+      _.blueprint._practiceAdd( op.blueprint, 'constructionInitEnd', constructionInitEnd );
     }
 
-    function initEnd( genesis )
+    function constructionInitEnd( genesis )
     {
       if( _global_.debugger )
       debugger;
@@ -667,7 +645,7 @@ function withConstructor( o )
 
 }
 
-withConstructor.defaults =
+constructor.defaults =
 {
   val : true,
 }
@@ -691,12 +669,12 @@ function extendable( o )
   o.kind = 'extendable';
   return _.definition._traitMake( o );
 
-  function blueprintForm2( op ) /* xxx : use op */
+  function blueprintForm2( op )
   {
     _.assert( _.boolIs( op.blueprint.TraitsMap.extendable.val ) );
     if( op.blueprint.TraitsMap.extendable.val )
     return;
-    _.blueprint._routineAdd( op.blueprint, 'initEnd', preventExtensions );
+    _.blueprint._practiceAdd( op.blueprint, 'constructionInitEnd', preventExtensions );
   }
 
   function preventExtensions( genesis )
@@ -727,8 +705,9 @@ function name( o )
 
   function blueprintForm1( op )
   {
-    _.assert( op.blueprint.Make === null );
-    op.blueprint.Runtime.Name = op.definition.val;
+    _.assert( op.blueprint.make === null );
+    _.assert( op.blueprint.name === null );
+    op.blueprint.runtime.name = op.definition.val;
   }
 
 }
@@ -755,7 +734,7 @@ let TraitExtension =
 
   callable,
   typed,
-  withConstructor, /* xxx : reuse static:maybe _.define.prop() ?*/
+  constructor, /* xxx : reuse static:maybe _.define.prop() ?*/
   extendable,
   name,
 
