@@ -133,7 +133,6 @@ function _define( o )
   runtime.typed = blueprint.TraitsMap.typed.val;
   _.assert( _.boolIs( runtime._makingTyped ) );
   _.assert( runtime._prototyping !== undefined );
-  // runtime._prototyping = blueprint.TraitsMap.typed.prototype;
 
   let name = blueprint.name || 'Construction';
   let Construction =

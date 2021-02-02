@@ -251,8 +251,8 @@ function typed_body( o )
       }
       else if( trait.val === _.maybe )
       {
-        if( trait.prototype === true ) /* yyy */
-        // if( trait.prototype === true || trait.prototype === false )
+        // if( trait.prototype === true ) /* typed:maybe */
+        if( trait.prototype === true || trait.prototype === false )
         prototype = Object.create( _.Construction.prototype );
         else
         prototype = runtime.prototype;
@@ -298,12 +298,12 @@ function typed_body( o )
     if( op.blueprint.TraitsMap.typed.val === true )
     runtime._makingTyped = true;
     else if( op.blueprint.TraitsMap.typed.val === _.maybe )
-    // if
-    // (
-    //        op.blueprint.TraitsMap.typed.prototype === false
-    //   || ( op.blueprint.TraitsMap.typed.prototype && op.blueprint.TraitsMap.typed.prototype !== Object.prototype )
-    // )
-    if( op.blueprint.TraitsMap.typed.prototype && op.blueprint.TraitsMap.typed.prototype !== Object.prototype ) /* yyy */
+    if
+    (
+           op.blueprint.TraitsMap.typed.prototype === false
+      || ( op.blueprint.TraitsMap.typed.prototype && op.blueprint.TraitsMap.typed.prototype !== Object.prototype )
+    )
+    // if( op.blueprint.TraitsMap.typed.prototype && op.blueprint.TraitsMap.typed.prototype !== Object.prototype ) /* typed:maybe */
     runtime._makingTyped = true;
 
     /* */
@@ -314,8 +314,8 @@ function typed_body( o )
 
     let effectiveTyped = !!trait.val && prototype !== null;
 
-    if( trait.val === _.maybe && !trait.prototype ) /* yyy */
-    // if( trait.val === _.maybe && trait.prototype === null )
+    // if( trait.val === _.maybe && !trait.prototype ) /* typed:maybe */
+    if( trait.val === _.maybe && trait.prototype === null )
     effectiveTyped = false;
 
     allocate = effectiveTyped ? allocateTyped : allocateUntyped;

@@ -66,7 +66,7 @@ function amend( o )
   let amending = o.amending;
   let blueprint = blueprintLook( o.src, null );
 
-  if( !blueprint ) /* xxx : bad if */
+  if( !blueprint ) /* xxx : bad if? */
   {
     let defs = [];
     let prototype = _.prototype.of( o.dstConstruction );
@@ -77,7 +77,7 @@ function amend( o )
     {
       let opts = Object.create( null );
       opts.val = _.maybe;
-      if( prototype && prototype !== Object.prototype ) /* xxx : remove? */
+      if( prototype && prototype !== Object.prototype )
       {
         opts.prototype = prototype;
         opts.new = false;

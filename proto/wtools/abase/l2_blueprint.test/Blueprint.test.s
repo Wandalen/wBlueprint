@@ -5621,12 +5621,14 @@ function definePropAccessorTypedMaybe( test )
         f1 : tops.prop,
       });
 
-      if( tops.typed === 1 )
+      // if( tops.typed && tops.typed !== _.nothing )/* if( tops.typed === 1 ) */
+      if( tops.typed )
       test.identical( _.prototype.each( blueprint.prototype ).length, 2 );
       else
       test.identical( _.prototype.each( blueprint.prototype ).length, 0 );
 
-      if( tops.typed === 1 )
+      // if( tops.typed && tops.typed !== _.nothing )/* if( tops.typed === 1 ) */
+      if( tops.typed )
       {
         var got = Object.getOwnPropertyDescriptor( blueprint.prototype, 'f1' );
         var exp = undefined;
@@ -5644,7 +5646,7 @@ function definePropAccessorTypedMaybe( test )
 
       var exp = [ 'f1' ];
       test.identical( new Set( keysOwn( _.prototype.each( instance1 )[ 0 ] ) ), new Set( exp ) );
-      if( tops.typed === 1 )
+      if( tops.typed && tops.typed !== _.nothing )/* if( tops.typed === 1 ) */
       {
         var exp = [];
         test.identical( new Set( keysOwn( _.prototype.each( instance1 )[ 1 ] ) ), new Set( exp ) );
@@ -5669,7 +5671,7 @@ function definePropAccessorTypedMaybe( test )
         f1 : tops.prop,
       });
 
-      if( tops.typed === 1 )
+      if( tops.typed && tops.typed !== _.nothing )/* if( tops.typed === 1 ) */
       {
         var got = Object.getOwnPropertyDescriptor( blueprint.prototype, 'f1' );
         var exp =
@@ -5689,7 +5691,8 @@ function definePropAccessorTypedMaybe( test )
       test.description = 'instance'; /* */
 
       var instance1 = blueprint.make();
-      if( tops.typed === 1 )
+      // if( tops.typed && tops.typed !== _.nothing )/* if( tops.typed === 1 ) */
+      if( tops.typed )
       test.identical( _.prototype.each( instance1 ).length, 3 );
       else
       test.identical( _.prototype.each( instance1 ).length, 1 );
@@ -5699,7 +5702,8 @@ function definePropAccessorTypedMaybe( test )
         f1 : 1,
       }
       test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ]._ ), exp );
-      if( tops.typed === 1 )
+      // if( tops.typed && tops.typed !== _.nothing )/* if( tops.typed === 1 ) */
+      if( tops.typed )
       {
         var exp =
         {
@@ -5707,7 +5711,8 @@ function definePropAccessorTypedMaybe( test )
         test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ]._ ), exp );
       }
 
-      if( tops.typed === 1 )
+      // if( tops.typed && tops.typed !== _.nothing )/* if( tops.typed === 1 ) */
+      if( tops.typed )
       {
         var exp = [ '_' ];
         test.identical( new Set( keysOwn( _.prototype.each( instance1 )[ 0 ] ) ), new Set( exp ) );
@@ -5718,7 +5723,7 @@ function definePropAccessorTypedMaybe( test )
         test.identical( new Set( keysOwn( _.prototype.each( instance1 )[ 0 ] ) ), new Set( exp ) );
       }
 
-      if( tops.typed === 1 )
+      if( tops.typed && tops.typed !== _.nothing )/* if( tops.typed === 1 ) */
       {
         var exp = [ 'f1', '_' ];
         test.identical( new Set( keysOwn( _.prototype.each( instance1 )[ 1 ] ) ), new Set( exp ) );
@@ -5743,7 +5748,7 @@ function definePropAccessorTypedMaybe( test )
         f1 : tops.prop,
       });
 
-      if( tops.typed === 1 )
+      if( tops.typed && tops.typed !== _.nothing )/* if( tops.typed === 1 ) */
       {
         var got = Object.getOwnPropertyDescriptor( blueprint.prototype, 'f1' );
         var exp =
@@ -5770,7 +5775,7 @@ function definePropAccessorTypedMaybe( test )
       test.description = 'instance'; /* */
 
       var instance1 = blueprint.make();
-      if( tops.typed === 1 )
+      if( tops.typed && tops.typed !== _.nothing )/* if( tops.typed === 1 ) */
       test.identical( _.prototype.each( instance1 ).length, 3 );
       else
       test.identical( _.prototype.each( instance1 ).length, 1 );
@@ -5779,7 +5784,7 @@ function definePropAccessorTypedMaybe( test )
       {
         f1 : 1,
       }
-      if( tops.typed === 1 )
+      if( tops.typed && tops.typed !== _.nothing )/* if( tops.typed === 1 ) */
       {
         test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ]._ ), exp );
         var exp =
@@ -5813,7 +5818,7 @@ function definePropAccessorTypedMaybe( test )
         f1 : tops.prop,
       });
 
-      if( tops.typed === 1 )
+      if( tops.typed && tops.typed !== _.nothing )/* if( tops.typed === 1 ) */
       {
         var got = Object.getOwnPropertyDescriptor( blueprint.prototype, 'f1' );
         var exp =
@@ -5844,7 +5849,7 @@ function definePropAccessorTypedMaybe( test )
       test.description = 'instance'; /* */
 
       var instance1 = blueprint.make();
-      if( tops.typed === 1 )
+      if( tops.typed && tops.typed !== _.nothing )/* if( tops.typed === 1 ) */
       test.identical( _.prototype.each( instance1 ).length, 3 );
       else
       test.identical( _.prototype.each( instance1 ).length, 1 );
@@ -5852,7 +5857,7 @@ function definePropAccessorTypedMaybe( test )
 
       var exp = [];
       test.identical( new Set( keysOwn( _.prototype.each( instance1 )[ 0 ] ) ), new Set( exp ) );
-      if( tops.typed === 1 )
+      if( tops.typed && tops.typed !== _.nothing )/* if( tops.typed === 1 ) */
       {
         var exp = [ 'f1' ];
         test.identical( new Set( keysOwn( _.prototype.each( instance1 )[ 1 ] ) ), new Set( exp ) );
@@ -11860,7 +11865,7 @@ function defineConstantBasic( test )
 
   eachCase({ typed : 0 });
   eachCase({ typed : 1 });
-  // eachCase({ typed : _.maybe });
+  eachCase({ typed : _.maybe });
   // xxx
 
   function eachCase( tops )
@@ -12409,7 +12414,7 @@ function traitTypedBasic( test )
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
   test.identical( _.property.all( instance1 ), exp );
-  test.identical( _.prototype.each( instance1 ).length, 1 );
+  test.identical( _.prototype.each( instance1 ).length, 3 );
 
   /* */
 
@@ -12422,7 +12427,7 @@ function traitTypedBasic( test )
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
   test.identical( _.property.all( instance1 ), exp );
-  test.identical( _.prototype.each( instance1 ).length, 1 );
+  test.identical( _.prototype.each( instance1 ).length, 3 );
 
   /* */
 
@@ -12435,7 +12440,7 @@ function traitTypedBasic( test )
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
   test.identical( _.property.all( instance1 ), exp );
-  test.identical( _.prototype.each( instance1 ).length, 1 );
+  test.identical( _.prototype.each( instance1 ).length, 3 );
 
   /* */
 
@@ -12574,7 +12579,7 @@ function traitTypedBasic( test )
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
   test.identical( _.property.all( instance1 ), exp );
-  test.identical( _.prototype.each( instance1 ).length, 1 );
+  test.identical( _.prototype.each( instance1 ).length, 3 );
   test.true( _.prototype.each( instance1 )[ 0 ] === instance1 );
 
   /* */
@@ -12588,7 +12593,7 @@ function traitTypedBasic( test )
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
   test.identical( _.property.all( instance1 ), exp );
-  test.identical( _.prototype.each( instance1 ).length, 1 );
+  test.identical( _.prototype.each( instance1 ).length, 3 );
   test.true( _.prototype.each( instance1 )[ 0 ] === instance1 );
 
   /* */
@@ -12602,7 +12607,7 @@ function traitTypedBasic( test )
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
   test.identical( _.property.all( instance1 ), exp );
-  test.identical( _.prototype.each( instance1 ).length, 1 );
+  test.identical( _.prototype.each( instance1 ).length, 3 );
   test.true( _.prototype.each( instance1 )[ 0 ] === instance1 );
 
   /* - */
@@ -14298,7 +14303,7 @@ function traitTypedLogistic( test )
     test.true( trait._blueprint === blueprint1 );
     test.true( trait === blueprint1.TraitsMap.typed );
     var instance1 = blueprint1.make();
-    if( tops.typed === 1 )
+    if( tops.typed && tops.typed !== _.nothing )/* if( tops.typed === 1 ) */
     test.identical( _.prototype.each( instance1 ).length, 3 );
     else
     test.identical( _.prototype.each( instance1 ).length, 1 );
@@ -14318,7 +14323,7 @@ function traitTypedLogistic( test )
     test.true( trait._blueprint === blueprint1 );
     test.true( trait === blueprint1.TraitsMap.typed );
     var instance1 = blueprint1.make();
-    if( tops.typed === 1 )
+    if( tops.typed && tops.typed !== _.nothing )/* if( tops.typed === 1 ) */
     test.identical( _.prototype.each( instance1 ).length, 3 );
     else
     test.identical( _.prototype.each( instance1 ).length, 1 );
@@ -14348,13 +14353,13 @@ function traitTypedLogistic( test )
     test.true( trait === blueprint1.TraitsMap.typed );
 
     var instance1 = blueprint1.make();
-    if( tops.typed === 1 )
+    if( tops.typed && tops.typed !== _.nothing )/* if( tops.typed === 1 ) */
     test.identical( _.prototype.each( instance1 ).length, 3 );
     else
     test.identical( _.prototype.each( instance1 ).length, 1 );
 
     var instance2 = blueprint2.make();
-    if( tops.typed === 1 )
+    if( tops.typed && tops.typed !== _.nothing )/* if( tops.typed === 1 ) */
     test.identical( _.prototype.each( instance2 ).length, 3 );
     else
     test.identical( _.prototype.each( instance2 ).length, 1 );
@@ -14796,14 +14801,21 @@ function traitConstructorBasic( test )
   test.true( _.routineIs( instance1.constructor ) );
   test.identical( instance1.constructor.name, 'Construction' );
 
-  test.identical( _.prototype.each( instance1 ).length, 1 );
+  test.identical( _.prototype.each( instance1 ).length, 3 );
   var exp =
   {
     'field1' : 'b1',
     'field2' : 'b1',
-    constructor : instance1.constructor,
+    // constructor : instance1.constructor,
   }
   test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
+  var exp =
+  {
+    constructor : Blueprint1.prototype.constructor,
+    's1' : 'b1',
+    's2' : 'b1',
+  }
+  test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
 
   test.description = 'instance2'; /* */
 
@@ -14811,14 +14823,21 @@ function traitConstructorBasic( test )
   test.true( _.routineIs( instance2.constructor ) );
   test.identical( instance2.constructor.name, 'Construction' );
 
-  test.identical( _.prototype.each( instance2 ).length, 1 );
+  test.identical( _.prototype.each( instance2 ).length, 3 );
   var exp =
   {
-    constructor : instance2.constructor,
+    // constructor : instance2.constructor,
     'field1' : 'b1',
     'field2' : 'b1',
   }
   test.identical( propertyOwn( _.prototype.each( instance2 )[ 0 ] ), exp );
+  var exp =
+  {
+    constructor : Blueprint1.prototype.constructor,
+    's1' : 'b1',
+    's2' : 'b1',
+  }
+  test.identical( propertyOwn( _.prototype.each( instance2 )[ 1 ] ), exp );
 
   /* */
 
