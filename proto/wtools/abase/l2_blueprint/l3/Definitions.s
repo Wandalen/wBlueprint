@@ -507,6 +507,8 @@ function prop_body( o )
 
     function constructionInitMaybe( genesis )
     {
+      if( _global_.debugger )
+      debugger;
       if( prototype === null )
       {
         constructionInitUntyped( genesis );

@@ -191,6 +191,7 @@ function typed_body( o )
   {
     let prototype;
     let trait = op.blueprint.TraitsMap.typed;
+    let runtime = op.blueprint.runtime;
 
     /**/
 
@@ -239,28 +240,29 @@ function typed_body( o )
 
     _.assert( trait._dstConstruction === _.nothing );
     _.assert( op.blueprint.make === null );
-    _.assert( op.blueprint.runtime.prototype === null );
+    _.assert( runtime.prototype === null );
 
     if( _.boolIs( trait.prototype ) )
     {
 
-      if( trait.val === false )
+      if( trait.val === false && trait.val !== _.maybe )
       {
         prototype = null;
       }
       else if( trait.val === _.maybe )
       {
-        if( trait.prototype === true )
+        if( trait.prototype === true ) /* yyy */
+        // if( trait.prototype === true || trait.prototype === false )
         prototype = Object.create( _.Construction.prototype );
         else
-        prototype = op.blueprint.runtime.prototype;
+        prototype = runtime.prototype;
       }
       else
       {
         prototype = Object.create( _.Construction.prototype );
       }
 
-      op.blueprint.runtime.prototype = prototype;
+      runtime.prototype = prototype;
     }
     else
     {
@@ -281,22 +283,46 @@ function typed_body( o )
       }
 
       if( trait.new && prototype )
-      op.blueprint.runtime.prototype = Object.create( prototype );
+      runtime.prototype = Object.create( prototype );
       else
-      op.blueprint.runtime.prototype = prototype;
+      runtime.prototype = prototype;
 
     }
 
+    if( _global_.debugger )
+    debugger;
+
+    /* */
+
+    runtime._makingTyped = false;
+    if( op.blueprint.TraitsMap.typed.val === true )
+    runtime._makingTyped = true;
+    else if( op.blueprint.TraitsMap.typed.val === _.maybe )
+    // if
+    // (
+    //        op.blueprint.TraitsMap.typed.prototype === false
+    //   || ( op.blueprint.TraitsMap.typed.prototype && op.blueprint.TraitsMap.typed.prototype !== Object.prototype )
+    // )
+    if( op.blueprint.TraitsMap.typed.prototype && op.blueprint.TraitsMap.typed.prototype !== Object.prototype ) /* yyy */
+    runtime._makingTyped = true;
+
+    /* */
+
+    runtime._prototyping = trait.prototype;
+
+    /* */
+
     let effectiveTyped = !!trait.val && prototype !== null;
 
-    if( trait.val === _.maybe && !trait.prototype )
+    if( trait.val === _.maybe && !trait.prototype ) /* yyy */
+    // if( trait.val === _.maybe && trait.prototype === null )
     effectiveTyped = false;
 
     allocate = effectiveTyped ? allocateTyped : allocateUntyped;
     retype = effectiveTyped ? retypeTyped : retypeUntypedPreserving;
     if( trait.val === false && ( trait.prototype === null || trait.prototype === true ) )
     retype = retypeUntypedForcing;
-    if( trait.val === _.maybe )
+    if( trait.val === _.maybe ) /* xxx : optimize condition */
     retype = retypeMaybe;
 
     _.blueprint._practiceAdd( op.blueprint, 'allocate', allocate );
@@ -447,7 +473,7 @@ function typed_body( o )
 
     if( genesis.construction === null )
     {
-      if( !genesis.runtime._reprototyping || genesis.runtime.prototype === null )
+      if( !genesis.runtime._prototyping || genesis.runtime.prototype === null )
       {
         _.assert( 0, 'not tested' );
         genesis.construction = Object.create( null );
@@ -460,14 +486,14 @@ function typed_body( o )
     }
     else if( _.mapIs( genesis.construction ) )
     {
-      if( genesis.runtime._reprototyping === null || genesis.runtime._reprototyping === true )
+      if( genesis.runtime._prototyping === null || genesis.runtime._prototyping === true )
       if( Object.getPrototypeOf( genesis.construction ) !== null )
       Object.setPrototypeOf( genesis.construction, null );
     }
     else
     {
 
-      if( genesis.runtime._reprototyping )
+      if( genesis.runtime._prototyping )
       if( Object.getPrototypeOf( genesis.construction ) !== genesis.runtime.prototype )
       Object.setPrototypeOf( genesis.construction, genesis.runtime.prototype );
 
@@ -488,7 +514,7 @@ function typed_body( o )
     }
     else if( genesis.construction )
     {
-      if( genesis.runtime._reprototyping !== false || _.mapIs( genesis.construction ) )
+      if( genesis.runtime._prototyping !== false || _.mapIs( genesis.construction ) )
       if( genesis.runtime.prototype === null || !( genesis.construction instanceof genesis.runtime.make ) )
       Object.setPrototypeOf( genesis.construction, genesis.runtime.prototype );
     }
@@ -500,7 +526,7 @@ function typed_body( o )
 
     _.assert
     (
-      genesis.runtime._reprototyping === false
+      genesis.runtime._prototyping === false
       || genesis.runtime.typed === _.maybe
       || genesis.runtime.prototype === null
       || genesis.construction instanceof genesis.runtime.make

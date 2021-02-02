@@ -90,7 +90,7 @@ function _define( o )
   runtime.name = null;
   runtime.typed = null;
   runtime._makingTyped = null;
-  runtime._reprototyping = null;
+  runtime._prototyping = null;
   runtime.make = null;
   runtime.makeEach = makeEach;
   runtime.from = from;
@@ -131,13 +131,9 @@ function _define( o )
   _.blueprint._form( defContext );
 
   runtime.typed = blueprint.TraitsMap.typed.val;
-  runtime._makingTyped = false;
-  runtime._makingTyped = false;
-  if( blueprint.TraitsMap.typed.val === true )
-  runtime._makingTyped = true;
-  else if( blueprint.TraitsMap.typed.val === _.maybe && blueprint.TraitsMap.typed.prototype && blueprint.TraitsMap.typed.prototype !== Object.prototype )
-  runtime._makingTyped = true;
-  runtime._reprototyping = blueprint.TraitsMap.typed.prototype;
+  _.assert( _.boolIs( runtime._makingTyped ) );
+  _.assert( runtime._prototyping !== undefined );
+  // runtime._prototyping = blueprint.TraitsMap.typed.prototype;
 
   let name = blueprint.name || 'Construction';
   let Construction =
