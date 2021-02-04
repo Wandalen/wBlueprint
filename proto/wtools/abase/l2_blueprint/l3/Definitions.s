@@ -222,7 +222,7 @@ function prop_body( o )
 
       if( op.definition.static !== _.maybe )
       return;
-      if( op.blueprint.TraitsMap.typed.val === true )
+      if( op.blueprint.traitsMap.typed.val === true )
       return;
     }
 
@@ -405,7 +405,7 @@ function prop_body( o )
     if( _global_.debugger )
     debugger;
 
-    if( !isStatic && blueprint.TraitsMap.typed.val && blueprint.prototype )
+    if( !isStatic && blueprint.traitsMap.typed.val && blueprint.prototype )
     {
       op2 = _.accessor.declareSingle
       ({
@@ -428,11 +428,11 @@ function prop_body( o )
     let constructionInit;
     if( isStatic )
     constructionInit = constructionInitUntypedStatic;
-    else if( blueprint.TraitsMap.typed.val === _.maybe )
+    else if( blueprint.traitsMap.typed.val === _.maybe )
     constructionInit = constructionInitMaybe;
-    else if( blueprint.TraitsMap.typed.val === true && blueprint.prototype )
+    else if( blueprint.traitsMap.typed.val === true && blueprint.prototype )
     constructionInit = constructionInitTyped;
-    else if( blueprint.TraitsMap.typed.val === false || blueprint.prototype === null || blueprint.TraitsMap.typed.val && !blueprint.prototype )
+    else if( blueprint.traitsMap.typed.val === false || blueprint.prototype === null || blueprint.traitsMap.typed.val && !blueprint.prototype )
     constructionInit = constructionInitUntyped;
     else _.assert( 0 );
 
@@ -993,15 +993,15 @@ function _amendment_body( o )
   {
     let definition = op.definition;
     let blueprint = op.blueprint;
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
     return _.blueprint._amend
     ({
       blueprint : op.blueprint,
       blueprintDepth : op.blueprintDepth,
       extension : definition.val,
       amending : op.amending === 'extend' ? definition.amending : op.amending,
-      blueprintAction : 'amend',
+      blueprintComposing : 'amend',
       blueprintDepthReserve : definition.blueprintDepthReserve + o.blueprintDepthReserve,
     });
   }
@@ -1061,16 +1061,16 @@ function inherit( o )
   if( o.val.prototype )
   prototype = o.val;
 
-  if( o.val.TraitsMap.typed )
+  if( o.val.traitsMap.typed )
   {
     if( prototype )
-    result.push( _.trait.typed( o.val.TraitsMap.typed.val || true, { prototype : prototype, new : 1 } ) );
+    result.push( _.trait.typed( o.val.traitsMap.typed.val || true, { prototype : prototype, new : 1, _iherited : true } ) ); /* xxx : cover */
     else
-    result.push( _.trait.typed( o.val.TraitsMap.typed.val || true, { prototype : o.val.TraitsMap.typed.val } ) );
+    result.push( _.trait.typed( o.val.traitsMap.typed.val, { prototype : o.val.traitsMap.typed.val, _iherited : true } ) );
   }
   else
   {
-    result.push( _.trait.typed( true ) );
+    // result.push( _.trait.typed( true ) ); /* yyy */
   }
 
   return result;

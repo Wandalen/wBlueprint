@@ -64,7 +64,8 @@ function amend( o )
   if( o.dstConstruction === null )
   o.dstConstruction = Object.create( null );
   let amending = o.amending;
-  let blueprint = blueprintLook( o.src, null );
+
+  let blueprint = _.blueprint.singleAt( o.src ).blueprint;
 
   if( !blueprint ) /* xxx : bad if? */
   {
@@ -94,52 +95,6 @@ function amend( o )
   constructionBlueprintExtend( o.dstConstruction, blueprint, null );
 
   return o.dstConstruction;
-
-  /* */
-
-  function blueprintLook( src, name )
-  {
-    if( _.mapIs( src ) )
-    return blueprintMapLook( src, name );
-    else if( _.longIs( src ) )
-    return blueprintArrayLook( src, name )
-    else if( _.definitionIs( src ) )
-    return false;
-    else if( _.blueprintIsDefinitive( src ) )
-    return src;
-    else
-    return false;
-  }
-
-  function blueprintMapLook( map, name )
-  {
-    let result = null
-    _.assert( _.mapIs( map ) );
-    for( let name2 in map )
-    {
-      let prop = map[ name2 ];
-      let r = blueprintLook( prop, name );
-      if( r !== null )
-      result = !result ? r : false;
-      if( result === false )
-      return result;
-    }
-    return null;
-  }
-
-  function blueprintArrayLook( array, name )
-  {
-    let result = null;
-    for( let prop of array )
-    {
-      let r = blueprintLook( prop, name );
-      if( r !== null )
-      result = !result ? r : false;
-      if( result === false )
-      return result;
-    }
-    return result;
-  }
 
   /* */
 

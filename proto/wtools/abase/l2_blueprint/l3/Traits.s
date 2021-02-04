@@ -159,11 +159,10 @@ function typed_body( o )
     , () => `Trait::typed should be either not false or prototype should be [ true, false, null ], it is ${_.strType( o.prototype )}`
   );
 
+  o.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
   o.blueprintForm1 = blueprintForm1;
   o.blueprintForm2 = blueprintForm2;
-  o.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
 
-  let val = o.val;
   let allocate;
   let retype;
 
@@ -172,9 +171,10 @@ function typed_body( o )
 
 /* -
 
+- blueprintDefinitionRewrite
+- bluprintDefinitionSupplement
 - blueprintForm1
 - blueprintForm2
-- blueprintDefinitionRewrite
 - allocateTyped
 - allocateUntyped
 - retypeMaybe
@@ -187,10 +187,125 @@ function typed_body( o )
 
   /* */
 
+  function blueprintDefinitionRewrite( op )
+  {
+    _.assert( !op.primeDefinition || !op.secondaryDefinition || op.primeDefinition.kind === op.secondaryDefinition.kind );
+
+    // xxx yyy
+    // if( op.primeDefinition && op.secondaryDefinition )
+    // bluprintDefinitionSupplement( op );
+
+    if( op.primeDefinition && op.secondaryDefinition && op.secondaryDefinition._dstConstruction !== _.nothing )
+    {
+
+      if( _global_.debugger )
+      debugger;
+      _.assert( op.primeDefinition._dstConstruction === _.nothing );
+
+      let prototype = _.prototype.of( op.secondaryDefinition._dstConstruction );
+      let opts = op.primeDefinition.cloneShallow(); /* xxx : sometimes redundant! */
+      opts._blueprint = op.blueprint;
+
+      if( op.primeDefinition.val === true && op.primeDefinition.prototype === _.nothing )
+      opts.prototype = true;
+
+      if
+      (
+           prototype
+        && prototype !== Object.prototype
+        && op.primeDefinition.val
+        && ( opts.prototype === _.nothing || opts.prototype === false ) )
+      {
+
+        opts.prototype = prototype;
+        opts.new = false;
+
+      }
+      else if
+      (
+           !!op.secondaryDefinition._dstConstruction
+        && ( _.boolIs( opts.prototype ) || opts.prototype === _.nothing )
+        && op.primeDefinition.val === _.maybe
+      )
+      {
+
+        if( opts.prototype === _.nothing )
+        {
+          if( prototype === Object.prototype )
+          opts.prototype = false;
+          else
+          opts.prototype = prototype;
+        }
+        else if( prototype === null || prototype === Object.prototype )
+        {
+          if( opts.prototype !== true )
+          opts.prototype = false;
+        }
+
+      }
+
+      op.blueprint.traitsMap[ op.primeDefinition.kind ] = opts;
+      return;
+    }
+
+    if( op.secondaryDefinition && op.secondaryDefinition._iherited )
+    {
+      debugger;
+    }
+
+    /*
+    default handler otherwise
+    */
+    op.blueprintDefinitionRewrite( op );
+
+  }
+
+  /* */
+
+  function bluprintDefinitionSupplement( op )
+  {
+
+    // if( op.primeDefinition && op.secondaryDefinition )
+    // if( op.primeDefinition.new !== null && op.primeDefinition.prototype !== _.nothing )
+    // return false;
+
+    if( _global_.debugger )
+    debugger;
+
+    let prototypeRewriting = false;
+    if( op.primeDefinition.prototype === _.nothing )
+    if( op.primeDefinition.val || _.primitiveIs( op.secondaryDefinition.prototype ) )
+    prototypeRewriting = true;
+
+    let newRewriting = false;
+    if( op.primeDefinition.new === null )
+    newRewriting = true;
+
+    if( prototypeRewriting === false && newRewriting === false )
+    return false;
+
+    if( op.primeDefinition._blueprint && op.primeDefinition._blueprint !== op.blueprint )
+    {
+      debugger;
+      // _.assert( 0, 'not tested' );
+      op.primeDefinition = op.primeDefinition.cloneShallow();
+    }
+
+    if( prototypeRewriting )
+    op.primeDefinition.prototype = op.secondaryDefinition.prototype;
+
+    if( newRewriting )
+    op.primeDefinition.new = op.secondaryDefinition.new;
+
+    return true;
+  }
+
+  /* */
+
   function blueprintForm1( op )
   {
     let prototype;
-    let trait = op.blueprint.TraitsMap.typed;
+    let trait = op.blueprint.traitsMap.typed;
     let runtime = op.blueprint.runtime;
 
     /**/
@@ -295,15 +410,15 @@ function typed_body( o )
     /* */
 
     runtime._makingTyped = false;
-    if( op.blueprint.TraitsMap.typed.val === true )
+    if( op.blueprint.traitsMap.typed.val === true )
     runtime._makingTyped = true;
-    else if( op.blueprint.TraitsMap.typed.val === _.maybe )
+    else if( op.blueprint.traitsMap.typed.val === _.maybe )
     if
     (
-           op.blueprint.TraitsMap.typed.prototype === false
-      || ( op.blueprint.TraitsMap.typed.prototype && op.blueprint.TraitsMap.typed.prototype !== Object.prototype )
+           op.blueprint.traitsMap.typed.prototype === false
+      || ( op.blueprint.traitsMap.typed.prototype && op.blueprint.traitsMap.typed.prototype !== Object.prototype )
     )
-    // if( op.blueprint.TraitsMap.typed.prototype && op.blueprint.TraitsMap.typed.prototype !== Object.prototype ) /* typed:maybe */
+    // if( op.blueprint.traitsMap.typed.prototype && op.blueprint.traitsMap.typed.prototype !== Object.prototype ) /* typed:maybe */
     runtime._makingTyped = true;
 
     /* */
@@ -334,10 +449,9 @@ function typed_body( o )
 
   function blueprintForm2( op )
   {
-    let trait = op.blueprint.TraitsMap.typed;
+    let trait = op.blueprint.traitsMap.typed;
     let prototype;
 
-    _.assert( trait.val === val );
     _.assert( _.fuzzyIs( trait.val ) );
     _.assert( op.blueprint.typed === trait.val || trait.val === _.maybe );
     _.assert( trait._blueprint === op.blueprint );
@@ -364,72 +478,6 @@ function typed_body( o )
       if( op.blueprint.make !== prototype.constructor )
       Object.setPrototypeOf( op.blueprint.make, prototype.constructor );
     }
-
-  }
-
-  /* */
-
-  function blueprintDefinitionRewrite( op )
-  {
-    _.assert( !op.primeDefinition || !op.secondaryDefinition || op.primeDefinition.kind === op.secondaryDefinition.kind );
-
-    if( op.primeDefinition && op.secondaryDefinition && op.secondaryDefinition._dstConstruction !== _.nothing )
-    {
-
-      if( _global_.debugger )
-      debugger;
-      _.assert( op.primeDefinition._dstConstruction === _.nothing );
-
-      let prototype = _.prototype.of( op.secondaryDefinition._dstConstruction );
-      let opts = op.primeDefinition.cloneShallow();
-      opts._blueprint = op.blueprint;
-
-      if( op.primeDefinition.val === true && op.primeDefinition.prototype === _.nothing )
-      opts.prototype = true;
-
-      if
-      (
-           prototype
-        && prototype !== Object.prototype
-        && op.primeDefinition.val
-        && ( opts.prototype === _.nothing || opts.prototype === false ) )
-      {
-
-        opts.prototype = prototype;
-        opts.new = false;
-
-      }
-      else if
-      (
-           !!op.secondaryDefinition._dstConstruction
-        && ( _.boolIs( opts.prototype ) || opts.prototype === _.nothing )
-        && op.primeDefinition.val === _.maybe
-      )
-      {
-
-        if( opts.prototype === _.nothing )
-        {
-          if( prototype === Object.prototype )
-          opts.prototype = false;
-          else
-          opts.prototype = prototype;
-        }
-        else if( prototype === null || prototype === Object.prototype )
-        {
-          if( opts.prototype !== true )
-          opts.prototype = false;
-        }
-
-      }
-
-      op.blueprint.TraitsMap[ op.primeDefinition.kind ] = opts;
-      return;
-    }
-
-    /*
-    default handler otherwise
-    */
-    op.blueprintDefinitionRewrite( op );
 
   }
 
@@ -583,8 +631,9 @@ typed_body.defaults =
 {
   val : true,
   prototype : _.nothing,
-  new : null,
+  new : null, /* xxx : use nothing? */
   _dstConstruction : _.nothing,
+  _iherited : false,
   _blueprint : null,
 }
 
@@ -614,7 +663,7 @@ function constructor( o )
     if( _global_.debugger )
     debugger;
 
-    if( !op.blueprint.TraitsMap.constructor.val )
+    if( !op.blueprint.traitsMap.constructor.val )
     return;
 
     let prototyped = op.blueprint.prototype && op.blueprint.prototype !== Object.prototype;
@@ -697,8 +746,8 @@ function extendable( o )
 
   function blueprintForm2( op )
   {
-    _.assert( _.boolIs( op.blueprint.TraitsMap.extendable.val ) );
-    if( op.blueprint.TraitsMap.extendable.val )
+    _.assert( _.boolIs( op.blueprint.traitsMap.extendable.val ) );
+    if( op.blueprint.traitsMap.extendable.val )
     return;
     _.blueprint._practiceAdd( op.blueprint, 'constructionInitEnd', preventExtensions );
   }
