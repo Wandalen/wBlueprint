@@ -619,17 +619,17 @@ function defineInheritTraitTyped( test )
   {
     // tops.prototype = false;
     // eachNew( tops );
-    tops.prototype = true;
-    eachNew( tops );
-    // tops.prototype = null;
+    // tops.prototype = true;
     // eachNew( tops );
+    tops.prototype = null;
+    eachNew( tops );
   }
 
   function eachNew( tops )
   {
-    tops.new = false;
+    tops.new1 = false;
     eachType1( tops );
-    // tops.new = true;
+    // tops.new1 = true;
     // eachType1( tops );
   }
 
@@ -645,10 +645,10 @@ function defineInheritTraitTyped( test )
 
   function eachAmending( tops )
   {
-    // tops.amending = 'extend';
-    // eachCase( tops );
-    tops.amending = 'supplement';
+    tops.amending = 'extend';
     eachCase( tops );
+    // tops.amending = 'supplement';
+    // eachCase( tops );
   }
 
   function eachCase( tops )
@@ -656,15 +656,14 @@ function defineInheritTraitTyped( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, prototype:${_.toStr( tops.prototype )}, new:${tops.new}, by typed2:true`;
+    test.case = `typed1:${ _.toStr( tops.typed1 ) }, prototype:${_.toStr( tops.prototype )}, new1:${tops.new1}, by typed2:true`;
 
     var src =
     {
-      typed : _.trait.typed({ val : tops.typed1, prototype : tops.prototype, new : tops.new }),
+      typed : _.trait.typed({ val : tops.typed1, prototype : tops.prototype, new : tops.new1 }),
     }
     var Blueprint1 = _.blueprint._define({ src, amending : tops.amending });
 
-    debugger; _global_.debugger = 1;
     var inherit = _.define.inherit( Blueprint1 );
     var typed = _.trait.typed( true );
     var src = {};
@@ -679,12 +678,56 @@ function defineInheritTraitTyped( test )
       src.inherit = inherit;
     }
 
+    debugger; _global_.debugger = 1;
+
     var Blueprint2 = _.blueprint._define({ src, amending : tops.amending });
 
     test.identical( Blueprint2.traitsMap.typed.val, true );
-    test.identical( Blueprint2.traitsMap.typed.prototype, false );
-    test.identical( Blueprint2.traitsMap.typed.new, tops.new );
+    if( tops.typed1 && tops.prototype )
+    {
+      test.true( Blueprint2.prototype !== Blueprint2.traitsMap.typed.prototype );
+      test.identical( Blueprint2.traitsMap.typed.new, true );
+      test.true( _.prototype.each( Blueprint2.prototype )[ 1 ] === Blueprint1.prototype );
+      test.identical( _.prototype.each( Blueprint2.prototype ).length, 3 );
+    }
+    else
+    {
+      test.identical( Blueprint2.traitsMap.typed.prototype, tops.prototype );
+      test.identical( Blueprint2.traitsMap.typed.new, tops.new1 );
+      test.identical( _.prototype.each( Blueprint2.prototype ).length, 2 );
+    }
     debugger;
+
+    /* */
+
+    // test.case = `typed1:${ _.toStr( tops.typed1 ) }, prototype:${_.toStr( tops.prototype )}, new1:${tops.new1}, by typed2:true, new2:${tops.new2}`;
+    //
+    // var src =
+    // {
+    //   typed : _.trait.typed({ val : tops.typed1, prototype : tops.prototype, new : tops.new1 }),
+    // }
+    // var Blueprint1 = _.blueprint._define({ src, amending : tops.amending });
+    //
+    // debugger; _global_.debugger = 1;
+    // var inherit = _.define.inherit( Blueprint1 );
+    // var typed2 = _.trait.typed({ val : false, new : tops.new2 });
+    // var typed3 = _.trait.typed( true );
+    // var src = {};
+    // if( tops.amending === 'extend' )
+    // {
+    //   src = [ inherit, typed2, typed3 ];
+    // }
+    // else
+    // {
+    //   src = [ typed3, typed2, inherit ];
+    // }
+    //
+    // var Blueprint2 = _.blueprint._define({ src, amending : tops.amending });
+    //
+    // test.identical( Blueprint2.traitsMap.typed.val, true );
+    // test.identical( Blueprint2.traitsMap.typed.prototype, tops.prototype );
+    // test.identical( Blueprint2.traitsMap.typed.new, tops.new1 );
+    // debugger;
 
     /* */
 

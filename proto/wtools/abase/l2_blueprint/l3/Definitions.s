@@ -985,8 +985,8 @@ function _amendment_body( o )
   _.assert( _.objectIs( o.val ) );
   _.assert( _.blueprintIsDefinitive( o.val ) );
   o.defGroup = 'definition.unnamed';
-  o.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
   o.kind = 'amend';
+  o.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
   return _.definition._unnamedMake( o );
 
   function blueprintDefinitionRewrite( op )
@@ -995,6 +995,7 @@ function _amendment_body( o )
     let blueprint = op.blueprint;
     // if( _global_.debugger )
     // debugger;
+    // debugger;
     return _.blueprint._amend
     ({
       blueprint : op.blueprint,
@@ -1002,7 +1003,7 @@ function _amendment_body( o )
       extension : definition.val,
       amending : op.amending === 'extend' ? definition.amending : op.amending,
       blueprintComposing : 'amend',
-      blueprintDepthReserve : definition.blueprintDepthReserve + o.blueprintDepthReserve,
+      blueprintDepthReserve : definition.blueprintDepthReserve + op.blueprintDepthReserve,
     });
   }
 
@@ -1045,41 +1046,99 @@ _.routineEr( supplementation, _singleArgumentHead );
 
 //
 
-function inherit( o )
+function inherit_body( o )
 {
-  if( !_.mapIs( o ) )
-  o = { val : arguments[ 0 ] };
-  _.routineOptions( inherit, o );
-  _.assert( _.blueprint.isDefinitive( o.val ) );
 
-  if( _global_.debugger )
-  debugger;
+  _.assertRoutineOptions( inherit_body, arguments );
+  _.assert( _.objectIs( o.val ) );
+  _.assert( _.blueprintIsDefinitive( o.val ) );
+  o.defGroup = 'definition.unnamed';
+  o.kind = 'inherit';
+  o.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
+  o._blueprint = false;
+  return _.definition._unnamedMake( o );
 
-  let result = [];
-  result.push( _.define.extension( o.val ) );
-  let prototype = null;
-  if( o.val.prototype )
-  prototype = o.val;
+  // if( !_.mapIs( o ) )
+  // o = { val : arguments[ 0 ] };
+  // _.routineOptions( inherit, o );
+  // _.assert( _.blueprint.isDefinitive( o.val ) );
+  //
+  // if( _global_.debugger )
+  // debugger;
+  //
+  // let result = [];
+  // result.push( _.define.extension( o.val ) );
+  // let prototype = null;
+  // if( o.val.prototype )
+  // prototype = o.val;
+  //
+  // if( o.val.traitsMap.typed )
+  // {
+  //   if( prototype )
+  //   result.push( _.trait.typed( o.val.traitsMap.typed.val || true, { prototype : prototype, new : true, _iherited : true } ) ); /* xxx : cover */
+  //   else
+  //   result.push( _.trait.typed( o.val.traitsMap.typed.val, { prototype : o.val.traitsMap.typed.prototype, _iherited : true } ) );
+  //   // result.push( _.trait.typed( o.val.traitsMap.typed.val, { prototype : o.val.traitsMap.typed.val, _iherited : true } ) ); /* yyy */
+  // }
+  // else
+  // {
+  //   // result.push( _.trait.typed( true ) ); /* yyy */
+  // }
+  //
+  // return result;
 
-  if( o.val.traitsMap.typed )
+  function blueprintDefinitionRewrite( op )
   {
-    if( prototype )
-    result.push( _.trait.typed( o.val.traitsMap.typed.val || true, { prototype : prototype, new : 1, _iherited : true } ) ); /* xxx : cover */
+    _.assert( !op.primeDefinition || !op.secondaryDefinition, 'not tested' );
+    let definition = op.primeDefinition || op.secondaryDefinition;
+    let blueprint = op.blueprint;
+    let add = op.amending === 'supplement' ? 'unshift' : 'push';
+
+    if( _global_.debugger )
+    debugger;
+
+    let result = [];
+    // result[ add ]( _.define.extension( definition.val ) );
+    result[ add ]( definition.val );
+    let prototype = null;
+    if( definition.val.prototype )
+    prototype = definition.val;
+
+    if( definition.val.traitsMap.typed )
+    {
+      if( prototype )
+      result[ add ]( _.trait.typed( definition.val.traitsMap.typed.val || true, { prototype : prototype, new : true, _iherited : true } ) ); /* xxx : cover */
+      else
+      result[ add ]( _.trait.typed( definition.val.traitsMap.typed.val, { prototype : definition.val.traitsMap.typed.prototype, _iherited : true } ) );
+      // result[ add ]( _.trait.typed( definition.val.traitsMap.typed.val, { prototype : definition.val.traitsMap.typed.val, _iherited : true } ) ); /* yyy */
+    }
     else
-    result.push( _.trait.typed( o.val.traitsMap.typed.val, { prototype : o.val.traitsMap.typed.val, _iherited : true } ) );
-  }
-  else
-  {
-    // result.push( _.trait.typed( true ) ); /* yyy */
+    {
+      // result[ add ]( _.trait.typed( true ) ); /* yyy */
+    }
+
+    if( _global_.debugger )
+    debugger;
+
+    return _.blueprint._amend
+    ({
+      blueprint : op.blueprint,
+      blueprintDepth : op.blueprintDepth,
+      extension : result,
+      amending : op.amending,
+      blueprintComposing : 'amend',
+      blueprintDepthReserve : ( definition.blueprintDepthReserve || 0 ) + op.blueprintDepthReserve,
+    });
   }
 
-  return result;
 }
 
-inherit.defaults =
+inherit_body.defaults =
 {
   val : null,
 }
+
+let inherit = _.routineUnite( _pairArgumentsHead, inherit_body );
 
 //
 

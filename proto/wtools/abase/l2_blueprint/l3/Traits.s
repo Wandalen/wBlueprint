@@ -191,9 +191,8 @@ function typed_body( o )
   {
     _.assert( !op.primeDefinition || !op.secondaryDefinition || op.primeDefinition.kind === op.secondaryDefinition.kind );
 
-    // xxx yyy
-    // if( op.primeDefinition && op.secondaryDefinition )
-    // bluprintDefinitionSupplement( op );
+    if( op.primeDefinition && op.secondaryDefinition )
+    bluprintDefinitionSupplement( op );
 
     if( op.primeDefinition && op.secondaryDefinition && op.secondaryDefinition._dstConstruction !== _.nothing )
     {
@@ -275,6 +274,7 @@ function typed_body( o )
     let prototypeRewriting = false;
     if( op.primeDefinition.prototype === _.nothing )
     if( op.primeDefinition.val || _.primitiveIs( op.secondaryDefinition.prototype ) )
+    if( op.primeDefinition.val !== true || op.secondaryDefinition.prototype !== null )
     prototypeRewriting = true;
 
     let newRewriting = false;
