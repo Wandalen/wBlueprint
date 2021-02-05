@@ -843,7 +843,6 @@ function _objectSetValue( o )
   // if( _global_.debugger )
   // debugger;
 
-  // /* yyy */
   let descriptor = Object.getOwnPropertyDescriptor( o.object, o.name );
   if( descriptor && descriptor.configurable && descriptor.get == undefined && descriptor.set === undefined )
   delete o.object[ o.name ];

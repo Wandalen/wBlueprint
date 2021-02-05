@@ -49,17 +49,19 @@ function production( test )
   let a = test.assetFor( 'production' );
   let runList = [];
 
-  if( _.process.insideTestContainer() )
-  _.time.sleep( 60000 );
-
   if( process.env.GITHUB_EVENT_NAME === 'pull_request' )
   {
     test.true( true );
     return;
   }
 
-  console.log( `Event : ${process.env.GITHUB_EVENT_NAME}` );
-  console.log( `Env :\n${_.toStr( process.env )}` );
+  /* delay to let npm get updated */
+  if( publishIs() )
+  a.ready.delay( 60000 );
+
+  let eventName = process.env.GITHUB_EVENT_NAME ? process.env.GITHUB_EVENT_NAME : 'push';
+  console.log( `Event : ${eventName}` );
+  console.log( `Env :\n${_.toStr( _.mapBut( process.env, { WTOOLS_BOT_TOKEN : null } ) )}` );
 
   /* */
 
@@ -89,16 +91,16 @@ function production( test )
     mdlRepoParsed = _.git.path.parse( mdl.repository.url );
     remotePathParsed = _.git.path.parse( remotePath );
 
-    /* qqq : should be no 2 parse */
+    /* aaa : should be no 2 parse */ /* Dmytro : 1 parse for each path */
   }
 
   let isFork = mdlRepoParsed.user !== remotePathParsed.user || mdlRepoParsed.repo !== remotePathParsed.repo;
 
   let version;
-  if( !isFork )
-  version = _.npm.versionRemoteRetrive( `npm:///${ mdl.name }!alpha` ) === '' ? 'latest' : 'alpha';
-  else
+  if( isFork )
   version = _.git.path.nativize( remotePath );
+  else
+  version = _.npm.versionRemoteRetrive( `npm:///${ mdl.name }!alpha` ) === '' ? 'latest' : 'alpha';
 
   if( !version )
   throw _.err( 'Cannot obtain version to install' );
@@ -110,7 +112,7 @@ function production( test )
 
   /* */
 
-  a.ready.Try( () => a.shell( `npm i --production` ) )
+  a.shell( `npm i --production` )
   .catch( handleDownloadingError )
   .then( ( op ) =>
   {
@@ -125,6 +127,28 @@ function production( test )
   /* */
 
   return a.ready;
+
+  /* */
+
+  function publishIs()
+  {
+    if( process.env.GITHUB_WORKFLOW === 'publish' )
+    return true;
+
+    if( process.env.CIRCLECI )
+    {
+      let lastCommitLog = a.shell
+      ({
+        currentPath : a.abs( __dirname, '..' ),
+        execPath : 'git log --format=%B -n 1',
+        sync : 1
+      });
+      let commitMsg = lastCommitLog.output;
+      return _.strBegins( commitMsg, 'version' );
+    }
+
+    return false;
+  }
 
   /* */
 
