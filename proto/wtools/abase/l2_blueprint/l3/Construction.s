@@ -83,7 +83,6 @@ function amend( o )
         opts.prototype = prototype;
         opts.new = false;
       }
-      // opts._dstConstruction = o.dstConstruction; xxx yyy
       opts._synthetic = o.dstConstruction;
       defs[ add ]( _.trait.typed( opts ) );
     }

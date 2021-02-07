@@ -91,7 +91,6 @@ prototype:0
 preserve prototype of typed destination
 preserve as map if untyped destination
 create typed
-// create untyped -- xxx
 
 prototype:1
 set generated prototype if destination is typed
@@ -198,20 +197,16 @@ function typed_body( o )
     _.assert( !op.primeDefinition || !op.secondaryDefinition || op.primeDefinition.kind === op.secondaryDefinition.kind );
 
     if( op.primeDefinition && op.secondaryDefinition )
-    if( _.boolIs( op.secondaryDefinition._synthetic ) ) /* xxx yyy : remove? */
+    // if( _.boolIs( op.secondaryDefinition._synthetic ) ) /* xxx yyy : remove? */
     bluprintDefinitionSupplement( op );
 
-    // if( op.primeDefinition && op.secondaryDefinition && op.secondaryDefinition._dstConstruction !== _.nothing )
     if( op.primeDefinition && op.secondaryDefinition && !_.boolIs( op.secondaryDefinition._synthetic ) )
     {
 
       if( _global_.debugger )
       debugger;
-      // _.assert( op.primeDefinition._dstConstruction === _.nothing );
-      // debugger;
       _.assert( _.boolIs( op.primeDefinition._synthetic ) );
 
-      // let prototype = _.prototype.of( op.secondaryDefinition._dstConstruction );
       let prototype = _.prototype.of( op.secondaryDefinition._synthetic );
       let opts = op.primeDefinition.cloneShallow(); /* xxx : sometimes redundant! */
       opts._blueprint = op.blueprint;
@@ -355,34 +350,12 @@ function typed_body( o )
     // }
 
     return bluprintDefinitionSupplementAct( op, secondaryDefinition );
-
-    // if( op.primeDefinition._blueprint && op.primeDefinition._blueprint !== op.blueprint )
-    // op.primeDefinition = op.primeDefinition.cloneShallow();
-    //
-    // if( prototypeRewriting )
-    // {
-    //   definitionRewritePrototype( op, secondaryDefinition );
-    // }
-    // else
-    // {
-    //   if( secondaryDefinition.prototype !== _.nothing && op.primeDefinition._secondaryPrototype === _.nothing )
-    //   op.primeDefinition._secondaryPrototype = secondaryDefinition.prototype;
-    // }
-    //
-    // if( newRewriting )
-    // op.primeDefinition.new = secondaryDefinition.new;
-    //
-    // return true;
   }
 
   /* */
 
   function bluprintDefinitionSupplementAct( op, secondaryDefinition )
   {
-    // let secondaryDefinition = op.secondaryDefinition;
-
-    // if( _global_.debugger )
-    // debugger;
 
     let prototypeRewriting = false;
     if( op.primeDefinition.prototype === _.nothing )
@@ -391,31 +364,6 @@ function typed_body( o )
     let newRewriting = false;
     if( op.primeDefinition.new === _.nothing )
     newRewriting = true;
-
-    // if( op.primeDefinition._synthetic === true )
-    // {
-    //   op.primeDefinition._notSyntheticDefinition = secondaryDefinition._synthetic === true ? secondaryDefinition._notSyntheticDefinition : secondaryDefinition;
-    // }
-
-    // if( newRewriting && secondaryDefinition._synthetic === true && secondaryDefinition._notSyntheticDefinition )
-    // if( !prototypeRewriting || canRewritePrototype( op, secondaryDefinition._notSyntheticDefinitionPrototype ) )
-    // {
-    //   debugger;
-    //   secondaryDefinition = op.secondaryDefinition._notSyntheticDefinition;
-    //
-    //   prototypeRewriting = false;
-    //   if( op.primeDefinition.prototype === _.nothing )
-    //   prototypeRewriting = true;
-    //
-    //   newRewriting = false;
-    //   if( op.primeDefinition.new === _.nothing )
-    //   newRewriting = true;
-    // }
-
-    // if( secondaryDefinition._synthetic === true && !canRewritePrototype( op, secondaryDefinition.prototype ) )
-    // {
-    //   x
-    // }
 
     if( op.primeDefinition._blueprint && op.primeDefinition._blueprint !== op.blueprint )
     op.primeDefinition = op.primeDefinition.cloneShallow();
@@ -478,7 +426,6 @@ function typed_body( o )
 
     if( trait.prototype === _.nothing )
     {
-      // if( _.mapIs( trait._dstConstruction ) && trait.val === _.maybe )
       if( _.mapIs( trait._synthetic ) && trait.val === _.maybe )
       trait.prototype = false;
       else if( trait.val === true )
@@ -508,20 +455,14 @@ function typed_body( o )
     );
     _.assert( trait._blueprint === op.blueprint );
 
-    /**/
+    /* */
 
-    // if( trait._dstConstruction )
-    // trait._dstConstruction = _.nothing;
     if( trait._synthetic )
     trait._synthetic = false;
 
-    // _.assert( trait._dstConstruction === _.nothing );
     _.assert( trait._synthetic === false );
     _.assert( op.blueprint.make === null );
     _.assert( runtime.prototype === null );
-
-    // if( _global_.debugger )
-    // debugger;
 
     if( _.boolIs( trait.prototype ) )
     {
@@ -532,7 +473,6 @@ function typed_body( o )
       }
       else if( trait.val === _.maybe )
       {
-        // if( trait.prototype === true ) /* typed:maybe */
         if( trait.prototype === true || trait.prototype === false )
         prototype = Object.create( _.Construction.prototype );
         else
@@ -574,23 +514,9 @@ function typed_body( o )
 
     }
 
-    // if( _global_.debugger )
-    // debugger;
-
     /* */
 
-    runtime._makingTyped = !!op.blueprint.traitsMap.typed.val;
-    // runtime._makingTyped = false;
-    // if( op.blueprint.traitsMap.typed.val === true )
-    // runtime._makingTyped = true;
-    // else if( op.blueprint.traitsMap.typed.val === _.maybe )
-    // if
-    // (
-    //        op.blueprint.traitsMap.typed.prototype === false
-    //   || ( op.blueprint.traitsMap.typed.prototype && op.blueprint.traitsMap.typed.prototype !== Object.prototype )
-    // )
-    // // if( op.blueprint.traitsMap.typed.prototype && op.blueprint.traitsMap.typed.prototype !== Object.prototype ) /* typed:maybe */
-    // runtime._makingTyped = true;
+    runtime._makingTyped = !!op.blueprint.traitsMap.typed.val; /* xxx : remove? */
 
     /* */
 
@@ -598,11 +524,7 @@ function typed_body( o )
 
     /* */
 
-    let effectiveTyped = !!trait.val;
-    // let effectiveTyped = !!trait.val && prototype !== null;
-    // if( trait.val === _.maybe && !trait.prototype ) /* typed:maybe */
-    // if( trait.val === _.maybe && trait.prototype === null )
-    // effectiveTyped = false;
+    let effectiveTyped = !!trait.val; /* xxx : remove? */
 
     allocate = effectiveTyped ? allocateTyped : allocateUntyped;
     retype = effectiveTyped ? retypeTyped : retypeUntypedPreserving;
