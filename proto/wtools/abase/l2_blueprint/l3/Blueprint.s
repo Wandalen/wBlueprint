@@ -162,7 +162,7 @@ function _define( o )
   runtime.prototype = null;
   runtime.name = null;
   runtime.typed = null;
-  runtime._makingTyped = null;
+  // runtime._makingTyped = null;
   runtime._prototyping = null;
   runtime.make = null;
   runtime.makeEach = makeEach;
@@ -184,7 +184,6 @@ function _define( o )
     blueprint,
     extension : o.src,
     amending : o.amending,
-    // blueprintComposing : 'amend', /* yyy */
     blueprintComposing : 'inherit',
   });
 
@@ -196,7 +195,6 @@ function _define( o )
   [
     _.trait.extendable( false ),
     _.trait.typed({ val : false }),
-    // _.trait.typed({ val : false, prototype : false }), /* yyy */
   ]
 
   _.blueprint._supplement( blueprint, defaultSupplement );
@@ -206,7 +204,6 @@ function _define( o )
   _.blueprint._form( defContext );
 
   runtime.typed = blueprint.traitsMap.typed.val;
-  _.assert( _.boolIs( runtime._makingTyped ) );
   _.assert( runtime._prototyping !== undefined );
 
   let name = blueprint.name || 'Construction';

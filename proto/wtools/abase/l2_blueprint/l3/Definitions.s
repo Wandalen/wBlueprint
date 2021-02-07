@@ -1057,7 +1057,6 @@ alias_body.defaults =
 }
 
 let alias = _.routineUnite( alias_head, alias_body );
-// alias.definitionDescriptor = _.mapExtend( null, prop.definitionDescriptor );
 alias.group = _.mapExtend( null, prop.group );
 _.routineEr( alias );
 
@@ -1090,7 +1089,6 @@ nothing_body.defaults =
   _blueprint : false,
 }
 
-// nothing_body.definitionDescriptor = { transparent : true };
 nothing_body.group = { definition : true, named : false };
 
 let nothing = _.routineUnite( _singleArgumentHead, nothing_body );
@@ -1099,6 +1097,8 @@ let nothing = _.routineUnite( _singleArgumentHead, nothing_body );
 
 function _constant_functor()
 {
+  /* xxx : use predefined object for other definitions to optimize */
+
   let prototype = Object.create( null );
   prototype.defGroup = 'definition.named';
   prototype.kind = 'constant';
@@ -1107,8 +1107,6 @@ function _constant_functor()
   prototype.toVal = toVal;
   prototype.blueprintForm1 = blueprintForm1;
   prototype.blueprintForm2 = blueprintForm2;
-  _.property.hide( prototype, 'asAccessorSuite' ); /* xxx : use 3rd argument */
-  _.property.hide( prototype, 'toVal' );
   _.definition.retype( prototype );
   Object.freeze( prototype );
 
@@ -1141,6 +1139,7 @@ function _constant_functor()
 
   function blueprintForm1( op )
   {
+    debugger;
     const val = op.definition.val;
     const name = op.definition.name;
     _.assert( _.strDefined( op.propName ) || _.strDefined( op.definition.name ) );
@@ -1152,6 +1151,7 @@ function _constant_functor()
 
   function blueprintForm2( op )
   {
+    debugger;
     const val = op.definition.val;
     const name = op.definition.name;
 
@@ -1311,7 +1311,7 @@ function inherit_body( o )
     if( definition.val.traitsMap.typed )
     {
       if( prototype )
-      result[ add ]( _.trait.typed( definition.val.traitsMap.typed.val || true, { prototype : prototype, new : true, _synthetic : true } ) ); /* xxx : cover */
+      result[ add ]( _.trait.typed( definition.val.traitsMap.typed.val || true, { prototype, new : true, _synthetic : true } ) );
       else
       result[ add ]( _.trait.typed( definition.val.traitsMap.typed.val, { prototype : definition.val.traitsMap.typed.prototype, _synthetic : true } ) );
     }
@@ -1396,7 +1396,6 @@ let DefineExtension =
 
 _.define = _.define || Object.create( null );
 _.definition.extend( DefineExtension );
-// _.mapExtend( _.define, DefineExtension );
 
 // --
 // export

@@ -226,22 +226,14 @@ function _make3( genesis )
     genesis.construction = genesis.runtime._practiceMap.allocate( genesis );
     _.assert
     (
-         // genesis.runtime._makingTyped === false
-      // ||
-      // genesis.runtime.make.prototype === null
-      genesis.runtime._makingTyped === false
+      !!genesis.runtime.typed === false
       || genesis.runtime.make.prototype === null
       || genesis.construction instanceof genesis.runtime.make
     );
-    if( genesis.runtime._makingTyped && wasNull )
+    if( !!genesis.runtime.typed && wasNull )
     return genesis.construction;
   }
   else _.assert( genesis.constructing === false );
-
-  // if( genesis.runtime.typed === true )
-  // _.assert( genesis.runtime.make.prototype === null || genesis.construction instanceof genesis.runtime.make );
-  // else if( genesis.runtime.typed === false ) /* yyy */
-  // _.assert( genesis.runtime.make.prototype === null || !( genesis.construction instanceof genesis.runtime.make ) );
 
   _.construction._init( genesis );
   _.construction._extendArguments( genesis );
@@ -280,9 +272,8 @@ function _make( construction, runtime, args )
 {
 
   _.assert( arguments.length === 3 );
-  _.assert( _.boolIs( runtime._makingTyped ) );
 
-  if( !runtime._makingTyped && runtime.make.prototype !== null && construction instanceof runtime.make )
+  if( !runtime.typed && runtime.make.prototype !== null && construction instanceof runtime.make )
   {
     construction = null;
   }

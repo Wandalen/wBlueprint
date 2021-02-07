@@ -470,7 +470,7 @@ function defineInheritTrivial( test )
   var Blueprint2 = _.Blueprint
   ({
     inherit : _.define.inherit( Blueprint1 ),
-    typed : _.trait.typed( true ), /* yyy */
+    typed : _.trait.typed( true ),
     field2 : 'b2',
     field3 : 'b2',
   });
@@ -533,7 +533,7 @@ function defineInheritTrivial( test )
   var Blueprint2 = _.Blueprint
   ({
     inherit : _.define.inherit( Blueprint1 ),
-    typed : _.trait.typed( true ), /* yyy */
+    typed : _.trait.typed( true ),
     field2 : 'b2',
     field3 : 'b2',
   });
@@ -622,7 +622,7 @@ function defineInheritTrivial( test )
   var Blueprint3 = _.Blueprint
   ({
     inherit : _.define.inherit( Blueprint2 ),
-    typed : _.trait.typed( true ), /* yyy */
+    typed : _.trait.typed( true ),
     'field3' : 'b3',
     'field4' : 'b3',
   });
@@ -2760,7 +2760,7 @@ function definePropStaticMaybeAmendConstruction( test )
       exp._ = Object.create( null );
       exp._.s1 = 1;
     }
-    test.identical( _.property.onlyOwn( dstContainer, { onlyEnumerable : 0 } ), exp ); debugger;
+    test.identical( _.property.onlyOwn( dstContainer, { onlyEnumerable : 0 } ), exp );
 
     if( tops.typed === 1 )
     {
@@ -7878,7 +7878,7 @@ function definePropAccessorRewriting( test )
   var blueprint2 = _.blueprint.define
   ({
     inherit : _.define.inherit( blueprint1 ),
-    typed : _.trait.typed( true ), /* yyy */
+    typed : _.trait.typed( true ),
     f1 : _.define.prop( 2, { accessor : 1, static : 1, combining : 'rewrite' } ),
   });
   var instance1 = blueprint2.make();
@@ -13164,7 +13164,6 @@ function traitTypedBasic( test )
   var exp = { f1 : 'a' }
   test.identical( _.property.all( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
-  // test.identical( _.prototype.each( instance1 ).length, 1 ); /* yyy */
 
   /* */
 
@@ -13178,7 +13177,6 @@ function traitTypedBasic( test )
   var exp = { f1 : 'a' }
   test.identical( _.property.all( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
-  // test.identical( _.prototype.each( instance1 ).length, 1 ); /* yyy */
 
   /* */
 
@@ -13192,7 +13190,6 @@ function traitTypedBasic( test )
   var exp = { f1 : 'a' }
   test.identical( _.property.all( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
-  // test.identical( _.prototype.each( instance1 ).length, 1 ); /* yyy */
 
   /* */
 
@@ -16914,14 +16911,14 @@ function genericDefineLogistic( test )
 
   function eachCase( tops )
   {
-    var nameOfMap = tops.def.group.trait ? 'traitsMap' : 'namedMap';
+
+    // if( tops.name !== 'constant' )
+    // return;
+    // debugger;
 
     /* */
 
     test.case = `${tops.name}, basic`;
-
-    if( tops.name === 'constructor' )
-    debugger;
 
     var def = tops.sample();
 
@@ -17095,12 +17092,16 @@ function genericDefineLogistic( test )
       test.true( blueprint1.namedMap.c2 === undefined );
       test.true( blueprint2.namedMap.c1 === undefined );
       test.true( blueprint2.namedMap.c2 === undefined );
+
+      test.identical( new Set( _.mapAllKeys( blueprint1.traitsMap[ tops.name ] ) ), new Set( _.mapAllKeys( blueprint2.traitsMap[ tops.name ] ) ) );
     }
     else if( tops.def.group.named )
     {
       test.true( blueprint1.namedMap.c1 === def );
       test.true( blueprint2.namedMap.c2 !== def );
       test.true( Object.isFrozen( blueprint2.namedMap.c2 ) );
+
+      test.identical( new Set( _.mapAllKeys( blueprint1.namedMap.c1 ) ), new Set( _.mapAllKeys( blueprint2.namedMap.c2 ) ) );
     }
     else
     {
@@ -20228,7 +20229,6 @@ let Self =
     // generic
 
     genericDefineLogistic,
-    // genericTraitLogistic,
 
     // construct / define
 

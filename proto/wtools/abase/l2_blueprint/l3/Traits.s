@@ -197,7 +197,6 @@ function typed_body( o )
     _.assert( !op.primeDefinition || !op.secondaryDefinition || op.primeDefinition.kind === op.secondaryDefinition.kind );
 
     if( op.primeDefinition && op.secondaryDefinition )
-    // if( _.boolIs( op.secondaryDefinition._synthetic ) ) /* xxx yyy : remove? */
     bluprintDefinitionSupplement( op );
 
     if( op.primeDefinition && op.secondaryDefinition && !_.boolIs( op.secondaryDefinition._synthetic ) )
@@ -208,49 +207,52 @@ function typed_body( o )
       _.assert( _.boolIs( op.primeDefinition._synthetic ) );
 
       let prototype = _.prototype.of( op.secondaryDefinition._synthetic );
-      let opts = op.primeDefinition.cloneShallow(); /* xxx : sometimes redundant! */
-      opts._blueprint = op.blueprint;
+      let definition = op.primeDefinition
+
+      _.assert( definition._blueprint === op.blueprint || definition._blueprint === null, 'not tested' )
+      if( definition._blueprint !== op.blueprint && definition._blueprint !== null )
+      definition.cloneShallow();
+      definition._blueprint = op.blueprint;
 
       if( op.primeDefinition.val === true && op.primeDefinition.prototype === _.nothing )
-      opts.prototype = true;
+      definition.prototype = true;
 
       if
       (
            prototype
         && prototype !== Object.prototype
         && op.primeDefinition.val
-        && ( opts.prototype === _.nothing || opts.prototype === false ) )
+        && ( definition.prototype === _.nothing || definition.prototype === false ) )
       {
 
-        opts.prototype = prototype;
-        opts.new = false;
+        definition.prototype = prototype;
+        definition.new = false;
 
       }
       else if
       (
-           // !!op.secondaryDefinition._dstConstruction
            !_.boolIs( op.secondaryDefinition._synthetic )
-        && ( _.boolIs( opts.prototype ) || opts.prototype === _.nothing )
+        && ( _.boolIs( definition.prototype ) || definition.prototype === _.nothing )
         && op.primeDefinition.val === _.maybe
       )
       {
 
-        if( opts.prototype === _.nothing )
+        if( definition.prototype === _.nothing )
         {
           if( prototype === Object.prototype )
-          opts.prototype = false;
+          definition.prototype = false;
           else
-          opts.prototype = prototype;
+          definition.prototype = prototype;
         }
         else if( prototype === null || prototype === Object.prototype )
         {
-          if( opts.prototype !== true )
-          opts.prototype = false;
+          if( definition.prototype !== true )
+          definition.prototype = false;
         }
 
       }
 
-      op.blueprint.traitsMap[ op.primeDefinition.kind ] = opts;
+      op.blueprint.traitsMap[ op.primeDefinition.kind ] = definition;
       return;
     }
 
@@ -286,68 +288,27 @@ function typed_body( o )
     if( _global_.debugger )
     debugger;
 
-    // _.assert( secondaryDefinition._syntheticDefinition === null, 'not tested' );
-
-    // let prototypeRewriting = false;
-    // if( op.primeDefinition.prototype === _.nothing )
-    // prototypeRewriting = true;
-    //
-    // let newRewriting = false;
-    // if( op.primeDefinition.new === _.nothing )
-    // newRewriting = true;
-
     if( op.primeDefinition._synthetic === true )
     {
       op.primeDefinition._notSyntheticDefinition = secondaryDefinition._synthetic === true ? secondaryDefinition._notSyntheticDefinition : secondaryDefinition;
+      /* preserve non-synthetic definition to use in case of attempt of partial supplementation */
     }
 
     if( secondaryDefinition._synthetic === true )
     {
-      // if( op.primeDefinition.prototype === _.nothing || canRewritePrototype( op, secondaryDefinition ) )
-      // op.primeDefinition._syntheticDefinition = secondaryDefinition;
       if( op.primeDefinition.prototype !== _.nothing || !canRewritePrototype( op, secondaryDefinition ) )
       {
-        if( secondaryDefinition._notSyntheticDefinition )
+        if( secondaryDefinition._notSyntheticDefinition !== _.nothing )
         secondaryDefinition = secondaryDefinition._notSyntheticDefinition;
         else return;
+        /* reject partial supplementing by trait generated inheriting */
       }
     }
-
-    // if( secondaryDefinition._notSyntheticDefinition )
-    // if( op.primeDefinition.prototype !== _.nothing || !canRewritePrototype( op, secondaryDefinition ) )
-    // {
-    //   secondaryDefinition = secondaryDefinition._notSyntheticDefinition;
-    //
-    //   // bluprintDefinitionSupplementAct( op, secondaryDefinition );
-    //
-    //   // prototypeRewriting = false;
-    //   // if( op.primeDefinition.prototype === _.nothing )
-    //   // prototypeRewriting = true;
-    //   //
-    //   // newRewriting = false;
-    //   // if( op.primeDefinition.new === _.nothing )
-    //   // newRewriting = true;
-    // }
-
-    // if( newRewriting && secondaryDefinition._synthetic === true && secondaryDefinition._notSyntheticDefinition )
-    // if( !prototypeRewriting || canRewritePrototype( op, secondaryDefinition._notSyntheticDefinitionPrototype ) )
-    // {
-    //   debugger;
-    //   secondaryDefinition = op.secondaryDefinition._notSyntheticDefinition;
-    //
-    //   prototypeRewriting = false;
-    //   if( op.primeDefinition.prototype === _.nothing )
-    //   prototypeRewriting = true;
-    //
-    //   newRewriting = false;
-    //   if( op.primeDefinition.new === _.nothing )
-    //   newRewriting = true;
-    // }
-
-    // if( secondaryDefinition._synthetic === true && !canRewritePrototype( op, secondaryDefinition.prototype ) )
-    // {
-    //   x
-    // }
+    else if( !_.boolIs( secondaryDefinition._synthetic ) )
+    {
+      /* reject partial supplementing by trait generated construction */
+      return;
+    }
 
     return bluprintDefinitionSupplementAct( op, secondaryDefinition );
   }
@@ -374,8 +335,9 @@ function typed_body( o )
     }
     else
     {
-      if( secondaryDefinition.prototype !== _.nothing && op.primeDefinition._secondaryPrototype === _.nothing )
-      op.primeDefinition._secondaryPrototype = secondaryDefinition.prototype;
+      if( op.primeDefinition._secondaryPrototype === _.nothing || op.primeDefinition._secondaryPrototype === op.primeDefinition.prototype )
+      if( secondaryDefinition.prototype !== _.nothing )
+      op.primeDefinition._secondaryPrototype = secondaryDefinition.prototype; /* qqq : cover logic of amending of prototype in case of many amendings */
     }
 
     if( newRewriting )
@@ -516,7 +478,7 @@ function typed_body( o )
 
     /* */
 
-    runtime._makingTyped = !!op.blueprint.traitsMap.typed.val; /* xxx : remove? */
+    // runtime._makingTyped = !!op.blueprint.traitsMap.typed.val; 
 
     /* */
 
@@ -524,14 +486,15 @@ function typed_body( o )
 
     /* */
 
-    let effectiveTyped = !!trait.val; /* xxx : remove? */
+    allocate = !!trait.val ? allocateTyped : allocateUntyped;
 
-    allocate = effectiveTyped ? allocateTyped : allocateUntyped;
-    retype = effectiveTyped ? retypeTyped : retypeUntypedPreserving;
-    if( trait.val === false && ( trait.prototype === null || trait.prototype === true ) )
-    retype = retypeUntypedForcing;
-    if( trait.val === _.maybe ) /* xxx : optimize condition */
+    /* */
+
+    retype = !!trait.val ? retypeTyped : retypeUntypedPreserving;
+    if( trait.val === _.maybe )
     retype = retypeMaybe;
+    else if( trait.val === false && ( trait.prototype === null || trait.prototype === true ) )
+    retype = retypeUntypedForcing;
 
     _.blueprint._practiceAdd( op.blueprint, 'allocate', allocate );
     _.blueprint._practiceAdd( op.blueprint, 'retype', retype );
@@ -724,12 +687,10 @@ typed_body.defaults =
 {
   val : true,
   prototype : _.nothing,
-  new : _.nothing, /* yyy : use nothing? */
-  // _dstConstruction : _.nothing, /* yyy : merge with _synthetic */
+  new : _.nothing,
   _synthetic : false, /* false for ordinary, true if created by inheriting, construction if spawned by _.construction.amend */
   _blueprint : null,
-  _notSyntheticDefinition : null,
-  // _syntheticDefinition : null,
+  _notSyntheticDefinition : _.nothing,
   _secondaryPrototype : _.nothing,
 }
 

@@ -2300,7 +2300,7 @@ function accessorDeducingMethods( test )
     // aGet : object.aGet,
     // aSet : object.aSet,
   }
-  test.identical( object, exp ); /* yyy */
+  test.identical( object, exp );
 
   var exp =
   {
