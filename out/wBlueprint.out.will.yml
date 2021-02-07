@@ -3,7 +3,7 @@ root:
   - wBlueprint.out
 consistency:
   ../.ex.will.yml: &ref_0
-    hash: a65cb8d7f10e8d8696c2c753c33c8726
+    hash: 7f16b7905c40f2370ff4e0ae119fa205
     size: 1907
   ../.im.will.yml: &ref_1
     hash: 8b8dfd5cb09aaa475c2c5aee402bb605
@@ -18,7 +18,7 @@ module:
         removing fields in descendants, defining the schema of structure,
         typeless objects, generating optimal code for definition, and many cool
         things alternatives cant do.
-      enabled: 0
+      enabled: 1
       version: 0.4.0
       interpreters: &ref_2
         - njs >= 10.0.0
@@ -790,7 +790,7 @@ module:
         removing fields in descendants, defining the schema of structure,
         typeless objects, generating optimal code for definition, and many cool
         things alternatives cant do.
-      enabled: 0
+      enabled: 1
       version: 0.4.0
       interpreters: *ref_2
       keywords: *ref_3
@@ -1440,7 +1440,7 @@ module:
           - build::npm
     consistency:
       ../.ex.will.yml:
-        hash: a65cb8d7f10e8d8696c2c753c33c8726
+        hash: 7f16b7905c40f2370ff4e0ae119fa205
         size: 1907
       ../.im.will.yml:
         hash: 8b8dfd5cb09aaa475c2c5aee402bb605
