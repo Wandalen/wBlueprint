@@ -195,7 +195,8 @@ function _define( o )
   let defaultSupplement =
   [
     _.trait.extendable( false ),
-    _.trait.typed({ val : false, prototype : false }),
+    _.trait.typed({ val : false }),
+    // _.trait.typed({ val : false, prototype : false }), /* yyy */
   ]
 
   _.blueprint._supplement( blueprint, defaultSupplement );

@@ -91,8 +91,8 @@ function _pairArgumentsHead( routine, args )
 
 let _toVal = Object.create( null );
 _toVal.val = function val( val ) { return val }
-_toVal.shallow = function shallow( val ) { return _.entity.make( val ) }
-_toVal.deep = function deep( val ) { return _.replicate({ src : val }) }
+_toVal.shallow = function shallow( val ) { return _.entity.shallowClone( val ) }
+_toVal.deep = function deep( val ) { return _.entity.deepClone({ src : val }) }
 _toVal.call = function call( val ) { return val() }
 _toVal.new = function nw( val ) { return new val() }
 
@@ -678,6 +678,9 @@ prop_body.defaults =
 
 }
 
+// prop_body.definitionDescriptor = { transparent : false };
+prop_body.group = { definition : true, named : true };
+
 let prop = _.routineUnite( prop_head, prop_body );
 _.routineEr( prop, _singleArgumentHead );
 
@@ -748,6 +751,9 @@ props_body.defaults =
 }
 
 let props = _.routineUnite( prop_head, props_body );
+// props.definitionDescriptor = _.mapExtend( null, prop.definitionDescriptor );
+props.group = _.mapExtend( null, prop.group );
+props.group.named = false;
 _.routineEr( props, _singleArgumentHead );
 
 //
@@ -764,6 +770,8 @@ val_body.defaults =
 }
 
 let val = _.routineUnite( prop_head, val_body );
+// val.definitionDescriptor = _.mapExtend( null, prop.definitionDescriptor );
+val.group = _.mapExtend( null, prop.group );
 _.routineEr( val, _singleArgumentHead );
 
 //
@@ -780,6 +788,9 @@ vals_body.defaults =
 }
 
 let vals = _.routineUnite( prop_head, vals_body );
+// vals.definitionDescriptor = _.mapExtend( null, val.definitionDescriptor );
+vals.group = _.mapExtend( null, val.group );
+vals.group.named = false;
 _.routineEr( vals, _singleArgumentHead );
 
 //
@@ -796,6 +807,8 @@ shallow_body.defaults =
 }
 
 let shallow = _.routineUnite( prop_head, shallow_body );
+// shallow.definitionDescriptor = _.mapExtend( null, prop.definitionDescriptor );
+shallow.group = _.mapExtend( null, prop.group );
 _.routineEr( shallow, _singleArgumentHead );
 
 //
@@ -812,6 +825,9 @@ shallows_body.defaults =
 }
 
 let shallows = _.routineUnite( prop_head, shallows_body );
+// shallows.definitionDescriptor = _.mapExtend( null, shallow.definitionDescriptor );
+shallows.group = _.mapExtend( null, shallow.group );
+shallows.group.named = false;
 _.routineEr( shallows, _singleArgumentHead );
 
 //
@@ -828,6 +844,8 @@ deep_body.defaults =
 }
 
 let deep = _.routineUnite( prop_head, deep_body );
+// deep.definitionDescriptor = _.mapExtend( null, prop.definitionDescriptor );
+deep.group = _.mapExtend( null, prop.group );
 _.routineEr( deep, _singleArgumentHead );
 
 //
@@ -844,6 +862,9 @@ deeps_body.defaults =
 }
 
 let deeps = _.routineUnite( prop_head, deeps_body );
+// deeps.definitionDescriptor = _.mapExtend( null, deep.definitionDescriptor );
+deeps.group = _.mapExtend( null, deep.group );
+deeps.group.named = false;
 _.routineEr( deeps, _singleArgumentHead );
 
 //
@@ -860,6 +881,8 @@ call_body.defaults =
 }
 
 let call = _.routineUnite( prop_head, call_body );
+// call.definitionDescriptor = _.mapExtend( null, prop.definitionDescriptor );
+call.group = _.mapExtend( null, prop.group );
 _.routineEr( call, _singleArgumentHead );
 
 //
@@ -876,6 +899,9 @@ calls_body.defaults =
 }
 
 let calls = _.routineUnite( prop_head, calls_body );
+// calls.definitionDescriptor = _.mapExtend( null, call.definitionDescriptor );
+calls.group = _.mapExtend( null, call.group );
+calls.group.named = false;
 _.routineEr( calls, _singleArgumentHead );
 
 //
@@ -892,6 +918,8 @@ new_body.defaults =
 }
 
 let _new = _.routineUnite( prop_head, new_body );
+// _new.definitionDescriptor = _.mapExtend( null, prop.definitionDescriptor );
+_new.group = _.mapExtend( null, prop.group );
 _.routineEr( _new, _singleArgumentHead );
 
 //
@@ -908,6 +936,9 @@ news_body.defaults =
 }
 
 let _news = _.routineUnite( prop_head, news_body );
+// _news.definitionDescriptor = _.mapExtend( null, _new.definitionDescriptor );
+_news.group = _.mapExtend( null, _new.group );
+_news.group.named = false;
 _.routineEr( _news, _singleArgumentHead );
 
 //
@@ -924,6 +955,8 @@ static_body.defaults =
 }
 
 let _static = _.routineUnite( prop_head, static_body );
+// _static.definitionDescriptor = _.mapExtend( null, prop.definitionDescriptor );
+_static.group = _.mapExtend( null, prop.group );
 _.routineEr( _static, _singleArgumentHead );
 
 //
@@ -940,9 +973,99 @@ statics_body.defaults =
 }
 
 let _statics = _.routineUnite( prop_head, statics_body );
+// _statics.definitionDescriptor = _.mapExtend( null, _static.definitionDescriptor );
+_statics.group = _.mapExtend( null, _static.group );
+_statics.group.named = false;
 _.routineEr( _statics, _singleArgumentHead );
 
 //
+
+function alias_head( routine, args )
+{
+  let o = args[ 0 ];
+
+  if( !_.mapIs( args[ 0 ] ) )
+  o = { originalName : args[ 0 ] };
+
+  _.assert( args.length === 1 );
+
+  return _.define.prop.head( routine, [ undefined, o ] );
+}
+
+function alias_body( o )
+{
+
+  _.assertRoutineOptions( alias_body, arguments );
+
+  let originalContainer = o.originalContainer;
+  let originalName = o.originalName;
+
+  _.assert( originalContainer === null || !!originalContainer );
+  _.assert( _.strDefined( originalName ), 'Expects defined `originalName`' );
+  _.assert( o.val === undefined );
+  _.assert( o.accessor === null || _.boolLikeTrue( o.accessor ) || _.mapIs( o.accessor ) );
+
+  if( !_.mapIs( o.accessor ) )
+  o.accessor = Object.create( null );
+
+  if( originalContainer === null )
+  {
+    let accessor2 = { grab : selfGet, get : selfGet, put : selfSet, set : selfSet }
+    _.accessor.suiteSupplement( o.accessor, accessor2 );
+  }
+  else
+  {
+    let accessor2 = { grab : get, get, put : set, set }
+    _.accessor.suiteSupplement( o.accessor, accessor2 );
+  }
+
+  o.val = _.nothing;
+  _.mapSupplement( o, _.define.prop.defaults );
+  return _.define.prop.body( o );
+
+  /* */
+
+  function get()
+  {
+    return originalContainer[ originalName ];
+  }
+
+  function set( src )
+  {
+    originalContainer[ originalName ] = src;
+    return originalContainer[ originalName ];
+  }
+
+  function selfGet()
+  {
+    return this[ originalName ];
+  }
+
+  function selfSet( src )
+  {
+    this[ originalName ] = src;
+    return this[ originalName ];
+  }
+
+}
+
+alias_body.defaults =
+{
+  ... _.mapBut( prop.defaults, { methods : null, val : null } ),
+  originalContainer : null,
+  originalName : null,
+}
+
+let alias = _.routineUnite( alias_head, alias_body );
+// alias.definitionDescriptor = _.mapExtend( null, prop.definitionDescriptor );
+alias.group = _.mapExtend( null, prop.group );
+_.routineEr( alias );
+
+/* xxx : implement definition::aliases */
+
+// --
+//
+// --
 
 function nothing_body( o )
 {
@@ -967,178 +1090,10 @@ nothing_body.defaults =
   _blueprint : false,
 }
 
+// nothing_body.definitionDescriptor = { transparent : true };
+nothing_body.group = { definition : true, named : false };
+
 let nothing = _.routineUnite( _singleArgumentHead, nothing_body );
-
-//
-
-function _amendment_head( routine, args )
-{
-  let o = _pairArgumentsHead( ... arguments );
-  _.assert( _.longHas( [ 'extend', 'supplement' ], o.amending ) );
-  return o;
-}
-
-function _amendment_body( o )
-{
-
-  _.assertRoutineOptions( _amendment_body, arguments );
-  _.assert( _.objectIs( o.val ) );
-  _.assert( _.blueprintIsDefinitive( o.val ) );
-  o.defGroup = 'definition.unnamed';
-  o.kind = 'amend';
-  o.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
-  return _.definition._unnamedMake( o );
-
-  function blueprintDefinitionRewrite( op )
-  {
-    let definition = op.definition;
-    let blueprint = op.blueprint;
-    // if( _global_.debugger )
-    // debugger;
-    // debugger;
-    return _.blueprint._amend
-    ({
-      blueprint : op.blueprint,
-      blueprintDepth : op.blueprintDepth,
-      extension : definition.val,
-      amending : op.amending === 'extend' ? definition.amending : op.amending,
-      blueprintComposing : 'amend',
-      blueprintDepthReserve : definition.blueprintDepthReserve + op.blueprintDepthReserve,
-    });
-  }
-
-}
-
-_amendment_body.defaults =
-{
-  amending : null,
-  val : null,
-  blueprintDepthReserve : 0,
-  blueprintDepthLimit : 1,
-  _blueprint : false,
-}
-
-let _amendment = _.routineUnite( _amendment_head, _amendment_body );
-
-//
-
-let extension = _.routineUnite( _amendment_head, _amendment_body );
-
-extension.defaults =
-{
-  ... _amendment.defaults,
-  amending : 'extend',
-}
-
-_.routineEr( extension, _singleArgumentHead );
-
-//
-
-let supplementation = _.routineUnite( _amendment_head, _amendment_body );
-
-supplementation.defaults =
-{
-  ... _amendment.defaults,
-  amending : 'supplement',
-}
-
-_.routineEr( supplementation, _singleArgumentHead );
-
-//
-
-function inherit_body( o )
-{
-
-  _.assertRoutineOptions( inherit_body, arguments );
-  _.assert( _.objectIs( o.val ) );
-  _.assert( _.blueprintIsDefinitive( o.val ) );
-  o.defGroup = 'definition.unnamed';
-  o.kind = 'inherit';
-  o.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
-  o._blueprint = false;
-  return _.definition._unnamedMake( o );
-
-  // if( !_.mapIs( o ) )
-  // o = { val : arguments[ 0 ] };
-  // _.routineOptions( inherit, o );
-  // _.assert( _.blueprint.isDefinitive( o.val ) );
-  //
-  // if( _global_.debugger )
-  // debugger;
-  //
-  // let result = [];
-  // result.push( _.define.extension( o.val ) );
-  // let prototype = null;
-  // if( o.val.prototype )
-  // prototype = o.val;
-  //
-  // if( o.val.traitsMap.typed )
-  // {
-  //   if( prototype )
-  //   result.push( _.trait.typed( o.val.traitsMap.typed.val || true, { prototype : prototype, new : true, _iherited : true } ) ); /* xxx : cover */
-  //   else
-  //   result.push( _.trait.typed( o.val.traitsMap.typed.val, { prototype : o.val.traitsMap.typed.prototype, _iherited : true } ) );
-  //   // result.push( _.trait.typed( o.val.traitsMap.typed.val, { prototype : o.val.traitsMap.typed.val, _iherited : true } ) ); /* yyy */
-  // }
-  // else
-  // {
-  //   // result.push( _.trait.typed( true ) ); /* yyy */
-  // }
-  //
-  // return result;
-
-  function blueprintDefinitionRewrite( op )
-  {
-    _.assert( !op.primeDefinition || !op.secondaryDefinition, 'not tested' );
-    let definition = op.primeDefinition || op.secondaryDefinition;
-    let blueprint = op.blueprint;
-    let add = op.amending === 'supplement' ? 'unshift' : 'push';
-
-    if( _global_.debugger )
-    debugger;
-
-    let result = [];
-    // result[ add ]( _.define.extension( definition.val ) );
-    result[ add ]( definition.val );
-    let prototype = null;
-    if( definition.val.prototype )
-    prototype = definition.val;
-
-    if( definition.val.traitsMap.typed )
-    {
-      if( prototype )
-      result[ add ]( _.trait.typed( definition.val.traitsMap.typed.val || true, { prototype : prototype, new : true, _iherited : true } ) ); /* xxx : cover */
-      else
-      result[ add ]( _.trait.typed( definition.val.traitsMap.typed.val, { prototype : definition.val.traitsMap.typed.prototype, _iherited : true } ) );
-      // result[ add ]( _.trait.typed( definition.val.traitsMap.typed.val, { prototype : definition.val.traitsMap.typed.val, _iherited : true } ) ); /* yyy */
-    }
-    else
-    {
-      // result[ add ]( _.trait.typed( true ) ); /* yyy */
-    }
-
-    if( _global_.debugger )
-    debugger;
-
-    return _.blueprint._amend
-    ({
-      blueprint : op.blueprint,
-      blueprintDepth : op.blueprintDepth,
-      extension : result,
-      amending : op.amending,
-      blueprintComposing : 'amend',
-      blueprintDepthReserve : ( definition.blueprintDepthReserve || 0 ) + op.blueprintDepthReserve,
-    });
-  }
-
-}
-
-inherit_body.defaults =
-{
-  val : null,
-}
-
-let inherit = _.routineUnite( _pairArgumentsHead, inherit_body );
 
 //
 
@@ -1157,7 +1112,16 @@ function _constant_functor()
   _.definition.retype( prototype );
   Object.freeze( prototype );
 
-  return _constant;
+  let r =
+  {
+    'constant' : function( val )
+    {
+      return _constant( val );
+    }
+  }
+
+  r.constant.group = { definition : true, named : true };
+  return r.constant;
 
   /* */
 
@@ -1237,86 +1201,142 @@ let _constant = _constant_functor();
 
 //
 
-function alias_head( routine, args )
+function _amendment_head( routine, args )
 {
-  let o = args[ 0 ];
-
-  if( !_.mapIs( args[ 0 ] ) )
-  o = { originalName : args[ 0 ] };
-
-  _.assert( args.length === 1 );
-
-  return _.define.prop.head( routine, [ undefined, o ] );
+  let o = _pairArgumentsHead( ... arguments );
+  _.assert( _.longHas( [ 'extend', 'supplement' ], o.amending ) );
+  return o;
 }
 
-function alias_body( o )
+function _amendment_body( o )
 {
 
-  _.assertRoutineOptions( alias_body, arguments );
+  _.assertRoutineOptions( _amendment_body, arguments );
+  _.assert( _.objectIs( o.val ) );
+  _.assert( _.blueprintIsDefinitive( o.val ) );
+  o.defGroup = 'definition.unnamed';
+  o.kind = 'amend';
+  o.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
+  return _.definition._unnamedMake( o );
 
-  let originalContainer = o.originalContainer;
-  let originalName = o.originalName;
-
-  _.assert( originalContainer === null || !!originalContainer );
-  _.assert( _.strDefined( originalName ) );
-  _.assert( o.val === undefined );
-  _.assert( o.accessor === null || _.boolLikeTrue( o.accessor ) || _.mapIs( o.accessor ) );
-
-  if( !_.mapIs( o.accessor ) )
-  o.accessor = Object.create( null );
-
-  if( originalContainer === null )
+  function blueprintDefinitionRewrite( op )
   {
-    let accessor2 = { grab : selfGet, get : selfGet, put : selfSet, set : selfSet }
-    _.accessor.suiteSupplement( o.accessor, accessor2 );
-  }
-  else
-  {
-    let accessor2 = { grab : get, get, put : set, set }
-    _.accessor.suiteSupplement( o.accessor, accessor2 );
+    let definition = op.definition;
+    let blueprint = op.blueprint;
+    return _.blueprint._amend
+    ({
+      blueprint : op.blueprint,
+      blueprintDepth : op.blueprintDepth,
+      extension : definition.val,
+      amending : op.amending === 'extend' ? definition.amending : op.amending,
+      blueprintComposing : 'amend',
+      blueprintDepthReserve : definition.blueprintDepthReserve + op.blueprintDepthReserve,
+    });
   }
 
-  o.val = _.nothing;
-  _.mapSupplement( o, _.define.prop.defaults );
-  return _.define.prop.body( o );
-  // let definition = _.define.prop.body( o );
-  // return definition;
+}
+
+_amendment_body.defaults =
+{
+  amending : null,
+  val : null,
+  blueprintDepthReserve : 0,
+  blueprintDepthLimit : 1,
+  _blueprint : false,
+}
+
+_amendment_body.group = { definition : true, named : false };
+
+let _amendment = _.routineUnite( _amendment_head, _amendment_body );
+
+//
+
+let extension = _.routineUnite({ head : _amendment_head, body : _amendment_body, name : 'extension' });
+
+extension.defaults =
+{
+  ... _amendment.defaults,
+  amending : 'extend',
+}
+
+_.assert( !!extension.group.definition );
+_.assert( !extension.group.anemd );
+
+_.routineEr( extension, _singleArgumentHead );
+
+//
+
+let supplementation = _.routineUnite({ head : _amendment_head, body : _amendment_body, name : 'supplementation' });
+
+supplementation.defaults =
+{
+  ... _amendment.defaults,
+  amending : 'supplement',
+}
+
+_.routineEr( supplementation, _singleArgumentHead );
+
+//
+
+function inherit_body( o )
+{
+
+  _.assertRoutineOptions( inherit_body, arguments );
+  _.assert( _.objectIs( o.val ) );
+  _.assert( _.blueprintIsDefinitive( o.val ) );
+  o.defGroup = 'definition.unnamed';
+  o.kind = 'inherit';
+  o.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
+  o._blueprint = false;
+  return _.definition._unnamedMake( o );
 
   /* */
 
-  function get()
+  function blueprintDefinitionRewrite( op )
   {
-    return originalContainer[ originalName ];
-  }
+    _.assert( !op.primeDefinition || !op.secondaryDefinition, 'not tested' );
+    let definition = op.primeDefinition || op.secondaryDefinition;
+    let blueprint = op.blueprint;
+    let add = op.amending === 'supplement' ? 'unshift' : 'push';
 
-  function set( src )
-  {
-    originalContainer[ originalName ] = src;
-    return originalContainer[ originalName ];
-  }
+    if( _global_.debugger )
+    debugger;
 
-  function selfGet()
-  {
-    return this[ originalName ];
-  }
+    let result = [];
+    result[ add ]( definition.val );
+    let prototype = null;
+    if( definition.val.prototype )
+    prototype = definition.val;
 
-  function selfSet( src )
-  {
-    this[ originalName ] = src;
-    return this[ originalName ];
+    if( definition.val.traitsMap.typed )
+    {
+      if( prototype )
+      result[ add ]( _.trait.typed( definition.val.traitsMap.typed.val || true, { prototype : prototype, new : true, _synthetic : true } ) ); /* xxx : cover */
+      else
+      result[ add ]( _.trait.typed( definition.val.traitsMap.typed.val, { prototype : definition.val.traitsMap.typed.prototype, _synthetic : true } ) );
+    }
+
+    return _.blueprint._amend
+    ({
+      blueprint : op.blueprint,
+      blueprintDepth : op.blueprintDepth,
+      extension : result,
+      amending : op.amending,
+      blueprintComposing : 'amend',
+      blueprintDepthReserve : ( definition.blueprintDepthReserve || 0 ) + op.blueprintDepthReserve,
+    });
   }
 
 }
 
-alias_body.defaults =
+inherit_body.defaults =
 {
-  ... _.mapBut( prop.defaults, { methods : null, val : null } ),
-  originalContainer : null,
-  originalName : null,
+  val : null,
 }
 
-let alias = _.routineUnite( alias_head, alias_body );
-_.routineEr( alias );
+inherit_body.group = { definition : true, named : false };
+
+let inherit = _.routineUnite( _pairArgumentsHead, inherit_body );
 
 // --
 //
@@ -1361,21 +1381,22 @@ let DefineExtension =
   news : _news,
   static : _static,
   statics : _statics,
+  alias,
 
   nothing,
+  constant : _constant,
 
   _amendment,
   extension,
   supplementation,
   inherit,
 
-  constant : _constant,
-  alias,
 
 }
 
 _.define = _.define || Object.create( null );
-_.mapExtend( _.define, DefineExtension );
+_.definition.extend( DefineExtension );
+// _.mapExtend( _.define, DefineExtension );
 
 // --
 // export
