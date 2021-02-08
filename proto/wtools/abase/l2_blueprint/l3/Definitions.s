@@ -350,8 +350,6 @@ function prop_body( o )
     if( _global_.debugger )
     debugger;
 
-    /* xxx : introduce option::preservingValue? */
-
     if( prototype )
     {
       let val2 = _.escape.right( valFrom( prototype, name, op.amending, val ) );
@@ -414,7 +412,9 @@ function prop_body( o )
         methods,
         suite : accessor ? _.mapExtend( null, accessor ) : false,
         storingStrategy,
-        storageIniting : false,
+        storageIniting : true,
+        valueGetting : false,
+        valueSetting : false,
         enumerable,
         configurable,
         writable,
@@ -422,7 +422,6 @@ function prop_body( o )
         addingMethods,
       });
       normalizedAsuite = op2.normalizedAsuite;
-      _.accessor._objectInitStorage( blueprint.prototype, normalizedAsuite ); /* xxx : remove the call and introduce maybe extra option for declareSingle */
     }
 
     let constructionInit;

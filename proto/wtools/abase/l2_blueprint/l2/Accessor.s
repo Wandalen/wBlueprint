@@ -54,6 +54,7 @@ let DeclarationSpecialDefaults =
   object : null,
   methods : null,
   needed : null,
+  normalizedAsuite : null,
 }
 
 let DeclarationOptions =
@@ -72,6 +73,8 @@ let DeclarationOptions =
   writable : null,
   storingStrategy : null,
   storageIniting : null,
+  valueGetting : null,
+  valueSetting : null,
 
   strict : true, /* zzz : deprecate */
 
@@ -93,6 +96,8 @@ let DeclarationDefaults =
   writable : null,
   storingStrategy : 'symbol',
   storageIniting : true,
+  valueGetting : true,
+  valueSetting : true,
 
   strict : true,
 
@@ -551,7 +556,7 @@ function _objectMethodMoveGet( srcInstance, name )
 
 //
 
-function _objectDeclaringIsNeeded( o )
+function _declaringIsNeeded( o )
 {
   let prop = _.prototype.propertyDescriptorActiveGet( o.object, o.name );
   if( prop.descriptor )
@@ -580,7 +585,7 @@ function _objectDeclaringIsNeeded( o )
   return true;
 }
 
-_objectDeclaringIsNeeded.defaults =
+_declaringIsNeeded.defaults =
 {
   object : null,
   name : null,
@@ -623,11 +628,6 @@ function _methodsNormalize( o )
 
   for( let mname in _.accessor.AmethodTypesMap )
   methodNormalize( o, mname );
-
-  // methodNormalize( o, 'grab' );
-  // methodNormalize( o, 'get' );
-  // methodNormalize( o, 'put' );
-  // methodNormalize( o, 'set' );
 
   function methodNormalize( o, n1 )
   {
@@ -840,9 +840,6 @@ function _objectSetValue( o )
 
   _.assertMapHasAll( o, _objectSetValue.defaults );
 
-  // if( _global_.debugger )
-  // debugger;
-
   let descriptor = Object.getOwnPropertyDescriptor( o.object, o.name );
   if( descriptor && descriptor.configurable && descriptor.get == undefined && descriptor.set === undefined )
   delete o.object[ o.name ];
@@ -937,36 +934,7 @@ function _objectInitStorage( object, normalizedAsuite )
     initer( object );
   }
 
-  // if( storingStrategy === 'underscore' )
-  // {
-  //   if( !Object.hasOwnProperty.call( object, '_' ) )
-  //   Object.defineProperty( object, '_',
-  //   {
-  //     value : Object.create( _.objectIs( object._ ) ? object._ : null ),
-  //     enumerable : false,
-  //     writable : false,
-  //     configurable : false,
-  //   });
-  // }
-
 }
-
-// function _objectInitStorage( object, storingStrategy )
-// {
-//
-//   if( storingStrategy === 'underscore' )
-//   {
-//     if( !Object.hasOwnProperty.call( object, '_' ) )
-//     Object.defineProperty( object, '_',
-//     {
-//       value : Object.create( _.objectIs( object._ ) ? object._ : null ),
-//       enumerable : false,
-//       writable : false,
-//       configurable : false,
-//     });
-//   }
-//
-// }
 
 //
 
@@ -1074,6 +1042,8 @@ function suiteNormalize_body( o )
 
   /* */
 
+  _.debugger;
+
   if( !o.normalizedAsuite )
   {
 
@@ -1170,7 +1140,8 @@ function declareSingle_body( o )
 
   /* */
 
-  o.needed = _.accessor._objectDeclaringIsNeeded( o );
+  _.debugger;
+  o.needed = _.accessor._declaringIsNeeded( o );
   if( !o.needed )
   return false;
 
@@ -1214,16 +1185,22 @@ function declareSingle_body( o )
 
   /* cache value */
 
-  if( _.definitionIs( o.normalizedAsuite.get ) )
+  _.debugger;
+  if( o.storageIniting && o.valueGetting)
   {
-    if( o.val === _.nothing && o.storageIniting )
-    o.val = _.definition.toVal( o.normalizedAsuite.get );
-    o.normalizedAsuite.get = null;
-  }
 
-  if( o.val === _.nothing && o.storageIniting )
-  if( o.preservingValue && Object.hasOwnProperty.call( o.object, o.name ) )
-  o.val = o.object[ o.name ];
+    if( _.definitionIs( o.normalizedAsuite.get ) )
+    {
+      if( o.val === _.nothing )
+      o.val = _.definition.toVal( o.normalizedAsuite.get );
+      o.normalizedAsuite.get = null;
+    }
+
+    if( o.val === _.nothing )
+    if( o.preservingValue && Object.hasOwnProperty.call( o.object, o.name ) )
+    o.val = o.object[ o.name ];
+
+  }
 
   /* define accessor */
 
@@ -1241,9 +1218,9 @@ function declareSingle_body( o )
 
   /* set value */
 
-  // if( _global_.debugger )
-  // debugger;
-  if( o.storageIniting && o.val !== _.nothing && descriptor.get )
+  _.debugger;
+  if( o.storageIniting && o.valueSetting )
+  if( o.val !== _.nothing && descriptor.get )
   {
     _.accessor._objectSetValue
     ({
@@ -1254,16 +1231,6 @@ function declareSingle_body( o )
       val : o.val,
     });
   }
-
-  // if( o.storageIniting && o.val !== _.nothing && o.normalizedAsuite.get !== null ) /* yyy */
-  // _.accessor._objectSetValue
-  // ({
-  //   object : o.object,
-  //   normalizedAsuite : o.normalizedAsuite,
-  //   storingStrategy : o.storingStrategy,
-  //   name : o.name,
-  //   val : o.val,
-  // });
 
   /* validate */
 
@@ -1799,7 +1766,7 @@ let AccessorExtension =
   _objectSetValue,
   _objectAddMethods,
   _objectInitStorage,
-  _objectDeclaringIsNeeded,
+  _declaringIsNeeded,
 
   _defaultsApply,
   _methodsNormalize,

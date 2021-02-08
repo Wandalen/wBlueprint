@@ -2968,6 +2968,363 @@ function accessorUnfunctGetSuite( test )
 
 //
 
+function accessorValueOptions( test )
+{
+
+  var sets =
+  {
+    storageIniting : [ 0, 1 ],
+    valueGetting : [ 0, 1 ],
+    valueSetting : [ 0, 1 ],
+    preservingValue : [ 0, 1 ],
+  };
+  var samples = _.eachSample({ sets }); debugger;
+
+  for( let tops of samples )
+  eachCase( tops );
+
+  /* - */
+
+  function eachCase( tops )
+  {
+
+    /* */
+
+    if( tops.storageIniting && tops.valueGetting )
+    {
+
+      test.case = `storageIniting:${tops.storageIniting}, valueGetting:${tops.valueGetting}, valueSetting:${tops.valueSetting}, preservingValue:${tops.preservingValue}`;
+
+      var env = envMake
+      ({
+        storageIniting : tops.storageIniting,
+        valueGetting : tops.valueGetting,
+        valueSetting : tops.valueSetting,
+        preservingValue : tops.preservingValue,
+      });
+
+      var exp =
+      {
+        'a' : '2',
+        'b' : '1',
+        'c' : undefined,
+      }
+      if( !tops.valueSetting )
+      {
+        exp =
+        {
+          'a' : undefined,
+          'b' : undefined,
+          'c' : undefined,
+        }
+      }
+      if( !tops.preservingValue )
+      exp.b = undefined;
+      test.identical( env.object, exp );
+
+      var exp = { a : '2', b : '1' }
+      if( !tops.valueSetting )
+      exp = {}
+      if( !tops.preservingValue )
+      delete exp.b;
+      test.identical( env.object._, exp );
+
+      test.identical( env.optionsA.val, '2' );
+      if( tops.preservingValue )
+      test.identical( env.optionsB.val, '1' );
+      else
+      test.identical( env.optionsB.val, _.nothing );
+      test.identical( env.optionsC.val, _.nothing );
+
+    }
+
+    /* */
+
+    if( tops.storageIniting && !tops.valueGetting )
+    {
+
+      test.case = `storageIniting:${tops.storageIniting}, valueGetting:${tops.valueGetting}, valueSetting:${tops.valueSetting}, preservingValue:${tops.preservingValue}`;
+
+      var env = envMake
+      ({
+        storageIniting : tops.storageIniting,
+        valueGetting : tops.valueGetting,
+        valueSetting : tops.valueSetting,
+        preservingValue : tops.preservingValue,
+      });
+
+      var exp =
+      {
+        'a' : '2',
+        'b' : undefined,
+        'c' : undefined,
+      }
+      if( !tops.valueSetting )
+      {
+        exp =
+        {
+          'a' : undefined,
+          'b' : undefined,
+          'c' : undefined,
+        }
+      }
+      test.identical( env.object, exp );
+
+      var exp = { a : '2' }
+      if( !tops.valueSetting )
+      exp = {}
+      test.identical( env.object._, exp );
+
+      test.identical( env.optionsA.val, '2' );
+      test.identical( env.optionsB.val, _.nothing );
+      test.identical( env.optionsC.val, _.nothing );
+
+    }
+
+    /* */
+
+    if( !tops.storageIniting )
+    {
+
+      test.case = `storageIniting:${tops.storageIniting}, valueGetting:${tops.valueGetting}, valueSetting:${tops.valueSetting}, preservingValue:${tops.preservingValue}`;
+
+      var env = envMake
+      ({
+        storageIniting : tops.storageIniting,
+        valueGetting : tops.valueGetting,
+        valueSetting : tops.valueSetting,
+        preservingValue : tops.preservingValue,
+      });
+
+      test.true( env.object._ === undefined );
+
+      Object.defineProperty( env.object, '_', { enumerable : 0, value : Object.create( null ) } );
+
+      var exp =
+      {
+        'a' : undefined,
+        'b' : undefined,
+        'c' : undefined,
+      }
+      test.identical( env.object, exp );
+
+      var exp = {}
+      test.identical( env.object._, exp );
+
+      test.identical( env.optionsA.val, '2' );
+      test.identical( env.optionsB.val, _.nothing );
+      test.identical( env.optionsC.val, _.nothing );
+
+    }
+
+    /* */
+
+  }
+
+  /* - */
+
+  function envMake( env )
+  {
+
+    env.object =
+    {
+      'a' : '1',
+      'b' : '1'
+    };
+
+    env.optionsA =
+    {
+      object : env.object,
+      name : 'a',
+      prime : 0,
+      strict : 0,
+      addingMethods : 0,
+      val : '2',
+      suite : 1,
+      storingStrategy : 'underscore',
+      storageIniting : env.storageIniting,
+      valueGetting : env.valueGetting,
+      valueSetting : env.valueSetting,
+      preservingValue : env.preservingValue,
+    }
+    _.accessor.declareSingle( env.optionsA );
+
+    env.optionsB =
+    {
+      object : env.object,
+      name : 'b',
+      prime : 0,
+      strict : 0,
+      addingMethods : 0,
+      val : _.nothing,
+      suite : 1,
+      storingStrategy : 'underscore',
+      storageIniting : env.storageIniting,
+      valueGetting : env.valueGetting,
+      valueSetting : env.valueSetting,
+      preservingValue : env.preservingValue,
+    }
+    _.accessor.declareSingle( env.optionsB );
+    /* xxx : write test of reusing options for declareSingle */
+
+    env.optionsC =
+    {
+      object : env.object,
+      name : 'c',
+      prime : 0,
+      strict : 0,
+      addingMethods : 0,
+      val : _.nothing,
+      suite : 1,
+      storingStrategy : 'underscore',
+      storageIniting : env.storageIniting,
+      valueGetting : env.valueGetting,
+      valueSetting : env.valueSetting,
+      preservingValue : env.preservingValue,
+    }
+    _.accessor.declareSingle( env.optionsC );
+
+    return env;
+  }
+
+}
+
+//
+
+function accessorLogistic( test )
+{
+
+  test.case = 'basic';
+
+  var options =
+  {
+    name : 'a',
+    prime : 0,
+    strict : 0,
+    addingMethods : 0,
+    val : '2',
+    suite : 1,
+    storingStrategy : 'underscore',
+  }
+
+  test.description = 'object1';
+
+  var object1 =
+  {
+    'a' : '1',
+    'b' : '1'
+  };
+  options.object = object1;
+  _.debugger = 1;
+  _.accessor.declareSingle( options );
+
+  var exp =
+  {
+    'a' : '2',
+    'b' : '1',
+  }
+  test.identical( object1, exp );
+
+  var exp = { a : '2' }
+  test.identical( object1._, exp );
+
+  delete options.object;
+  var exp =
+  {
+    'name' : 'a',
+    'prime' : 0,
+    'strict' : 0,
+    'addingMethods' : 0,
+    'val' : '2',
+    'suite' : {},
+    'storingStrategy' : 'underscore',
+    'grab' : null,
+    'get' : null,
+    'put' : null,
+    'set' : null,
+    'move' : null,
+    'methods' : null,
+    'needed' : true,
+    'normalizedAsuite' :
+    {
+      'grab' : options.normalizedAsuite.grab,
+      'get' : options.normalizedAsuite.get,
+      'put' : options.normalizedAsuite.put,
+      'set' : options.normalizedAsuite.set,
+      'move' : false,
+    },
+    'preservingValue' : true,
+    'combining' : null,
+    'enumerable' : true,
+    'configurable' : true,
+    'writable' : true,
+    'storageIniting' : true,
+    'valueGetting' : true,
+    'valueSetting' : true
+  }
+  test.identical( options, exp );
+
+  test.description = 'object2';
+
+  var object2 =
+  {
+    'a' : '1',
+    'b' : '1'
+  };
+  options.object = object2;
+  _.debugger = 1;
+  _.accessor.declareSingle( options );
+
+  var exp =
+  {
+    'a' : '2',
+    'b' : '1',
+  }
+  test.identical( object2, exp );
+
+  var exp = { a : '2' }
+  test.identical( object2._, exp );
+
+  delete options.object;
+  var exp =
+  {
+    'name' : 'a',
+    'prime' : 0,
+    'strict' : 0,
+    'addingMethods' : 0,
+    'val' : '2',
+    'suite' : {},
+    'storingStrategy' : 'underscore',
+    'grab' : null,
+    'get' : null,
+    'put' : null,
+    'set' : null,
+    'move' : null,
+    'methods' : null,
+    'needed' : true,
+    'normalizedAsuite' :
+    {
+      'grab' : options.normalizedAsuite.grab,
+      'get' : options.normalizedAsuite.get,
+      'put' : options.normalizedAsuite.put,
+      'set' : options.normalizedAsuite.set,
+      'move' : false,
+    },
+    'preservingValue' : true,
+    'combining' : null,
+    'enumerable' : true,
+    'configurable' : true,
+    'writable' : true,
+    'storageIniting' : true,
+    'valueGetting' : true,
+    'valueSetting' : true
+  }
+  test.identical( options, exp );
+
+}
+
+//
+
 function accessorForbid( test )
 {
 
@@ -3664,6 +4021,8 @@ let Self =
     accessorDeducingMethods,
     accessorUnfunct,
     accessorUnfunctGetSuite,
+    accessorValueOptions,
+    accessorLogistic,
 
     accessorForbid,
     forbidWithoutConstructor,
