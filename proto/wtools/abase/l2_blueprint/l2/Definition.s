@@ -47,7 +47,11 @@ Object.setPrototypeOf( Definition, null );
 Definition.prototype = Object.create( null );
 Definition.prototype.cloneShallow = function()
 {
-  let result = new Definition( this );
+  // let result = new Definition( this );
+  let result = Object.create( Object.getPrototypeOf( this ) );
+  debugger;
+  Object.assign( result, this );
+  debugger;
 
   if( result._blueprint )
   result._blueprint = null;

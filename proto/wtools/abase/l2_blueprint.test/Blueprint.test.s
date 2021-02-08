@@ -11954,7 +11954,7 @@ defineAmendmentPropInheritance.description =
 // define nothing
 // --
 
-function defineNothing( test )
+function defineNothingLogistic( test )
 {
 
   /* */
@@ -11963,13 +11963,61 @@ function defineNothing( test )
   var nothing = _.define.nothing();
   test.true( _.definition.is( nothing ) );
   test.true( Object.isFrozen( nothing ) );
+  test.identical( _.prototype.each( nothing ).length, 2 );
+
+  /* */
+
+  test.case = 'clone shallow';
+  var nothing = _.define.nothing();
+
+  var nothing2 = nothing.cloneShallow();
+  test.true( nothing === nothing2 );
+
+  var nothing2 = _.entity.cloneShallow( nothing );
+  test.true( nothing === nothing2 );
+
+  /* */
+
+  test.case = 'clone deep';
+  var nothing = _.define.nothing();
+
+  var nothing2 = nothing.cloneDeep();
+  test.true( nothing === nothing2 );
+
+  var nothing2 = _.entity.cloneDeep( nothing );
+  test.true( nothing === nothing2 );
+
+  /* */
+
+  test.case = 'make second';
+
+  var nothing = _.define.nothing();
+  var nothing2 = _.define.nothing();
+  test.true( _.definition.is( nothing2 ) );
+  test.true( Object.isFrozen( nothing2 ) );
+  test.true( nothing === nothing2 );
+  test.identical( _.prototype.each( nothing2 ).length, 2 );
+
+  /* */
 
   test.case = 'make with options';
-  var src = {}
-  var nothing = _.define.nothing(src);
-  test.true( _.definition.is( nothing ) );
-  test.true( Object.isFrozen( nothing ) );
-  test.true( src === nothing );
+  var nothing = _.define.nothing();
+  var src = {};
+  var nothing2 = _.define.nothing( src );
+  test.true( _.definition.is( nothing2 ) );
+  test.true( Object.isFrozen( nothing2 ) );
+  test.true( src === nothing2 );
+  test.true( nothing !== nothing2 );
+  test.identical( _.prototype.each( nothing2 ).length, 3 );
+
+  /* */
+
+}
+
+//
+
+function defineNothingBasic( test )
+{
 
   /* */
 
@@ -20196,7 +20244,8 @@ let Self =
 
     // define nothing
 
-    defineNothing,
+    defineNothingLogistic,
+    defineNothingBasic,
     constructionExtendWithBlueprintWithNothing,
     constructionExtendWithNothing,
 

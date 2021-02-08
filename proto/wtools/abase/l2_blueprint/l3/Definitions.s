@@ -91,8 +91,8 @@ function _pairArgumentsHead( routine, args )
 
 let _toVal = Object.create( null );
 _toVal.val = function val( val ) { return val }
-_toVal.shallow = function shallow( val ) { return _.entity.shallowClone( val ) }
-_toVal.deep = function deep( val ) { return _.entity.deepClone({ src : val }) }
+_toVal.shallow = function shallow( val ) { return _.entity.cloneShallow( val ) }
+_toVal.deep = function deep( val ) { return _.entity.cloneDeep({ src : val }) }
 _toVal.call = function call( val ) { return val() }
 _toVal.new = function nw( val ) { return new val() }
 
@@ -677,7 +677,6 @@ prop_body.defaults =
 
 }
 
-// prop_body.definitionDescriptor = { transparent : false };
 prop_body.group = { definition : true, named : true };
 
 let prop = _.routineUnite( prop_head, prop_body );
@@ -750,7 +749,6 @@ props_body.defaults =
 }
 
 let props = _.routineUnite( prop_head, props_body );
-// props.definitionDescriptor = _.mapExtend( null, prop.definitionDescriptor );
 props.group = _.mapExtend( null, prop.group );
 props.group.named = false;
 _.routineEr( props, _singleArgumentHead );
@@ -769,7 +767,6 @@ val_body.defaults =
 }
 
 let val = _.routineUnite( prop_head, val_body );
-// val.definitionDescriptor = _.mapExtend( null, prop.definitionDescriptor );
 val.group = _.mapExtend( null, prop.group );
 _.routineEr( val, _singleArgumentHead );
 
@@ -787,7 +784,6 @@ vals_body.defaults =
 }
 
 let vals = _.routineUnite( prop_head, vals_body );
-// vals.definitionDescriptor = _.mapExtend( null, val.definitionDescriptor );
 vals.group = _.mapExtend( null, val.group );
 vals.group.named = false;
 _.routineEr( vals, _singleArgumentHead );
@@ -806,7 +802,6 @@ shallow_body.defaults =
 }
 
 let shallow = _.routineUnite( prop_head, shallow_body );
-// shallow.definitionDescriptor = _.mapExtend( null, prop.definitionDescriptor );
 shallow.group = _.mapExtend( null, prop.group );
 _.routineEr( shallow, _singleArgumentHead );
 
@@ -824,7 +819,6 @@ shallows_body.defaults =
 }
 
 let shallows = _.routineUnite( prop_head, shallows_body );
-// shallows.definitionDescriptor = _.mapExtend( null, shallow.definitionDescriptor );
 shallows.group = _.mapExtend( null, shallow.group );
 shallows.group.named = false;
 _.routineEr( shallows, _singleArgumentHead );
@@ -843,7 +837,6 @@ deep_body.defaults =
 }
 
 let deep = _.routineUnite( prop_head, deep_body );
-// deep.definitionDescriptor = _.mapExtend( null, prop.definitionDescriptor );
 deep.group = _.mapExtend( null, prop.group );
 _.routineEr( deep, _singleArgumentHead );
 
@@ -861,7 +854,6 @@ deeps_body.defaults =
 }
 
 let deeps = _.routineUnite( prop_head, deeps_body );
-// deeps.definitionDescriptor = _.mapExtend( null, deep.definitionDescriptor );
 deeps.group = _.mapExtend( null, deep.group );
 deeps.group.named = false;
 _.routineEr( deeps, _singleArgumentHead );
@@ -880,7 +872,6 @@ call_body.defaults =
 }
 
 let call = _.routineUnite( prop_head, call_body );
-// call.definitionDescriptor = _.mapExtend( null, prop.definitionDescriptor );
 call.group = _.mapExtend( null, prop.group );
 _.routineEr( call, _singleArgumentHead );
 
@@ -898,7 +889,6 @@ calls_body.defaults =
 }
 
 let calls = _.routineUnite( prop_head, calls_body );
-// calls.definitionDescriptor = _.mapExtend( null, call.definitionDescriptor );
 calls.group = _.mapExtend( null, call.group );
 calls.group.named = false;
 _.routineEr( calls, _singleArgumentHead );
@@ -917,7 +907,6 @@ new_body.defaults =
 }
 
 let _new = _.routineUnite( prop_head, new_body );
-// _new.definitionDescriptor = _.mapExtend( null, prop.definitionDescriptor );
 _new.group = _.mapExtend( null, prop.group );
 _.routineEr( _new, _singleArgumentHead );
 
@@ -935,7 +924,6 @@ news_body.defaults =
 }
 
 let _news = _.routineUnite( prop_head, news_body );
-// _news.definitionDescriptor = _.mapExtend( null, _new.definitionDescriptor );
 _news.group = _.mapExtend( null, _new.group );
 _news.group.named = false;
 _.routineEr( _news, _singleArgumentHead );
@@ -954,7 +942,6 @@ static_body.defaults =
 }
 
 let _static = _.routineUnite( prop_head, static_body );
-// _static.definitionDescriptor = _.mapExtend( null, prop.definitionDescriptor );
 _static.group = _.mapExtend( null, prop.group );
 _.routineEr( _static, _singleArgumentHead );
 
@@ -972,7 +959,6 @@ statics_body.defaults =
 }
 
 let _statics = _.routineUnite( prop_head, statics_body );
-// _statics.definitionDescriptor = _.mapExtend( null, _static.definitionDescriptor );
 _statics.group = _.mapExtend( null, _static.group );
 _statics.group.named = false;
 _.routineEr( _statics, _singleArgumentHead );
@@ -1065,32 +1051,99 @@ _.routineEr( alias );
 //
 // --
 
-function nothing_body( o )
+function nothing_functor()
 {
 
-  _.assertRoutineOptions( nothing_body, arguments );
-  o.defGroup = 'definition.unnamed';
-  o.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
-  o.kind = 'nothing';
-  return _.definition._unnamedMake( o );
+  nothing_body.group = { definition : true, named : false };
+  nothing_body.defaults =
+  {
+    ... PropOptionsLogic,
+    blueprintDepthReserve : -1,
+    blueprintDepthLimit : 1,
+    _blueprint : false,
+  }
+
+  let prototype = Object.create( null );
+  prototype.defGroup = 'definition.unnamed';
+  prototype.kind = 'nothing';
+  prototype.name = null;
+  _.mapExtend( prototype, nothing_body.defaults );
+  prototype.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
+  _.definition.retype( prototype );
+  Object.freeze( prototype );
+
+  let nothing = _.routineUnite( _head, nothing_body );
+  return nothing;
+
+  /* */
+
+  function _head( routine, args )
+  {
+    let o = args[ 0 ];
+
+    _.assert( arguments.length === 2 );
+    _.assert( args.length === 0 || args.length === 1 );
+    _.assert( o === undefined || _.mapIs( o ) );
+
+    if( !o )
+    return prototype;
+
+    _.assertMapHasOnly( o, routine.defaults );
+    return o;
+  }
+
+  /* */
+
+  function nothing_body( o )
+  {
+    if( o === prototype )
+    return prototype;
+    _.assert( o === undefined || _.mapIs( o ) || Object.getPrototypeOf( o ) === prototype ); debugger;
+    if( Object.getPrototypeOf( o ) !== prototype )
+    Object.setPrototypeOf( o, prototype );
+    Object.freeze( o );
+    _.assert( arguments.length === 1 );
+    return o;
+  }
+
+  /* */
 
   function blueprintDefinitionRewrite( op )
   {
   }
 
+  /* */
+
 }
 
-nothing_body.defaults =
-{
-  ... PropOptionsLogic,
-  blueprintDepthReserve : -1,
-  blueprintDepthLimit : 1,
-  _blueprint : false,
-}
+let nothing = nothing_functor();
 
-nothing_body.group = { definition : true, named : false };
-
-let nothing = _.routineUnite( _singleArgumentHead, nothing_body );
+// function nothing_body( o )
+// {
+//
+//   _.assertRoutineOptions( nothing_body, arguments );
+//   o.defGroup = 'definition.unnamed';
+//   o.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
+//   o.kind = 'nothing';
+//   return _.definition._unnamedMake( o );
+//
+//   function blueprintDefinitionRewrite( op )
+//   {
+//   }
+//
+// }
+//
+// nothing_body.defaults =
+// {
+//   ... PropOptionsLogic,
+//   blueprintDepthReserve : -1,
+//   blueprintDepthLimit : 1,
+//   _blueprint : false,
+// }
+//
+// nothing_body.group = { definition : true, named : false };
+//
+// let nothing = _.routineUnite( _singleArgumentHead, nothing_body );
 
 //
 
