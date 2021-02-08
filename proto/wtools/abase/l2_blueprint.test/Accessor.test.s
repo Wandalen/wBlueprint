@@ -3165,7 +3165,6 @@ function accessorValueOptions( test )
       preservingValue : env.preservingValue,
     }
     _.accessor.declareSingle( env.optionsB );
-    /* xxx : write test of reusing options for declareSingle */
 
     env.optionsC =
     {
