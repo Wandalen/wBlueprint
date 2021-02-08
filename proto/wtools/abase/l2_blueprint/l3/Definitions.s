@@ -297,7 +297,7 @@ function prop_body( o )
       addingMethods : op.definition.addingMethods,
     }
 
-    op2.needed = _.accessor._objectDeclaringIsNeeded( op2 );
+    op2.needed = _.accessor._declaringIsNeeded( op2 );
     if( op2.needed )
     {
       _.accessor.suiteNormalize( op2 );
