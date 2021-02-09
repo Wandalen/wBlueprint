@@ -47,23 +47,34 @@ Object.setPrototypeOf( Definition, null );
 Definition.prototype = Object.create( null );
 Definition.prototype.cloneShallow = function()
 {
+  if( this._blueprint === false )
+  {
+    _.assert( Object.isFrozen( this ) );
+    return this;
+  }
+
   // let result = new Definition( this );
   let result = Object.create( Object.getPrototypeOf( this ) );
-  debugger;
+  // debugger;
   Object.assign( result, this );
-  debugger;
+  // debugger;
 
   if( result._blueprint )
   result._blueprint = null;
   if( result._ )
   result._ = Object.create( null );
 
-  if( result._blueprint === false )
-  Object.freeze( result );
-  else
+  // if( result._blueprint === false )
+  // Object.freeze( result );
+  // else
   Object.preventExtensions( result );
 
   return result;
+}
+
+Definition.prototype.cloneDeep = function()
+{
+  return this.cloneShallow();
 }
 
 //

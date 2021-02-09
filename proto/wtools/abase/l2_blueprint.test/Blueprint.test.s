@@ -1602,7 +1602,7 @@ function blueprintUseSingleBlueprint( test )
   // test.true( _.prototype.hasPrototype( instance, Blueprint2.make.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.mapLike( instance ) );
+  test.true( _.mapLike_( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -1645,7 +1645,7 @@ function blueprintUseSingleBlueprint( test )
   test.true( _.prototype.hasPrototype( instance, Blueprint2.make.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.mapLike( instance ) );
+  test.true( _.mapLike_( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -1706,7 +1706,7 @@ function blueprintUseMultipleBlueprints( test )
   test.true( _.prototype.hasPrototype( instance, Blueprint3.make.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.mapLike( instance ) );
+  test.true( _.mapLike_( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1', 'field2', 'field3' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1', 'field2', 'field3' ] );
@@ -11973,8 +11973,10 @@ function defineNothingLogistic( test )
   var nothing2 = nothing.cloneShallow();
   test.true( nothing === nothing2 );
 
+  debugger;
   var nothing2 = _.entity.cloneShallow( nothing );
   test.true( nothing === nothing2 );
+  debugger;
 
   /* */
 
@@ -12666,7 +12668,7 @@ function traitTypedTrivial( test )
   test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.mapLike( instance ) );
+  test.true( _.mapLike_( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -12694,7 +12696,7 @@ function traitTypedTrivial( test )
   test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.mapLike( instance ) );
+  test.true( _.mapLike_( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -12727,7 +12729,7 @@ function traitTypedTrivial( test )
   test.true( _.prototype.hasPrototype( instance, _.Construction.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.mapLike( instance ) );
+  test.true( _.mapLike_( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17211,7 +17213,7 @@ function constructWithoutHelper( test )
   test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.mapLike( instance ) );
+  test.true( _.mapLike_( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17244,7 +17246,7 @@ function constructWithoutHelper( test )
   test.true( _.prototype.hasPrototype( instance, _.Construction.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.mapLike( instance ) );
+  test.true( _.mapLike_( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17272,7 +17274,7 @@ function constructWithoutHelper( test )
   test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.mapLike( instance ) );
+  test.true( _.mapLike_( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17305,7 +17307,7 @@ function constructWithoutHelper( test )
   test.true( _.prototype.hasPrototype( instance, _.Construction.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.mapLike( instance ) );
+  test.true( _.mapLike_( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17359,7 +17361,7 @@ function constructWithArgumentMap( test )
   test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.mapLike( instance ) );
+  test.true( _.mapLike_( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17398,7 +17400,7 @@ function constructWithArgumentMap( test )
   test.true( _.prototype.hasPrototype( instance, _.Construction.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.mapLike( instance ) );
+  test.true( _.mapLike_( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17432,7 +17434,7 @@ function constructWithArgumentMap( test )
   test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.mapLike( instance ) );
+  test.true( _.mapLike_( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17470,7 +17472,7 @@ function constructWithArgumentMap( test )
   test.true( _.prototype.hasPrototype( instance, _.Construction.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.mapLike( instance ) );
+  test.true( _.mapLike_( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17665,7 +17667,7 @@ function constructWithArgumentInstance( test )
   test.true( !_.prototype.hasPrototype( instance2, Blueprint ) );
   test.true( _.objectIs( instance2 ) );
   test.true( _.mapIs( instance2 ) );
-  test.true( _.mapLike( instance2 ) );
+  test.true( _.mapLike_( instance2 ) );
   test.true( !_.instanceIs( instance2 ) );
   test.identical( _.mapKeys( instance2 ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance2 ), [ 'field1' ] );
@@ -17708,7 +17710,7 @@ function constructWithArgumentInstance( test )
   test.true( _.prototype.hasPrototype( instance2, _.Construction.prototype ) );
   test.true( _.objectIs( instance2 ) );
   test.true( !_.mapIs( instance2 ) );
-  test.true( _.mapLike( instance2 ) );
+  test.true( _.mapLike_( instance2 ) );
   test.true( !_.instanceIs( instance2 ) );
   test.identical( _.mapKeys( instance2 ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance2 ), [ 'field1' ] );
@@ -17744,7 +17746,7 @@ function constructWithArgumentInstance( test )
   test.true( !_.prototype.hasPrototype( instance2, Blueprint ) );
   test.true( _.objectIs( instance2 ) );
   test.true( _.mapIs( instance2 ) );
-  test.true( _.mapLike( instance2 ) );
+  test.true( _.mapLike_( instance2 ) );
   test.true( !_.instanceIs( instance2 ) );
   test.identical( _.mapKeys( instance2 ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance2 ), [ 'field1' ] );
@@ -17785,7 +17787,7 @@ function constructWithArgumentInstance( test )
   test.true( _.prototype.hasPrototype( instance2, _.Construction.prototype ) );
   test.true( _.objectIs( instance2 ) );
   test.true( !_.mapIs( instance2 ) );
-  test.true( _.mapLike( instance2 ) );
+  test.true( _.mapLike_( instance2 ) );
   test.true( !_.instanceIs( instance2 ) );
   test.identical( _.mapKeys( instance2 ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance2 ), [ 'field1' ] );
@@ -18370,7 +18372,7 @@ function helperConstruct( test )
   test.true( !_.prototype.hasPrototype( instance, Blueprint1 ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.mapLike( instance ) );
+  test.true( _.mapLike_( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -18439,7 +18441,7 @@ function helperConstructAndNew( test )
   test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.mapLike( instance ) );
+  test.true( _.mapLike_( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
