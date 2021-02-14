@@ -314,7 +314,7 @@ function defineInheritTrivial( test )
     's1' : 'b1',
     's2' : 'b1',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
   var exp =
   {
     'field1' : 'b1',
@@ -357,7 +357,7 @@ function defineInheritTrivial( test )
     's2' : 'b2',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
   var exp =
   {
     'field1' : 'b1',
@@ -392,7 +392,7 @@ function defineInheritTrivial( test )
     's1' : 'b1',
     's2' : 'b1',
   }
-  var got = _.property.all( instance );
+  var got = _.property.onlyExplicit( instance );
   test.identical( got, exp );
 
   test.description = 'blueprint3'; /* */
@@ -424,7 +424,7 @@ function defineInheritTrivial( test )
     's1' : 'b1',
     's2' : 'b2'
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
   var exp =
   {
     'field1' : 'b1',
@@ -1127,7 +1127,7 @@ function blueprintUseManually( test )
     's1' : 'b1',
     's2' : 'b1',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
   var exp =
   {
     'field1' : 'b1',
@@ -1170,7 +1170,7 @@ function blueprintUseManually( test )
     's2' : 'b2',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
   var exp =
   {
     'field1' : 'b1',
@@ -1206,7 +1206,7 @@ function blueprintUseManually( test )
     's1' : 'b1',
     's2' : 'b1',
   }
-  var got = _.property.all( instance );
+  var got = _.property.onlyExplicit( instance );
   test.identical( got, exp );
 
   test.description = 'blueprint3'; /* */
@@ -1239,7 +1239,7 @@ function blueprintUseManually( test )
     's1' : 'b1',
     's2' : 'b2'
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
   var exp =
   {
     'field1' : 'b1',
@@ -1311,7 +1311,7 @@ function blueprintUseSingle( test )
     // test.true( _.prototype.each( instance2 )[ 2 ] === _.Construction.prototype );
 
     var exp = { field1 : 1 }
-    test.identical( _.property.all( instance2 ), exp );
+    test.identical( _.property.onlyExplicit( instance2 ), exp );
 
     /* */
 
@@ -1344,7 +1344,7 @@ function blueprintUseSingle( test )
     // test.true( _.prototype.each( instance2 )[ 2 ] === _.Construction.prototype );
 
     var exp = { field1 : 1 }
-    test.identical( _.property.all( instance2 ), exp );
+    test.identical( _.property.onlyExplicit( instance2 ), exp );
 
     /* */
 
@@ -1379,7 +1379,7 @@ function blueprintUseSingle( test )
     test.true( _.prototype.each( instance2 )[ 3 ] === _.Construction.prototype );
 
     var exp = { field1 : 1 }
-    test.identical( _.property.all( instance2 ), exp );
+    test.identical( _.property.onlyExplicit( instance2 ), exp );
 
     /* */
 
@@ -1409,7 +1409,7 @@ function blueprintUseSingle( test )
     test.true( _.prototype.each( instance2 )[ 3 ] === _.Construction.prototype );
 
     var exp = { field1 : 1 }
-    test.identical( _.property.all( instance2 ), exp );
+    test.identical( _.property.onlyExplicit( instance2 ), exp );
 
     /* */
 
@@ -1457,7 +1457,7 @@ function blueprintUseMultiple( test )
     test.true( _.prototype.each( instance3 )[ 3 ] === _.Construction.prototype );
 
     var exp = { field1 : 1, field2 : 2, field3 : 2, }
-    test.identical( _.property.all( instance3 ), exp );
+    test.identical( _.property.onlyExplicit( instance3 ), exp );
 
     /* */
 
@@ -1488,7 +1488,7 @@ function blueprintUseMultiple( test )
     // test.true( _.prototype.each( instance3 )[ 2 ] === _.Construction.prototype );
 
     var exp = { field1 : 1, field2 : 2, field3 : 2, }
-    test.identical( _.property.all( instance3 ), exp );
+    test.identical( _.property.onlyExplicit( instance3 ), exp );
 
     /* */
 
@@ -1520,7 +1520,7 @@ function blueprintUseMultiple( test )
     test.true( _.prototype.each( instance3 )[ 3 ] === _.Construction.prototype );
 
     var exp = { field1 : 1, field2 : 2, field3 : 2, }
-    test.identical( _.property.all( instance3 ), exp );
+    test.identical( _.property.onlyExplicit( instance3 ), exp );
 
     /* */
 
@@ -1553,7 +1553,7 @@ function blueprintUseMultiple( test )
     // test.true( _.prototype.each( instance3 )[ 2 ] === _.Construction.prototype );
 
     var exp = { field1 : 1, field2 : 2, field3 : 2, }
-    test.identical( _.property.all( instance3 ), exp );
+    test.identical( _.property.onlyExplicit( instance3 ), exp );
 
     /* */
 
@@ -1602,7 +1602,7 @@ function blueprintUseSingleBlueprint( test )
   // test.true( _.prototype.hasPrototype( instance, Blueprint2.make.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.mapLike_( instance ) );
+  test.true( _.mapLike( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -1645,7 +1645,7 @@ function blueprintUseSingleBlueprint( test )
   test.true( _.prototype.hasPrototype( instance, Blueprint2.make.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.mapLike_( instance ) );
+  test.true( _.mapLike( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -1683,7 +1683,7 @@ function blueprintUseMultipleBlueprints( test )
   test.containsOnly( instance, exp );
 
   var exp = { 'field1' : null, 'field2' : null, 'field3' : '3' };
-  var got = _.property.all( instance );
+  var got = _.property.onlyExplicit( instance );
   test.identical( got, exp );
 
   var prototypes = _.prototype.each( _.Blueprint );
@@ -1706,7 +1706,7 @@ function blueprintUseMultipleBlueprints( test )
   test.true( _.prototype.hasPrototype( instance, Blueprint3.make.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.mapLike_( instance ) );
+  test.true( _.mapLike( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1', 'field2', 'field3' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1', 'field2', 'field3' ] );
@@ -1755,7 +1755,7 @@ function blueprintUseMultipleAlternatives( test )
     var instance3 = _.blueprint.construct( Blueprint3 );
     test.identical( _.prototype.each( instance3 ).length, 4 );
     var exp = { field1 : 1, field2 : 2, field3 : 2, }
-    test.identical( _.property.all( instance3 ), exp );
+    test.identical( _.property.onlyExplicit( instance3 ), exp );
 
     /* */
 
@@ -1783,7 +1783,7 @@ function blueprintUseMultipleAlternatives( test )
     var instance3 = _.blueprint.construct( Blueprint3 );
     test.identical( _.prototype.each( instance3 ).length, 4 );
     var exp = { field1 : 1, field2 : 2, field3 : 2, }
-    test.identical( _.property.all( instance3 ), exp );
+    test.identical( _.property.onlyExplicit( instance3 ), exp );
 
     /* */
 
@@ -1811,7 +1811,7 @@ function blueprintUseMultipleAlternatives( test )
     var instance3 = _.blueprint.construct( Blueprint3 );
     test.identical( _.prototype.each( instance3 ).length, 4 );
     var exp = { field1 : 1, field2 : 2, field3 : 2, }
-    test.identical( _.property.all( instance3 ), exp );
+    test.identical( _.property.onlyExplicit( instance3 ), exp );
 
     /* */
 
@@ -2177,7 +2177,7 @@ function definePropStaticBasic( test )
     'staticField5' : { 'k' : 'staticField5' },
     'staticField6' : { 'k' : 'staticField6' }
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   test.description = 'own properties'; /* */
 
@@ -2312,7 +2312,7 @@ function definePropStaticInheritance( test )
     'StaticMethod3' : Blueprint2.prototype.StaticMethod3,
     'constructor' : Blueprint2.make
   }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
 
   test.description = 'own properites'; /* */
 
@@ -3025,7 +3025,7 @@ function definePropEnumerable( test )
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.make
   }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
 
   test.description = 'own properites'; /* */
 
@@ -3216,7 +3216,7 @@ function definePropEnumerable( test )
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.make
   }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
 
   test.description = 'own properites'; /* */
 
@@ -3406,7 +3406,7 @@ function definePropEnumerable( test )
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.make
   }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
 
   test.description = 'own properites'; /* */
 
@@ -3614,7 +3614,7 @@ function definePropWritable( test )
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.make
   }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
 
   test.description = 'own properites'; /* */
   test.identical( _.prototype.each( instance1 ).length, 4 );
@@ -3704,7 +3704,7 @@ function definePropWritable( test )
     'StaticField2' : 'ext',
   }
   var got = _.mapExtend( instance1, ext );
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
 
   test.description = 'descriptor of instance.field1';
   var got = Object.getOwnPropertyDescriptor( instance1, 'field1' );
@@ -3858,7 +3858,7 @@ function definePropWritable( test )
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.make
   }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
 
   test.description = 'own properites'; /* */
   test.identical( _.prototype.each( instance1 ).length, 4 );
@@ -3948,7 +3948,7 @@ function definePropWritable( test )
     'StaticField2' : 'ext',
   }
   var got = _.mapExtend( instance1, ext );
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
 
   test.description = 'descriptor of instance.field1';
   var got = Object.getOwnPropertyDescriptor( instance1, 'field1' );
@@ -4102,7 +4102,7 @@ function definePropWritable( test )
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.make
   }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
 
   test.description = 'own properites'; /* */
   test.identical( _.prototype.each( instance1 ).length, 4 );
@@ -4192,7 +4192,7 @@ function definePropWritable( test )
     'StaticField2' : 'ext',
   }
   test.shouldThrowErrorSync( () => _.mapExtend( instance1, ext ) );
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
 
   test.description = 'descriptor of instance.field1';
   var got = Object.getOwnPropertyDescriptor( instance1, 'field1' );
@@ -4358,7 +4358,7 @@ function definePropConfigurable( test )
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.make
   }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
 
   test.description = 'own properites'; /* */
   test.identical( _.prototype.each( instance1 ).length, 4 );
@@ -4448,7 +4448,7 @@ function definePropConfigurable( test )
     'StaticField2' : 'ext',
   }
   var got = _.mapExtend( instance1, ext );
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
 
   test.description = 'descriptor of instance.field1';
   var got = Object.getOwnPropertyDescriptor( instance1, 'field1' );
@@ -4740,7 +4740,7 @@ function definePropConfigurable( test )
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.make
   }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
 
   test.description = 'own properites'; /* */
   test.identical( _.prototype.each( instance1 ).length, 4 );
@@ -4830,7 +4830,7 @@ function definePropConfigurable( test )
     'StaticField2' : 'ext',
   }
   var got = _.mapExtend( instance1, ext );
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
 
   test.description = 'descriptor of instance.field1';
   var got = Object.getOwnPropertyDescriptor( instance1, 'field1' );
@@ -5122,7 +5122,7 @@ function definePropConfigurable( test )
     'StaticField3' : 'b2',
     'constructor' : Blueprint2.make
   }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
 
   test.description = 'own properites'; /* */
   test.identical( _.prototype.each( instance1 ).length, 4 );
@@ -5212,7 +5212,7 @@ function definePropConfigurable( test )
     'StaticField2' : 'ext',
   }
   var got = _.mapExtend( instance1, ext );
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
 
   test.description = 'descriptor of instance.field1';
   var got = Object.getOwnPropertyDescriptor( instance1, 'field1' );
@@ -5983,7 +5983,7 @@ function definePropAccessorBasic( test )
   {
     'f1' : 1,
   }
-  test.identical( _.property.all( instance1._ ), exp );
+  test.identical( _.property.onlyExplicit( instance1._ ), exp );
 
   test.description = 'instance set'; /* */
 
@@ -6002,7 +6002,7 @@ function definePropAccessorBasic( test )
   {
     'f1' : 2,
   }
-  test.identical( _.property.all( instance1._ ), exp );
+  test.identical( _.property.onlyExplicit( instance1._ ), exp );
 
   /* */
 
@@ -6031,7 +6031,7 @@ function definePropAccessorBasic( test )
   {
     'f1' : 1,
   }
-  test.identical( _.property.all( instance1._ ), exp );
+  test.identical( _.property.onlyExplicit( instance1._ ), exp );
 
   test.description = 'instance set'; /* */
 
@@ -6050,7 +6050,7 @@ function definePropAccessorBasic( test )
   {
     'f1' : 2,
   }
-  test.identical( _.property.all( instance1._ ), exp );
+  test.identical( _.property.onlyExplicit( instance1._ ), exp );
 
   /* */
 
@@ -6079,7 +6079,7 @@ function definePropAccessorBasic( test )
   {
     'f1' : 1,
   }
-  test.identical( _.property.all( instance1._ ), exp );
+  test.identical( _.property.onlyExplicit( instance1._ ), exp );
 
   test.description = 'instance set'; /* */
 
@@ -6099,7 +6099,7 @@ function definePropAccessorBasic( test )
   {
     'f1' : 2,
   }
-  test.identical( _.property.all( instance1._ ), exp );
+  test.identical( _.property.onlyExplicit( instance1._ ), exp );
 
   /* */
 
@@ -6128,7 +6128,7 @@ function definePropAccessorBasic( test )
   {
     'f1' : 1,
   }
-  test.identical( _.property.all( instance1._ ), exp );
+  test.identical( _.property.onlyExplicit( instance1._ ), exp );
 
   test.description = 'instance set'; /* */
 
@@ -6148,7 +6148,7 @@ function definePropAccessorBasic( test )
   {
     'f1' : 2,
   }
-  test.identical( _.property.all( instance1._ ), exp );
+  test.identical( _.property.onlyExplicit( instance1._ ), exp );
 
   /* */
 
@@ -6172,7 +6172,7 @@ function definePropAccessorBasic( test )
   {
     'f1' : 1,
   }
-  test.identical( _.property.all( instance1._ ), exp );
+  test.identical( _.property.onlyExplicit( instance1._ ), exp );
   test.shouldThrowErrorSync( () => instance1.f1 );
 
   test.description = 'instance set'; /* */
@@ -6187,7 +6187,7 @@ function definePropAccessorBasic( test )
   {
     'f1' : 2,
   }
-  test.identical( _.property.all( instance1._ ), exp );
+  test.identical( _.property.onlyExplicit( instance1._ ), exp );
   test.shouldThrowErrorSync( () => instance1.f1 );
 
   /* */
@@ -6222,7 +6222,7 @@ function definePropAccessorBasic( test )
   {
     'f1' : 2,
   }
-  test.identical( _.property.all( instance1._ ), exp );
+  test.identical( _.property.onlyExplicit( instance1._ ), exp );
   test.shouldThrowErrorSync( () => instance1.f1 );
 
   /* */
@@ -7324,7 +7324,7 @@ function definePropAccessorAlternativeOptions( test )
   {
     x : -70,
   }
-  test.identical( _.property.all( instance1._ ), exp );
+  test.identical( _.property.onlyExplicit( instance1._ ), exp );
   test.true( instance1.f1Grab === grab1 );
   test.true( instance1.f1Get === get1 );
   test.true( instance1.f1Put === put1 );
@@ -7359,7 +7359,7 @@ function definePropAccessorAlternativeOptions( test )
   {
     x : -70,
   }
-  test.identical( _.property.all( instance1._ ), exp );
+  test.identical( _.property.onlyExplicit( instance1._ ), exp );
   test.true( instance1.f1Grab === grab1 );
   test.true( instance1.f1Get === get1 );
   test.true( instance1.f1Put === put1 );
@@ -7393,7 +7393,7 @@ function definePropAccessorAlternativeOptions( test )
   {
     x : -70,
   }
-  test.identical( _.property.all( instance1._ ), exp );
+  test.identical( _.property.onlyExplicit( instance1._ ), exp );
   test.true( instance1.f1Grab === grab1 );
   test.true( instance1.f1Get === get1 );
   test.true( instance1.f1Put === put1 );
@@ -7423,7 +7423,7 @@ function definePropAccessorAlternativeOptions( test )
   {
     x : -70,
   }
-  test.identical( _.property.all( instance1._ ), exp );
+  test.identical( _.property.onlyExplicit( instance1._ ), exp );
   test.true( instance1.f1Grab.originalRoutine === grab1 );
   test.true( instance1.f1Get.originalRoutine === get1 );
   test.true( instance1.f1Put.originalRoutine === put1 );
@@ -7453,7 +7453,7 @@ function definePropAccessorAlternativeOptions( test )
   {
     x : -70,
   }
-  test.identical( _.property.all( instance1._ ), exp );
+  test.identical( _.property.onlyExplicit( instance1._ ), exp );
 
   test.true( instance1.f1Grab.originalRoutine === grab1 );
   test.true( instance1.f1Get.originalRoutine === get1 );
@@ -7484,7 +7484,7 @@ function definePropAccessorAlternativeOptions( test )
   {
     x : -70,
   }
-  test.identical( _.property.all( instance1._ ), exp );
+  test.identical( _.property.onlyExplicit( instance1._ ), exp );
 
   test.true( instance1.f1Grab.originalRoutine === grab1 );
   test.true( instance1.f1Get.originalRoutine === get1 );
@@ -7599,12 +7599,12 @@ function definePropAccessorStaticNonStatic( test )
   {
     'f1' : 1,
   }
-  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( instance1._, { onlyOwn : 1 } ), exp );
   var exp =
   {
     's1' : 2,
   }
-  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
 
   test.description = 'instance set f1'; /* */
 
@@ -7628,12 +7628,12 @@ function definePropAccessorStaticNonStatic( test )
   {
     'f1' : 3,
   }
-  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( instance1._, { onlyOwn : 1 } ), exp );
   var exp =
   {
     's1' : 2,
   }
-  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
 
   test.description = 'instance set s1'; /* */
 
@@ -7657,12 +7657,12 @@ function definePropAccessorStaticNonStatic( test )
   {
     'f1' : 3,
   }
-  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( instance1._, { onlyOwn : 1 } ), exp );
   var exp =
   {
     's1' : 4,
   }
-  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
 
   test.description = 'prototype set f1'; /* */
 
@@ -7686,13 +7686,13 @@ function definePropAccessorStaticNonStatic( test )
   {
     'f1' : 3,
   }
-  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( instance1._, { onlyOwn : 1 } ), exp );
   var exp =
   {
     'f1' : 5,
     's1' : 4,
   }
-  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
 
   test.description = 'prototype set s1'; /* */
 
@@ -7716,13 +7716,13 @@ function definePropAccessorStaticNonStatic( test )
   {
     'f1' : 3,
   }
-  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( instance1._, { onlyOwn : 1 } ), exp );
   var exp =
   {
     'f1' : 5,
     's1' : 6,
   }
-  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
 
   /* */
 
@@ -7769,12 +7769,12 @@ function definePropAccessorRewriting( test )
   {
     'f1' : 1,
   }
-  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
   var exp =
   {
     'f1' : 2,
   }
-  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
 
   test.description = 'instance set f1'; /* */
 
@@ -7794,17 +7794,17 @@ function definePropAccessorRewriting( test )
   {
     'f1' : 3,
   }
-  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( instance1._, { onlyOwn : 1 } ), exp );
   var exp =
   {
     'f1' : 1,
   }
-  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
   var exp =
   {
     'f1' : 3,
   }
-  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
 
   test.description = 'blueprint1.prototype set f1'; /* */
 
@@ -7824,17 +7824,17 @@ function definePropAccessorRewriting( test )
   {
     'f1' : 3,
   }
-  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( instance1._, { onlyOwn : 1 } ), exp );
   var exp =
   {
     'f1' : 5,
   }
-  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
   var exp =
   {
     'f1' : 3,
   }
-  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
 
   test.description = 'blueprint2.prototype set f1'; /* */
 
@@ -7854,17 +7854,17 @@ function definePropAccessorRewriting( test )
   {
     'f1' : 6,
   }
-  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( instance1._, { onlyOwn : 1 } ), exp );
   var exp =
   {
     'f1' : 5,
   }
-  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
   var exp =
   {
     'f1' : 6,
   }
-  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
 
   /* */
 
@@ -7901,7 +7901,7 @@ function definePropAccessorRewriting( test )
   {
     'f1' : 2,
   }
-  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
 
   test.description = 'instance set f1'; /* */
 
@@ -7951,11 +7951,11 @@ function definePropAccessorRewriting( test )
   var exp =
   {
   }
-  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
   var exp =
   {
   }
-  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
 
   test.description = 'instance set f1'; /* */
 
@@ -7975,15 +7975,15 @@ function definePropAccessorRewriting( test )
   {
     'f1' : 3,
   }
-  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( instance1._, { onlyOwn : 1 } ), exp );
   var exp =
   {
   }
-  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
   var exp =
   {
   }
-  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
 
   test.description = 'blueprint2.prototype set f1'; /* */
 
@@ -8003,16 +8003,16 @@ function definePropAccessorRewriting( test )
   {
     'f1' : 3,
   }
-  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( instance1._, { onlyOwn : 1 } ), exp );
   var exp =
   {
   }
-  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
   var exp =
   {
     'f1' : 5,
   }
-  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
 
   test.description = 'blueprint1.prototype set f1'; /* */
 
@@ -8032,17 +8032,17 @@ function definePropAccessorRewriting( test )
   {
     'f1' : 3,
   }
-  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( instance1._, { onlyOwn : 1 } ), exp );
   var exp =
   {
     'f1' : 6,
   }
-  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
   var exp =
   {
     'f1' : 5,
   }
-  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
 
   /* */
 
@@ -8096,7 +8096,7 @@ function definePropAccessorRewriting( test )
   {
     'f1' : 3,
   }
-  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( instance1._, { onlyOwn : 1 } ), exp );
 
   test.description = 'blueprint2.prototype set f1'; /* */
 
@@ -8116,7 +8116,7 @@ function definePropAccessorRewriting( test )
   {
     'f1' : 3,
   }
-  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( instance1._, { onlyOwn : 1 } ), exp );
 
   test.description = 'blueprint1.prototype set f1'; /* */
 
@@ -8136,7 +8136,7 @@ function definePropAccessorRewriting( test )
   {
     'f1' : 3,
   }
-  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( instance1._, { onlyOwn : 1 } ), exp );
 
   /* */
 
@@ -8176,16 +8176,16 @@ function definePropAccessorRewriting( test )
   {
     'f1' : 2,
   }
-  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( instance1._, { onlyOwn : 1 } ), exp );
   var exp =
   {
     'f1' : 1,
   }
-  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
   var exp =
   {
   }
-  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
 
   test.description = 'instance set f1'; /* */
 
@@ -8207,16 +8207,16 @@ function definePropAccessorRewriting( test )
   {
     'f1' : 3,
   }
-  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( instance1._, { onlyOwn : 1 } ), exp );
   var exp =
   {
     'f1' : 1,
   }
-  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
   var exp =
   {
   }
-  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
 
   test.description = 'blueprint1.prototype set f1'; /* */
 
@@ -8238,16 +8238,16 @@ function definePropAccessorRewriting( test )
   {
     'f1' : 3,
   }
-  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( instance1._, { onlyOwn : 1 } ), exp );
   var exp =
   {
     'f1' : 5,
   }
-  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
   var exp =
   {
   }
-  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
 
   test.description = 'blueprint2.prototype set f1'; /* */
 
@@ -8269,17 +8269,17 @@ function definePropAccessorRewriting( test )
   {
     'f1' : 3,
   }
-  test.identical( _.property.all( instance1._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( instance1._, { onlyOwn : 1 } ), exp );
   var exp =
   {
     'f1' : 5,
   }
-  test.identical( _.property.all( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint1.prototype._, { onlyOwn : 1 } ), exp );
   var exp =
   {
     'f1' : 6,
   }
-  test.identical( _.property.all( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( blueprint2.prototype._, { onlyOwn : 1 } ), exp );
 
   /* */
 
@@ -8863,7 +8863,7 @@ function definePropConstructionAmendWithBlueprint( test )
       test.true( _.mapIs( dstContainer ) ^ tops.typed === 1 );
 
       var exp = { f2 : 0 }
-      test.identical( _.property.all( dstContainer, { onlyEnumerable : 1 } ), exp );
+      test.identical( _.property.onlyExplicit( dstContainer, { onlyEnumerable : 1 } ), exp );
 
     }
 
@@ -9887,7 +9887,7 @@ function definePropAliasOptionOriginalContainer( test )
       'p' : '1',
       's' : '2',
     }
-    test.identical( _.mapBut( _.property.all( instance1 ), [ '_' ] ), exp );
+    test.identical( _.mapBut( _.property.onlyExplicit( instance1 ), [ '_' ] ), exp );
 
     var exp =
     {
@@ -9979,7 +9979,7 @@ function definePropAliasOptionOriginalContainer( test )
       'p' : tops.set ? '3' : '1',
       's' : '2',
     }
-    test.identical( _.mapBut( _.property.all( instance1 ), [ '_' ] ), exp );
+    test.identical( _.mapBut( _.property.onlyExplicit( instance1 ), [ '_' ] ), exp );
 
     var exp =
     {
@@ -10047,7 +10047,7 @@ function definePropAliasOptionOriginalContainer( test )
       'p' : '1',
       's' : tops.set ? '3' : '2',
     }
-    test.identical( _.mapBut( _.property.all( instance1 ), [ '_' ] ), exp );
+    test.identical( _.mapBut( _.property.onlyExplicit( instance1 ), [ '_' ] ), exp );
 
     var exp =
     {
@@ -10114,7 +10114,7 @@ function definePropAliasOptionOriginalContainer( test )
     {
       'p' : '1',
     }
-    test.identical( _.mapBut( _.property.all( instance1 ), [ '_' ] ), exp );
+    test.identical( _.mapBut( _.property.onlyExplicit( instance1 ), [ '_' ] ), exp );
 
     var exp =
     {
@@ -10206,7 +10206,7 @@ function definePropAliasOptionOriginalContainer( test )
     {
       'p' : tops.set ? '3' : '1',
     }
-    test.identical( _.mapBut( _.property.all( instance1 ), [ '_' ] ), exp );
+    test.identical( _.mapBut( _.property.onlyExplicit( instance1 ), [ '_' ] ), exp );
 
     var exp =
     {
@@ -10259,7 +10259,7 @@ function definePropAliasOptionOriginalContainer( test )
     {
       'p' : '1',
     }
-    test.identical( _.mapBut( _.property.all( instance1 ), [ '_' ] ), exp );
+    test.identical( _.mapBut( _.property.onlyExplicit( instance1 ), [ '_' ] ), exp );
 
     var exp =
     {
@@ -10438,7 +10438,7 @@ function definePropAliasConstructionAmendWithDefinition( test )
       'f1' : '11',
       'f2' : '12',
     }
-    test.identical( _.property.all( dstContainer, { onlyEnumerable : 1 } ), exp );
+    test.identical( _.property.onlyExplicit( dstContainer, { onlyEnumerable : 1 } ), exp );
     test.identical( dstContainer.s, '1' );
     test.identical( dstContainer.f2, '12' );
     test.true( dstContainer._ === undefined );
@@ -10681,7 +10681,7 @@ function definePropAliasConstructionAmendWithBlueprint( test )
       'f1' : '11',
       'f2' : '12',
     }
-    test.identical( _.property.all( dstContainer, { onlyEnumerable : 1 } ), exp );
+    test.identical( _.property.onlyExplicit( dstContainer, { onlyEnumerable : 1 } ), exp );
 
     test.identical( dstContainer.s, undefined );
     // test.identical( extension.prototype.s, '1' );
@@ -10723,7 +10723,7 @@ function definePropAliasConstructionAmendWithBlueprint( test )
       'f1' : '11',
       'f2' : '12',
     }
-    test.identical( _.property.all( dstContainer, { onlyEnumerable : 1 } ), exp );
+    test.identical( _.property.onlyExplicit( dstContainer, { onlyEnumerable : 1 } ), exp );
 
     var exp =
     {
@@ -11044,7 +11044,7 @@ function defineExtensionOrder( test )
     's1' : 'b1',
     's2' : 'b1',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   /* */
 
@@ -11078,7 +11078,7 @@ function defineExtensionOrder( test )
     's2' : 'b2',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   /* */
 
@@ -11113,7 +11113,7 @@ function defineExtensionOrder( test )
     's2' : 'b2',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   /* */
 
@@ -11148,7 +11148,7 @@ function defineExtensionOrder( test )
     's2' : 'b2',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   /* */
 
@@ -11182,7 +11182,7 @@ function defineExtensionOrder( test )
     's2' : 'b2',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   /* */
 
@@ -11216,7 +11216,7 @@ function defineExtensionOrder( test )
     's2' : 'b2',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   /* */
 
@@ -11251,7 +11251,7 @@ function defineExtensionOrder( test )
     's2' : 'b1',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   /* */
 
@@ -11286,7 +11286,7 @@ function defineExtensionOrder( test )
     's2' : 'b1',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   /* */
 
@@ -11321,7 +11321,7 @@ function defineExtensionOrder( test )
     's2' : 'b1',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   /* */
 
@@ -11356,7 +11356,7 @@ function defineExtensionOrder( test )
     's2' : 'b1',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   /* */
 
@@ -11393,7 +11393,7 @@ function defineSupplementationOrder( test )
     's1' : 'b1',
     's2' : 'b1',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   /* */
 
@@ -11427,7 +11427,7 @@ function defineSupplementationOrder( test )
     's2' : 'b2',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   /* */
 
@@ -11462,7 +11462,7 @@ function defineSupplementationOrder( test )
     's2' : 'b2',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   /* */
 
@@ -11497,7 +11497,7 @@ function defineSupplementationOrder( test )
     's2' : 'b2',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   /* */
 
@@ -11531,7 +11531,7 @@ function defineSupplementationOrder( test )
     's2' : 'b2',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   /* */
 
@@ -11565,7 +11565,7 @@ function defineSupplementationOrder( test )
     's2' : 'b2',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   /* */
 
@@ -11600,7 +11600,7 @@ function defineSupplementationOrder( test )
     's2' : 'b2',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   /* */
 
@@ -11635,7 +11635,7 @@ function defineSupplementationOrder( test )
     's2' : 'b2',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   /* */
 
@@ -11670,7 +11670,7 @@ function defineSupplementationOrder( test )
     's2' : 'b2',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   /* */
 
@@ -11705,7 +11705,7 @@ function defineSupplementationOrder( test )
     's2' : 'b2',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance ), exp );
+  test.identical( _.property.onlyExplicit( instance ), exp );
 
   /* */
 
@@ -11856,7 +11856,7 @@ function defineAmendmentPropInheritance( test )
   {
     f1 : '1',
   }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
 
   var instance2 = _.blueprint.construct( Blueprint2 );
   var exp =
@@ -11864,7 +11864,7 @@ function defineAmendmentPropInheritance( test )
     f2 : '2',
     f1 : '1',
   }
-  test.identical( _.property.all( instance2 ), exp );
+  test.identical( _.property.onlyExplicit( instance2 ), exp );
 
   var instance3 = _.blueprint.construct( Blueprint3 );
   var exp =
@@ -11873,7 +11873,7 @@ function defineAmendmentPropInheritance( test )
     f2 : '2',
     f1 : '1',
   }
-  test.identical( _.property.all( instance3 ), exp );
+  test.identical( _.property.onlyExplicit( instance3 ), exp );
 
   /* */
 
@@ -11918,7 +11918,7 @@ function defineAmendmentPropInheritance( test )
     f1 : '1',
     s1 : '1',
   }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
 
   var instance2 = _.blueprint.construct( Blueprint2 );
   var exp =
@@ -11927,7 +11927,7 @@ function defineAmendmentPropInheritance( test )
     f1 : '1',
     s2 : '2',
   }
-  test.identical( _.property.all( instance2 ), exp );
+  test.identical( _.property.onlyExplicit( instance2 ), exp );
 
   var instance3 = _.blueprint.construct( Blueprint3 );
   var exp =
@@ -11937,7 +11937,7 @@ function defineAmendmentPropInheritance( test )
     f1 : '1',
     s3 : '3',
   }
-  test.identical( _.property.all( instance3 ), exp );
+  test.identical( _.property.onlyExplicit( instance3 ), exp );
 
   /* */
 
@@ -12041,7 +12041,7 @@ function defineNothingBasic( test )
   {
     f1 : '1',
   }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.true( !Object.isExtensible( instance1 ) );
   test.true( _.mapIs( instance1 ) );
 
@@ -12069,7 +12069,7 @@ function defineNothingBasic( test )
   {
     f1 : '1',
   }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.true( !Object.isExtensible( instance1 ) );
   test.true( _.mapIs( instance1 ) );
 
@@ -12109,7 +12109,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   {
     f1 : '1',
   }
-  test.identical( _.property.all( construction1 ), exp );
+  test.identical( _.property.onlyExplicit( construction1 ), exp );
   test.true( !Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
   test.true( _.objectIs( construction1 ) );
@@ -12142,7 +12142,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   {
     f1 : '1',
   }
-  test.identical( _.property.all( construction1, { onlyEnumerable : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( construction1, { onlyEnumerable : 1 } ), exp );
   test.true( !Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
   test.true( _.objectIs( construction1 ) );
@@ -12175,7 +12175,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   {
     f1 : '1',
   }
-  test.identical( _.property.all( construction1 ), exp );
+  test.identical( _.property.onlyExplicit( construction1 ), exp );
   test.true( !Object.isExtensible( construction1 ) );
   test.true( !_.mapIs( construction1 ) );
   test.true( _.objectIs( construction1 ) );
@@ -12208,7 +12208,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   {
     f1 : '1',
   }
-  test.identical( _.property.all( construction1 ), exp );
+  test.identical( _.property.onlyExplicit( construction1 ), exp );
   test.true( !Object.isExtensible( construction1 ) );
   test.true( !_.mapIs( construction1 ) );
   test.true( _.objectIs( construction1 ) );
@@ -12242,7 +12242,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   {
     f1 : '1',
   }
-  test.identical( _.property.all( construction1 ), exp );
+  test.identical( _.property.onlyExplicit( construction1 ), exp );
   test.true( !Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
   test.true( _.objectIs( construction1 ) );
@@ -12276,7 +12276,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   {
     f1 : '1',
   }
-  test.identical( _.property.all( construction1 ), exp );
+  test.identical( _.property.onlyExplicit( construction1 ), exp );
   test.true( !Object.isExtensible( construction1 ) );
   test.true( !_.mapIs( construction1 ) );
   test.true( _.objectIs( construction1 ) );
@@ -12309,7 +12309,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   {
     f1 : '1',
   }
-  test.identical( _.property.all( construction1 ), exp );
+  test.identical( _.property.onlyExplicit( construction1 ), exp );
   test.true( !Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
   test.true( _.objectIs( construction1 ) );
@@ -12342,7 +12342,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   {
     f1 : '1',
   }
-  test.identical( _.property.all( construction1, { onlyEnumerable : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( construction1, { onlyEnumerable : 1 } ), exp );
   test.true( !Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
   test.true( _.objectIs( construction1 ) );
@@ -12376,7 +12376,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   {
     f1 : '1',
   }
-  test.identical( _.property.all( construction1 ), exp );
+  test.identical( _.property.onlyExplicit( construction1 ), exp );
   test.true( !Object.isExtensible( construction1 ) );
   test.true( !_.mapIs( construction1 ) );
   test.true( _.objectIs( construction1 ) );
@@ -12412,7 +12412,7 @@ function constructionExtendWithNothing( test )
   {
     f1 : '1',
   }
-  test.identical( _.property.all( construction1 ), exp );
+  test.identical( _.property.onlyExplicit( construction1 ), exp );
   test.true( Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
   test.true( _.objectIs( construction1 ) );
@@ -12439,7 +12439,7 @@ function constructionExtendWithNothing( test )
   {
     f1 : '1',
   }
-  test.identical( _.property.all( construction1, { onlyEnumerable : 1 } ), exp );
+  test.identical( _.property.onlyExplicit( construction1, { onlyEnumerable : 1 } ), exp );
   test.true( Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
   test.true( _.objectIs( construction1 ) );
@@ -12467,7 +12467,7 @@ function constructionExtendWithNothing( test )
   {
     f1 : '1',
   }
-  test.identical( _.property.all( construction1 ), exp );
+  test.identical( _.property.onlyExplicit( construction1 ), exp );
   test.true( Object.isExtensible( construction1 ) );
   test.true( !_.mapIs( construction1 ) );
   test.true( _.objectIs( construction1 ) );
@@ -12585,7 +12585,7 @@ function defineConstantBasic( test )
     {
       c1 : 1,
     }
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
 
     var got = Object.getOwnPropertyDescriptor( instance1, 'c1' );
     var exp =
@@ -12668,7 +12668,7 @@ function traitTypedTrivial( test )
   test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.mapLike_( instance ) );
+  test.true( _.mapLike( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -12696,7 +12696,7 @@ function traitTypedTrivial( test )
   test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.mapLike_( instance ) );
+  test.true( _.mapLike( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -12729,7 +12729,7 @@ function traitTypedTrivial( test )
   test.true( _.prototype.hasPrototype( instance, _.Construction.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.mapLike_( instance ) );
+  test.true( _.mapLike( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -12763,7 +12763,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 1 );
 
   /* - */
@@ -12776,7 +12776,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 1 );
 
   /* */
@@ -12789,7 +12789,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 1 );
 
   /* */
@@ -12802,7 +12802,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 1 );
 
   /* */
@@ -12815,7 +12815,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 1 );
 
   /* */
@@ -12828,7 +12828,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 1 );
 
   /* */
@@ -12841,7 +12841,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 1 );
 
   /* */
@@ -12854,7 +12854,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 1 );
 
   /* */
@@ -12867,7 +12867,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 1 );
 
   /* */
@@ -12880,7 +12880,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 1 );
 
   /* */
@@ -12909,7 +12909,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 1 );
 
   /* */
@@ -12922,7 +12922,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 1 );
 
   /* */
@@ -12935,7 +12935,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 1 );
 
   /* - */
@@ -12948,7 +12948,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
 
   /* */
@@ -12961,7 +12961,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
 
   /* */
@@ -12974,7 +12974,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
 
   /* */
@@ -12987,7 +12987,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
 
   /* */
@@ -13000,7 +13000,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
 
   /* */
@@ -13013,7 +13013,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
 
   /* */
@@ -13042,7 +13042,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 2 );
   test.true( _.prototype.each( instance1 )[ 0 ] === instance1 );
   test.true( _.prototype.each( instance1 )[ 1 ] === prototype2 );
@@ -13058,7 +13058,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
   test.true( _.prototype.each( instance1 )[ 0 ] === instance1 );
   test.true( _.prototype.each( instance1 )[ 2 ] === prototype2 );
@@ -13074,7 +13074,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 2 );
   test.true( _.prototype.each( instance1 )[ 0 ] === instance1 );
   test.true( _.prototype.each( instance1 )[ 1 ] === prototype2 );
@@ -13089,7 +13089,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
   test.true( _.prototype.each( instance1 )[ 0 ] === instance1 );
   test.true( _.prototype.each( instance1 )[ 2 ] === _.Construction.prototype );
@@ -13104,7 +13104,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
   test.true( _.prototype.each( instance1 )[ 0 ] === instance1 );
   test.true( _.prototype.each( instance1 )[ 2 ] === _.Construction.prototype );
@@ -13119,7 +13119,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
   test.true( _.prototype.each( instance1 )[ 0 ] === instance1 );
   test.true( _.prototype.each( instance1 )[ 2 ] === _.Construction.prototype );
@@ -13134,7 +13134,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
 
   /* */
@@ -13147,7 +13147,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
 
   /* */
@@ -13160,7 +13160,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
 
   /* */
@@ -13173,7 +13173,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
 
   /* */
@@ -13186,7 +13186,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
 
   /* */
@@ -13199,7 +13199,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
 
   /* */
@@ -13212,7 +13212,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
 
   /* */
@@ -13225,7 +13225,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
 
   /* */
@@ -13238,7 +13238,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
 
   /* */
@@ -13252,7 +13252,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 2 );
   test.true( _.prototype.each( instance1 )[ 0 ] === instance1 );
   test.true( _.prototype.each( instance1 )[ 1 ] === prototype2 );
@@ -13268,7 +13268,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 2 );
   test.true( _.prototype.each( instance1 )[ 0 ] === instance1 );
   test.true( _.prototype.each( instance1 )[ 1 ] === prototype2 );
@@ -13284,7 +13284,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
   test.true( _.prototype.each( instance1 )[ 0 ] === instance1 );
   test.true( _.prototype.each( instance1 )[ 2 ] === prototype2 );
@@ -13299,7 +13299,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
   test.true( _.prototype.each( instance1 )[ 0 ] === instance1 );
 
@@ -13313,7 +13313,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
   test.true( _.prototype.each( instance1 )[ 0 ] === instance1 );
 
@@ -13327,7 +13327,7 @@ function traitTypedBasic( test )
   });
   var instance1 = blueprint1.make();
   var exp = { f1 : 'a' }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   test.identical( _.prototype.each( instance1 ).length, 3 );
   test.true( _.prototype.each( instance1 )[ 0 ] === instance1 );
 
@@ -15534,7 +15534,7 @@ function traitConstructorBasic( test )
     'field1' : 'b1',
     'field2' : 'b1',
   }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   var exp =
   {
     constructor : instance1.constructor,
@@ -15592,7 +15592,7 @@ function traitConstructorBasic( test )
     's1' : 'b1',
     's2' : 'b1',
   }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   var exp =
   {
     'field1' : 'b1',
@@ -15627,7 +15627,7 @@ function traitConstructorBasic( test )
     's1' : 'b1',
     's2' : 'b1',
   }
-  test.identical( _.property.all( instance2 ), exp );
+  test.identical( _.property.onlyExplicit( instance2 ), exp );
   var exp =
   {
     'field1' : 'b1',
@@ -15682,7 +15682,7 @@ function traitConstructorBasic( test )
     's1' : 'b1',
     's2' : 'b1',
   }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   var exp =
   {
     'field1' : 'b1',
@@ -15717,7 +15717,7 @@ function traitConstructorBasic( test )
     's1' : 'b1',
     's2' : 'b1',
   }
-  test.identical( _.property.all( instance2 ), exp );
+  test.identical( _.property.onlyExplicit( instance2 ), exp );
   var exp =
   {
     'field1' : 'b1',
@@ -15831,7 +15831,7 @@ function traitConstructorBasic( test )
     's1' : 'b1',
     's2' : 'b1',
   }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   var exp =
   {
     'field1' : 'b1',
@@ -15866,7 +15866,7 @@ function traitConstructorBasic( test )
     's1' : 'b1',
     's2' : 'b1',
   }
-  test.identical( _.property.all( instance2 ), exp );
+  test.identical( _.property.onlyExplicit( instance2 ), exp );
   var exp =
   {
     'field1' : 'b1',
@@ -15921,7 +15921,7 @@ function traitConstructorBasic( test )
     's1' : 'b1',
     's2' : 'b1',
   }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   var exp =
   {
     'field1' : 'b1',
@@ -15956,7 +15956,7 @@ function traitConstructorBasic( test )
     's1' : 'b1',
     's2' : 'b1',
   }
-  test.identical( _.property.all( instance2 ), exp );
+  test.identical( _.property.onlyExplicit( instance2 ), exp );
   var exp =
   {
     'field1' : 'b1',
@@ -16045,7 +16045,7 @@ function traitConstructorBasic( test )
     's2' : 'b2',
     'staticField3' : 'b2',
   }
-  test.identical( _.property.all( instance1 ), exp );
+  test.identical( _.property.onlyExplicit( instance1 ), exp );
   var exp =
   {
     'field1' : 'b1',
@@ -16143,7 +16143,7 @@ function traitConstructorAmendConstruction( test )
     {
       constructor : dstContainer.constructor,
     }
-    test.identical( propertyOwn( _.property.all( dstContainer ) ), exp );
+    test.identical( propertyOwn( _.property.onlyExplicit( dstContainer ) ), exp );
 
     /* */
 
@@ -16161,7 +16161,7 @@ function traitConstructorAmendConstruction( test )
     {
       constructor : dstContainer.constructor,
     }
-    test.identical( propertyOwn( _.property.all( dstContainer ) ), exp );
+    test.identical( propertyOwn( _.property.onlyExplicit( dstContainer ) ), exp );
 
     /* */
 
@@ -16180,7 +16180,7 @@ function traitConstructorAmendConstruction( test )
     {
       constructor : tops.amending === 'extend' ? dstContainer.constructor : constructor1,
     }
-    test.identical( _.property.all( dstContainer ), exp );
+    test.identical( _.property.onlyExplicit( dstContainer ), exp );
 
     /* */
 
@@ -16226,7 +16226,7 @@ function traitConstructorAmendConstruction( test )
     {
       constructor : dstContainer.constructor,
     }
-    test.identical( propertyOwn( _.property.all( dstContainer, { onlyOwn : 1 } ) ), exp );
+    test.identical( propertyOwn( _.property.onlyExplicit( dstContainer, { onlyOwn : 1 } ) ), exp );
 
     /* */
 
@@ -16247,7 +16247,7 @@ function traitConstructorAmendConstruction( test )
     {
       constructor : dstContainer.constructor,
     }
-    test.identical( propertyOwn( _.property.all( dstContainer ) ), exp );
+    test.identical( propertyOwn( _.property.onlyExplicit( dstContainer ) ), exp );
 
     /* */
 
@@ -16270,7 +16270,7 @@ function traitConstructorAmendConstruction( test )
     {
       constructor : tops.amending === 'extend' ? dstContainer.constructor : constructor1,
     }
-    test.identical( _.property.all( dstContainer, { onlyOwn : 1 } ), exp );
+    test.identical( _.property.onlyExplicit( dstContainer, { onlyOwn : 1 } ), exp );
 
     /* */
 
@@ -16543,7 +16543,7 @@ function traitConstructorAmendConstructionAlternatives( test )
     {
       constructor : dstContainer.constructor,
     }
-    test.identical( propertyOwn( _.property.all( dstContainer ) ), exp );
+    test.identical( propertyOwn( _.property.onlyExplicit( dstContainer ) ), exp );
 
     /* */
 
@@ -16565,7 +16565,7 @@ function traitConstructorAmendConstructionAlternatives( test )
     {
       constructor : dstContainer.constructor,
     }
-    test.identical( propertyOwn( _.property.all( dstContainer ) ), exp );
+    test.identical( propertyOwn( _.property.onlyExplicit( dstContainer ) ), exp );
 
     /* */
 
@@ -16583,7 +16583,7 @@ function traitConstructorAmendConstructionAlternatives( test )
     {
       constructor : dstContainer.constructor,
     }
-    test.identical( propertyOwn( _.property.all( dstContainer ) ), exp );
+    test.identical( propertyOwn( _.property.onlyExplicit( dstContainer ) ), exp );
 
     /* */
 
@@ -16601,7 +16601,7 @@ function traitConstructorAmendConstructionAlternatives( test )
     {
       constructor : dstContainer.constructor,
     }
-    test.identical( propertyOwn( _.property.all( dstContainer ) ), exp );
+    test.identical( propertyOwn( _.property.onlyExplicit( dstContainer ) ), exp );
 
     /* */
 
@@ -16863,7 +16863,7 @@ function traitExtendableAmendConstruction( test )
     {
       a : 2,
     }
-    test.identical( _.property.all( dstConstruction ), exp );
+    test.identical( _.property.onlyExplicit( dstConstruction ), exp );
 
     /* */
 
@@ -16877,14 +16877,14 @@ function traitExtendableAmendConstruction( test )
     var exp =
     {
     }
-    test.identical( _.property.all( dstConstruction ), exp );
+    test.identical( _.property.onlyExplicit( dstConstruction ), exp );
 
     prototype.a = 2;
     var exp =
     {
       a : 2,
     }
-    test.identical( _.property.all( dstConstruction ), exp );
+    test.identical( _.property.onlyExplicit( dstConstruction ), exp );
 
     /* */
 
@@ -17213,7 +17213,7 @@ function constructWithoutHelper( test )
   test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.mapLike_( instance ) );
+  test.true( _.mapLike( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17246,7 +17246,7 @@ function constructWithoutHelper( test )
   test.true( _.prototype.hasPrototype( instance, _.Construction.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.mapLike_( instance ) );
+  test.true( _.mapLike( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17274,7 +17274,7 @@ function constructWithoutHelper( test )
   test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.mapLike_( instance ) );
+  test.true( _.mapLike( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17307,7 +17307,7 @@ function constructWithoutHelper( test )
   test.true( _.prototype.hasPrototype( instance, _.Construction.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.mapLike_( instance ) );
+  test.true( _.mapLike( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17361,7 +17361,7 @@ function constructWithArgumentMap( test )
   test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.mapLike_( instance ) );
+  test.true( _.mapLike( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17400,7 +17400,7 @@ function constructWithArgumentMap( test )
   test.true( _.prototype.hasPrototype( instance, _.Construction.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.mapLike_( instance ) );
+  test.true( _.mapLike( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17434,7 +17434,7 @@ function constructWithArgumentMap( test )
   test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.mapLike_( instance ) );
+  test.true( _.mapLike( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17472,7 +17472,7 @@ function constructWithArgumentMap( test )
   test.true( _.prototype.hasPrototype( instance, _.Construction.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.mapLike_( instance ) );
+  test.true( _.mapLike( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17667,7 +17667,7 @@ function constructWithArgumentInstance( test )
   test.true( !_.prototype.hasPrototype( instance2, Blueprint ) );
   test.true( _.objectIs( instance2 ) );
   test.true( _.mapIs( instance2 ) );
-  test.true( _.mapLike_( instance2 ) );
+  test.true( _.mapLike( instance2 ) );
   test.true( !_.instanceIs( instance2 ) );
   test.identical( _.mapKeys( instance2 ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance2 ), [ 'field1' ] );
@@ -17710,7 +17710,7 @@ function constructWithArgumentInstance( test )
   test.true( _.prototype.hasPrototype( instance2, _.Construction.prototype ) );
   test.true( _.objectIs( instance2 ) );
   test.true( !_.mapIs( instance2 ) );
-  test.true( _.mapLike_( instance2 ) );
+  test.true( _.mapLike( instance2 ) );
   test.true( !_.instanceIs( instance2 ) );
   test.identical( _.mapKeys( instance2 ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance2 ), [ 'field1' ] );
@@ -17746,7 +17746,7 @@ function constructWithArgumentInstance( test )
   test.true( !_.prototype.hasPrototype( instance2, Blueprint ) );
   test.true( _.objectIs( instance2 ) );
   test.true( _.mapIs( instance2 ) );
-  test.true( _.mapLike_( instance2 ) );
+  test.true( _.mapLike( instance2 ) );
   test.true( !_.instanceIs( instance2 ) );
   test.identical( _.mapKeys( instance2 ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance2 ), [ 'field1' ] );
@@ -17787,7 +17787,7 @@ function constructWithArgumentInstance( test )
   test.true( _.prototype.hasPrototype( instance2, _.Construction.prototype ) );
   test.true( _.objectIs( instance2 ) );
   test.true( !_.mapIs( instance2 ) );
-  test.true( _.mapLike_( instance2 ) );
+  test.true( _.mapLike( instance2 ) );
   test.true( !_.instanceIs( instance2 ) );
   test.identical( _.mapKeys( instance2 ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance2 ), [ 'field1' ] );
@@ -18372,7 +18372,7 @@ function helperConstruct( test )
   test.true( !_.prototype.hasPrototype( instance, Blueprint1 ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.mapLike_( instance ) );
+  test.true( _.mapLike( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -18441,7 +18441,7 @@ function helperConstructAndNew( test )
   test.true( !_.prototype.hasPrototype( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.mapLike_( instance ) );
+  test.true( _.mapLike( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -18801,7 +18801,7 @@ function makeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
 
     /* */
@@ -18820,7 +18820,7 @@ function makeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
 
     /* */
@@ -18841,7 +18841,7 @@ function makeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
     test.true( instance0 !== instance1 );
 
@@ -18863,7 +18863,7 @@ function makeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
     test.true( instance0 !== instance1 );
 
@@ -18884,7 +18884,7 @@ function makeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
     test.true( opts !== instance1 );
 
@@ -18905,7 +18905,7 @@ function makeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
     test.true( opts !== instance1 );
 
@@ -18925,7 +18925,7 @@ function makeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
 
     /* */
@@ -18944,7 +18944,7 @@ function makeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
 
     /* */
@@ -18963,7 +18963,7 @@ function makeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
 
     /* */
@@ -18982,7 +18982,7 @@ function makeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
 
     /* */
@@ -19003,7 +19003,7 @@ function makeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
     test.true( instance0 !== instance1 );
 
@@ -19025,7 +19025,7 @@ function makeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
     test.true( instance0 !== instance1 );
 
@@ -19046,7 +19046,7 @@ function makeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
     test.true( opts !== instance1 );
 
@@ -19067,7 +19067,7 @@ function makeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
     test.true( opts !== instance1 );
 
@@ -19087,7 +19087,7 @@ function makeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
 
     /* */
@@ -19106,7 +19106,7 @@ function makeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
 
     /* */
@@ -19341,7 +19341,7 @@ function fromAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
 
     /* */
@@ -19362,7 +19362,7 @@ function fromAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
     test.true( instance0 === instance1 );
 
@@ -19383,7 +19383,7 @@ function fromAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
     test.true( opts !== instance1 );
 
@@ -19403,7 +19403,7 @@ function fromAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
 
     /* */
@@ -19422,7 +19422,7 @@ function fromAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
 
     /* */
@@ -19443,7 +19443,7 @@ function fromAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
     test.true( instance0 === instance1 );
 
@@ -19464,7 +19464,7 @@ function fromAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
     test.true( opts !== instance1 );
 
@@ -19484,7 +19484,7 @@ function fromAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
 
     /* */
@@ -19733,7 +19733,7 @@ function retypeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
 
     /* */
@@ -19754,7 +19754,7 @@ function retypeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
     test.true( instance0 === instance1 );
 
@@ -19775,7 +19775,7 @@ function retypeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
     test.true( opts === instance1 );
 
@@ -19795,7 +19795,7 @@ function retypeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
 
     /* */
@@ -19814,7 +19814,7 @@ function retypeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
 
     /* */
@@ -19835,7 +19835,7 @@ function retypeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
     test.true( instance0 === instance1 );
 
@@ -19856,7 +19856,7 @@ function retypeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
     test.true( opts === instance1 );
 
@@ -19876,7 +19876,7 @@ function retypeAlternativeRoutinesTyped( test )
     }
     if( top.constructor )
     exp.constructor = instance1.constructor;
-    test.identical( _.property.all( instance1 ), exp );
+    test.identical( _.property.onlyExplicit( instance1 ), exp );
     test.identical( _.construction.isInstanceOf( instance1, Blueprint1 ), true );
 
     /* */
@@ -20020,7 +20020,7 @@ function retypeBasic( test )
     a : 'a2',
     b : '3',
   }
-  test.identical( _.property.all( got ), propertyOwn( exp ) );
+  test.identical( _.property.onlyExplicit( got ), propertyOwn( exp ) );
 
   /* */
 
@@ -20043,7 +20043,7 @@ function retypeBasic( test )
     a : 'a2',
     b : '3',
   }
-  test.identical( _.property.all( got ), propertyOwn( exp ) );
+  test.identical( _.property.onlyExplicit( got ), propertyOwn( exp ) );
 
   /* */
 
@@ -20067,7 +20067,7 @@ function retypeBasic( test )
     a : 'a2',
     b : '3',
   }
-  test.identical( _.property.all( got ), propertyOwn( exp ) );
+  test.identical( _.property.onlyExplicit( got ), propertyOwn( exp ) );
 
   /* */
 
@@ -20091,7 +20091,7 @@ function retypeBasic( test )
     a : 'a2',
     b : '3',
   }
-  test.identical( _.property.all( got ), propertyOwn( exp ) );
+  test.identical( _.property.onlyExplicit( got ), propertyOwn( exp ) );
 
   /* */
 
@@ -20115,7 +20115,7 @@ function retypeBasic( test )
     a : 'a2',
     b : '3',
   }
-  test.identical( _.property.all( got ), propertyOwn( exp ) );
+  test.identical( _.property.onlyExplicit( got ), propertyOwn( exp ) );
 
   /* */
 
