@@ -231,7 +231,7 @@ let Self =
   {
 
     _constant,
-    hasPrototype,
+    // hasPrototype,
     declare,
 
   },
