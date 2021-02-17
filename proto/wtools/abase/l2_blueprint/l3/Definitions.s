@@ -275,7 +275,7 @@ function prop_body( o )
     _.assert( _.boolIs( op.definition.configurable ) );
     _.assert( _.boolIs( op.definition.enumerable ) );
     _.assert( !_.boolLikeFalse( op.definition.accessor ) );
-    _.assert( !_.prototype._isStandardEntity( prototype ), 'Attempt to pollute _global_.Object.prototype' );
+    _.assert( !_.prototype._ofStandardEntity( prototype ), 'Attempt to pollute _global_.Object.prototype' );
 
     if( _global_.debugger )
     debugger;
@@ -345,7 +345,7 @@ function prop_body( o )
 
     _.assert( _.boolIs( op.definition.configurable ) );
     _.assert( _.boolIs( op.definition.enumerable ) );
-    _.assert( !_.prototype._isStandardEntity( prototype ), 'Attempt to pollute _global_.Object.prototype' );
+    _.assert( !_.prototype._ofStandardEntity( prototype ), 'Attempt to pollute _global_.Object.prototype' );
 
     if( _global_.debugger )
     debugger;
