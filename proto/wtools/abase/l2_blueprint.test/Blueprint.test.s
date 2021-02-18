@@ -11975,6 +11975,7 @@ function defineNothingLogistic( test )
 
   debugger;
   var nothing2 = _.entity.cloneShallow( nothing );
+  debugger;
   test.true( nothing === nothing2 );
   debugger;
 

@@ -45,6 +45,7 @@ function Definition( o )
 
 Object.setPrototypeOf( Definition, null );
 Definition.prototype = Object.create( null );
+Definition.prototype.constructor = Definition;
 Definition.prototype.cloneShallow = function()
 {
   if( this._blueprint === false )
