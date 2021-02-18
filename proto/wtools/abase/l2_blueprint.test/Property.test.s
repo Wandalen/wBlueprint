@@ -1,4 +1,5 @@
-( function _Property_test_s_( ) {
+( function _Property_test_s_( )
+{
 
 'use strict';
 

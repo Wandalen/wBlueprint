@@ -1,4 +1,5 @@
-( function _Traits_s_() {
+( function _Traits_s_()
+{
 
 'use strict';
 
@@ -17,10 +18,10 @@ function _pairArgumentsHead( routine, args )
 {
   let o = args[ 1 ];
 
-  if( !o )
-  o = { val : args[ 0 ] };
-  else
+  if( o )
   o.val = args[ 0 ];
+  else
+  o = { val : args[ 0 ] };
 
   o = _.routineOptions( routine, o );
 
@@ -118,13 +119,13 @@ function typed_head( routine, args )
     o = args[ 0 ];
     _.assert( args.length === 1 );
   }
-  else if( !o )
+  else if( o )
   {
-    o = { val : args[ 0 ] };
+    o.val = args[ 0 ];
   }
   else
   {
-    o.val = args[ 0 ];
+    o = { val : args[ 0 ] };
   }
 
   o = _.routineOptions( routine, o );
@@ -157,7 +158,8 @@ function typed_body( o )
   _.assert
   (
     o.val !== false || _.primitiveIs( o.prototype )
-    , () => `Trait::typed should be either not false or prototype should be [ true, false, null ], it is ${_.strType( o.prototype )}`
+    , () => `Trait::typed should be either not false or prototype should be [ true, false, null ]`
+    + `, it is ${_.strType( o.prototype )}`
   );
   _.assert( o.prototype !== null || o.val !== true, 'Object with null prototype cant be typed' );
 
@@ -165,8 +167,7 @@ function typed_body( o )
   o.blueprintForm1 = blueprintForm1;
   o.blueprintForm2 = blueprintForm2;
 
-  let allocate;
-  let retype;
+  let allocate, retype;
 
   o.kind = 'typed';
   return _.definition._traitMake( o );
@@ -290,7 +291,10 @@ function typed_body( o )
 
     if( op.primeDefinition._synthetic === true )
     {
-      op.primeDefinition._notSyntheticDefinition = secondaryDefinition._synthetic === true ? secondaryDefinition._notSyntheticDefinition : secondaryDefinition;
+      if( secondaryDefinition._synthetic === true )
+      op.primeDefinition._notSyntheticDefinition = secondaryDefinition._notSyntheticDefinition;
+      else
+      op.primeDefinition._notSyntheticDefinition = secondaryDefinition;
       /* preserve non-synthetic definition to use in case of attempt of partial supplementation */
     }
 
@@ -298,10 +302,11 @@ function typed_body( o )
     {
       if( op.primeDefinition.prototype !== _.nothing || !canRewritePrototype( op, secondaryDefinition ) )
       {
-        if( secondaryDefinition._notSyntheticDefinition !== _.nothing )
-        secondaryDefinition = secondaryDefinition._notSyntheticDefinition;
-        else return;
         /* reject partial supplementing by trait generated inheriting */
+        if( secondaryDefinition._notSyntheticDefinition === _.nothing )
+        return;
+        else
+        secondaryDefinition = secondaryDefinition._notSyntheticDefinition;
       }
     }
     else if( !_.boolIs( secondaryDefinition._synthetic ) )
@@ -335,7 +340,11 @@ function typed_body( o )
     }
     else
     {
-      if( op.primeDefinition._secondaryPrototype === _.nothing || op.primeDefinition._secondaryPrototype === op.primeDefinition.prototype )
+      if
+      (
+        op.primeDefinition._secondaryPrototype === _.nothing
+        || op.primeDefinition._secondaryPrototype === op.primeDefinition.prototype
+      )
       if( secondaryDefinition.prototype !== _.nothing )
       op.primeDefinition._secondaryPrototype = secondaryDefinition.prototype; /* qqq : cover logic of amending of prototype in case of many amendings */
     }
@@ -413,7 +422,8 @@ function typed_body( o )
     _.assert
     (
       trait.val !== false || _.primitiveIs( trait.prototype )
-      , () => `Trait::typed should be either not false or prototype should be any of [ true, false, null ], but it is ${_.strType( trait.prototype )}`
+      , () => `Trait::typed should be either not false or prototype should be any of [ true, false, null ]`
+      + `, but it is ${_.strType( trait.prototype )}`
     );
     _.assert( trait._blueprint === op.blueprint );
 
@@ -456,7 +466,7 @@ function typed_body( o )
         _.assert( _.routineIs( trait.prototype.make ) );
         _.assert
         (
-            _.objectIs( trait.prototype.prototype )
+          _.objectIs( trait.prototype.prototype )
           , `Cant use ${_.blueprint.qnameOf( trait.prototype )} as prototype. This blueprint is not prototyped.`
         );
       }
@@ -478,7 +488,7 @@ function typed_body( o )
 
     /* */
 
-    // runtime._makingTyped = !!op.blueprint.traitsMap.typed.val; 
+    // runtime._makingTyped = !!op.blueprint.traitsMap.typed.val;
 
     /* */
 
@@ -486,11 +496,11 @@ function typed_body( o )
 
     /* */
 
-    allocate = !!trait.val ? allocateTyped : allocateUntyped;
+    allocate = trait.val ? allocateTyped : allocateUntyped;
 
     /* */
 
-    retype = !!trait.val ? retypeTyped : retypeUntypedPreserving;
+    retype = trait.val ? retypeTyped : retypeUntypedPreserving;
     if( trait.val === _.maybe )
     retype = retypeMaybe;
     else if( trait.val === false && ( trait.prototype === null || trait.prototype === true ) )
@@ -546,7 +556,10 @@ function typed_body( o )
     _.assert( !!genesis.runtime.typed );
     if( genesis.construction === null )
     genesis.construction = new( _.constructorJoin( genesis.runtime.make, genesis.args ) );
-    _.assert( genesis.construction === null || !genesis.runtime.prototype || genesis.construction instanceof genesis.runtime.make );
+    _.assert
+    (
+      genesis.construction === null || !genesis.runtime.prototype || genesis.construction instanceof genesis.runtime.make
+    );
     return genesis.construction;
   }
 

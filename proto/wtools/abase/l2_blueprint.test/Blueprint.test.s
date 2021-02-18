@@ -15531,14 +15531,14 @@ function traitConstructorBasic( test )
   test.identical( _.prototype.each( instance1 ).length, 1 );
   var exp =
   {
-    constructor : instance1.constructor,
+    'constructor' : instance1.constructor,
     'field1' : 'b1',
     'field2' : 'b1',
   }
   test.identical( _.property.onlyExplicit( instance1 ), exp );
   var exp =
   {
-    constructor : instance1.constructor,
+    'constructor' : instance1.constructor,
     'field1' : 'b1',
     'field2' : 'b1',
   }
@@ -15553,7 +15553,7 @@ function traitConstructorBasic( test )
   test.identical( _.prototype.each( instance2 ).length, 1 );
   var exp =
   {
-    constructor : instance2.constructor,
+    'constructor' : instance2.constructor,
     'field1' : 'b1',
     'field2' : 'b1',
   }
@@ -15587,7 +15587,7 @@ function traitConstructorBasic( test )
   test.identical( _.prototype.each( instance1 ).length, 3 );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
+    'constructor' : Blueprint1.prototype.constructor,
     'field1' : 'b1',
     'field2' : 'b1',
     's1' : 'b1',
@@ -15602,7 +15602,7 @@ function traitConstructorBasic( test )
   test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
+    'constructor' : Blueprint1.prototype.constructor,
     's1' : 'b1',
     's2' : 'b1',
   }
@@ -15622,7 +15622,7 @@ function traitConstructorBasic( test )
   test.identical( _.prototype.each( instance2 ).length, 3 );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
+    'constructor' : Blueprint1.prototype.constructor,
     'field1' : 'b1',
     'field2' : 'b1',
     's1' : 'b1',
@@ -15637,7 +15637,7 @@ function traitConstructorBasic( test )
   test.identical( propertyOwn( _.prototype.each( instance2 )[ 0 ] ), exp );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
+    'constructor' : Blueprint1.prototype.constructor,
     's1' : 'b1',
     's2' : 'b1',
   }
@@ -15677,7 +15677,7 @@ function traitConstructorBasic( test )
   test.identical( _.prototype.each( instance1 ).length, 3 );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
+    'constructor' : Blueprint1.prototype.constructor,
     'field1' : 'b1',
     'field2' : 'b1',
     's1' : 'b1',
@@ -15692,7 +15692,7 @@ function traitConstructorBasic( test )
   test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
+    'constructor' : Blueprint1.prototype.constructor,
     's1' : 'b1',
     's2' : 'b1',
   }
@@ -15712,7 +15712,7 @@ function traitConstructorBasic( test )
   test.identical( _.prototype.each( instance2 ).length, 3 );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
+    'constructor' : Blueprint1.prototype.constructor,
     'field1' : 'b1',
     'field2' : 'b1',
     's1' : 'b1',
@@ -15727,7 +15727,7 @@ function traitConstructorBasic( test )
   test.identical( propertyOwn( _.prototype.each( instance2 )[ 0 ] ), exp );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
+    'constructor' : Blueprint1.prototype.constructor,
     's1' : 'b1',
     's2' : 'b1',
   }
@@ -15765,12 +15765,11 @@ function traitConstructorBasic( test )
   {
     'field1' : 'b1',
     'field2' : 'b1',
-    // constructor : instance1.constructor,
   }
   test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
+    'constructor' : Blueprint1.prototype.constructor,
     's1' : 'b1',
     's2' : 'b1',
   }
@@ -15785,14 +15784,13 @@ function traitConstructorBasic( test )
   test.identical( _.prototype.each( instance2 ).length, 3 );
   var exp =
   {
-    // constructor : instance2.constructor,
     'field1' : 'b1',
     'field2' : 'b1',
   }
   test.identical( propertyOwn( _.prototype.each( instance2 )[ 0 ] ), exp );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
+    'constructor' : Blueprint1.prototype.constructor,
     's1' : 'b1',
     's2' : 'b1',
   }
@@ -15826,7 +15824,7 @@ function traitConstructorBasic( test )
   test.identical( _.prototype.each( instance1 ).length, 3 );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
+    'constructor' : Blueprint1.prototype.constructor,
     'field1' : 'b1',
     'field2' : 'b1',
     's1' : 'b1',
@@ -15841,7 +15839,7 @@ function traitConstructorBasic( test )
   test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
+    'constructor' : Blueprint1.prototype.constructor,
     's1' : 'b1',
     's2' : 'b1',
   }
@@ -15861,7 +15859,7 @@ function traitConstructorBasic( test )
   test.identical( _.prototype.each( instance2 ).length, 3 );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
+    'constructor' : Blueprint1.prototype.constructor,
     'field1' : 'b1',
     'field2' : 'b1',
     's1' : 'b1',
@@ -15876,7 +15874,7 @@ function traitConstructorBasic( test )
   test.identical( propertyOwn( _.prototype.each( instance2 )[ 0 ] ), exp );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
+    'constructor' : Blueprint1.prototype.constructor,
     's1' : 'b1',
     's2' : 'b1',
   }
@@ -15916,7 +15914,7 @@ function traitConstructorBasic( test )
   test.identical( _.prototype.each( instance1 ).length, 3 );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
+    'constructor' : Blueprint1.prototype.constructor,
     'field1' : 'b1',
     'field2' : 'b1',
     's1' : 'b1',
@@ -15931,7 +15929,7 @@ function traitConstructorBasic( test )
   test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
+    'constructor' : Blueprint1.prototype.constructor,
     's1' : 'b1',
     's2' : 'b1',
   }
@@ -15951,7 +15949,7 @@ function traitConstructorBasic( test )
   test.identical( _.prototype.each( instance2 ).length, 3 );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
+    'constructor' : Blueprint1.prototype.constructor,
     'field1' : 'b1',
     'field2' : 'b1',
     's1' : 'b1',
@@ -15966,7 +15964,7 @@ function traitConstructorBasic( test )
   test.identical( propertyOwn( _.prototype.each( instance2 )[ 0 ] ), exp );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
+    'constructor' : Blueprint1.prototype.constructor,
     's1' : 'b1',
     's2' : 'b1',
   }
@@ -16038,7 +16036,7 @@ function traitConstructorBasic( test )
   test.identical( _.prototype.each( instance1 ).length, 4 );
   var exp =
   {
-    constructor : Blueprint2.prototype.constructor,
+    'constructor' : Blueprint2.prototype.constructor,
     'field1' : 'b1',
     'field2' : 'b2',
     'field3' : 'b2',
@@ -16056,14 +16054,14 @@ function traitConstructorBasic( test )
   test.identical( propertyOwn( _.prototype.each( instance1 )[ 0 ] ), exp );
   var exp =
   {
-    constructor : Blueprint2.prototype.constructor,
+    'constructor' : Blueprint2.prototype.constructor,
     's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( propertyOwn( _.prototype.each( instance1 )[ 1 ] ), exp );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
+    'constructor' : Blueprint1.prototype.constructor,
     's1' : 'b1',
     's2' : 'b1',
   }
@@ -16089,14 +16087,14 @@ function traitConstructorBasic( test )
   test.identical( propertyOwn( _.prototype.each( instance2 )[ 0 ] ), exp );
   var exp =
   {
-    constructor : Blueprint2.prototype.constructor,
+    'constructor' : Blueprint2.prototype.constructor,
     's2' : 'b2',
     'staticField3' : 'b2',
   }
   test.identical( propertyOwn( _.prototype.each( instance2 )[ 1 ] ), exp );
   var exp =
   {
-    constructor : Blueprint1.prototype.constructor,
+    'constructor' : Blueprint1.prototype.constructor,
     's1' : 'b1',
     's2' : 'b1',
   }
@@ -16514,7 +16512,7 @@ function traitConstructorAmendConstructionAlternatives( test )
     var extension = _.trait.constructor();
     var dstContainer = Object.create( null );
 
-    _.construction[ tops.amending ]( dstContainer, extension ),
+    _.construction[ tops.amending ]( dstContainer, extension );
 
     test.true( _.routineIs( dstContainer.constructor ) );
     test.identical( dstContainer.constructor.name, 'Construction' );
@@ -17144,7 +17142,11 @@ function genericDefineLogistic( test )
       test.true( blueprint2.namedMap.c1 === undefined );
       test.true( blueprint2.namedMap.c2 === undefined );
 
-      test.identical( new Set( _.mapAllKeys( blueprint1.traitsMap[ tops.name ] ) ), new Set( _.mapAllKeys( blueprint2.traitsMap[ tops.name ] ) ) );
+      test.identical
+      (
+        new Set( _.mapAllKeys( blueprint1.traitsMap[ tops.name ] ) ),
+        new Set( _.mapAllKeys( blueprint2.traitsMap[ tops.name ] ) )
+      );
     }
     else if( tops.def.group.named )
     {
@@ -17152,7 +17154,11 @@ function genericDefineLogistic( test )
       test.true( blueprint2.namedMap.c2 !== def );
       test.true( Object.isFrozen( blueprint2.namedMap.c2 ) );
 
-      test.identical( new Set( _.mapAllKeys( blueprint1.namedMap.c1 ) ), new Set( _.mapAllKeys( blueprint2.namedMap.c2 ) ) );
+      test.identical
+      (
+        new Set( _.mapAllKeys( blueprint1.namedMap.c1 ) ),
+        new Set( _.mapAllKeys( blueprint2.namedMap.c2 ) )
+      );
     }
     else
     {
@@ -19785,7 +19791,7 @@ function retypeAlternativeRoutinesTyped( test )
     test.case = `Blueprint.${top.method}( null )`;
     var Blueprint1 = _.Blueprint
     ({
-      typed : _.trait.typed({ val : true, }),
+      typed : _.trait.typed({ val : true }),
       constructor : _.trait.constructor( top.constructor ),
       a : 1,
     });

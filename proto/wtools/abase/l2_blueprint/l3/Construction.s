@@ -1,4 +1,5 @@
-( function _Construction_s_() {
+( function _Construction_s_()
+{
 
 'use strict';
 
@@ -151,7 +152,11 @@ function supplement( dstConstruction, src )
 function _amendCant( construction, definition, key )
 {
   debugger;
-  throw _.err( `Definition::${definition.kind} cant extend created construction after initialization. Use this definition during initialization only.` );
+  throw _.err
+  (
+    `Definition::${definition.kind} cant extend created construction after initialization.`
+    + ` Use this definition during initialization only.`
+  );
 }
 
 // --

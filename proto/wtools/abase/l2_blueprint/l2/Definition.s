@@ -1,4 +1,5 @@
-( function _Definition_s_() {
+( function _Definition_s_()
+{
 
 'use strict';
 

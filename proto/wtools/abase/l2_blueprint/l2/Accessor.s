@@ -1,4 +1,5 @@
-( function _Accessor_s_() {
+( function _Accessor_s_()
+{
 
 'use strict';
 
@@ -166,7 +167,8 @@ function _normalizedAsuiteForm_body( o )
   if( o.suite )
   _.assertMapHasOnly( o.suite, _.accessor.AmethodTypes );
 
-  for( let k in o.normalizedAsuite, _.accessor.AmethodTypesMap )
+  // for( let k in o.normalizedAsuite, _.accessor.AmethodTypesMap )
+  for( let k in _.accessor.AmethodTypesMap )
   methodNormalize( k );
 
   _.assert( o.writable !== false || !o.normalizedAsuite.set );
@@ -279,7 +281,7 @@ function _normalizedAsuiteForm_body( o )
     let capitalName = _.strCapitalize( name );
     _.assert
     (
-         o.normalizedAsuite[ name ] === null
+      o.normalizedAsuite[ name ] === null
       || _.boolLike( o.normalizedAsuite[ name ] )
       || _.routineIs( o.normalizedAsuite[ name ] )
       || _.definitionIs( o.normalizedAsuite[ name ] )
@@ -841,7 +843,8 @@ function _objectSetValue( o )
   _.assertMapHasAll( o, _objectSetValue.defaults );
 
   let descriptor = Object.getOwnPropertyDescriptor( o.object, o.name );
-  if( descriptor && descriptor.configurable && descriptor.get == undefined && descriptor.set === undefined )
+  // if( descriptor && descriptor.configurable && descriptor.get == undefined && descriptor.set === undefined ) /* yyy */
+  if( descriptor && descriptor.configurable && descriptor.get === undefined && descriptor.set === undefined )
   delete o.object[ o.name ];
 
   let val2 = _.escape.right( o.val );
@@ -1417,7 +1420,7 @@ function declareMultiple_body( o )
 
   let names2 = Object.getOwnPropertySymbols( o.names );
   for( let n = 0 ; n < names2.length ; n++ )
-  result[ names2[ n ] ] = declare( names2[ n ], o.names[ names2[ n ] ],  );
+  result[ names2[ n ] ] = declare( names2[ n ], o.names[ names2[ n ] ] );
 
   return result;
 
@@ -1516,10 +1519,10 @@ function forbid_body( o )
   _.assert( _.routineIs( _constructor ) || _constructor === null );
   if( !o.protoName )
   o.protoName = ( _constructor ? ( _constructor.name || _constructor._name || '' ) : '' ) + '.';
-  if( !o.message )
-  o.message = 'is deprecated';
-  else
+  if( o.message )
   o.message = _.arrayIs( o.message ) ? o.message.join( ' : ' ) : o.message;
+  else
+  o.message = 'is deprecated';
 
   /* property */
 

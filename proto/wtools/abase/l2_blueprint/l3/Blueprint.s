@@ -1,4 +1,5 @@
-( function _Blueprint_s_() {
+( function _Blueprint_s_()
+{
 
 'use strict';
 
@@ -318,7 +319,7 @@ function _amend( o )
     else if( _.blueprint.isDefinitive( src ) )
     amendWithBlueprint1( src, name );
     else if( _.mapIs( src ) )
-    amendWithMap(  src, name );
+    amendWithMap( src, name );
     else if( _.definitionIs( src ) )
     amendWithDefinition( src, name );
     else _.assert( 0, `Not clear how to amend blueprint by the amendment ${_.strType( src )}` );
@@ -465,7 +466,9 @@ function _amend( o )
 
     srcDefinition = definitionCloneMaybe( srcDefinition );
 
-    let blueprintDefinitionRewrite2 = ( dstDefinition && dstDefinition.blueprintDefinitionRewrite ) || ( srcDefinition && srcDefinition.blueprintDefinitionRewrite );
+    let blueprintDefinitionRewrite2 =
+         ( dstDefinition && dstDefinition.blueprintDefinitionRewrite )
+      || ( srcDefinition && srcDefinition.blueprintDefinitionRewrite );
 
     _.assert( _.strDefined( srcDefinition.name ) );
 
@@ -522,7 +525,9 @@ function _amend( o )
 
     srcDefinition = definitionCloneMaybe( srcDefinition );
 
-    let blueprintDefinitionRewrite2 = ( dstDefinition && dstDefinition.blueprintDefinitionRewrite ) || ( srcDefinition && srcDefinition.blueprintDefinitionRewrite );
+    let blueprintDefinitionRewrite2 =
+       ( dstDefinition && dstDefinition.blueprintDefinitionRewrite )
+    || ( srcDefinition && srcDefinition.blueprintDefinitionRewrite );
 
     let o2 = _.mapExtend( null, o );
     o2.blueprintDefinitionRewrite = blueprintUnnamedDefinitionRewrite;
@@ -570,7 +575,9 @@ function _amend( o )
     srcDefinition = definitionCloneMaybe( srcDefinition );
 
     let dstDefinition = o.blueprint.traitsMap[ srcDefinition.kind ] || null;
-    let blueprintDefinitionRewrite2 = ( dstDefinition && dstDefinition.blueprintDefinitionRewrite ) || ( srcDefinition && srcDefinition.blueprintDefinitionRewrite );
+    let blueprintDefinitionRewrite2 =
+         ( dstDefinition && dstDefinition.blueprintDefinitionRewrite )
+      || ( srcDefinition && srcDefinition.blueprintDefinitionRewrite );
 
     _.assert( dstDefinition === null || _.definitionIs( dstDefinition ) );
 
@@ -795,7 +802,12 @@ function _validate( blueprint )
     _.routineIs( blueprint._practiceMap.retype )
     , `Each blueprint should have handler::retype, but definition::${blueprint.name} does not have`
   );
-  _.assert( !blueprint.traitsMap.typed || blueprint.typed === blueprint.traitsMap.typed.val || blueprint.traitsMap.typed.val === _.maybe );
+  _.assert
+  (
+    !blueprint.traitsMap.typed
+    || blueprint.typed === blueprint.traitsMap.typed.val
+    || blueprint.traitsMap.typed.val === _.maybe
+  );
 
   _.blueprint.eachDefinition( blueprint, ( blueprint, definition, key ) =>
   {

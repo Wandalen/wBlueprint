@@ -73,10 +73,10 @@ function _pairArgumentsHead( routine, args )
 {
   let o = args[ 1 ];
 
-  if( !o )
-  o = { val : args[ 0 ] };
-  else
+  if( o )
   o.val = args[ 0 ];
+  else
+  o = { val : args[ 0 ] };
 
   o = _.routineOptions( routine, o );
 
@@ -215,7 +215,7 @@ function prop_body( o )
         name : op.propName,
         amending : op.amending,
       }
-      if( !!op.definition.accessor )
+      if( op.definition.accessor )
       declareStaticWithAccessor( op2 );
       else
       declareStaticWithoutAccessor( op2 );
@@ -226,7 +226,7 @@ function prop_body( o )
       return;
     }
 
-    if( !!op.definition.accessor )
+    if( op.definition.accessor )
     {
       declareWithAccessor( op.blueprint, op.definition );
     }
@@ -244,7 +244,10 @@ function prop_body( o )
       else
       op.blueprint.propsExtension[ op.propName ] = _.escape.right( op.definition.val );
     }
-    else if( op.definition.enumerable && op.definition.configurable && ( op.definition.writable || op.definition.writable === null ) )
+    else if
+    (
+      op.definition.enumerable && op.definition.configurable && ( op.definition.writable || op.definition.writable === null )
+    )
     {
       declareOrdinary( op.blueprint, op.definition );
     }
@@ -431,7 +434,13 @@ function prop_body( o )
     constructionInit = constructionInitMaybe;
     else if( blueprint.traitsMap.typed.val === true && blueprint.prototype )
     constructionInit = constructionInitTyped;
-    else if( blueprint.traitsMap.typed.val === false || blueprint.prototype === null || blueprint.traitsMap.typed.val && !blueprint.prototype )
+    else if
+    (
+      blueprint.traitsMap.typed.val === false
+      || blueprint.prototype === null
+      || blueprint.traitsMap.typed.val
+      && !blueprint.prototype
+    )
     constructionInit = constructionInitUntyped;
     else _.assert( 0 );
 
@@ -599,8 +608,12 @@ function prop_body( o )
 
   /* */
 
-  function valFrom( object, name, amending, val )
+  function valFrom( /* object, name, amending, val */ )
   {
+    let object = arguments[ 0 ];
+    let name = arguments[ 1 ];
+    let amending = arguments[ 2 ];
+    let val = arguments[ 3 ];
     let val2;
     if( amending === 'supplement' && Object.hasOwnProperty.call( object, name ) )
     {
@@ -1365,7 +1378,13 @@ function inherit_body( o )
       if( prototype )
       result[ add ]( _.trait.typed( definition.val.traitsMap.typed.val || true, { prototype, new : true, _synthetic : true } ) );
       else
-      result[ add ]( _.trait.typed( definition.val.traitsMap.typed.val, { prototype : definition.val.traitsMap.typed.prototype, _synthetic : true } ) );
+      result[ add ]
+      (
+        _.trait.typed
+        (
+          definition.val.traitsMap.typed.val, { prototype : definition.val.traitsMap.typed.prototype, _synthetic : true }
+        )
+      );
     }
 
     return _.blueprint._amend
