@@ -1,4 +1,5 @@
-( function _Blueprint_test_s_( ) {
+( function _Blueprint_test_s_( )
+{
 
 'use strict';
 
@@ -45,7 +46,7 @@ function eachKindOfProp()
 {
   let result = Object.create( null );
 
-  add({ propKind : 'valToIns:val', prop : _.define.prop( 1 , { valToIns : 'val' } ) });
+  add({ propKind : 'valToIns:val', prop : _.define.prop( 1, { valToIns : 'val' } ) });
   add({ propKind : 'valToIns:shallow', prop : _.define.prop( 1, { valToIns : 'shallow' } ) });
   add({ propKind : 'configurable:0', prop : _.define.prop( 1, { configurable : 0 } ) });
   add({ propKind : 'get:1, set:1', prop : _.define.prop( 1, { get : 1, set : 1 } ) });
@@ -83,8 +84,8 @@ function eachDefine( o )
     shallow : () => _.define.shallow( 1 ),
     deep : () => _.define.deep( 1 ),
     call : () => _.define.call( () => 1 ),
-    'new' : () => _.define.new( function(){} ),
-    'static' : () => _.define.static( 1 ),
+    new : () => _.define.new( function(){} ),
+    static : () => _.define.static( 1 ),
     alias : () => _.define.alias( 'b1' ),
 
     props : () => _.define.props({ a : 1, b : 1 }),
@@ -92,8 +93,8 @@ function eachDefine( o )
     shallows : () => _.define.deeps({ a : 1, b : 1 }),
     deeps : () => _.define.deeps({ a : 1, b : 1 }),
     calls : () => _.define.calls({ a : () => 1, b : () => 1 }),
-    'news' : () => _.define.news({ a : function(){}, b : function(){} }),
-    'statics' : () => _.define.statics({ a : 1, b : 1 }),
+    news : () => _.define.news({ a : function(){}, b : function(){} }),
+    statics : () => _.define.statics({ a : 1, b : 1 }),
 
     typed : () => _.trait.typed(),
     constructor : () => _.trait.constructor(),
@@ -399,11 +400,11 @@ function defineInheritTrivial( test )
 
   var Blueprint3 = _.Blueprint
   ({
-    inherit : _.define.inherit( Blueprint2 ),
+    'inherit' : _.define.inherit( Blueprint2 ),
     'field3' : 'b3',
     'field4' : 'b3',
-    staticField3 : s( 'b3' ),
-    staticField4 : s( 'b3' ),
+    'staticField3' : s( 'b3' ),
+    'staticField4' : s( 'b3' ),
   });
 
   var instance = Blueprint3.make();
@@ -494,7 +495,7 @@ function defineInheritTrivial( test )
 
   var Blueprint3 = _.Blueprint
   ({
-    inherit : _.define.inherit( Blueprint2 ),
+    'inherit' : _.define.inherit( Blueprint2 ),
     'field3' : 'b3',
     'field4' : 'b3',
   });
@@ -557,7 +558,7 @@ function defineInheritTrivial( test )
 
   var Blueprint3 = _.Blueprint
   ({
-    inherit : _.define.inherit( Blueprint2 ),
+    'inherit' : _.define.inherit( Blueprint2 ),
     'field3' : 'b3',
     'field4' : 'b3',
   });
@@ -621,8 +622,8 @@ function defineInheritTrivial( test )
 
   var Blueprint3 = _.Blueprint
   ({
-    inherit : _.define.inherit( Blueprint2 ),
-    typed : _.trait.typed( true ),
+    'inherit' : _.define.inherit( Blueprint2 ),
+    'typed' : _.trait.typed( true ),
     'field3' : 'b3',
     'field4' : 'b3',
   });
@@ -687,7 +688,7 @@ function defineInheritTrivial( test )
 
   var Blueprint3 = _.Blueprint
   ({
-    inherit : _.define.inherit( Blueprint2 ),
+    'inherit' : _.define.inherit( Blueprint2 ),
     'field3' : 'b3',
     'field4' : 'b3',
   });
@@ -758,7 +759,8 @@ function defineInheritTraitTyped( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:false, by typed2:true`;
+    test.case =
+`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:false, by typed2:true`;
 
     tops.typed2 = true;
     tops.prototype = false;
@@ -781,7 +783,8 @@ function defineInheritTraitTyped( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:false, by typed2:maybe`;
+    test.case =
+`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:false, by typed2:maybe`;
 
     tops.typed2 = _.maybe;
     tops.prototype = false;
@@ -804,7 +807,8 @@ function defineInheritTraitTyped( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:false, by typed2:false`;
+    test.case =
+`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:false, by typed2:false`;
 
     tops.typed2 = false;
     tops.prototype = false;
@@ -818,7 +822,8 @@ function defineInheritTraitTyped( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:null, by typed2:true`;
+    test.case =
+`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:null, by typed2:true`;
 
     if( tops.typed1 !== true )
     {
@@ -845,7 +850,8 @@ function defineInheritTraitTyped( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:null, by typed2:maybe`;
+    test.case =
+`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:null, by typed2:maybe`;
 
     if( tops.typed1 !== true )
     {
@@ -872,7 +878,8 @@ function defineInheritTraitTyped( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:null, by typed2:false`;
+    test.case =
+`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:null, by typed2:false`;
 
     if( tops.typed1 !== true )
     {
@@ -888,7 +895,8 @@ function defineInheritTraitTyped( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:true, by typed2:true`;
+    test.case =
+`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:true, by typed2:true`;
 
     tops.typed2 = true;
     tops.prototype = true;
@@ -934,7 +942,8 @@ function defineInheritTraitTyped( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:true, by typed2:false`;
+    test.case =
+`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:true, by typed2:false`;
 
     tops.typed2 = false;
     tops.prototype = true;
@@ -947,7 +956,8 @@ function defineInheritTraitTyped( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:true`;
+    test.case =
+`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:true`;
 
     if( tops.typed1 !== false )
     {
@@ -984,7 +994,8 @@ function defineInheritTraitTyped( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:maybe`;
+    test.case =
+`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:maybe`;
 
     if( tops.typed1 !== false )
     {
@@ -1021,7 +1032,8 @@ function defineInheritTraitTyped( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:false`;
+    test.case =
+`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:false`;
 
     if( tops.typed1 !== false )
     {
@@ -1213,12 +1225,12 @@ function blueprintUseManually( test )
 
   var Blueprint3 = _.Blueprint
   ({
-    extend : _.define.extension( Blueprint2 ),
-    typed : _.trait.typed({ val : 1, prototype : Blueprint2 }),
+    'extend' : _.define.extension( Blueprint2 ),
+    'typed' : _.trait.typed({ val : 1, prototype : Blueprint2 }),
     'field3' : 'b3',
     'field4' : 'b3',
-    staticField3 : s( 'b3' ),
-    staticField4 : s( 'b3' ),
+    'staticField3' : s( 'b3' ),
+    'staticField4' : s( 'b3' ),
   });
 
   var instance = Blueprint3.make();
@@ -1456,7 +1468,7 @@ function blueprintUseMultiple( test )
     test.true( _.prototype.each( instance3 )[ 2 ] === Blueprint2.prototype );
     test.true( _.prototype.each( instance3 )[ 3 ] === _.Construction.prototype );
 
-    var exp = { field1 : 1, field2 : 2, field3 : 2, }
+    var exp = { field1 : 1, field2 : 2, field3 : 2 }
     test.identical( _.property.onlyExplicit( instance3 ), exp );
 
     /* */
@@ -1487,7 +1499,7 @@ function blueprintUseMultiple( test )
     // test.true( _.prototype.each( instance3 )[ 1 ] === Blueprint3.prototype );
     // test.true( _.prototype.each( instance3 )[ 2 ] === _.Construction.prototype );
 
-    var exp = { field1 : 1, field2 : 2, field3 : 2, }
+    var exp = { field1 : 1, field2 : 2, field3 : 2 }
     test.identical( _.property.onlyExplicit( instance3 ), exp );
 
     /* */
@@ -1519,7 +1531,7 @@ function blueprintUseMultiple( test )
     test.true( _.prototype.each( instance3 )[ 2 ] === Blueprint2.prototype );
     test.true( _.prototype.each( instance3 )[ 3 ] === _.Construction.prototype );
 
-    var exp = { field1 : 1, field2 : 2, field3 : 2, }
+    var exp = { field1 : 1, field2 : 2, field3 : 2 }
     test.identical( _.property.onlyExplicit( instance3 ), exp );
 
     /* */
@@ -1552,7 +1564,7 @@ function blueprintUseMultiple( test )
     // test.true( _.prototype.each( instance3 )[ 1 ] === Blueprint3.prototype );
     // test.true( _.prototype.each( instance3 )[ 2 ] === _.Construction.prototype );
 
-    var exp = { field1 : 1, field2 : 2, field3 : 2, }
+    var exp = { field1 : 1, field2 : 2, field3 : 2 }
     test.identical( _.property.onlyExplicit( instance3 ), exp );
 
     /* */
@@ -1754,7 +1766,7 @@ function blueprintUseMultipleAlternatives( test )
 
     var instance3 = _.blueprint.construct( Blueprint3 );
     test.identical( _.prototype.each( instance3 ).length, 4 );
-    var exp = { field1 : 1, field2 : 2, field3 : 2, }
+    var exp = { field1 : 1, field2 : 2, field3 : 2 }
     test.identical( _.property.onlyExplicit( instance3 ), exp );
 
     /* */
@@ -1782,7 +1794,7 @@ function blueprintUseMultipleAlternatives( test )
 
     var instance3 = _.blueprint.construct( Blueprint3 );
     test.identical( _.prototype.each( instance3 ).length, 4 );
-    var exp = { field1 : 1, field2 : 2, field3 : 2, }
+    var exp = { field1 : 1, field2 : 2, field3 : 2 }
     test.identical( _.property.onlyExplicit( instance3 ), exp );
 
     /* */
@@ -1810,7 +1822,7 @@ function blueprintUseMultipleAlternatives( test )
 
     var instance3 = _.blueprint.construct( Blueprint3 );
     test.identical( _.prototype.each( instance3 ).length, 4 );
-    var exp = { field1 : 1, field2 : 2, field3 : 2, }
+    var exp = { field1 : 1, field2 : 2, field3 : 2 }
     test.identical( _.property.onlyExplicit( instance3 ), exp );
 
     /* */
@@ -1928,7 +1940,7 @@ function defineProp( test )
     {
       a : 2
     }
-    var options = { val2 : { a : 2 }, }
+    var options = { val2 : { a : 2 } }
     var instance1 = _.blueprint.construct( options )
     test.identical( instance1, exp );
     test.true( !!options.val2.a );
@@ -1943,7 +1955,7 @@ function defineProp( test )
   if( !Config.debug )
   return;
 
-  test.shouldThrowErrorSync( () => _.blueprint.construct({ val2 : [ 2, 2 ], }) );
+  test.shouldThrowErrorSync( () => _.blueprint.construct({ val2 : [ 2, 2 ] }) );
 
   /* */
 
@@ -2091,9 +2103,9 @@ function definePropStaticBasic( test )
   /* */
 
   test.case = 'basic';
-  let m1 = function(){ return 'm1' };
-  let sm1 = function(){ return 'sm1' };
-  let sm2 = function(){ return 'sm2' };
+  let m1 = a;
+  let sm1 = b;
+  let sm2 = c;
   let s = _.define.static;
   let ss = _.define.statics;
   let staticsA =
@@ -2144,8 +2156,8 @@ function definePropStaticBasic( test )
   var got = Object.getOwnPropertyDescriptor( Object.getPrototypeOf( instance ), 's1' );
   var exp =
   {
-    get : got.get || true,
-    set : got.set || true,
+    'get' : got.get || true,
+    'set' : got.set || true,
     'enumerable' : false,
     'configurable' : true,
   }
@@ -2154,8 +2166,8 @@ function definePropStaticBasic( test )
   var got = Object.getOwnPropertyDescriptor( Object.getPrototypeOf( instance ), 'staticMethod1' );
   var exp =
   {
-    get : got.get || true,
-    set : got.set || true,
+    'get' : got.get || true,
+    'set' : got.set || true,
     'enumerable' : false,
     'configurable' : true,
   }
@@ -2210,7 +2222,13 @@ function definePropStaticBasic( test )
   test.true( Blueprint1.make.staticMethod1 === Blueprint1.prototype.staticMethod1 );
   test.true( Blueprint1.make.staticMethod2 === Blueprint1.prototype.staticMethod2 );
 
-  /* */
+  /* - */
+
+  function a(){ return 'm1' };
+
+  function b(){ return 'sm1' };
+
+  function c(){ return 'sm2' };
 
 }
 
@@ -2523,7 +2541,8 @@ function definePropStaticMaybeAmendConstruction( test )
 
     /* - */
 
-    test.case = `typed:${_.toStr( tops.typed )}, accessor:${_.toStr( tops.accessor )}, amending:${_.toStr( tops.amending )}, pure map`;
+    test.case =
+`typed:${_.toStr( tops.typed )}, accessor:${_.toStr( tops.accessor )}, amending:${_.toStr( tops.amending )}, pure map`;
 
     var dstContainer = Object.create( null );
 
@@ -2571,7 +2590,8 @@ function definePropStaticMaybeAmendConstruction( test )
 
     /* */
 
-    test.case = `typed:${_.toStr( tops.typed )}, accessor:${_.toStr( tops.accessor )}, amending:${_.toStr( tops.amending )}, pure map, rewriting in instance`;
+    test.case =
+`typ:${_.toStr( tops.typed )}, acc:${_.toStr( tops.accessor )}, amend:${_.toStr( tops.amending )},pure map,rewriting in instance`;
 
     var dstContainer = Object.create( null );
     dstContainer.s1 = 0;
@@ -2625,7 +2645,8 @@ function definePropStaticMaybeAmendConstruction( test )
 
     /* */
 
-    test.case = `typed:${_.toStr( tops.typed )}, accessor:${_.toStr( tops.accessor )}, amending:${_.toStr( tops.amending )}, polluted map`;
+    test.case =
+`typed:${_.toStr( tops.typed )}, accessor:${_.toStr( tops.accessor )}, amending:${_.toStr( tops.amending )}, polluted map`;
 
     var dstContainer = {};
 
@@ -2673,7 +2694,8 @@ function definePropStaticMaybeAmendConstruction( test )
 
     /* */
 
-    test.case = `typed:${_.toStr( tops.typed )}, accessor:${_.toStr( tops.accessor )}, amending:${_.toStr( tops.amending )}, polluted map, rewriting in instance`;
+    test.case =
+`t:${_.toStr( tops.typed )}, ac:${_.toStr( tops.accessor )}, am:${_.toStr( tops.amending )}, polluted map, rewriting in instance`;
 
     var dstContainer = {};
     dstContainer.s1 = 0;
@@ -2727,7 +2749,8 @@ function definePropStaticMaybeAmendConstruction( test )
 
     /* */
 
-    test.case = `typed:${_.toStr( tops.typed )}, accessor:${_.toStr( tops.accessor )}, amending:${_.toStr( tops.amending )}, object`;
+    test.case =
+`typed:${_.toStr( tops.typed )}, accessor:${_.toStr( tops.accessor )}, amending:${_.toStr( tops.amending )}, object`;
 
     var prototype = Object.create( null );
     var dstContainer = Object.create( prototype );
@@ -2778,7 +2801,8 @@ function definePropStaticMaybeAmendConstruction( test )
 
     /* */
 
-    test.case = `typed:${_.toStr( tops.typed )}, accessor:${_.toStr( tops.accessor )}, amending:${_.toStr( tops.amending )}, object, rewriting in instance`;
+    test.case =
+`typ:${_.toStr( tops.typed )}, acc:${_.toStr( tops.accessor )}, am:${_.toStr( tops.amending )}, object, rewriting in instance`;
 
     var prototype = Object.create( null );
     var dstContainer = Object.create( prototype );
@@ -2835,7 +2859,8 @@ function definePropStaticMaybeAmendConstruction( test )
 
     /* */
 
-    test.case = `typed:${_.toStr( tops.typed )}, accessor:${_.toStr( tops.accessor )}, amending:${_.toStr( tops.amending )}, object, rewriting in prototype`;
+    test.case =
+`typ:${_.toStr( tops.typed )}, acc:${_.toStr( tops.accessor )}, am:${_.toStr( tops.amending )}, obj, rewriting in prototype`;
 
     var prototype = Object.create( null );
     prototype.s1 = 0;
@@ -8313,20 +8338,28 @@ function definePropConstructionAmendWithBlueprint( test )
 
     tops.val = 1;
     act( tops );
+    act2( tops );
     tops.val = _.nothing;
     act( tops );
+    act2( tops );
     tops.val = undefined;
     act( tops );
+    act2( tops );
     tops.val = _.undefined;
     act( tops );
+    act2( tops );
     tops.val = null;
     act( tops );
+    act2( tops );
     tops.val = _.null;
     act( tops );
+    act2( tops );
     tops.val = escapedNothing;
     act( tops );
+    act2( tops );
     tops.val = escapedEscapedNothing;
     act( tops );
+    act2( tops );
 
   }
 
@@ -8442,7 +8475,8 @@ function definePropConstructionAmendWithBlueprint( test )
 
     /* */
 
-    test.case = `typed : ${_.toStr( tops.typed )}, static : 0, ordinary ( not props ), amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
+    test.case =
+`typed : ${_.toStr( tops.typed )}, static : 0, ordinary ( not props ), amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
 
     var dstContainer =
     {
@@ -8548,7 +8582,8 @@ function definePropConstructionAmendWithBlueprint( test )
 
     /* */
 
-    test.case = `typed : ${_.toStr( tops.typed )}, static : 0, configurable : 0, amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
+    test.case =
+`typed : ${_.toStr( tops.typed )}, static : 0, configurable : 0, amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
 
     var dstContainer =
     {
@@ -8654,7 +8689,8 @@ function definePropConstructionAmendWithBlueprint( test )
 
     /* */
 
-    test.case = `typed : ${_.toStr( tops.typed )}, static : 0, accessor : 1, amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
+    test.case =
+`typed : ${_.toStr( tops.typed )}, static : 0, accessor : 1, amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
 
     var dstContainer =
     {
@@ -8733,12 +8769,21 @@ function definePropConstructionAmendWithBlueprint( test )
     test.true( _.routineIs( got.get ) );
     test.true( _.routineIs( got.set ) );
 
+  }
+
+  /* - */
+
+  function act2( tops )
+  {
+    _.assert( _.fuzzyLike( tops.typed ) );
+
     /* */
 
     if( tops.typed === 1 )
     {
 
-      test.case = `typed : ${_.toStr( tops.typed )}, static : 1, accessor : 1, amending : ${tops.amending}, val : ${_.toStr( tops.val )}, amending polluted map`;
+      test.case =
+`typ : ${_.toStr( tops.typed )}, static : 1, acc : 1, am : ${tops.amending}, val : ${_.toStr( tops.val )}, amending polluted map`;
 
       var dstContainer =
       {
@@ -8834,7 +8879,8 @@ function definePropConstructionAmendWithBlueprint( test )
     if( tops.typed === _.maybe )
     {
 
-      test.case = `typed : ${_.toStr( tops.typed )}, static : 1, accessor : 1, amending : ${tops.amending}, val : ${_.toStr( tops.val )}, amending polluted map`;
+      test.case =
+`typ : ${_.toStr( tops.typed )}, static : 1, acc : 1, am : ${tops.amending}, val : ${_.toStr( tops.val )}, amending polluted map`;
 
       var dstContainer =
       {
@@ -8872,7 +8918,8 @@ function definePropConstructionAmendWithBlueprint( test )
     if( tops.typed )
     {
 
-      test.case = `typed : ${_.toStr( tops.typed )}, static : 1, accessor : 1, amending : ${tops.amending}, val : ${_.toStr( tops.val )}, amending object`;
+      test.case =
+`typ : ${_.toStr( tops.typed )}, static : 1, acc : 1, am : ${tops.amending}, val : ${_.toStr( tops.val )}, amending object`;
 
       var prototype = Object.create( null );
       prototype.f2 = 0;
@@ -8970,7 +9017,8 @@ function definePropConstructionAmendWithBlueprint( test )
     if( tops.typed )
     {
 
-      test.case = `typed : ${_.toStr( tops.typed )}, static : 1, accessor : 1, amending : ${tops.amending}, val : ${_.toStr( tops.val )}, amending object by map`;
+      test.case =
+`typ : ${_.toStr( tops.typed )}, static : 1, acc : 1, am : ${tops.amending}, val : ${_.toStr( tops.val )},amending object by map`;
 
       var prototype = Object.create( null );
       prototype.f2 = 0;
@@ -9116,7 +9164,8 @@ function definePropConstructionAmendWithBlueprint( test )
     if( tops.typed )
     {
 
-      test.case = `typed : ${_.toStr( tops.typed )}, static : 1, accessor : 0, amending : ${tops.amending}, val : ${_.toStr( tops.val )}, amending object by map`;
+      test.case =
+`typ : ${_.toStr( tops.typed )}, static : 1, acc : 0, am : ${tops.amending}, val :${_.toStr( tops.val )}, amending object by map`;
 
       var prototype = Object.create( null );
       prototype.f2 = 0;
@@ -9257,8 +9306,6 @@ function definePropConstructionAmendWithBlueprint( test )
 
     }
 
-    /* */
-
   }
 
 }
@@ -9334,8 +9381,8 @@ function definePropAliasBasic( test )
   var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'af1p' );
   var exp =
   {
-    get : got.get,
-    set : got.set,
+    'get' : got.get,
+    'set' : got.set,
     'enumerable' : true,
     'configurable' : true,
   }
@@ -9349,8 +9396,8 @@ function definePropAliasBasic( test )
   var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'af1s' );
   var exp =
   {
-    get : got.get,
-    set : got.set,
+    'get' : got.get,
+    'set' : got.set,
     'enumerable' : true,
     'configurable' : true,
   }
@@ -9364,8 +9411,8 @@ function definePropAliasBasic( test )
   var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 's1' );
   var exp =
   {
-    get : got.get,
-    set : got.set,
+    'get' : got.get,
+    'set' : got.set,
     'enumerable' : true,
     'configurable' : true,
   }
@@ -9379,8 +9426,8 @@ function definePropAliasBasic( test )
   var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'as1p' );
   var exp =
   {
-    get : got.get,
-    set : got.set,
+    'get' : got.get,
+    'set' : got.set,
     'enumerable' : true,
     'configurable' : true,
   }
@@ -9394,8 +9441,8 @@ function definePropAliasBasic( test )
   var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'as1s' );
   var exp =
   {
-    get : got.get,
-    set : got.set,
+    'get' : got.get,
+    'set' : got.set,
     'enumerable' : true,
     'configurable' : true,
   }
@@ -9553,8 +9600,8 @@ function definePropAliasBasic( test )
   var got = Object.getOwnPropertyDescriptor( instance1, 'af1p' );
   var exp =
   {
-    get : got.get,
-    set : got.set,
+    'get' : got.get,
+    'set' : got.set,
     'enumerable' : true,
     'configurable' : true,
   }
@@ -9571,8 +9618,8 @@ function definePropAliasBasic( test )
   // var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'af1s' );
   // var exp =
   // {
-  //   get : got.get,
-  //   set : got.set,
+  //   'get' : got.get,
+  //   'set' : got.set,
   //   'enumerable' : true,
   //   'configurable' : true,
   // }
@@ -9586,8 +9633,8 @@ function definePropAliasBasic( test )
   // var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 's1' );
   // var exp =
   // {
-  //   get : got.get,
-  //   set : got.set,
+  //   'get' : got.get,
+  //   'set' : got.set,
   //   'enumerable' : true,
   //   'configurable' : true,
   // }
@@ -9598,8 +9645,8 @@ function definePropAliasBasic( test )
   var got = Object.getOwnPropertyDescriptor( instance1, 'as1p' );
   var exp =
   {
-    get : got.get,
-    set : got.set,
+    'get' : got.get,
+    'set' : got.set,
     'enumerable' : true,
     'configurable' : true,
   }
@@ -9616,8 +9663,8 @@ function definePropAliasBasic( test )
   // var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'as1s' );
   // var exp =
   // {
-  //   get : got.get,
-  //   set : got.set,
+  //   'get' : got.get,
+  //   'set' : got.set,
   //   'enumerable' : true,
   //   'configurable' : true,
   // }
@@ -9769,8 +9816,8 @@ function definePropAliasBasic( test )
   var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'af1p' );
   var exp =
   {
-    get : got.get,
-    set : got.set,
+    'get' : got.get,
+    'set' : got.set,
     'enumerable' : true,
     'configurable' : true,
   }
@@ -9784,8 +9831,8 @@ function definePropAliasBasic( test )
   var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'af1s' );
   var exp =
   {
-    get : got.get,
-    set : got.set,
+    'get' : got.get,
+    'set' : got.set,
     'enumerable' : false,
     'configurable' : true,
   }
@@ -9799,8 +9846,8 @@ function definePropAliasBasic( test )
   var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 's1' );
   var exp =
   {
-    get : got.get,
-    set : got.set,
+    'get' : got.get,
+    'set' : got.set,
     'enumerable' : false,
     'configurable' : true,
   }
@@ -9814,8 +9861,8 @@ function definePropAliasBasic( test )
   var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'as1p' );
   var exp =
   {
-    get : got.get,
-    set : got.set,
+    'get' : got.get,
+    'set' : got.set,
     'enumerable' : true,
     'configurable' : true,
   }
@@ -9829,8 +9876,8 @@ function definePropAliasBasic( test )
   var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'as1s' );
   var exp =
   {
-    get : got.get,
-    set : got.set,
+    'get' : got.get,
+    'set' : got.set,
     'enumerable' : false,
     'configurable' : true,
   }
@@ -9916,8 +9963,8 @@ function definePropAliasOptionOriginalContainer( test )
     var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 'p' );
     var exp =
     {
-      get : got.get,
-      set : got.set,
+      'get' : got.get,
+      'set' : got.set,
       'enumerable' : true,
       'configurable' : true,
     }
@@ -9934,8 +9981,8 @@ function definePropAliasOptionOriginalContainer( test )
     var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 's' );
     var exp =
     {
-      get : got.get,
-      set : got.set,
+      'get' : got.get,
+      'set' : got.set,
       'enumerable' : false,
       'configurable' : true,
     }
@@ -10140,8 +10187,8 @@ function definePropAliasOptionOriginalContainer( test )
     var got = Object.getOwnPropertyDescriptor( instance1, 'p' );
     var exp =
     {
-      get : got.get,
-      set : got.set,
+      'get' : got.get,
+      'set' : got.set,
       'enumerable' : true,
       'configurable' : true,
     }
@@ -10162,8 +10209,8 @@ function definePropAliasOptionOriginalContainer( test )
     // var got = Object.getOwnPropertyDescriptor( Blueprint1.prototype, 's' );
     // var exp =
     // {
-    //   get : got.get,
-    //   set : got.set,
+    //   'get' : got.get,
+    //   'set' : got.set,
     //   'enumerable' : false,
     //   'configurable' : true,
     // }
@@ -10342,8 +10389,8 @@ function definePropAliasConstructionAmendWithDefinition( test )
     var got = Object.getOwnPropertyDescriptor( dstContainer, 'p' );
     var exp =
     {
-      get : got.get,
-      set : got.set,
+      'get' : got.get,
+      'set' : got.set,
       'enumerable' : true,
       'configurable' : true,
     }
@@ -10398,8 +10445,8 @@ function definePropAliasConstructionAmendWithDefinition( test )
     var got = Object.getOwnPropertyDescriptor( dstContainer, 'p' );
     var exp =
     {
-      get : got.get,
-      set : got.set,
+      'get' : got.get,
+      'set' : got.set,
       'enumerable' : true,
       'configurable' : true,
     }
@@ -10453,8 +10500,8 @@ function definePropAliasConstructionAmendWithDefinition( test )
     var got = Object.getOwnPropertyDescriptor( prototype, 's' );
     var exp =
     {
-      get : got.get,
-      set : got.set,
+      'get' : got.get,
+      'set' : got.set,
       'enumerable' : false,
       'configurable' : true,
     }
@@ -10637,8 +10684,8 @@ function definePropAliasConstructionAmendWithBlueprint( test )
     var got = Object.getOwnPropertyDescriptor( dstContainer, 'p' );
     var exp =
     {
-      get : got.get,
-      set : got.set,
+      'get' : got.get,
+      'set' : got.set,
       'enumerable' : true,
       'configurable' : true,
     }
@@ -13644,7 +13691,7 @@ throw error
     {
       var extension =
       {
-        typed : _.trait.typed( 0, { prototype : prototype } ),
+        typed : _.trait.typed( 0, { prototype } ),
       };
     },
     ( err ) =>
@@ -13904,7 +13951,7 @@ set custom prototype
     var dstContainer = Object.create( prototype );
     var extension =
     {
-      typed : _.trait.typed( 1, { prototype : prototype } ),
+      typed : _.trait.typed( 1, { prototype } ),
     };
     if( tops.extension === 'map' )
     instance1 = _.construction[ tops.amending ]( dstContainer, extension );
@@ -14195,7 +14242,7 @@ create typed
     var dstContainer = Object.create( prototype );
     var extension =
     {
-      typed : _.trait.typed( _.maybe, { prototype : prototype } ),
+      typed : _.trait.typed( _.maybe, { prototype } ),
     };
     if( tops.extension === 'map' )
     instance1 = _.construction[ tops.amending ]( dstContainer, extension );
@@ -14611,7 +14658,7 @@ function traitTypedPrototypeTrivial( test )
     typed : _.trait.typed({ val : false, prototype : proto1, new : 1 }),
   });
 
-   var instance3 = _.blueprint.construct( Blueprint3 );
+  var instance3 = _.blueprint.construct( Blueprint3 );
   test.identical( _.prototype.each( instance3 ).length, 1 );
   test.true( _.prototype.each( instance3 )[ 0 ] === instance3 );
 
@@ -15231,7 +15278,8 @@ function traitTypedOrder( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:true, by typed2:false`;
+    test.case =
+`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:true, by typed2:false`;
 
     tops.typed2 = false;
     tops.prototype = true;
@@ -15244,7 +15292,8 @@ function traitTypedOrder( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:true`;
+    test.case =
+`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:true`;
 
     if( tops.typed1 !== false )
     {
@@ -15265,7 +15314,8 @@ function traitTypedOrder( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:maybe`;
+    test.case =
+`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:maybe`;
 
     if( tops.typed1 !== false )
     {
@@ -15286,7 +15336,8 @@ function traitTypedOrder( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:false`;
+    test.case =
+`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:false`;
 
     if( tops.typed1 !== false )
     {
