@@ -1614,7 +1614,7 @@ function blueprintUseSingleBlueprint( test )
   // test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint2.make.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.auxiliary.is( instance ) );
+  test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -1657,7 +1657,7 @@ function blueprintUseSingleBlueprint( test )
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint2.make.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.auxiliary.is( instance ) );
+  test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -1718,7 +1718,7 @@ function blueprintUseMultipleBlueprints( test )
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint3.make.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.auxiliary.is( instance ) );
+  test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1', 'field2', 'field3' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1', 'field2', 'field3' ] );
@@ -12716,7 +12716,7 @@ function traitTypedTrivial( test )
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.auxiliary.is( instance ) );
+  test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -12744,7 +12744,7 @@ function traitTypedTrivial( test )
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.auxiliary.is( instance ) );
+  test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -12777,7 +12777,7 @@ function traitTypedTrivial( test )
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, _.Construction.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.auxiliary.is( instance ) );
+  test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17271,7 +17271,7 @@ function constructWithoutHelper( test )
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.auxiliary.is( instance ) );
+  test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17304,7 +17304,7 @@ function constructWithoutHelper( test )
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, _.Construction.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.auxiliary.is( instance ) );
+  test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17332,7 +17332,7 @@ function constructWithoutHelper( test )
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.auxiliary.is( instance ) );
+  test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17365,7 +17365,7 @@ function constructWithoutHelper( test )
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, _.Construction.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.auxiliary.is( instance ) );
+  test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17419,7 +17419,7 @@ function constructWithArgumentMap( test )
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.auxiliary.is( instance ) );
+  test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17458,7 +17458,7 @@ function constructWithArgumentMap( test )
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, _.Construction.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.auxiliary.is( instance ) );
+  test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17492,7 +17492,7 @@ function constructWithArgumentMap( test )
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.auxiliary.is( instance ) );
+  test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17530,7 +17530,7 @@ function constructWithArgumentMap( test )
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, _.Construction.prototype ) );
   test.true( _.objectIs( instance ) );
   test.true( !_.mapIs( instance ) );
-  test.true( _.auxiliary.is( instance ) );
+  test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -17725,7 +17725,7 @@ function constructWithArgumentInstance( test )
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance2, Blueprint ) );
   test.true( _.objectIs( instance2 ) );
   test.true( _.mapIs( instance2 ) );
-  test.true( _.auxiliary.is( instance2 ) );
+  test.true( _.aux.is( instance2 ) );
   test.true( !_.instanceIs( instance2 ) );
   test.identical( _.mapKeys( instance2 ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance2 ), [ 'field1' ] );
@@ -17768,7 +17768,7 @@ function constructWithArgumentInstance( test )
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance2, _.Construction.prototype ) );
   test.true( _.objectIs( instance2 ) );
   test.true( !_.mapIs( instance2 ) );
-  test.true( _.auxiliary.is( instance2 ) );
+  test.true( _.aux.is( instance2 ) );
   test.true( !_.instanceIs( instance2 ) );
   test.identical( _.mapKeys( instance2 ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance2 ), [ 'field1' ] );
@@ -17804,7 +17804,7 @@ function constructWithArgumentInstance( test )
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance2, Blueprint ) );
   test.true( _.objectIs( instance2 ) );
   test.true( _.mapIs( instance2 ) );
-  test.true( _.auxiliary.is( instance2 ) );
+  test.true( _.aux.is( instance2 ) );
   test.true( !_.instanceIs( instance2 ) );
   test.identical( _.mapKeys( instance2 ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance2 ), [ 'field1' ] );
@@ -17845,7 +17845,7 @@ function constructWithArgumentInstance( test )
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance2, _.Construction.prototype ) );
   test.true( _.objectIs( instance2 ) );
   test.true( !_.mapIs( instance2 ) );
-  test.true( _.auxiliary.is( instance2 ) );
+  test.true( _.aux.is( instance2 ) );
   test.true( !_.instanceIs( instance2 ) );
   test.identical( _.mapKeys( instance2 ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance2 ), [ 'field1' ] );
@@ -18430,7 +18430,7 @@ function helperConstruct( test )
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint1 ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.auxiliary.is( instance ) );
+  test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
@@ -18499,7 +18499,7 @@ function helperConstructAndNew( test )
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint ) );
   test.true( _.objectIs( instance ) );
   test.true( _.mapIs( instance ) );
-  test.true( _.auxiliary.is( instance ) );
+  test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
   test.identical( _.mapKeys( instance ), [ 'field1' ] );
   test.identical( _.mapAllKeys( instance ), [ 'field1' ] );
