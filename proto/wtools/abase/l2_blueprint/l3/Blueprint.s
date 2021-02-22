@@ -322,7 +322,7 @@ function _amend( o )
     amendWithMap( src, name );
     else if( _.definitionIs( src ) )
     amendWithDefinition( src, name );
-    else _.assert( 0, `Not clear how to amend blueprint by the amendment ${_.strType( src )}` );
+    else _.assert( 0, `Not clear how to amend blueprint by the amendment ${_.entity.strType( src )}` );
   }
 
   /* */
@@ -629,7 +629,7 @@ function _amend( o )
     _.assert
     (
       _.primitiveIs( ext ) || _.routineIs( ext ),
-      () => `Property could be prtimitive or routine, but element ${key} is ${_.strType( key )}.`
+      () => `Property could be prtimitive or routine, but element ${key} is ${_.entity.strType( key )}.`
       + `\nUse _.define.*() to defined more complex data structure`
     );
     if( o.amending === 'supplement' )

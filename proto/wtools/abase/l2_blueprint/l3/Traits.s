@@ -153,13 +153,13 @@ function typed_body( o )
   if( _.boolLike( o.prototype ) )
   o.prototype = !!o.prototype;
 
-  _.assert( _.fuzzyIs( o.val ), () => `Expects fuzzy-like argument, but got ${_.strType( o.val )}` );
-  _.assert( o.new === _.nothing || _.boolIs( o.new ), () => `Expects bool-like option::new, but got ${_.strType( o.new )}` );
+  _.assert( _.fuzzyIs( o.val ), () => `Expects fuzzy-like argument, but got ${_.entity.strType( o.val )}` );
+  _.assert( o.new === _.nothing || _.boolIs( o.new ), () => `Expects bool-like option::new, but got ${_.entity.strType( o.new )}` );
   _.assert
   (
     o.val !== false || _.primitiveIs( o.prototype )
     , () => `Trait::typed should be either not false or prototype should be [ true, false, null ]`
-    + `, it is ${_.strType( o.prototype )}`
+    + `, it is ${_.entity.strType( o.prototype )}`
   );
   _.assert( o.prototype !== null || o.val !== true, 'Object with null prototype cant be typed' );
 
@@ -413,17 +413,17 @@ function typed_body( o )
       trait.new = _.blueprint.is( trait.prototype ) || trait.prototype === true;
     }
 
-    _.assert( _.boolIs( trait.new ), () => `Expects bool-like option::new, but got ${_.strType( trait.new )}` );
+    _.assert( _.boolIs( trait.new ), () => `Expects bool-like option::new, but got ${_.entity.strType( trait.new )}` );
     _.assert
     (
       trait.prototype === null || _.boolIs( trait.prototype ) || !_.primitiveIs( trait.prototype )
-      , () => `Prototype should be either bool, null or non-primitive, but is ${_.strType( trait.prototype )}`
+      , () => `Prototype should be either bool, null or non-primitive, but is ${_.entity.strType( trait.prototype )}`
     );
     _.assert
     (
       trait.val !== false || _.primitiveIs( trait.prototype )
       , () => `Trait::typed should be either not false or prototype should be any of [ true, false, null ]`
-      + `, but it is ${_.strType( trait.prototype )}`
+      + `, but it is ${_.entity.strType( trait.prototype )}`
     );
     _.assert( trait._blueprint === op.blueprint );
 
