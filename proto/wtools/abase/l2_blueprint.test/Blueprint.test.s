@@ -760,7 +760,7 @@ function defineInheritTraitTyped( test )
     /* */
 
     test.case =
-`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:false, by typed2:true`;
+`typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:false, by typed2:true`;
 
     tops.typed2 = true;
     tops.prototype = false;
@@ -784,7 +784,7 @@ function defineInheritTraitTyped( test )
     /* */
 
     test.case =
-`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:false, by typed2:maybe`;
+`typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:false, by typed2:maybe`;
 
     tops.typed2 = _.maybe;
     tops.prototype = false;
@@ -808,7 +808,7 @@ function defineInheritTraitTyped( test )
     /* */
 
     test.case =
-`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:false, by typed2:false`;
+`typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:false, by typed2:false`;
 
     tops.typed2 = false;
     tops.prototype = false;
@@ -823,7 +823,7 @@ function defineInheritTraitTyped( test )
     /* */
 
     test.case =
-`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:null, by typed2:true`;
+`typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:null, by typed2:true`;
 
     if( tops.typed1 !== true )
     {
@@ -851,7 +851,7 @@ function defineInheritTraitTyped( test )
     /* */
 
     test.case =
-`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:null, by typed2:maybe`;
+`typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:null, by typed2:maybe`;
 
     if( tops.typed1 !== true )
     {
@@ -879,7 +879,7 @@ function defineInheritTraitTyped( test )
     /* */
 
     test.case =
-`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:null, by typed2:false`;
+`typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:null, by typed2:false`;
 
     if( tops.typed1 !== true )
     {
@@ -896,7 +896,7 @@ function defineInheritTraitTyped( test )
     /* */
 
     test.case =
-`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:true, by typed2:true`;
+`typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:true, by typed2:true`;
 
     tops.typed2 = true;
     tops.prototype = true;
@@ -919,7 +919,7 @@ function defineInheritTraitTyped( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, prototype:true, by typed2:maybe`;
+    test.case = `typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, prototype:true, by typed2:maybe`;
 
     tops.typed2 = _.maybe;
     tops.prototype = true;
@@ -943,7 +943,7 @@ function defineInheritTraitTyped( test )
     /* */
 
     test.case =
-`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:true, by typed2:false`;
+`typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:true, by typed2:false`;
 
     tops.typed2 = false;
     tops.prototype = true;
@@ -957,7 +957,7 @@ function defineInheritTraitTyped( test )
     /* */
 
     test.case =
-`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:true`;
+`typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:true`;
 
     if( tops.typed1 !== false )
     {
@@ -995,7 +995,7 @@ function defineInheritTraitTyped( test )
     /* */
 
     test.case =
-`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:maybe`;
+`typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:maybe`;
 
     if( tops.typed1 !== false )
     {
@@ -1033,7 +1033,7 @@ function defineInheritTraitTyped( test )
     /* */
 
     test.case =
-`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:false`;
+`typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:false`;
 
     if( tops.typed1 !== false )
     {
@@ -2542,7 +2542,7 @@ function definePropStaticMaybeAmendConstruction( test )
     /* - */
 
     test.case =
-`typed:${_.toStr( tops.typed )}, accessor:${_.toStr( tops.accessor )}, amending:${_.toStr( tops.amending )}, pure map`;
+`typed:${_.entity.exportToString( tops.typed )}, accessor:${_.entity.exportToString( tops.accessor )}, amending:${_.entity.exportToString( tops.amending )}, pure map`;
 
     var dstContainer = Object.create( null );
 
@@ -2591,7 +2591,7 @@ function definePropStaticMaybeAmendConstruction( test )
     /* */
 
     test.case =
-`typ:${_.toStr( tops.typed )}, acc:${_.toStr( tops.accessor )}, amend:${_.toStr( tops.amending )},pure map,rewriting in instance`;
+`typ:${_.entity.exportToString( tops.typed )}, acc:${_.entity.exportToString( tops.accessor )}, amend:${_.entity.exportToString( tops.amending )},pure map,rewriting in instance`;
 
     var dstContainer = Object.create( null );
     dstContainer.s1 = 0;
@@ -2646,7 +2646,7 @@ function definePropStaticMaybeAmendConstruction( test )
     /* */
 
     test.case =
-`typed:${_.toStr( tops.typed )}, accessor:${_.toStr( tops.accessor )}, amending:${_.toStr( tops.amending )}, polluted map`;
+`typed:${_.entity.exportToString( tops.typed )}, accessor:${_.entity.exportToString( tops.accessor )}, amending:${_.entity.exportToString( tops.amending )}, polluted map`;
 
     var dstContainer = {};
 
@@ -2695,7 +2695,7 @@ function definePropStaticMaybeAmendConstruction( test )
     /* */
 
     test.case =
-`t:${_.toStr( tops.typed )}, ac:${_.toStr( tops.accessor )}, am:${_.toStr( tops.amending )}, polluted map, rewriting in instance`;
+`t:${_.entity.exportToString( tops.typed )}, ac:${_.entity.exportToString( tops.accessor )}, am:${_.entity.exportToString( tops.amending )}, polluted map, rewriting in instance`;
 
     var dstContainer = {};
     dstContainer.s1 = 0;
@@ -2750,7 +2750,7 @@ function definePropStaticMaybeAmendConstruction( test )
     /* */
 
     test.case =
-`typed:${_.toStr( tops.typed )}, accessor:${_.toStr( tops.accessor )}, amending:${_.toStr( tops.amending )}, object`;
+`typed:${_.entity.exportToString( tops.typed )}, accessor:${_.entity.exportToString( tops.accessor )}, amending:${_.entity.exportToString( tops.amending )}, object`;
 
     var prototype = Object.create( null );
     var dstContainer = Object.create( prototype );
@@ -2802,7 +2802,7 @@ function definePropStaticMaybeAmendConstruction( test )
     /* */
 
     test.case =
-`typ:${_.toStr( tops.typed )}, acc:${_.toStr( tops.accessor )}, am:${_.toStr( tops.amending )}, object, rewriting in instance`;
+`typ:${_.entity.exportToString( tops.typed )}, acc:${_.entity.exportToString( tops.accessor )}, am:${_.entity.exportToString( tops.amending )}, object, rewriting in instance`;
 
     var prototype = Object.create( null );
     var dstContainer = Object.create( prototype );
@@ -2860,7 +2860,7 @@ function definePropStaticMaybeAmendConstruction( test )
     /* */
 
     test.case =
-`typ:${_.toStr( tops.typed )}, acc:${_.toStr( tops.accessor )}, am:${_.toStr( tops.amending )}, obj, rewriting in prototype`;
+`typ:${_.entity.exportToString( tops.typed )}, acc:${_.entity.exportToString( tops.accessor )}, am:${_.entity.exportToString( tops.amending )}, obj, rewriting in prototype`;
 
     var prototype = Object.create( null );
     prototype.s1 = 0;
@@ -6289,7 +6289,7 @@ function definePropAccessorTypedMaybe( test )
     if( _.longHas( [ 'valToIns:val', 'valToIns:shallow', 'configurable:0' ], tops.propKind ) )
     {
 
-      test.case = `${tops.propKind}, typed : ${_.toStr( tops.typed )}`;
+      test.case = `${tops.propKind}, typed : ${_.entity.exportToString( tops.typed )}`;
 
       var blueprint = _.blueprint.define
       ({
@@ -6338,7 +6338,7 @@ function definePropAccessorTypedMaybe( test )
     if( _.longHas( [ 'get:1, set:1' ], tops.propKind ) )
     {
 
-      test.case = `${tops.propKind}, typed : ${_.toStr( tops.typed )}`;
+      test.case = `${tops.propKind}, typed : ${_.entity.exportToString( tops.typed )}`;
       test.true( _.definition.is( tops.prop ) );
 
       var blueprint = _.blueprint.define
@@ -6415,7 +6415,7 @@ function definePropAccessorTypedMaybe( test )
     if( _.longHas( [ 'static:1, get:1, set:1' ], tops.propKind ) )
     {
 
-      test.case = `${tops.propKind}, typed : ${_.toStr( tops.typed )}`;
+      test.case = `${tops.propKind}, typed : ${_.entity.exportToString( tops.typed )}`;
       test.true( _.definition.is( tops.prop ) );
 
       var blueprint = _.blueprint.define
@@ -6485,7 +6485,7 @@ function definePropAccessorTypedMaybe( test )
     if( _.longHas( [ 'static:1' ], tops.propKind ) )
     {
 
-      test.case = `${tops.propKind}, typed : ${_.toStr( tops.typed )}`;
+      test.case = `${tops.propKind}, typed : ${_.entity.exportToString( tops.typed )}`;
       test.true( _.definition.is( tops.prop ) );
 
       var blueprint = _.blueprint.define
@@ -6604,9 +6604,9 @@ function definePropAccessorConstructionAmend( test )
       if( k === 'prop' )
       return;
       if( k === 'propKind' )
-      result.push( `${_.toStrShort( e )}` );
+      result.push( `${_.entity.exportToStringShort( e )}` );
       else
-      result.push( `${k}:${_.toStrShort( e )}` );
+      result.push( `${k}:${_.entity.exportToStringShort( e )}` );
     });
     return result.join( ' ' );
   }
@@ -6831,7 +6831,7 @@ function definePropAccessorConstructionAmend( test )
       && _.longHas( [ _.nothing, _.maybe, 0 ], tops.typed )
     )
     {
-      test.case = `${tops.propKind}, ${_.toStr( tops.typed )}, amend pure map`;
+      test.case = `${tops.propKind}, ${_.entity.exportToString( tops.typed )}, amend pure map`;
 
       var extension =
       {
@@ -6863,7 +6863,7 @@ function definePropAccessorConstructionAmend( test )
       && _.longHas( [ 1 ], tops.typed )
     )
     {
-      test.case = `${tops.propKind}, ${_.toStr( tops.typed )}, amend pure map`;
+      test.case = `${tops.propKind}, ${_.entity.exportToString( tops.typed )}, amend pure map`;
 
       var extension =
       {
@@ -6899,7 +6899,7 @@ function definePropAccessorConstructionAmend( test )
       && _.longHas( [ 1, _.nothing ], tops.typed )
     )
     {
-      test.case = `${tops.propKind}, ${_.toStr( tops.typed )}, amend polluted map with explicit prototype:1`;
+      test.case = `${tops.propKind}, ${_.entity.exportToString( tops.typed )}, amend polluted map with explicit prototype:1`;
 
       var extension =
       {
@@ -6933,7 +6933,7 @@ function definePropAccessorConstructionAmend( test )
       && _.longHas( [ 0 ], tops.typed )
     )
     {
-      test.case = `${tops.propKind}, ${_.toStr( tops.typed )}, amend polluted map`;
+      test.case = `${tops.propKind}, ${_.entity.exportToString( tops.typed )}, amend polluted map`;
 
       var extension =
       {
@@ -6965,7 +6965,7 @@ function definePropAccessorConstructionAmend( test )
       && _.longHas( [ _.nothing, _.maybe ], tops.typed )
     )
     {
-      test.case = `${tops.propKind}, ${_.toStr( tops.typed )}, amend object`;
+      test.case = `${tops.propKind}, ${_.entity.exportToString( tops.typed )}, amend object`;
 
       var extension =
       {
@@ -6998,7 +6998,7 @@ function definePropAccessorConstructionAmend( test )
       && _.longHas( [ 1 ], tops.typed )
     )
     {
-      test.case = `${tops.propKind}, ${_.toStr( tops.typed )}, amend object`;
+      test.case = `${tops.propKind}, ${_.entity.exportToString( tops.typed )}, amend object`;
 
       var extension =
       {
@@ -7031,7 +7031,7 @@ function definePropAccessorConstructionAmend( test )
       && _.longHas( [ 0 ], tops.typed )
     )
     {
-      test.case = `${tops.propKind}, ${_.toStr( tops.typed )}, amend object`;
+      test.case = `${tops.propKind}, ${_.entity.exportToString( tops.typed )}, amend object`;
 
       var extension =
       {
@@ -7062,7 +7062,7 @@ function definePropAccessorConstructionAmend( test )
       && _.longHas( [ _.nothing, _.maybe, 0 ], tops.typed )
     )
     {
-      test.case = `${tops.propKind}, ${_.toStr( tops.typed )}, amend pure map`;
+      test.case = `${tops.propKind}, ${_.entity.exportToString( tops.typed )}, amend pure map`;
 
       var extension =
       {
@@ -7094,7 +7094,7 @@ function definePropAccessorConstructionAmend( test )
       && _.longHas( [ 1 ], tops.typed )
     )
     {
-      test.case = `${tops.propKind}, ${_.toStr( tops.typed )}, amend pure map`;
+      test.case = `${tops.propKind}, ${_.entity.exportToString( tops.typed )}, amend pure map`;
 
       var extension =
       {
@@ -7132,7 +7132,7 @@ function definePropAccessorConstructionAmend( test )
       && _.longHas( [ 0, _.maybe, _.nothing ], tops.typed )
     )
     {
-      test.case = `${tops.propKind}, ${_.toStr( tops.typed )}, amend polluted map`;
+      test.case = `${tops.propKind}, ${_.entity.exportToString( tops.typed )}, amend polluted map`;
 
       var extension =
       {
@@ -7164,7 +7164,7 @@ function definePropAccessorConstructionAmend( test )
       && _.longHas( [ 1 ], tops.typed )
     )
     {
-      test.case = `${tops.propKind}, ${_.toStr( tops.typed )}, amend polluted map`;
+      test.case = `${tops.propKind}, ${_.entity.exportToString( tops.typed )}, amend polluted map`;
 
       var extension =
       {
@@ -7196,7 +7196,7 @@ function definePropAccessorConstructionAmend( test )
       && _.longHas( [ 1 ], tops.typed )
     )
     {
-      test.case = `${tops.propKind}, typed:${_.toStr( tops.typed )}, amend object`;
+      test.case = `${tops.propKind}, typed:${_.entity.exportToString( tops.typed )}, amend object`;
 
       var extension =
       {
@@ -7235,7 +7235,7 @@ function definePropAccessorConstructionAmend( test )
       && _.longHas( [ _.nothing, _.maybe ], tops.typed )
     )
     {
-      test.case = `${tops.propKind}, typed:${_.toStr( tops.typed )}, amend object`;
+      test.case = `${tops.propKind}, typed:${_.entity.exportToString( tops.typed )}, amend object`;
 
       var extension =
       {
@@ -7273,7 +7273,7 @@ function definePropAccessorConstructionAmend( test )
       && _.longHas( [ 0 ], tops.typed )
     )
     {
-      test.case = `${tops.propKind}, typed:${_.toStr( tops.typed )}, amend object`;
+      test.case = `${tops.propKind}, typed:${_.entity.exportToString( tops.typed )}, amend object`;
 
       var extension =
       {
@@ -8370,7 +8370,7 @@ function definePropConstructionAmendWithBlueprint( test )
 
     /* */
 
-    test.case = `typed : ${_.toStr( tops.typed )}, static : 0, props, amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
+    test.case = `typed : ${_.entity.exportToString( tops.typed )}, static : 0, props, amending : ${tops.amending}, val : ${_.entity.exportToString( tops.val )}`;
 
     var dstContainer =
     {
@@ -8476,7 +8476,7 @@ function definePropConstructionAmendWithBlueprint( test )
     /* */
 
     test.case =
-`typed : ${_.toStr( tops.typed )}, static : 0, ordinary ( not props ), amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
+`typed : ${_.entity.exportToString( tops.typed )}, static : 0, ordinary ( not props ), amending : ${tops.amending}, val : ${_.entity.exportToString( tops.val )}`;
 
     var dstContainer =
     {
@@ -8583,7 +8583,7 @@ function definePropConstructionAmendWithBlueprint( test )
     /* */
 
     test.case =
-`typed : ${_.toStr( tops.typed )}, static : 0, configurable : 0, amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
+`typed : ${_.entity.exportToString( tops.typed )}, static : 0, configurable : 0, amending : ${tops.amending}, val : ${_.entity.exportToString( tops.val )}`;
 
     var dstContainer =
     {
@@ -8690,7 +8690,7 @@ function definePropConstructionAmendWithBlueprint( test )
     /* */
 
     test.case =
-`typed : ${_.toStr( tops.typed )}, static : 0, accessor : 1, amending : ${tops.amending}, val : ${_.toStr( tops.val )}`;
+`typed : ${_.entity.exportToString( tops.typed )}, static : 0, accessor : 1, amending : ${tops.amending}, val : ${_.entity.exportToString( tops.val )}`;
 
     var dstContainer =
     {
@@ -8783,7 +8783,7 @@ function definePropConstructionAmendWithBlueprint( test )
     {
 
       test.case =
-`typ : ${_.toStr( tops.typed )}, static : 1, acc : 1, am : ${tops.amending}, val : ${_.toStr( tops.val )}, amending polluted map`;
+`typ : ${_.entity.exportToString( tops.typed )}, static : 1, acc : 1, am : ${tops.amending}, val : ${_.entity.exportToString( tops.val )}, amending polluted map`;
 
       var dstContainer =
       {
@@ -8880,7 +8880,7 @@ function definePropConstructionAmendWithBlueprint( test )
     {
 
       test.case =
-`typ : ${_.toStr( tops.typed )}, static : 1, acc : 1, am : ${tops.amending}, val : ${_.toStr( tops.val )}, amending polluted map`;
+`typ : ${_.entity.exportToString( tops.typed )}, static : 1, acc : 1, am : ${tops.amending}, val : ${_.entity.exportToString( tops.val )}, amending polluted map`;
 
       var dstContainer =
       {
@@ -8919,7 +8919,7 @@ function definePropConstructionAmendWithBlueprint( test )
     {
 
       test.case =
-`typ : ${_.toStr( tops.typed )}, static : 1, acc : 1, am : ${tops.amending}, val : ${_.toStr( tops.val )}, amending object`;
+`typ : ${_.entity.exportToString( tops.typed )}, static : 1, acc : 1, am : ${tops.amending}, val : ${_.entity.exportToString( tops.val )}, amending object`;
 
       var prototype = Object.create( null );
       prototype.f2 = 0;
@@ -9018,7 +9018,7 @@ function definePropConstructionAmendWithBlueprint( test )
     {
 
       test.case =
-`typ : ${_.toStr( tops.typed )}, static : 1, acc : 1, am : ${tops.amending}, val : ${_.toStr( tops.val )},amending object by map`;
+`typ : ${_.entity.exportToString( tops.typed )}, static : 1, acc : 1, am : ${tops.amending}, val : ${_.entity.exportToString( tops.val )},amending object by map`;
 
       var prototype = Object.create( null );
       prototype.f2 = 0;
@@ -9165,7 +9165,7 @@ function definePropConstructionAmendWithBlueprint( test )
     {
 
       test.case =
-`typ : ${_.toStr( tops.typed )}, static : 1, acc : 0, am : ${tops.amending}, val :${_.toStr( tops.val )}, amending object by map`;
+`typ : ${_.entity.exportToString( tops.typed )}, static : 1, acc : 0, am : ${tops.amending}, val :${_.entity.exportToString( tops.val )}, amending object by map`;
 
       var prototype = Object.create( null );
       prototype.f2 = 0;
@@ -12621,7 +12621,7 @@ function defineConstantBasic( test )
 
     /* */
 
-    test.case = `typed:${_.toStr( tops.typed )}, basic`;
+    test.case = `typed:${_.entity.exportToString( tops.typed )}, basic`;
     var def = _.define.constant( 1 );
     var blueprint1 = _.Blueprint({ c1 : def, typed : _.trait.typed( tops.typed ) });
     var instance1 = blueprint1.make();
@@ -15037,7 +15037,7 @@ function traitTypedLogistic( test )
 
     /* */
 
-    test.case = `typed:${_.toStr( tops.typed )}, first argument`;
+    test.case = `typed:${_.entity.exportToString( tops.typed )}, first argument`;
     var src = { val : tops.typed };
     var trait = _.trait.typed( src );
     test.true( !Object.isExtensible( trait ) );
@@ -15057,7 +15057,7 @@ function traitTypedLogistic( test )
 
     /* */
 
-    test.case = `typed:${_.toStr( tops.typed )}, prototype:false, second argument`;
+    test.case = `typed:${_.entity.exportToString( tops.typed )}, prototype:false, second argument`;
     var src = { prototype : false };
     var trait = _.trait.typed( tops.typed, src );
     test.true( !Object.isExtensible( trait ) );
@@ -15077,7 +15077,7 @@ function traitTypedLogistic( test )
 
     /* */
 
-    test.case = `typed:${_.toStr( tops.typed )}, reuse`;
+    test.case = `typed:${_.entity.exportToString( tops.typed )}, reuse`;
     var src = { val : tops.typed };
     var trait = _.trait.typed( src );
     test.true( !Object.isExtensible( trait ) );
@@ -15162,7 +15162,7 @@ function traitTypedOrder( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, prototype:false, by typed2:true`;
+    test.case = `typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, prototype:false, by typed2:true`;
 
     tops.typed2 = true;
     tops.prototype = false;
@@ -15175,7 +15175,7 @@ function traitTypedOrder( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, prototype:false, by typed2:maybe`;
+    test.case = `typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, prototype:false, by typed2:maybe`;
 
     tops.typed2 = _.maybe;
     tops.prototype = false;
@@ -15188,7 +15188,7 @@ function traitTypedOrder( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, prototype:false, by typed2:false`;
+    test.case = `typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, prototype:false, by typed2:false`;
 
     tops.typed2 = false;
     tops.prototype = false;
@@ -15202,7 +15202,7 @@ function traitTypedOrder( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, prototype:null, by typed2:true`;
+    test.case = `typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, prototype:null, by typed2:true`;
 
     if( tops.typed1 !== true )
     {
@@ -15220,7 +15220,7 @@ function traitTypedOrder( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, prototype:null, by typed2:maybe`;
+    test.case = `typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, prototype:null, by typed2:maybe`;
 
     if( tops.typed1 !== true )
     {
@@ -15236,7 +15236,7 @@ function traitTypedOrder( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, prototype:null, by typed2:false`;
+    test.case = `typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, prototype:null, by typed2:false`;
 
     if( tops.typed1 !== true )
     {
@@ -15252,7 +15252,7 @@ function traitTypedOrder( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, prototype:true, by typed2:true`;
+    test.case = `typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, prototype:true, by typed2:true`;
 
     tops.typed2 = true;
     tops.prototype = true;
@@ -15265,7 +15265,7 @@ function traitTypedOrder( test )
 
     /* */
 
-    test.case = `typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, prototype:true, by typed2:maybe`;
+    test.case = `typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, prototype:true, by typed2:maybe`;
 
     tops.typed2 = _.maybe;
     tops.prototype = true;
@@ -15279,7 +15279,7 @@ function traitTypedOrder( test )
     /* */
 
     test.case =
-`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:true, by typed2:false`;
+`typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:true, by typed2:false`;
 
     tops.typed2 = false;
     tops.prototype = true;
@@ -15293,7 +15293,7 @@ function traitTypedOrder( test )
     /* */
 
     test.case =
-`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:true`;
+`typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:true`;
 
     if( tops.typed1 !== false )
     {
@@ -15315,7 +15315,7 @@ function traitTypedOrder( test )
     /* */
 
     test.case =
-`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:maybe`;
+`typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:maybe`;
 
     if( tops.typed1 !== false )
     {
@@ -15337,7 +15337,7 @@ function traitTypedOrder( test )
     /* */
 
     test.case =
-`typed1:${ _.toStr( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:false`;
+`typed1:${ _.entity.exportToString( tops.typed1 ) }, new1:${tops.new1}, amending:${tops.amending}, prototype:object, by typed2:false`;
 
     if( tops.typed1 !== false )
     {
@@ -16848,7 +16848,7 @@ function traitExtendableAmendConstruction( test )
 
     /* */
 
-    test.case = `amending : ${_.toStr( tops.amending )}, pure map, extendable : 1`;
+    test.case = `amending : ${_.entity.exportToString( tops.amending )}, pure map, extendable : 1`;
 
     var amendation = _.trait.extendable( 1 );
     var dstConstruction = Object.create( null );
@@ -16862,7 +16862,7 @@ function traitExtendableAmendConstruction( test )
 
     /* */
 
-    test.case = `amending : ${_.toStr( tops.amending )}, pure map, extendable : 0`;
+    test.case = `amending : ${_.entity.exportToString( tops.amending )}, pure map, extendable : 0`;
 
     var amendation = _.trait.extendable( 0 );
     var dstConstruction = Object.create( null );
@@ -16875,7 +16875,7 @@ function traitExtendableAmendConstruction( test )
 
     /* */
 
-    test.case = `amending : ${_.toStr( tops.amending )}, polluted map, extendable : 1`;
+    test.case = `amending : ${_.entity.exportToString( tops.amending )}, polluted map, extendable : 1`;
 
     var amendation = _.trait.extendable( 1 );
     var dstConstruction = {};
@@ -16889,7 +16889,7 @@ function traitExtendableAmendConstruction( test )
 
     /* */
 
-    test.case = `amending : ${_.toStr( tops.amending )}, polluted map, extendable : 0`;
+    test.case = `amending : ${_.entity.exportToString( tops.amending )}, polluted map, extendable : 0`;
 
     var amendation = _.trait.extendable( 0 );
     var dstConstruction = {};
@@ -16902,7 +16902,7 @@ function traitExtendableAmendConstruction( test )
 
     /* */
 
-    test.case = `amending : ${_.toStr( tops.amending )}, object, extendable : 1`;
+    test.case = `amending : ${_.entity.exportToString( tops.amending )}, object, extendable : 1`;
 
     var amendation = _.trait.extendable( 1 );
     var prototype = Object.create( null );
@@ -16917,7 +16917,7 @@ function traitExtendableAmendConstruction( test )
 
     /* */
 
-    test.case = `amending : ${_.toStr( tops.amending )}, object, extendable : 0`;
+    test.case = `amending : ${_.entity.exportToString( tops.amending )}, object, extendable : 0`;
 
     var amendation = _.trait.extendable( 0 );
     var prototype = Object.create( null );
