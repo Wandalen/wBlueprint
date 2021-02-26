@@ -154,7 +154,11 @@ function typed_body( o )
   o.prototype = !!o.prototype;
 
   _.assert( _.fuzzyIs( o.val ), () => `Expects fuzzy-like argument, but got ${_.entity.strType( o.val )}` );
-  _.assert( o.new === _.nothing || _.boolIs( o.new ), () => `Expects bool-like option::new, but got ${_.entity.strType( o.new )}` );
+  _.assert
+  (
+    o.new === _.nothing || _.boolIs( o.new ),
+    () => `Expects bool-like option::new, but got ${_.entity.strType( o.new )}`
+  );
   _.assert
   (
     o.val !== false || _.primitiveIs( o.prototype )
