@@ -2979,7 +2979,7 @@ function accessorValueOptions( test )
     valueSetting : [ 0, 1 ],
     preservingValue : [ 0, 1 ],
   };
-  var samples = _.eachSample({ sets }); debugger;
+  var samples = _.eachSample_({ sets }); debugger;
 
   for( let tops of samples )
   eachCase( tops );
