@@ -1,4 +1,5 @@
-( function _Property_test_s_( ) {
+( function _Property_test_s_( )
+{
 
 'use strict';
 
@@ -75,81 +76,6 @@ function _constant( test )
   {
     _.property.constant( {}, 13 );
   });
-
-}
-
-//
-
-function hasPrototype( test )
-{
-
-  test.case = 'map';
-  var src = {};
-  var got = _.prototype.hasPrototype( src, src );
-  test.identical( got, true );
-  var got = _.prototype.hasPrototype( src, Object.prototype );
-  test.identical( got, true );
-  var got = _.prototype.hasPrototype( Object.prototype, src );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( src, {} );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( {}, src );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( Object.create( null ), src );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( src, Object.create( null ) );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( null, src );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( src, null );
-  test.identical( got, false );
-
-  test.case = 'pure map';
-  var src = Object.create( null );
-  var got = _.prototype.hasPrototype( src, src );
-  test.identical( got, true );
-  var got = _.prototype.hasPrototype( src, Object.prototype );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( Object.prototype, src );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( src, {} );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( {}, src );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( Object.create( null ), src );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( src, Object.create( null ) );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( null, src );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( src, null );
-  test.identical( got, false );
-
-  test.case = 'map chain';
-  var prototype = Object.create( null );
-  var src = Object.create( prototype );
-  var got = _.prototype.hasPrototype( src, src );
-  test.identical( got, true );
-  var got = _.prototype.hasPrototype( src, prototype );
-  test.identical( got, true );
-  var got = _.prototype.hasPrototype( prototype, src );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( src, Object.prototype );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( Object.prototype, src );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( src, {} );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( {}, src );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( Object.create( null ), src );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( src, Object.create( null ) );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( null, src );
-  test.identical( got, false );
-  var got = _.prototype.hasPrototype( src, null );
-  test.identical( got, false );
 
 }
 
@@ -306,7 +232,7 @@ let Self =
   {
 
     _constant,
-    hasPrototype,
+    // hasPrototype,
     declare,
 
   },

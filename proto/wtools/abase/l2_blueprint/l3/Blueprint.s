@@ -1,4 +1,5 @@
-( function _Blueprint_s_() {
+( function _Blueprint_s_()
+{
 
 'use strict';
 
@@ -13,7 +14,7 @@ function is( blueprint )
 {
   if( !blueprint )
   return false;
-  return _.prototypeIsPrototypeOf( _.Blueprint.prototype, blueprint );
+  return _.prototype.isPrototypeFor( _.Blueprint.prototype, blueprint );
 }
 
 //
@@ -22,7 +23,7 @@ function isDefinitive( blueprint )
 {
   if( !blueprint )
   return false;
-  return _.prototypeIsPrototypeOf( _.Blueprint.prototype, blueprint ) && !!blueprint.traitsMap;
+  return _.prototype.isPrototypeFor( _.Blueprint.prototype, blueprint ) && !!blueprint.traitsMap;
 }
 
 //
@@ -31,7 +32,7 @@ function isRuntime( runtime )
 {
   if( !runtime )
   return false;
-  return _.prototypeIsPrototypeOf( _.Blueprint.prototype, runtime ) && !runtime.traitsMap;
+  return _.prototype.isPrototypeFor( _.Blueprint.prototype, runtime ) && !runtime.traitsMap;
 }
 
 //
@@ -162,7 +163,7 @@ function _define( o )
   runtime.prototype = null;
   runtime.name = null;
   runtime.typed = null;
-  runtime._makingTyped = null;
+  // runtime._makingTyped = null;
   runtime._prototyping = null;
   runtime.make = null;
   runtime.makeEach = makeEach;
@@ -184,7 +185,6 @@ function _define( o )
     blueprint,
     extension : o.src,
     amending : o.amending,
-    // blueprintComposing : 'amend', /* yyy */
     blueprintComposing : 'inherit',
   });
 
@@ -195,7 +195,7 @@ function _define( o )
   let defaultSupplement =
   [
     _.trait.extendable( false ),
-    _.trait.typed({ val : false, prototype : false }),
+    _.trait.typed({ val : false }),
   ]
 
   _.blueprint._supplement( blueprint, defaultSupplement );
@@ -205,7 +205,6 @@ function _define( o )
   _.blueprint._form( defContext );
 
   runtime.typed = blueprint.traitsMap.typed.val;
-  _.assert( _.boolIs( runtime._makingTyped ) );
   _.assert( runtime._prototyping !== undefined );
 
   let name = blueprint.name || 'Construction';
@@ -320,10 +319,10 @@ function _amend( o )
     else if( _.blueprint.isDefinitive( src ) )
     amendWithBlueprint1( src, name );
     else if( _.mapIs( src ) )
-    amendWithMap(  src, name );
+    amendWithMap( src, name );
     else if( _.definitionIs( src ) )
     amendWithDefinition( src, name );
-    else _.assert( 0, `Not clear how to amend blueprint by the amendment ${_.strType( src )}` );
+    else _.assert( 0, `Not clear how to amend blueprint by the amendment ${_.entity.strType( src )}` );
   }
 
   /* */
@@ -467,7 +466,9 @@ function _amend( o )
 
     srcDefinition = definitionCloneMaybe( srcDefinition );
 
-    let blueprintDefinitionRewrite2 = ( dstDefinition && dstDefinition.blueprintDefinitionRewrite ) || ( srcDefinition && srcDefinition.blueprintDefinitionRewrite );
+    let blueprintDefinitionRewrite2 =
+         ( dstDefinition && dstDefinition.blueprintDefinitionRewrite )
+      || ( srcDefinition && srcDefinition.blueprintDefinitionRewrite );
 
     _.assert( _.strDefined( srcDefinition.name ) );
 
@@ -524,7 +525,9 @@ function _amend( o )
 
     srcDefinition = definitionCloneMaybe( srcDefinition );
 
-    let blueprintDefinitionRewrite2 = ( dstDefinition && dstDefinition.blueprintDefinitionRewrite ) || ( srcDefinition && srcDefinition.blueprintDefinitionRewrite );
+    let blueprintDefinitionRewrite2 =
+       ( dstDefinition && dstDefinition.blueprintDefinitionRewrite )
+    || ( srcDefinition && srcDefinition.blueprintDefinitionRewrite );
 
     let o2 = _.mapExtend( null, o );
     o2.blueprintDefinitionRewrite = blueprintUnnamedDefinitionRewrite;
@@ -572,7 +575,9 @@ function _amend( o )
     srcDefinition = definitionCloneMaybe( srcDefinition );
 
     let dstDefinition = o.blueprint.traitsMap[ srcDefinition.kind ] || null;
-    let blueprintDefinitionRewrite2 = ( dstDefinition && dstDefinition.blueprintDefinitionRewrite ) || ( srcDefinition && srcDefinition.blueprintDefinitionRewrite );
+    let blueprintDefinitionRewrite2 =
+         ( dstDefinition && dstDefinition.blueprintDefinitionRewrite )
+      || ( srcDefinition && srcDefinition.blueprintDefinitionRewrite );
 
     _.assert( dstDefinition === null || _.definitionIs( dstDefinition ) );
 
@@ -624,7 +629,7 @@ function _amend( o )
     _.assert
     (
       _.primitiveIs( ext ) || _.routineIs( ext ),
-      () => `Property could be prtimitive or routine, but element ${key} is ${_.strType( key )}.`
+      () => `Property could be prtimitive or routine, but element ${key} is ${_.entity.strType( key )}.`
       + `\nUse _.define.*() to defined more complex data structure`
     );
     if( o.amending === 'supplement' )
@@ -797,7 +802,12 @@ function _validate( blueprint )
     _.routineIs( blueprint._practiceMap.retype )
     , `Each blueprint should have handler::retype, but definition::${blueprint.name} does not have`
   );
-  _.assert( !blueprint.traitsMap.typed || blueprint.typed === blueprint.traitsMap.typed.val || blueprint.traitsMap.typed.val === _.maybe );
+  _.assert
+  (
+    !blueprint.traitsMap.typed
+    || blueprint.typed === blueprint.traitsMap.typed.val
+    || blueprint.traitsMap.typed.val === _.maybe
+  );
 
   _.blueprint.eachDefinition( blueprint, ( blueprint, definition, key ) =>
   {

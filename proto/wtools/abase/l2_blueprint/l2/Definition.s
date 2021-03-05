@@ -1,4 +1,5 @@
-( function _Definition_s_() {
+( function _Definition_s_()
+{
 
 'use strict';
 
@@ -45,21 +46,37 @@ function Definition( o )
 
 Object.setPrototypeOf( Definition, null );
 Definition.prototype = Object.create( null );
+Definition.prototype.constructor = Definition;
 Definition.prototype.cloneShallow = function()
 {
-  let result = new Definition( this );
+  if( this._blueprint === false )
+  {
+    _.assert( Object.isFrozen( this ) );
+    return this;
+  }
+
+  // let result = new Definition( this );
+  let result = Object.create( Object.getPrototypeOf( this ) );
+  // debugger;
+  Object.assign( result, this );
+  // debugger;
 
   if( result._blueprint )
   result._blueprint = null;
   if( result._ )
   result._ = Object.create( null );
 
-  if( result._blueprint === false )
-  Object.freeze( result );
-  else
+  // if( result._blueprint === false )
+  // Object.freeze( result );
+  // else
   Object.preventExtensions( result );
 
   return result;
+}
+
+Definition.prototype.cloneDeep = function()
+{
+  return this.cloneShallow();
 }
 
 //
@@ -169,6 +186,57 @@ function _traitMake( o )
   return _.definition._make( o );
 }
 
+//
+
+function extend( src )
+{
+  _.assert( _.mapIs( src ) );
+
+  for( let name in src )
+  {
+    _.assert
+    (
+      name === src[ name ].name,
+      () => `Name of definition should be same as its alias, but \`${name} <> ${src[ name ].name}\``
+    );
+    _.definition._extend( src[ name ] );
+  }
+
+}
+
+//
+
+function _extend( src )
+{
+
+  _.assert( _.routineIs( src ) );
+  _.assert( _.strIs( src.name ) );
+  _.assert( arguments.length === 1 );
+
+  _.assert
+  (
+    _.mapIs( src.group ),
+    () => `Expects defined \`group\`, but routine::${src.name} does not have such`
+  );
+  _.assert( !!src.group.definition );
+  _.assert( _.define.trait === _.trait );
+
+  if( src.group.trait )
+  {
+    _.define.trait[ src.name ] = src;
+    _.define[ src.name ] = src;
+  }
+  else
+  {
+    _.define[ src.name ] = src;
+    if( src.group.named )
+    _.define.named[ src.name ] = src;
+    else
+    _.define.unnamed[ src.name ] = src;
+  }
+
+}
+
 // --
 // define
 // --
@@ -194,12 +262,19 @@ let DefinitionExtension =
   _unnamedMake,
   _namedMake,
   _traitMake,
+  extend,
+  _extend,
 
   // fields
 
 }
 
 _.define = _.define || Object.create( null );
+_.define.named = _.define.named || Object.create( null );
+_.define.unnamed = _.define.unnamed || Object.create( null );
+_.define.trait = _.define.trait || Object.create( null );
+_.trait = _.define.trait;
+
 _.definition = _.definition || Object.create( null );
 _.mapExtend( _.definition, DefinitionExtension );
 _.assert( _.routineIs( _.definitionIs ) );

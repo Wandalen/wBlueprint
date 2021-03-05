@@ -1,4 +1,5 @@
-( function _Proto_test_s_( ) {
+( function _Proto_test_s_( )
+{
 
 'use strict';
 
@@ -467,8 +468,8 @@ function declareBasic( test )
   var got = Object.getOwnPropertyDescriptor( obj1, 'a' );
   var exp =
   {
-    get : got.get,
-    set : got.set,
+    'get' : got.get,
+    'set' : got.set,
     'enumerable' : true,
     'configurable' : true,
   }
@@ -487,8 +488,8 @@ function declareBasic( test )
   var got = Object.getOwnPropertyDescriptor( obj1, 'a' );
   var exp =
   {
-    get : got.get,
-    set : got.set,
+    'get' : got.get,
+    'set' : got.set,
     'enumerable' : true,
     'configurable' : true,
   }
@@ -509,8 +510,8 @@ function declareBasic( test )
   var got = Object.getOwnPropertyDescriptor( obj1, 'a' );
   var exp =
   {
-    get : got.get,
-    set : got.set,
+    'get' : got.get,
+    'set' : got.set,
     'enumerable' : true,
     'configurable' : true,
   }
@@ -1616,8 +1617,8 @@ function accessorOptionAddingMethods( test )
   test.case = 'deduce setter from put, object does not have methods, with _, addingMethods:1';
   var methods =
   {
-    _aGet : function() { return this.b },
-    _aPut : function( src ) { this.b = src },
+    '_aGet' : function() { return this.b },
+    '_aPut' : function( src ) { this.b = src },
   }
   var dst =
   {
@@ -1647,15 +1648,15 @@ function accessorOptionAddingMethods( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aGet : function() { return this.b },
-    aPut : function( src ) { this.b = src },
+    'aGet' : function() { return this.b },
+    'aPut' : function( src ) { this.b = src },
   };
   var exp =
   {
     'a' : 'a1',
     'b' : 'a1',
-    aGet : dst.aGet,
-    aPut : dst.aPut,
+    'aGet' : dst.aGet,
+    'aPut' : dst.aPut,
   }
   _.accessor.declare
   ({
@@ -1674,17 +1675,17 @@ function accessorOptionAddingMethods( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aGrab : function() { return this.b },
-    aPut : function( src ) { this.b = src },
+    'aGrab' : function() { return this.b },
+    'aPut' : function( src ) { this.b = src },
   };
   var exp =
   {
     'a' : 'a1',
     'b' : 'a1',
-    aGrab : dst.aGrab,
-    aGet : dst.aGrab,
-    aPut : dst.aPut,
-    aSet : dst.aPut,
+    'aGrab' : dst.aGrab,
+    'aGet' : dst.aGrab,
+    'aPut' : dst.aPut,
+    'aSet' : dst.aPut,
   }
 
   var declared = _.accessor.declare
@@ -1718,17 +1719,17 @@ function accessorOptionAddingMethods( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    _aGrab : function() { return this.b },
-    _aPut : function( src ) { this.b = src },
+    '_aGrab' : function() { return this.b },
+    '_aPut' : function( src ) { this.b = src },
   };
   var exp =
   {
     'a' : 'a1',
     'b' : 'a1',
-    _aGrab : dst._aGrab,
-    aGet : dst._aGrab,
-    _aPut : dst._aPut,
-    aSet : dst._aPut,
+    '_aGrab' : dst._aGrab,
+    'aGet' : dst._aGrab,
+    '_aPut' : dst._aPut,
+    'aSet' : dst._aPut,
   }
   var declared = _.accessor.declare
   ({
@@ -1755,8 +1756,8 @@ function accessorOptionAddingMethods( test )
   test.case = 'deduce setter from put and get from grab, object does not have methods, with _, addingMethods:1';
   var methods =
   {
-    _aGrab : function() { return this.b },
-    _aPut : function( src ) { this.b = src },
+    '_aGrab' : function() { return this.b },
+    '_aPut' : function( src ) { this.b = src },
   }
   var dst =
   {
@@ -1767,10 +1768,10 @@ function accessorOptionAddingMethods( test )
   {
     'a' : 'a1',
     'b' : 'a1',
-    aGrab : methods._aGrab,
-    aGet : methods._aGrab,
-    aSet : methods._aPut,
-    aPut : methods._aPut,
+    'aGrab' : methods._aGrab,
+    'aGet' : methods._aGrab,
+    'aSet' : methods._aPut,
+    'aPut' : methods._aPut,
   }
   var declared = _.accessor.declare
   ({
@@ -1820,10 +1821,10 @@ function accessorOptionAddingMethods( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aPut : put_functor,
-    aSet : put_functor,
-    aGrab : put_functor,
-    aGet : put_functor,
+    'aPut' : put_functor,
+    'aSet' : put_functor,
+    'aGrab' : put_functor,
+    'aGet' : put_functor,
   };
   var names =
   {
@@ -1847,10 +1848,10 @@ function accessorOptionAddingMethods( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aGrab : function() { return this.b },
-    aGet : function() { return this.b },
-    aPut : function( src ) { this.b = src },
-    aSet : function( src ) { this.b = src },
+    'aGrab' : function() { return this.b },
+    'aGet' : function() { return this.b },
+    'aPut' : function( src ) { this.b = src },
+    'aSet' : function( src ) { this.b = src },
   };
 
   if( Config.debug )
@@ -1874,7 +1875,7 @@ function accessorOptionAddingMethods( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aGet : function() { return this.b },
+    'aGet' : function() { return this.b },
   };
 
   if( Config.debug )
@@ -1898,7 +1899,7 @@ function accessorOptionAddingMethods( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aGrab : function() { return this.b },
+    'aGrab' : function() { return this.b },
   };
 
   if( Config.debug )
@@ -1922,7 +1923,7 @@ function accessorOptionAddingMethods( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aSet : function( src ) { this.b = src },
+    'aSet' : function( src ) { this.b = src },
   };
 
   if( Config.debug )
@@ -1946,7 +1947,7 @@ function accessorOptionAddingMethods( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aPut : function( src ) { this.b = src },
+    'aPut' : function( src ) { this.b = src },
   };
 
   if( Config.debug )
@@ -1978,17 +1979,17 @@ function accessorOptionPreserveValues( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aGet : function() { return this.b },
-    aSet : function( src ) { this.b = src },
-    aPut : function( src ) { this.b = src },
+    'aGet' : function() { return this.b },
+    'aSet' : function( src ) { this.b = src },
+    'aPut' : function( src ) { this.b = src },
   };
   var exp =
   {
     'a' : 'a1',
     'b' : 'a1',
-    aGet : object.aGet,
-    aSet : object.aSet,
-    aPut : object.aPut,
+    'aGet' : object.aGet,
+    'aSet' : object.aSet,
+    'aPut' : object.aPut,
   }
   _.accessor.declare
   ({
@@ -2006,17 +2007,17 @@ function accessorOptionPreserveValues( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aGet : function() { return this.b },
-    aSet : function( src ) { this.b = src },
-    aPut : function( src ) { this.b = src },
+    'aGet' : function() { return this.b },
+    'aSet' : function( src ) { this.b = src },
+    'aPut' : function( src ) { this.b = src },
   };
   var exp =
   {
     'a' : 'b1',
     'b' : 'b1',
-    aGet : object.aGet,
-    aSet : object.aSet,
-    aPut : object.aPut,
+    'aGet' : object.aGet,
+    'aSet' : object.aSet,
+    'aPut' : object.aPut,
   }
   _.accessor.declare
   ({
@@ -2034,15 +2035,15 @@ function accessorOptionPreserveValues( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aGet : function() { return this.b },
-    aSet : function( src ) { this.b = src },
+    'aGet' : function() { return this.b },
+    'aSet' : function( src ) { this.b = src },
   };
   var exp =
   {
     'a' : 'a1',
     'b' : 'a1',
-    aGet : object.aGet,
-    aSet : object.aSet,
+    'aGet' : object.aGet,
+    'aSet' : object.aSet,
   }
   _.accessor.declare
   ({
@@ -2060,15 +2061,15 @@ function accessorOptionPreserveValues( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aGet : function() { return this.b },
-    aSet : function( src ) { this.b = src },
+    'aGet' : function() { return this.b },
+    'aSet' : function( src ) { this.b = src },
   };
   var exp =
   {
     'a' : 'b1',
     'b' : 'b1',
-    aGet : object.aGet,
-    aSet : object.aSet,
+    'aGet' : object.aGet,
+    'aSet' : object.aSet,
   }
   _.accessor.declare
   ({
@@ -2300,7 +2301,7 @@ function accessorDeducingMethods( test )
     // aGet : object.aGet,
     // aSet : object.aSet,
   }
-  test.identical( object, exp ); /* yyy */
+  test.identical( object, exp );
 
   var exp =
   {
@@ -2411,13 +2412,13 @@ function accessorUnfunct( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aGet : getter_functor,
+    'aGet' : getter_functor,
   };
   var exp =
   {
     'a' : 'b1',
     'b' : 'b1',
-    aGet : object.aGet,
+    'aGet' : object.aGet,
   }
   _.accessor.declare
   ({
@@ -2454,15 +2455,15 @@ function accessorUnfunct( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aSet : setter_functor,
-    aGet : function() { return this.b },
+    'aSet' : setter_functor,
+    'aGet' : function() { return this.b },
   };
   var exp =
   {
     'a' : 'a1',
     'b' : 'a1',
-    aSet : object.aSet,
-    aGet : object.aGet,
+    'aSet' : object.aSet,
+    'aGet' : object.aGet,
   }
   _.accessor.declare
   ({
@@ -2479,8 +2480,8 @@ function accessorUnfunct( test )
   {
     'a' : 'c',
     'b' : 'c',
-    aSet : object.aSet,
-    aGet : object.aGet,
+    'aSet' : object.aSet,
+    'aGet' : object.aGet,
   }
   test.identical( object, exp );
   test.identical( counter, 4 );
@@ -2510,15 +2511,15 @@ function accessorUnfunct( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aPut : putter_functor,
-    aGet : function() { return this.b },
+    'aPut' : putter_functor,
+    'aGet' : function() { return this.b },
   };
   var exp =
   {
     'a' : 'a1',
     'b' : 'a1',
-    aPut : object.aPut,
-    aGet : object.aGet,
+    'aPut' : object.aPut,
+    'aGet' : object.aGet,
   }
   _.accessor.declare
   ({
@@ -2535,8 +2536,8 @@ function accessorUnfunct( test )
   {
     'a' : 'c',
     'b' : 'c',
-    aPut : object.aPut,
-    aGet : object.aGet,
+    'aPut' : object.aPut,
+    'aGet' : object.aGet,
   }
   test.identical( object, exp );
   test.identical( counter, 4 );
@@ -2703,7 +2704,7 @@ function accessorUnfunctGetSuite( test )
   test.identical( object, exp );
   test.identical( object.a, exp.a );
   test.identical( object.b, exp.b );
-  var exp = { 'writable' : false, 'enumerable' : false, 'configurable' : false, value : 'abc3' }
+  var exp = { 'writable' : false, 'enumerable' : false, 'configurable' : false, 'value' : 'abc3' }
   test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
 
   /* */
@@ -2968,6 +2969,368 @@ function accessorUnfunctGetSuite( test )
 
 //
 
+function accessorValueOptions( test )
+{
+
+  var sets =
+  {
+    storageIniting : [ 0, 1 ],
+    valueGetting : [ 0, 1 ],
+    valueSetting : [ 0, 1 ],
+    preservingValue : [ 0, 1 ],
+  };
+  var samples = _.eachSample_({ sets }); debugger;
+
+  for( let tops of samples )
+  eachCase( tops );
+
+  /* - */
+
+  function eachCase( tops )
+  {
+
+    /* */
+
+    if( tops.storageIniting && tops.valueGetting )
+    {
+
+      test.case =
+`
+storInit:${tops.storageIniting}, valGet:${tops.valueGetting}, valSet:${tops.valueSetting}, presVal:${tops.preservingValue}
+`;
+
+      var env = envMake
+      ({
+        storageIniting : tops.storageIniting,
+        valueGetting : tops.valueGetting,
+        valueSetting : tops.valueSetting,
+        preservingValue : tops.preservingValue,
+      });
+
+      var exp =
+      {
+        'a' : '2',
+        'b' : '1',
+        'c' : undefined,
+      }
+      if( !tops.valueSetting )
+      {
+        exp =
+        {
+          'a' : undefined,
+          'b' : undefined,
+          'c' : undefined,
+        }
+      }
+      if( !tops.preservingValue )
+      exp.b = undefined;
+      test.identical( env.object, exp );
+
+      var exp = { a : '2', b : '1' }
+      if( !tops.valueSetting )
+      exp = {}
+      if( !tops.preservingValue )
+      delete exp.b;
+      test.identical( env.object._, exp );
+
+      test.identical( env.optionsA.val, '2' );
+      if( tops.preservingValue )
+      test.identical( env.optionsB.val, '1' );
+      else
+      test.identical( env.optionsB.val, _.nothing );
+      test.identical( env.optionsC.val, _.nothing );
+
+    }
+
+    /* */
+
+    if( tops.storageIniting && !tops.valueGetting )
+    {
+      test.case =
+`
+storInit:${tops.storageIniting}, valGet:${tops.valueGetting}, valSet:${tops.valueSetting}, presVal:${tops.preservingValue}
+`;
+      var env = envMake
+      ({
+        storageIniting : tops.storageIniting,
+        valueGetting : tops.valueGetting,
+        valueSetting : tops.valueSetting,
+        preservingValue : tops.preservingValue,
+      });
+
+      var exp =
+      {
+        'a' : '2',
+        'b' : undefined,
+        'c' : undefined,
+      }
+      if( !tops.valueSetting )
+      {
+        exp =
+        {
+          'a' : undefined,
+          'b' : undefined,
+          'c' : undefined,
+        }
+      }
+      test.identical( env.object, exp );
+
+      var exp = { a : '2' }
+      if( !tops.valueSetting )
+      exp = {}
+      test.identical( env.object._, exp );
+
+      test.identical( env.optionsA.val, '2' );
+      test.identical( env.optionsB.val, _.nothing );
+      test.identical( env.optionsC.val, _.nothing );
+
+    }
+
+    /* */
+
+    if( !tops.storageIniting )
+    {
+
+      test.case =
+`
+storInit:${tops.storageIniting}, valGet:${tops.valueGetting}, valSet:${tops.valueSetting}, presVal:${tops.preservingValue}
+`;
+      var env = envMake
+      ({
+        storageIniting : tops.storageIniting,
+        valueGetting : tops.valueGetting,
+        valueSetting : tops.valueSetting,
+        preservingValue : tops.preservingValue,
+      });
+
+      test.true( env.object._ === undefined );
+
+      Object.defineProperty( env.object, '_', { enumerable : 0, value : Object.create( null ) } );
+
+      var exp =
+      {
+        'a' : undefined,
+        'b' : undefined,
+        'c' : undefined,
+      }
+      test.identical( env.object, exp );
+
+      var exp = {}
+      test.identical( env.object._, exp );
+
+      test.identical( env.optionsA.val, '2' );
+      test.identical( env.optionsB.val, _.nothing );
+      test.identical( env.optionsC.val, _.nothing );
+
+    }
+
+    /* */
+
+  }
+
+  /* - */
+
+  function envMake( env )
+  {
+
+    env.object =
+    {
+      'a' : '1',
+      'b' : '1'
+    };
+
+    env.optionsA =
+    {
+      object : env.object,
+      name : 'a',
+      prime : 0,
+      strict : 0,
+      addingMethods : 0,
+      val : '2',
+      suite : 1,
+      storingStrategy : 'underscore',
+      storageIniting : env.storageIniting,
+      valueGetting : env.valueGetting,
+      valueSetting : env.valueSetting,
+      preservingValue : env.preservingValue,
+    }
+    _.accessor.declareSingle( env.optionsA );
+
+    env.optionsB =
+    {
+      object : env.object,
+      name : 'b',
+      prime : 0,
+      strict : 0,
+      addingMethods : 0,
+      val : _.nothing,
+      suite : 1,
+      storingStrategy : 'underscore',
+      storageIniting : env.storageIniting,
+      valueGetting : env.valueGetting,
+      valueSetting : env.valueSetting,
+      preservingValue : env.preservingValue,
+    }
+    _.accessor.declareSingle( env.optionsB );
+
+    env.optionsC =
+    {
+      object : env.object,
+      name : 'c',
+      prime : 0,
+      strict : 0,
+      addingMethods : 0,
+      val : _.nothing,
+      suite : 1,
+      storingStrategy : 'underscore',
+      storageIniting : env.storageIniting,
+      valueGetting : env.valueGetting,
+      valueSetting : env.valueSetting,
+      preservingValue : env.preservingValue,
+    }
+    _.accessor.declareSingle( env.optionsC );
+
+    return env;
+  }
+
+}
+
+//
+
+function accessorLogistic( test )
+{
+
+  test.case = 'basic';
+
+  var options =
+  {
+    name : 'a',
+    prime : 0,
+    strict : 0,
+    addingMethods : 0,
+    val : '2',
+    suite : 1,
+    storingStrategy : 'underscore',
+  }
+
+  test.description = 'object1';
+
+  var object1 =
+  {
+    'a' : '1',
+    'b' : '1'
+  };
+  options.object = object1;
+  _.debugger = 1;
+  _.accessor.declareSingle( options );
+
+  var exp =
+  {
+    'a' : '2',
+    'b' : '1',
+  }
+  test.identical( object1, exp );
+
+  var exp = { a : '2' }
+  test.identical( object1._, exp );
+
+  delete options.object;
+  var exp =
+  {
+    'name' : 'a',
+    'prime' : 0,
+    'strict' : 0,
+    'addingMethods' : 0,
+    'val' : '2',
+    'suite' : {},
+    'storingStrategy' : 'underscore',
+    'grab' : null,
+    'get' : null,
+    'put' : null,
+    'set' : null,
+    'move' : null,
+    'methods' : null,
+    'needed' : true,
+    'normalizedAsuite' :
+    {
+      'grab' : options.normalizedAsuite.grab,
+      'get' : options.normalizedAsuite.get,
+      'put' : options.normalizedAsuite.put,
+      'set' : options.normalizedAsuite.set,
+      'move' : false,
+    },
+    'preservingValue' : true,
+    'combining' : null,
+    'enumerable' : true,
+    'configurable' : true,
+    'writable' : true,
+    'storageIniting' : true,
+    'valueGetting' : true,
+    'valueSetting' : true
+  }
+  test.identical( options, exp );
+
+  test.description = 'object2';
+
+  var object2 =
+  {
+    'a' : '1',
+    'b' : '1'
+  };
+  options.object = object2;
+  _.debugger = 1;
+  _.accessor.declareSingle( options );
+
+  var exp =
+  {
+    'a' : '2',
+    'b' : '1',
+  }
+  test.identical( object2, exp );
+
+  var exp = { a : '2' }
+  test.identical( object2._, exp );
+
+  delete options.object;
+  var exp =
+  {
+    'name' : 'a',
+    'prime' : 0,
+    'strict' : 0,
+    'addingMethods' : 0,
+    'val' : '2',
+    'suite' : {},
+    'storingStrategy' : 'underscore',
+    'grab' : null,
+    'get' : null,
+    'put' : null,
+    'set' : null,
+    'move' : null,
+    'methods' : null,
+    'needed' : true,
+    'normalizedAsuite' :
+    {
+      'grab' : options.normalizedAsuite.grab,
+      'get' : options.normalizedAsuite.get,
+      'put' : options.normalizedAsuite.put,
+      'set' : options.normalizedAsuite.set,
+      'move' : false,
+    },
+    'preservingValue' : true,
+    'combining' : null,
+    'enumerable' : true,
+    'configurable' : true,
+    'writable' : true,
+    'storageIniting' : true,
+    'valueGetting' : true,
+    'valueSetting' : true
+  }
+  test.identical( options, exp );
+
+}
+
+//
+
 function accessorForbid( test )
 {
 
@@ -3044,8 +3407,8 @@ function forbidWithoutConstructor( test )
   var names = { abc : 'abc' }
   _.accessor.forbid
   ({
-    object : dst,
-    names : names,
+    'object' : dst,
+    names,
   });
 
   test.contains( dst, exp );
@@ -3424,8 +3787,8 @@ function accessorStoringStrategyUnderscoreIniting( test )
   var got = Object.getOwnPropertyDescriptor( obj1, 'a' );
   var exp =
   {
-    get : got.get,
-    set : got.set,
+    'get' : got.get,
+    'set' : got.set,
     'enumerable' : true,
     'configurable' : true,
   }
@@ -3457,8 +3820,8 @@ function accessorStoringStrategyUnderscoreIniting( test )
   var got = Object.getOwnPropertyDescriptor( obj1, 'a' );
   var exp =
   {
-    get : got.get,
-    set : got.set,
+    'get' : got.get,
+    'set' : got.set,
     'enumerable' : true,
     'configurable' : true,
   }
@@ -3664,6 +4027,8 @@ let Self =
     accessorDeducingMethods,
     accessorUnfunct,
     accessorUnfunctGetSuite,
+    accessorValueOptions,
+    accessorLogistic,
 
     accessorForbid,
     forbidWithoutConstructor,

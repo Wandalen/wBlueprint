@@ -1,4 +1,5 @@
-( function _Accessor_s_() {
+( function _Accessor_s_()
+{
 
 'use strict';
 
@@ -54,6 +55,7 @@ let DeclarationSpecialDefaults =
   object : null,
   methods : null,
   needed : null,
+  normalizedAsuite : null,
 }
 
 let DeclarationOptions =
@@ -72,6 +74,8 @@ let DeclarationOptions =
   writable : null,
   storingStrategy : null,
   storageIniting : null,
+  valueGetting : null,
+  valueSetting : null,
 
   strict : true, /* zzz : deprecate */
 
@@ -93,6 +97,8 @@ let DeclarationDefaults =
   writable : null,
   storingStrategy : 'symbol',
   storageIniting : true,
+  valueGetting : true,
+  valueSetting : true,
 
   strict : true,
 
@@ -161,7 +167,8 @@ function _normalizedAsuiteForm_body( o )
   if( o.suite )
   _.assertMapHasOnly( o.suite, _.accessor.AmethodTypes );
 
-  for( let k in o.normalizedAsuite, _.accessor.AmethodTypesMap )
+  // for( let k in o.normalizedAsuite, _.accessor.AmethodTypesMap )
+  for( let k in _.accessor.AmethodTypesMap )
   methodNormalize( k );
 
   _.assert( o.writable !== false || !o.normalizedAsuite.set );
@@ -261,7 +268,7 @@ function _normalizedAsuiteForm_body( o )
     _.assert
     (
       _.definitionIs( o.normalizedAsuite[ k ] ) || _.routineIs( o.normalizedAsuite[ k ] ) || o.normalizedAsuite[ k ] === false,
-      () => `Field "${propName}" is not read only, but setter not found ${_.toStrShort( o.methods )}`
+      () => `Field "${propName}" is not read only, but setter not found ${_.entity.exportStringShort( o.methods )}`
     );
   }
 
@@ -274,7 +281,7 @@ function _normalizedAsuiteForm_body( o )
     let capitalName = _.strCapitalize( name );
     _.assert
     (
-         o.normalizedAsuite[ name ] === null
+      o.normalizedAsuite[ name ] === null
       || _.boolLike( o.normalizedAsuite[ name ] )
       || _.routineIs( o.normalizedAsuite[ name ] )
       || _.definitionIs( o.normalizedAsuite[ name ] )
@@ -551,7 +558,7 @@ function _objectMethodMoveGet( srcInstance, name )
 
 //
 
-function _objectDeclaringIsNeeded( o )
+function _declaringIsNeeded( o )
 {
   let prop = _.prototype.propertyDescriptorActiveGet( o.object, o.name );
   if( prop.descriptor )
@@ -574,13 +581,13 @@ function _objectDeclaringIsNeeded( o )
     if( o.combining === 'supplement' )
     return false;
 
-    _.assert( prop.object !== o.object, () => `Attempt to redefine own accessor "${o.name}" of ${_.toStrShort( o.object )}` );
+    _.assert( prop.object !== o.object, () => `Attempt to redefine own accessor "${o.name}" of ${_.entity.exportStringShort( o.object )}` );
 
   }
   return true;
 }
 
-_objectDeclaringIsNeeded.defaults =
+_declaringIsNeeded.defaults =
 {
   object : null,
   name : null,
@@ -623,11 +630,6 @@ function _methodsNormalize( o )
 
   for( let mname in _.accessor.AmethodTypesMap )
   methodNormalize( o, mname );
-
-  // methodNormalize( o, 'grab' );
-  // methodNormalize( o, 'get' );
-  // methodNormalize( o, 'put' );
-  // methodNormalize( o, 'set' );
 
   function methodNormalize( o, n1 )
   {
@@ -840,11 +842,9 @@ function _objectSetValue( o )
 
   _.assertMapHasAll( o, _objectSetValue.defaults );
 
-  // if( _global_.debugger )
-  // debugger;
-
   let descriptor = Object.getOwnPropertyDescriptor( o.object, o.name );
-  if( descriptor && descriptor.configurable && descriptor.get == undefined && descriptor.set === undefined )
+  // if( descriptor && descriptor.configurable && descriptor.get == undefined && descriptor.set === undefined ) /* yyy */
+  if( descriptor && descriptor.configurable && descriptor.get === undefined && descriptor.set === undefined )
   delete o.object[ o.name ];
 
   let val2 = _.escape.right( o.val );
@@ -937,36 +937,7 @@ function _objectInitStorage( object, normalizedAsuite )
     initer( object );
   }
 
-  // if( storingStrategy === 'underscore' )
-  // {
-  //   if( !Object.hasOwnProperty.call( object, '_' ) )
-  //   Object.defineProperty( object, '_',
-  //   {
-  //     value : Object.create( _.objectIs( object._ ) ? object._ : null ),
-  //     enumerable : false,
-  //     writable : false,
-  //     configurable : false,
-  //   });
-  // }
-
 }
-
-// function _objectInitStorage( object, storingStrategy )
-// {
-//
-//   if( storingStrategy === 'underscore' )
-//   {
-//     if( !Object.hasOwnProperty.call( object, '_' ) )
-//     Object.defineProperty( object, '_',
-//     {
-//       value : Object.create( _.objectIs( object._ ) ? object._ : null ),
-//       enumerable : false,
-//       writable : false,
-//       configurable : false,
-//     });
-//   }
-//
-// }
 
 //
 
@@ -1074,6 +1045,8 @@ function suiteNormalize_body( o )
 
   /* */
 
+  _.debugger;
+
   if( !o.normalizedAsuite )
   {
 
@@ -1166,11 +1139,12 @@ function declareSingle_body( o )
   _.assertMapHasAll( o, declareSingle_body.defaults );
   _.assert( _.boolIs( o.writable ) || o.writable === null );
   _.assert( o.object !== Object, 'Attempt to polute _global_.Object' );
-  _.assert( !_.prototype._isStandardEntity( o.object ), 'Attempt to pollute _global_.Object.prototype' );
+  _.assert( !_.prototype._ofStandardEntity( o.object ), 'Attempt to pollute _global_.Object.prototype' );
 
   /* */
 
-  o.needed = _.accessor._objectDeclaringIsNeeded( o );
+  _.debugger;
+  o.needed = _.accessor._declaringIsNeeded( o );
   if( !o.needed )
   return false;
 
@@ -1214,16 +1188,22 @@ function declareSingle_body( o )
 
   /* cache value */
 
-  if( _.definitionIs( o.normalizedAsuite.get ) )
+  _.debugger;
+  if( o.storageIniting && o.valueGetting)
   {
-    if( o.val === _.nothing && o.storageIniting )
-    o.val = _.definition.toVal( o.normalizedAsuite.get );
-    o.normalizedAsuite.get = null;
-  }
 
-  if( o.val === _.nothing && o.storageIniting )
-  if( o.preservingValue && Object.hasOwnProperty.call( o.object, o.name ) )
-  o.val = o.object[ o.name ];
+    if( _.definitionIs( o.normalizedAsuite.get ) )
+    {
+      if( o.val === _.nothing )
+      o.val = _.definition.toVal( o.normalizedAsuite.get );
+      o.normalizedAsuite.get = null;
+    }
+
+    if( o.val === _.nothing )
+    if( o.preservingValue && Object.hasOwnProperty.call( o.object, o.name ) )
+    o.val = o.object[ o.name ];
+
+  }
 
   /* define accessor */
 
@@ -1241,9 +1221,9 @@ function declareSingle_body( o )
 
   /* set value */
 
-  // if( _global_.debugger )
-  // debugger;
-  if( o.storageIniting && o.val !== _.nothing && descriptor.get )
+  _.debugger;
+  if( o.storageIniting && o.valueSetting )
+  if( o.val !== _.nothing && descriptor.get )
   {
     _.accessor._objectSetValue
     ({
@@ -1254,16 +1234,6 @@ function declareSingle_body( o )
       val : o.val,
     });
   }
-
-  // if( o.storageIniting && o.val !== _.nothing && o.normalizedAsuite.get !== null ) /* yyy */
-  // _.accessor._objectSetValue
-  // ({
-  //   object : o.object,
-  //   normalizedAsuite : o.normalizedAsuite,
-  //   storingStrategy : o.storingStrategy,
-  //   name : o.name,
-  //   val : o.val,
-  // });
 
   /* validate */
 
@@ -1439,8 +1409,8 @@ function declareMultiple_body( o )
   /* verification */
 
   _.assert( !_.primitiveIs( o.methods ) );
-  _.assert( !_.primitiveIs( o.object ), () => 'Expects object {-object-}, but got ' + _.toStrShort( o.object ) );
-  _.assert( _.objectIs( o.names ), () => 'Expects object {-names-}, but got ' + _.toStrShort( o.names ) );
+  _.assert( !_.primitiveIs( o.object ), () => 'Expects object {-object-}, but got ' + _.entity.exportStringShort( o.object ) );
+  _.assert( _.objectIs( o.names ), () => 'Expects object {-names-}, but got ' + _.entity.exportStringShort( o.names ) );
 
   /* */
 
@@ -1450,7 +1420,7 @@ function declareMultiple_body( o )
 
   let names2 = Object.getOwnPropertySymbols( o.names );
   for( let n = 0 ; n < names2.length ; n++ )
-  result[ names2[ n ] ] = declare( names2[ n ], o.names[ names2[ n ] ],  );
+  result[ names2[ n ] ] = declare( names2[ n ], o.names[ names2[ n ] ] );
 
   return result;
 
@@ -1476,7 +1446,7 @@ function declareMultiple_body( o )
     {
       _.mapExtend( o2, { suite : extension } );
     }
-    else _.assert( name === extension, `Unexpected type ${_.strType( extension )}` );
+    else _.assert( name === extension, `Unexpected type ${_.entity.strType( extension )}` );
 
     o2.name = name;
     delete o2.names;
@@ -1540,8 +1510,8 @@ function forbid_body( o )
 
   /* verification */
 
-  _.assert( !_.primitiveIs( o.object ), () => 'Expects object {-o.object-} but got ' + _.toStrShort( o.object ) );
-  _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ), () => 'Expects object {-o.names-} as argument but got ' + _.toStrShort( o.names ) );
+  _.assert( !_.primitiveIs( o.object ), () => 'Expects object {-o.object-} but got ' + _.entity.exportStringShort( o.object ) );
+  _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ), () => 'Expects object {-o.names-} as argument but got ' + _.entity.exportStringShort( o.names ) );
 
   /* message */
 
@@ -1549,10 +1519,10 @@ function forbid_body( o )
   _.assert( _.routineIs( _constructor ) || _constructor === null );
   if( !o.protoName )
   o.protoName = ( _constructor ? ( _constructor.name || _constructor._name || '' ) : '' ) + '.';
-  if( !o.message )
-  o.message = 'is deprecated';
-  else
+  if( o.message )
   o.message = _.arrayIs( o.message ) ? o.message.join( ' : ' ) : o.message;
+  else
+  o.message = 'is deprecated';
 
   /* property */
 
@@ -1799,7 +1769,7 @@ let AccessorExtension =
   _objectSetValue,
   _objectAddMethods,
   _objectInitStorage,
-  _objectDeclaringIsNeeded,
+  _declaringIsNeeded,
 
   _defaultsApply,
   _methodsNormalize,

@@ -1,4 +1,5 @@
-( function _Proto_s_() {
+( function _Proto_s_()
+{
 
 'use strict';
 
@@ -10,97 +11,96 @@ let _ = _global_.wTools;
 // implementation
 // --
 
-/**
- * @namespace Tools.prototype
- * @module Tools/base/Proto
- */
-
-function _of( object )
-{
-  // _.assert( !!object );
-  return Object.getPrototypeOf( object );
-}
-
+// /**
+//  * @namespace Tools.prototype
+//  * @module Tools/base/Proto
+//  */
 //
-
-/**
- * Iterate through prototypes.
- * @param {object} proto - prototype
- * @function each
- * @namespace Tools.prototype
- */
-
-function each( proto, onEach )
-{
-  let result = [];
-
-  _.assert( _.routineIs( onEach ) || !onEach );
-  _.assert( !_.primitiveIs( proto ) || proto === null );
-  _.assert( arguments.length === 1 || arguments.length === 2 );
-
-  while( proto )
-  {
-    if( onEach )
-    onEach.call( this, proto );
-    result.push( proto );
-    proto = Object.getPrototypeOf( proto );
-  }
-
-  return result;
-}
-
+// function _of( object )
+// {
+//   return Object.getPrototypeOf( object );
+// }
 //
-
-/**
- * Does srcProto has insProto as prototype.
- * @param {object} srcProto - proto stack to investigate.
- * @param {object} insProto - proto to look for.
- * @function hasPrototype
- * @namespace Tools.prototype
- */
-
-function hasPrototype( srcProto, insProto )
-{
-
-  while( srcProto !== null )
-  {
-    if( srcProto === insProto )
-    return true;
-    srcProto = Object.getPrototypeOf( srcProto );
-  }
-
-  return false;
-}
-
+// //
 //
+// /**
+//  * Iterate through prototypes.
+//  * @param {object} proto - prototype
+//  * @function each
+//  * @namespace Tools.prototype
+//  */
+//
+// function each( proto, onEach )
+// {
+//   let result = [];
+//
+//   _.assert( _.routineIs( onEach ) || !onEach );
+//   _.assert( !_.primitiveIs( proto ) || proto === null );
+//   _.assert( arguments.length === 1 || arguments.length === 2 );
+//
+//   while( proto )
+//   {
+//     if( onEach )
+//     onEach.call( this, proto );
+//     result.push( proto );
+//     proto = Object.getPrototypeOf( proto );
+//   }
+//
+//   return result;
+// }
 
-/**
- * Return proto owning names.
- * @param {object} srcPrototype - src object to investigate proto stack.
- * @function hasProperty
- * @namespace Tools.prototype
- */
-
-function hasProperty( srcPrototype, name ) /* yyy qqq : names could be only string */
-{
-
-  _.assert( !_.primitiveIs( srcPrototype ) );
-  _.assert( _.strIs( name ) );
-
-  do
-  {
-    let has = true;
-    if( !Object.hasOwnProperty.call( srcPrototype, name ) )
-    has = false;
-    if( has )
-    return srcPrototype;
-
-    srcPrototype = Object.getPrototypeOf( srcPrototype );
-  }
-  while( srcPrototype !== Object.prototype && srcPrototype );
-
-  return null;
-}
+// //
+//
+// /**
+//  * Does srcProto has insProto as prototype.
+//  * @param {object} srcProto - proto stack to investigate.
+//  * @param {object} insProto - proto to look for.
+//  * @function hasPrototype
+//  * @namespace Tools.prototype
+//  */
+//
+// function hasPrototype( srcProto, insProto )
+// {
+//
+//   while( srcProto !== null )
+//   {
+//     if( srcProto === insProto )
+//     return true;
+//     srcProto = Object.getPrototypeOf( srcProto );
+//   }
+//
+//   return false;
+// }
+//
+// //
+//
+// /**
+//  * Return proto owning names.
+//  * @param {object} srcPrototype - src object to investigate proto stack.
+//  * @function havingProperty
+//  * @namespace Tools.prototype
+//  */
+//
+// function havingProperty( srcPrototype, name ) /* yyy qqq : names could be only string */
+// {
+//
+//   _.assert( !_.primitiveIs( srcPrototype ) );
+//   _.assert( _.strIs( name ) );
+//
+//   do
+//   {
+//     let has = true;
+//     if( !Object.hasOwnProperty.call( srcPrototype, name ) )
+//     has = false;
+//     if( has )
+//     return srcPrototype;
+//
+//     srcPrototype = Object.getPrototypeOf( srcPrototype );
+//   }
+//   while( srcPrototype !== Object.prototype && srcPrototype );
+//
+//   return null;
+// }
 
 // {
 //   names = _nameFielded( names );
@@ -140,6 +140,8 @@ function isSubPrototypeOf( sub, parent )
   return Object.isPrototypeOf.call( parent, sub );
 }
 
+//
+
 function propertyDescriptorActiveGet( object, name )
 {
   let result = Object.create( null );
@@ -167,7 +169,7 @@ function propertyDescriptorActiveGet( object, name )
 
 //
 
-function _isStandardEntity( src )
+function _ofStandardEntity( src )
 {
   if( src === Object.prototype )
   return true;
@@ -207,14 +209,14 @@ function propertyDescriptorGet( object, name )
 let PrototypeExtension =
 {
 
-  of : _of,
-  each,
+  // of : _of,
+  // each,
 
-  hasProperty,
-  hasPrototype,
+  // havingProperty,
+  // hasPrototype,
 
-  isSubPrototypeOf,
-  _isStandardEntity,
+  isSubPrototypeOf, /* xxx : remove? */
+  _ofStandardEntity,
 
   propertyDescriptorActiveGet,
   propertyDescriptorGet,

@@ -1,4 +1,5 @@
-( function _Property_s_() {
+( function _Property_s_()
+{
 
 'use strict';
 
@@ -34,7 +35,7 @@ function hide( dstPrototype, name, value )
 {
 
   _.assert( arguments.length === 2 || arguments.length === 3 );
-  _.assert( !_.primitiveIs( dstPrototype ), () => 'dstPrototype is needed, but got ' + _.toStrShort( dstPrototype ) );
+  _.assert( !_.primitiveIs( dstPrototype ), () => 'dstPrototype is needed, but got ' + _.entity.exportStringShort( dstPrototype ) );
 
   if( _.containerIs( name ) )
   {
@@ -44,10 +45,10 @@ function hide( dstPrototype, name, value )
     name = _.indexExtending( name, ( e ) => { return { [ e ] : undefined } } );
     _.each( name, ( v, n ) =>
     {
-      if( value !== undefined )
-      _.property.hide( dstPrototype, n, value );
-      else
+      if( value === undefined )
       _.property.hide( dstPrototype, n, v );
+      else
+      _.property.hide( dstPrototype, n, value );
     });
     return;
   }
@@ -94,7 +95,7 @@ function _constant( dstPrototype, name, value )
 {
 
   _.assert( arguments.length === 2 || arguments.length === 3 );
-  _.assert( !_.primitiveIs( dstPrototype ), () => 'dstPrototype is needed, but got ' + _.toStrShort( dstPrototype ) );
+  _.assert( !_.primitiveIs( dstPrototype ), () => 'dstPrototype is needed, but got ' + _.entity.exportStringShort( dstPrototype ) );
 
   if( _.containerIs( name ) )
   {
@@ -102,10 +103,10 @@ function _constant( dstPrototype, name, value )
     name = _.indexExtending( name, ( e ) => { return { [ e ] : undefined } } );
     _.each( name, ( v, n ) =>
     {
-      if( value !== undefined )
-      _.property.constant( dstPrototype, n, value );
-      else
+      if( value === undefined )
       _.property.constant( dstPrototype, n, v );
+      else
+      _.property.constant( dstPrototype, n, value );
     });
     return;
   }
@@ -149,7 +150,7 @@ function declare_head( routine, args )
   _.routineOptions( routine, o );
 
   if( o.writable === null )
-  o.writable = o.set === false ? false : true;
+  o.writable = !( o.set === false );
 
   _.assert( !_.primitiveIs( o.object ), 'Expects object as argument but got', o.object );
   _.assert( _.strIs( o.name ) || _.symbolIs( o.name ) );

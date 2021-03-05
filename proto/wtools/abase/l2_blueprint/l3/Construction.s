@@ -1,4 +1,5 @@
-( function _Construction_s_() {
+( function _Construction_s_()
+{
 
 'use strict';
 
@@ -67,7 +68,7 @@ function amend( o )
 
   let blueprint = _.blueprint.singleAt( o.src ).blueprint;
 
-  if( !blueprint ) /* xxx : bad if? */
+  if( !blueprint )
   {
     let defs = [];
     let prototype = _.prototype.of( o.dstConstruction );
@@ -83,7 +84,7 @@ function amend( o )
         opts.prototype = prototype;
         opts.new = false;
       }
-      opts._dstConstruction = o.dstConstruction;
+      opts._synthetic = o.dstConstruction;
       defs[ add ]( _.trait.typed( opts ) );
     }
 
@@ -146,78 +147,16 @@ function supplement( dstConstruction, src )
   });
 }
 
-// //
-//
-// function _amendDefinitionWithoutMethod( o )
-// {
-//
-//   _.assertMapHasAll( o, _amendDefinitionWithoutMethod.defaults );
-//   _.assert( _.strIs( o.key ) || _.symbolIs( o.key ) || o.key === null );
-//   _.assert( _.definitionIs( o.definition ) );
-//   _.assert( _.longHas( [ 'supplement', 'extend' ], o.amending ) );
-//
-//   debugger;
-//   if( o.amending === 'supplement' )
-//   {
-//     debugger;
-//     /* zzz qqq : cover */
-//     if( o.key !== null )
-//     if( Object.hasOwnProperty.call( o.construction, o.key ) && o.construction[ o.key ] !== undefined )
-//     return;
-//   }
-//
-//   // debugger; zzz
-//
-//   let prototype = _.prototype.of( o.construction );
-//   let defs = [];
-//   if( prototype && o.definition.kind === 'prototype' )
-//   debugger;
-//   if( prototype && o.definition.kind !== 'prototype' ) /* zzz : cover */
-//   defs.push( _.trait.prototype( prototype, { new : false } ) );
-//   if( o.definition.kind === 'extendable' )
-//   debugger;
-//   if( o.definition.kind !== 'extendable' ) /* zzz : cover */
-//   defs.push( _.trait.extendable( true ) );
-//   if( o.definition.kind !== 'typed' )
-//   debugger;
-//   if( o.definition.kind !== 'typed' ) /* zzz : cover */
-//   defs.push( _.trait.typed( _.maybe ) );
-//
-//   let args;
-//
-//   let newDefinition = o.key === null ? o.definition : { [ o.key ] : o.definition };
-//
-//   if( o.amending === 'extend' )
-//   args = [ defs, newDefinition ];
-//   else
-//   args = [ newDefinition, defs ];
-//
-//   let blueprint = _.blueprint._define({ args, amending : o.amending });
-//
-//   _.construction._init
-//   ({
-//     constructing : false,
-//     construction : o.construction,
-//     amending : o.amending,
-//     runtime : blueprint.runtime,
-//   });
-//
-// }
-//
-// _amendDefinitionWithoutMethod.defaults =
-// {
-//   construction : null,
-//   definition : null,
-//   key : null,
-//   amending : null,
-// }
-
 //
 
 function _amendCant( construction, definition, key )
 {
   debugger;
-  throw _.err( `Definition::${definition.kind} cant extend created construction after initialization. Use this definition during initialization only.` );
+  throw _.err
+  (
+    `Definition::${definition.kind} cant extend created construction after initialization.`
+    + ` Use this definition during initialization only.`
+  );
 }
 
 // --
@@ -292,20 +231,14 @@ function _make3( genesis )
     genesis.construction = genesis.runtime._practiceMap.allocate( genesis );
     _.assert
     (
-         // genesis.runtime._makingTyped === false
-      // ||
-      genesis.runtime.make.prototype === null
+      !!genesis.runtime.typed === false
+      || genesis.runtime.make.prototype === null
       || genesis.construction instanceof genesis.runtime.make
     );
-    if( genesis.runtime._makingTyped && wasNull )
+    if( !!genesis.runtime.typed && wasNull )
     return genesis.construction;
   }
   else _.assert( genesis.constructing === false );
-
-  // if( genesis.runtime.typed === true )
-  // _.assert( genesis.runtime.make.prototype === null || genesis.construction instanceof genesis.runtime.make );
-  // else if( genesis.runtime.typed === false ) /* yyy */
-  // _.assert( genesis.runtime.make.prototype === null || !( genesis.construction instanceof genesis.runtime.make ) );
 
   _.construction._init( genesis );
   _.construction._extendArguments( genesis );
@@ -344,9 +277,8 @@ function _make( construction, runtime, args )
 {
 
   _.assert( arguments.length === 3 );
-  _.assert( _.boolIs( runtime._makingTyped ) );
 
-  if( !runtime._makingTyped && runtime.make.prototype !== null && construction instanceof runtime.make )
+  if( !runtime.typed && runtime.make.prototype !== null && construction instanceof runtime.make )
   {
     construction = null;
   }

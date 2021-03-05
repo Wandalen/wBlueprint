@@ -1,4 +1,5 @@
-( function _Types_s_() {
+( function _Types_s_()
+{
 
 'use strict';
 

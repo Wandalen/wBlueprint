@@ -1,4 +1,5 @@
-( function _Etc_test_s_( ) {
+( function _Etc_test_s_( )
+{
 
 'use strict';
 

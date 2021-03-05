@@ -1,4 +1,5 @@
-( function _Traits_s_() {
+( function _Traits_s_()
+{
 
 'use strict';
 
@@ -17,10 +18,10 @@ function _pairArgumentsHead( routine, args )
 {
   let o = args[ 1 ];
 
-  if( !o )
-  o = { val : args[ 0 ] };
-  else
+  if( o )
   o.val = args[ 0 ];
+  else
+  o = { val : args[ 0 ] };
 
   o = _.routineOptions( routine, o );
 
@@ -50,6 +51,8 @@ callable.defaults =
   callback : null,
   _blueprint : false,
 }
+
+callable.group = { definition : true, trait : true, enabled : false };
 
 //
 
@@ -89,7 +92,6 @@ prototype:0
 preserve prototype of typed destination
 preserve as map if untyped destination
 create typed
-// create untyped -- xxx
 
 prototype:1
 set generated prototype if destination is typed
@@ -117,13 +119,13 @@ function typed_head( routine, args )
     o = args[ 0 ];
     _.assert( args.length === 1 );
   }
-  else if( !o )
+  else if( o )
   {
-    o = { val : args[ 0 ] };
+    o.val = args[ 0 ];
   }
   else
   {
-    o.val = args[ 0 ];
+    o = { val : args[ 0 ] };
   }
 
   o = _.routineOptions( routine, o );
@@ -151,20 +153,21 @@ function typed_body( o )
   if( _.boolLike( o.prototype ) )
   o.prototype = !!o.prototype;
 
-  _.assert( _.fuzzyIs( o.val ), () => `Expects fuzzy-like argument, but got ${_.strType( o.val )}` );
-  _.assert( o.new === null || _.boolIs( o.new ), () => `Expects bool-like option::new, but got ${_.strType( o.new )}` );
+  _.assert( _.fuzzyIs( o.val ), () => `Expects fuzzy-like argument, but got ${_.entity.strType( o.val )}` );
+  _.assert( o.new === _.nothing || _.boolIs( o.new ), () => `Expects bool-like option::new, but got ${_.entity.strType( o.new )}` );
   _.assert
   (
     o.val !== false || _.primitiveIs( o.prototype )
-    , () => `Trait::typed should be either not false or prototype should be [ true, false, null ], it is ${_.strType( o.prototype )}`
+    , () => `Trait::typed should be either not false or prototype should be [ true, false, null ]`
+    + `, it is ${_.entity.strType( o.prototype )}`
   );
+  _.assert( o.prototype !== null || o.val !== true, 'Object with null prototype cant be typed' );
 
   o.blueprintDefinitionRewrite = blueprintDefinitionRewrite;
   o.blueprintForm1 = blueprintForm1;
   o.blueprintForm2 = blueprintForm2;
 
-  let allocate;
-  let retype;
+  let allocate, retype;
 
   o.kind = 'typed';
   return _.definition._traitMake( o );
@@ -173,6 +176,9 @@ function typed_body( o )
 
 - blueprintDefinitionRewrite
 - bluprintDefinitionSupplement
+- bluprintDefinitionSupplementAct
+- definitionRewritePrototype
+- canRewritePrototype
 - blueprintForm1
 - blueprintForm2
 - allocateTyped
@@ -191,66 +197,64 @@ function typed_body( o )
   {
     _.assert( !op.primeDefinition || !op.secondaryDefinition || op.primeDefinition.kind === op.secondaryDefinition.kind );
 
-    // xxx yyy
-    // if( op.primeDefinition && op.secondaryDefinition )
-    // bluprintDefinitionSupplement( op );
+    if( op.primeDefinition && op.secondaryDefinition )
+    bluprintDefinitionSupplement( op );
 
-    if( op.primeDefinition && op.secondaryDefinition && op.secondaryDefinition._dstConstruction !== _.nothing )
+    if( op.primeDefinition && op.secondaryDefinition && !_.boolIs( op.secondaryDefinition._synthetic ) )
     {
 
       if( _global_.debugger )
       debugger;
-      _.assert( op.primeDefinition._dstConstruction === _.nothing );
+      _.assert( _.boolIs( op.primeDefinition._synthetic ) );
 
-      let prototype = _.prototype.of( op.secondaryDefinition._dstConstruction );
-      let opts = op.primeDefinition.cloneShallow(); /* xxx : sometimes redundant! */
-      opts._blueprint = op.blueprint;
+      let prototype = _.prototype.of( op.secondaryDefinition._synthetic );
+      let definition = op.primeDefinition
+
+      _.assert( definition._blueprint === op.blueprint || definition._blueprint === null, 'not tested' )
+      if( definition._blueprint !== op.blueprint && definition._blueprint !== null )
+      definition.cloneShallow();
+      definition._blueprint = op.blueprint;
 
       if( op.primeDefinition.val === true && op.primeDefinition.prototype === _.nothing )
-      opts.prototype = true;
+      definition.prototype = true;
 
       if
       (
            prototype
         && prototype !== Object.prototype
         && op.primeDefinition.val
-        && ( opts.prototype === _.nothing || opts.prototype === false ) )
+        && ( definition.prototype === _.nothing || definition.prototype === false ) )
       {
 
-        opts.prototype = prototype;
-        opts.new = false;
+        definition.prototype = prototype;
+        definition.new = false;
 
       }
       else if
       (
-           !!op.secondaryDefinition._dstConstruction
-        && ( _.boolIs( opts.prototype ) || opts.prototype === _.nothing )
+           !_.boolIs( op.secondaryDefinition._synthetic )
+        && ( _.boolIs( definition.prototype ) || definition.prototype === _.nothing )
         && op.primeDefinition.val === _.maybe
       )
       {
 
-        if( opts.prototype === _.nothing )
+        if( definition.prototype === _.nothing )
         {
           if( prototype === Object.prototype )
-          opts.prototype = false;
+          definition.prototype = false;
           else
-          opts.prototype = prototype;
+          definition.prototype = prototype;
         }
         else if( prototype === null || prototype === Object.prototype )
         {
-          if( opts.prototype !== true )
-          opts.prototype = false;
+          if( definition.prototype !== true )
+          definition.prototype = false;
         }
 
       }
 
-      op.blueprint.traitsMap[ op.primeDefinition.kind ] = opts;
+      op.blueprint.traitsMap[ op.primeDefinition.kind ] = definition;
       return;
-    }
-
-    if( op.secondaryDefinition && op.secondaryDefinition._iherited )
-    {
-      debugger;
     }
 
     /*
@@ -260,43 +264,119 @@ function typed_body( o )
 
   }
 
+/*
+
+= extend
+
+- typed1    ↓
+- synthetic ↓
+- typed2    ↓
+
+= supplement
+
+- typed2     ↑
+- synthetic  ↑
+- typed1     ↑
+
+*/
+
   /* */
 
   function bluprintDefinitionSupplement( op )
   {
-
-    // if( op.primeDefinition && op.secondaryDefinition )
-    // if( op.primeDefinition.new !== null && op.primeDefinition.prototype !== _.nothing )
-    // return false;
+    let secondaryDefinition = op.secondaryDefinition;
 
     if( _global_.debugger )
     debugger;
 
+    if( op.primeDefinition._synthetic === true )
+    {
+      if( secondaryDefinition._synthetic === true )
+      op.primeDefinition._notSyntheticDefinition = secondaryDefinition._notSyntheticDefinition;
+      else
+      op.primeDefinition._notSyntheticDefinition = secondaryDefinition;
+      /* preserve non-synthetic definition to use in case of attempt of partial supplementation */
+    }
+
+    if( secondaryDefinition._synthetic === true )
+    {
+      if( op.primeDefinition.prototype !== _.nothing || !canRewritePrototype( op, secondaryDefinition ) )
+      {
+        /* reject partial supplementing by trait generated inheriting */
+        if( secondaryDefinition._notSyntheticDefinition === _.nothing )
+        return;
+        else
+        secondaryDefinition = secondaryDefinition._notSyntheticDefinition;
+      }
+    }
+    else if( !_.boolIs( secondaryDefinition._synthetic ) )
+    {
+      /* reject partial supplementing by trait generated construction */
+      return;
+    }
+
+    return bluprintDefinitionSupplementAct( op, secondaryDefinition );
+  }
+
+  /* */
+
+  function bluprintDefinitionSupplementAct( op, secondaryDefinition )
+  {
+
     let prototypeRewriting = false;
     if( op.primeDefinition.prototype === _.nothing )
-    if( op.primeDefinition.val || _.primitiveIs( op.secondaryDefinition.prototype ) )
     prototypeRewriting = true;
 
     let newRewriting = false;
-    if( op.primeDefinition.new === null )
+    if( op.primeDefinition.new === _.nothing )
     newRewriting = true;
 
-    if( prototypeRewriting === false && newRewriting === false )
-    return false;
-
     if( op.primeDefinition._blueprint && op.primeDefinition._blueprint !== op.blueprint )
-    {
-      debugger;
-      // _.assert( 0, 'not tested' );
-      op.primeDefinition = op.primeDefinition.cloneShallow();
-    }
+    op.primeDefinition = op.primeDefinition.cloneShallow();
 
     if( prototypeRewriting )
-    op.primeDefinition.prototype = op.secondaryDefinition.prototype;
+    {
+      definitionRewritePrototype( op, secondaryDefinition );
+    }
+    else
+    {
+      if
+      (
+        op.primeDefinition._secondaryPrototype === _.nothing
+        || op.primeDefinition._secondaryPrototype === op.primeDefinition.prototype
+      )
+      if( secondaryDefinition.prototype !== _.nothing )
+      op.primeDefinition._secondaryPrototype = secondaryDefinition.prototype; /* qqq : cover logic of amending of prototype in case of many amendings */
+    }
 
     if( newRewriting )
-    op.primeDefinition.new = op.secondaryDefinition.new;
+    op.primeDefinition.new = secondaryDefinition.new;
 
+    return true;
+  }
+
+  /* */
+
+  function definitionRewritePrototype( op, secondaryDefinition )
+  {
+    if( canRewritePrototype( op, secondaryDefinition.prototype ) )
+    op.primeDefinition.prototype = secondaryDefinition.prototype;
+    else if( canRewritePrototype( op, secondaryDefinition._secondaryPrototype ) )
+    op.primeDefinition.prototype = secondaryDefinition._secondaryPrototype;
+    else
+    op.primeDefinition._secondaryPrototype = secondaryDefinition.prototype;
+  }
+
+  /* */
+
+  function canRewritePrototype( op, prototype )
+  {
+    if( prototype === _.nothing )
+    return false;
+    if( !op.primeDefinition.val && !_.primitiveIs( prototype ) )
+    return false;
+    if( op.primeDefinition.val === true && prototype === null )
+    return false;
     return true;
   }
 
@@ -317,7 +397,7 @@ function typed_body( o )
 
     if( trait.prototype === _.nothing )
     {
-      if( _.mapIs( trait._dstConstruction ) && trait.val === _.maybe )
+      if( _.mapIs( trait._synthetic ) && trait.val === _.maybe )
       trait.prototype = false;
       else if( trait.val === true )
       trait.prototype = true;
@@ -325,7 +405,7 @@ function typed_body( o )
       trait.prototype = false;
     }
 
-    if( trait.new === null )
+    if( trait.new === _.nothing )
     {
       if( trait.val === _.maybe && trait.prototype === true )
       trait.new = false;
@@ -333,27 +413,26 @@ function typed_body( o )
       trait.new = _.blueprint.is( trait.prototype ) || trait.prototype === true;
     }
 
-    _.assert( _.boolIs( trait.new ), () => `Expects bool-like option::new, but got ${_.strType( trait.new )}` );
+    _.assert( _.boolIs( trait.new ), () => `Expects bool-like option::new, but got ${_.entity.strType( trait.new )}` );
     _.assert
     (
       trait.prototype === null || _.boolIs( trait.prototype ) || !_.primitiveIs( trait.prototype )
-      , () => `Prototype should be either bool, null or non-primitive, but is ${_.strType( trait.prototype )}`
+      , () => `Prototype should be either bool, null or non-primitive, but is ${_.entity.strType( trait.prototype )}`
     );
     _.assert
     (
       trait.val !== false || _.primitiveIs( trait.prototype )
-      , () => `Trait::typed should be either not false or prototype should be any of [ true, false, null ], but it is ${_.strType( trait.prototype )}`
+      , () => `Trait::typed should be either not false or prototype should be any of [ true, false, null ]`
+      + `, but it is ${_.entity.strType( trait.prototype )}`
     );
     _.assert( trait._blueprint === op.blueprint );
 
-    /**/
+    /* */
 
-    if( trait._dstConstruction )
-    {
-      trait._dstConstruction = _.nothing;
-    }
+    if( trait._synthetic )
+    trait._synthetic = false;
 
-    _.assert( trait._dstConstruction === _.nothing );
+    _.assert( trait._synthetic === false );
     _.assert( op.blueprint.make === null );
     _.assert( runtime.prototype === null );
 
@@ -366,7 +445,6 @@ function typed_body( o )
       }
       else if( trait.val === _.maybe )
       {
-        // if( trait.prototype === true ) /* typed:maybe */
         if( trait.prototype === true || trait.prototype === false )
         prototype = Object.create( _.Construction.prototype );
         else
@@ -388,38 +466,29 @@ function typed_body( o )
         _.assert( _.routineIs( trait.prototype.make ) );
         _.assert
         (
-            _.objectIs( trait.prototype.prototype )
+          _.objectIs( trait.prototype.prototype )
           , `Cant use ${_.blueprint.qnameOf( trait.prototype )} as prototype. This blueprint is not prototyped.`
         );
+      }
+      else if( trait.val === _.maybe && trait.prototype === null )
+      {
+        prototype = _.Construction.prototype;
       }
       else
       {
         prototype = trait.prototype;
       }
 
-      if( trait.new && prototype )
+      if( ( prototype === _.Construction.prototype || trait.new ) && prototype )
       runtime.prototype = Object.create( prototype );
       else
       runtime.prototype = prototype;
 
     }
 
-    if( _global_.debugger )
-    debugger;
-
     /* */
 
-    runtime._makingTyped = false;
-    if( op.blueprint.traitsMap.typed.val === true )
-    runtime._makingTyped = true;
-    else if( op.blueprint.traitsMap.typed.val === _.maybe )
-    if
-    (
-           op.blueprint.traitsMap.typed.prototype === false
-      || ( op.blueprint.traitsMap.typed.prototype && op.blueprint.traitsMap.typed.prototype !== Object.prototype )
-    )
-    // if( op.blueprint.traitsMap.typed.prototype && op.blueprint.traitsMap.typed.prototype !== Object.prototype ) /* typed:maybe */
-    runtime._makingTyped = true;
+    // runtime._makingTyped = !!op.blueprint.traitsMap.typed.val;
 
     /* */
 
@@ -427,18 +496,15 @@ function typed_body( o )
 
     /* */
 
-    let effectiveTyped = !!trait.val && prototype !== null;
+    allocate = trait.val ? allocateTyped : allocateUntyped;
 
-    // if( trait.val === _.maybe && !trait.prototype ) /* typed:maybe */
-    if( trait.val === _.maybe && trait.prototype === null )
-    effectiveTyped = false;
+    /* */
 
-    allocate = effectiveTyped ? allocateTyped : allocateUntyped;
-    retype = effectiveTyped ? retypeTyped : retypeUntypedPreserving;
-    if( trait.val === false && ( trait.prototype === null || trait.prototype === true ) )
-    retype = retypeUntypedForcing;
-    if( trait.val === _.maybe ) /* xxx : optimize condition */
+    retype = trait.val ? retypeTyped : retypeUntypedPreserving;
+    if( trait.val === _.maybe )
     retype = retypeMaybe;
+    else if( trait.val === false && ( trait.prototype === null || trait.prototype === true ) )
+    retype = retypeUntypedForcing;
 
     _.blueprint._practiceAdd( op.blueprint, 'allocate', allocate );
     _.blueprint._practiceAdd( op.blueprint, 'retype', retype );
@@ -490,7 +556,10 @@ function typed_body( o )
     _.assert( !!genesis.runtime.typed );
     if( genesis.construction === null )
     genesis.construction = new( _.constructorJoin( genesis.runtime.make, genesis.args ) );
-    _.assert( genesis.construction === null || !genesis.runtime.prototype || genesis.construction instanceof genesis.runtime.make );
+    _.assert
+    (
+      genesis.construction === null || !genesis.runtime.prototype || genesis.construction instanceof genesis.runtime.make
+    );
     return genesis.construction;
   }
 
@@ -631,11 +700,14 @@ typed_body.defaults =
 {
   val : true,
   prototype : _.nothing,
-  new : null, /* xxx : use nothing? */
-  _dstConstruction : _.nothing,
-  _iherited : false,
+  new : _.nothing,
+  _synthetic : false, /* false for ordinary, true if created by inheriting, construction if spawned by _.construction.amend */
   _blueprint : null,
+  _notSyntheticDefinition : _.nothing,
+  _secondaryPrototype : _.nothing,
 }
+
+typed_body.group = { definition : true, trait : true };
 
 let typed = _.routineUnite( typed_head, typed_body );
 
@@ -720,6 +792,7 @@ function constructor( o )
 
 }
 
+constructor.group = { definition : true, trait : true };
 constructor.defaults =
 {
   val : true,
@@ -759,6 +832,7 @@ function extendable( o )
 
 }
 
+extendable.group = { definition : true, trait : true };
 extendable.defaults =
 {
   val : true,
@@ -787,6 +861,7 @@ function name( o )
 
 }
 
+name.group = { definition : true, trait : true };
 name.defaults =
 {
   val : null,
@@ -815,8 +890,7 @@ let TraitExtension =
 
 }
 
-_.trait = _.trait || Object.create( null );
-_.mapExtend( _.trait, TraitExtension );
+_.definition.extend( TraitExtension );
 
 //
 

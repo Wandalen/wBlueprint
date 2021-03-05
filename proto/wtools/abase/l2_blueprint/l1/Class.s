@@ -1,4 +1,5 @@
-( function _Class_s_() {
+( function _Class_s_()
+{
 
 'use strict';
 
