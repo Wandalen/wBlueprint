@@ -22,6 +22,14 @@ let select = _globals_.testing.wTools.select;
 
 */
 
+/*
+local-tst .run wtools/abase/l0.test && \
+local-tst .run wtools/abase/l1.test
+
+local-tst .run wtools/abase/l2_blueprint.test && \
+local-tst .run wtools/abase/l3_proto.test
+*/
+
 // --
 // helper
 // --

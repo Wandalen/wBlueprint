@@ -2688,7 +2688,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : true
   }
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
   var exp =
   {
     'a' : 'a1',
@@ -2705,7 +2705,7 @@ function accessorUnfunctGetSuite( test )
   test.identical( object.a, exp.a );
   test.identical( object.b, exp.b );
   var exp = { 'writable' : false, 'enumerable' : false, 'configurable' : false, 'value' : 'abc3' }
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
 
   /* */
 
@@ -2735,7 +2735,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : false,
   }
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
   var exp =
   {
     'a' : 'a1',
@@ -2758,7 +2758,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : false,
   }
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
 
   /* */
 
@@ -2788,7 +2788,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : true,
   }
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
   var exp =
   {
     'a' : 'a1',
@@ -2807,7 +2807,7 @@ function accessorUnfunctGetSuite( test )
   test.identical( object.a, exp.a );
   test.identical( object.b, exp.b );
   var exp = { 'writable' : false, 'enumerable' : false, 'configurable' : false, 'value' : 'abc3' };
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
 
   /* */
 
@@ -2837,7 +2837,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : true
   }
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
   var exp =
   {
     'a' : 'a1',
@@ -2856,7 +2856,7 @@ function accessorUnfunctGetSuite( test )
   test.identical( object.a, exp.a );
   test.identical( object.b, exp.b );
   var exp = { 'writable' : false, 'enumerable' : false, 'configurable' : false, 'value' : 'abc3' };
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
 
   /* */
 
@@ -2887,7 +2887,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : true
   }
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
   var exp =
   {
     'a' : 'a1',
@@ -2906,7 +2906,7 @@ function accessorUnfunctGetSuite( test )
   test.identical( object.a, exp.a );
   test.identical( object.b, exp.b );
   var exp = { 'writable' : false, 'enumerable' : false, 'configurable' : false, 'value' : 'abc3' };
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
 
   /* */
 
@@ -2936,7 +2936,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : false
   }
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
   var exp =
   {
     'a' : 'a1',
@@ -2961,7 +2961,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : false
   }
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
 
   /* */
 

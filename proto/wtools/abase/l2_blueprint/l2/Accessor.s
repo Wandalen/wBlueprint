@@ -560,7 +560,7 @@ function _objectMethodMoveGet( srcInstance, name )
 
 function _declaringIsNeeded( o )
 {
-  let prop = _.prototype.propertyDescriptorActiveGet( o.object, o.name );
+  let prop = _.property.descriptorActiveOf( o.object, o.name );
   if( prop.descriptor )
   {
 
@@ -1599,7 +1599,7 @@ function _forbidSingle()
 
   /* */
 
-  let propertyDescriptor = _.prototype.propertyDescriptorActiveGet( o.object, o.propName );
+  let propertyDescriptor = _.property.descriptorActiveOf( o.object, o.propName );
   if( propertyDescriptor.descriptor )
   {
     _.assert( _.strIs( o.combining ), 'forbid : if accessor overided expect ( o.combining ) is', _.accessor.Combining.join() );

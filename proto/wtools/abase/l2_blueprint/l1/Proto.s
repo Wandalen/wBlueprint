@@ -142,33 +142,6 @@ function isSubPrototypeOf( sub, parent )
 
 //
 
-function propertyDescriptorActiveGet( object, name )
-{
-  let result = Object.create( null );
-  result.object = null;
-  result.descriptor = null;
-
-  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  _.assert( !!object, 'No object' );
-
-  do
-  {
-    let descriptor = Object.getOwnPropertyDescriptor( object, name );
-    if( descriptor && !( 'value' in descriptor ) )
-    {
-      result.descriptor = descriptor;
-      result.object = object;
-      return result;
-    }
-    object = Object.getPrototypeOf( object );
-  }
-  while( object );
-
-  return result;
-}
-
-//
-
 function _ofStandardEntity( src )
 {
   if( src === Object.prototype )
@@ -176,31 +149,60 @@ function _ofStandardEntity( src )
   return false;
 }
 
+// //
 //
-
-function propertyDescriptorGet( object, name )
-{
-  let result = Object.create( null );
-  result.object = null;
-  result.descriptor = null;
-
-  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-
-  do
-  {
-    let descriptor = Object.getOwnPropertyDescriptor( object, name );
-    if( descriptor )
-    {
-      result.descriptor = descriptor;
-      result.object = object;
-      return result;
-    }
-    object = Object.getPrototypeOf( object );
-  }
-  while( object );
-
-  return result;
-}
+// function propertyDescriptorActiveGet( object, name )
+// {
+//   let result = Object.create( null );
+//   // yyy
+//   // result.object = null;
+//   // result.descriptor = null;
+//
+//   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
+//   _.assert( !!object, 'No object' );
+//
+//   do
+//   {
+//     let descriptor = Object.getOwnPropertyDescriptor( object, name );
+//     if( descriptor && !( 'value' in descriptor ) )
+//     {
+//       result.descriptor = descriptor;
+//       result.object = object;
+//       return result;
+//     }
+//     object = Object.getPrototypeOf( object );
+//   }
+//   while( object );
+//
+//   return result;
+// }
+//
+// //
+//
+// function propertyDescriptorGet( object, name )
+// {
+//   let result = Object.create( null );
+//   // yyy
+//   // result.object = null;
+//   // result.descriptor = null;
+//
+//   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
+//
+//   do
+//   {
+//     let descriptor = Object.getOwnPropertyDescriptor( object, name );
+//     if( descriptor )
+//     {
+//       result.descriptor = descriptor;
+//       result.object = object;
+//       return result;
+//     }
+//     object = Object.getPrototypeOf( object );
+//   }
+//   while( object );
+//
+//   return result;
+// }
 
 // --
 // define
@@ -218,8 +220,8 @@ let PrototypeExtension =
   isSubPrototypeOf, /* xxx : remove? */
   _ofStandardEntity,
 
-  propertyDescriptorActiveGet,
-  propertyDescriptorGet,
+  // propertyDescriptorActiveGet, /* qqq : cover please */
+  // propertyDescriptorGet, /* qqq : cover please */
 
 }
 
