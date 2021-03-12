@@ -581,7 +581,11 @@ function _declaringIsNeeded( o )
     if( o.combining === 'supplement' )
     return false;
 
-    _.assert( prop.object !== o.object, () => `Attempt to redefine own accessor "${o.name}" of ${_.entity.exportStringShort( o.object )}` );
+    _.assert
+    (
+      prop.object !== o.object,
+      () => `Attempt to redefine own accessor "${o.name}" of ${_.entity.exportStringShort( o.object )}`
+    );
 
   }
   return true;
