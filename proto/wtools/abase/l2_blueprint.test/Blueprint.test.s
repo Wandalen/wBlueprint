@@ -23,11 +23,11 @@ let select = _globals_.testing.wTools.select;
 */
 
 /*
-local-tst .run wtools/abase/l0.test && \
-local-tst .run wtools/abase/l1.test
+tst.local .run wtools/abase/l0.test n:1 && \
+tst.local .run wtools/abase/l1.test n:1
 
-local-tst .run wtools/abase/l2_blueprint.test && \
-local-tst .run wtools/abase/l3_proto.test
+tst.local .run wtools/abase/l2_blueprint.test n:1 && \
+tst.local .run wtools/abase/l3_proto.test n:1
 */
 
 // --

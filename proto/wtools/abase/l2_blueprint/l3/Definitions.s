@@ -692,7 +692,7 @@ prop_body.defaults =
 
 prop_body.group = { definition : true, named : true };
 
-let prop = _.routineUnite( prop_head, prop_body );
+let prop = _.routine.uniteCloning_( prop_head, prop_body );
 _.routineEr( prop, _singleArgumentHead );
 
 /*
@@ -761,7 +761,7 @@ props_body.defaults =
   ... prop.defaults,
 }
 
-let props = _.routineUnite( prop_head, props_body );
+let props = _.routine.uniteCloning_( prop_head, props_body );
 props.group = _.mapExtend( null, prop.group );
 props.group.named = false;
 _.routineEr( props, _singleArgumentHead );
@@ -779,7 +779,7 @@ val_body.defaults =
   valToIns : 'val',
 }
 
-let val = _.routineUnite( prop_head, val_body );
+let val = _.routine.uniteCloning_( prop_head, val_body );
 val.group = _.mapExtend( null, prop.group );
 _.routineEr( val, _singleArgumentHead );
 
@@ -796,7 +796,7 @@ vals_body.defaults =
   valToIns : 'val',
 }
 
-let vals = _.routineUnite( prop_head, vals_body );
+let vals = _.routine.uniteCloning_( prop_head, vals_body );
 vals.group = _.mapExtend( null, val.group );
 vals.group.named = false;
 _.routineEr( vals, _singleArgumentHead );
@@ -814,7 +814,7 @@ shallow_body.defaults =
   valToIns : 'shallow',
 }
 
-let shallow = _.routineUnite( prop_head, shallow_body );
+let shallow = _.routine.uniteCloning_( prop_head, shallow_body );
 shallow.group = _.mapExtend( null, prop.group );
 _.routineEr( shallow, _singleArgumentHead );
 
@@ -831,7 +831,7 @@ shallows_body.defaults =
   valToIns : 'shallow',
 }
 
-let shallows = _.routineUnite( prop_head, shallows_body );
+let shallows = _.routine.uniteCloning_( prop_head, shallows_body );
 shallows.group = _.mapExtend( null, shallow.group );
 shallows.group.named = false;
 _.routineEr( shallows, _singleArgumentHead );
@@ -849,7 +849,7 @@ deep_body.defaults =
   valToIns : 'deep',
 }
 
-let deep = _.routineUnite( prop_head, deep_body );
+let deep = _.routine.uniteCloning_( prop_head, deep_body );
 deep.group = _.mapExtend( null, prop.group );
 _.routineEr( deep, _singleArgumentHead );
 
@@ -866,7 +866,7 @@ deeps_body.defaults =
   valToIns : 'deep',
 }
 
-let deeps = _.routineUnite( prop_head, deeps_body );
+let deeps = _.routine.uniteCloning_( prop_head, deeps_body );
 deeps.group = _.mapExtend( null, deep.group );
 deeps.group.named = false;
 _.routineEr( deeps, _singleArgumentHead );
@@ -884,7 +884,7 @@ call_body.defaults =
   valToIns : 'call',
 }
 
-let call = _.routineUnite( prop_head, call_body );
+let call = _.routine.uniteCloning_( prop_head, call_body );
 call.group = _.mapExtend( null, prop.group );
 _.routineEr( call, _singleArgumentHead );
 
@@ -901,7 +901,7 @@ calls_body.defaults =
   valToIns : 'call',
 }
 
-let calls = _.routineUnite( prop_head, calls_body );
+let calls = _.routine.uniteCloning_( prop_head, calls_body );
 calls.group = _.mapExtend( null, call.group );
 calls.group.named = false;
 _.routineEr( calls, _singleArgumentHead );
@@ -919,7 +919,7 @@ new_body.defaults =
   valToIns : 'new',
 }
 
-let _new = _.routineUnite( prop_head, new_body );
+let _new = _.routine.uniteCloning_( prop_head, new_body );
 _new.group = _.mapExtend( null, prop.group );
 _.routineEr( _new, _singleArgumentHead );
 
@@ -936,7 +936,7 @@ news_body.defaults =
   valToIns : 'new',
 }
 
-let _news = _.routineUnite( prop_head, news_body );
+let _news = _.routine.uniteCloning_( prop_head, news_body );
 _news.group = _.mapExtend( null, _new.group );
 _news.group.named = false;
 _.routineEr( _news, _singleArgumentHead );
@@ -954,7 +954,7 @@ static_body.defaults =
   static : 1,
 }
 
-let _static = _.routineUnite( prop_head, static_body );
+let _static = _.routine.uniteCloning_( prop_head, static_body );
 _static.group = _.mapExtend( null, prop.group );
 _.routineEr( _static, _singleArgumentHead );
 
@@ -971,7 +971,7 @@ statics_body.defaults =
   static : 1,
 }
 
-let _statics = _.routineUnite( prop_head, statics_body );
+let _statics = _.routine.uniteCloning_( prop_head, statics_body );
 _statics.group = _.mapExtend( null, _static.group );
 _statics.group.named = false;
 _.routineEr( _statics, _singleArgumentHead );
@@ -1054,7 +1054,7 @@ alias_body.defaults =
   originalName : null,
 }
 
-let alias = _.routineUnite( alias_head, alias_body );
+let alias = _.routine.uniteCloning_( alias_head, alias_body );
 alias.group = _.mapExtend( null, prop.group );
 _.routineEr( alias );
 
@@ -1085,7 +1085,7 @@ function nothing_functor()
   _.definition.retype( prototype );
   Object.freeze( prototype );
 
-  let nothing = _.routineUnite( _head, nothing_body );
+  let nothing = _.routine.uniteCloning_( _head, nothing_body );
   return nothing;
 
   /* */
@@ -1156,7 +1156,7 @@ let nothing = nothing_functor();
 //
 // nothing_body.group = { definition : true, named : false };
 //
-// let nothing = _.routineUnite( _singleArgumentHead, nothing_body );
+// let nothing = _.routine.uniteCloning_( _singleArgumentHead, nothing_body );
 
 //
 
@@ -1312,11 +1312,11 @@ _amendment_body.defaults =
 
 _amendment_body.group = { definition : true, named : false };
 
-let _amendment = _.routineUnite( _amendment_head, _amendment_body );
+let _amendment = _.routine.uniteCloning_( _amendment_head, _amendment_body );
 
 //
 
-let extension = _.routineUnite({ head : _amendment_head, body : _amendment_body, name : 'extension' });
+let extension = _.routine.uniteCloning_({ head : _amendment_head, body : _amendment_body, name : 'extension' });
 
 extension.defaults =
 {
@@ -1331,7 +1331,7 @@ _.routineEr( extension, _singleArgumentHead );
 
 //
 
-let supplementation = _.routineUnite({ head : _amendment_head, body : _amendment_body, name : 'supplementation' });
+let supplementation = _.routine.uniteCloning_({ head : _amendment_head, body : _amendment_body, name : 'supplementation' });
 
 supplementation.defaults =
 {
@@ -1407,7 +1407,7 @@ inherit_body.defaults =
 
 inherit_body.group = { definition : true, named : false };
 
-let inherit = _.routineUnite( _pairArgumentsHead, inherit_body );
+let inherit = _.routine.uniteCloning_( _pairArgumentsHead, inherit_body );
 
 // --
 //

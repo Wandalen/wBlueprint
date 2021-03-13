@@ -329,7 +329,7 @@ _normalizedAsuiteForm_body.defaults =
   name : null,
 }
 
-let _normalizedAsuiteForm = _.routineUnite( _normalizedAsuiteForm_head, _normalizedAsuiteForm_body );
+let _normalizedAsuiteForm = _.routine.uniteCloning_( _normalizedAsuiteForm_head, _normalizedAsuiteForm_body );
 
 //
 
@@ -1100,7 +1100,7 @@ var defaults = suiteNormalize_body.defaults =
   ... DeclarationOptions,
 }
 
-let suiteNormalize = _.routineUnite( declareSingle_head, suiteNormalize_body );
+let suiteNormalize = _.routine.uniteCloning_( declareSingle_head, suiteNormalize_body );
 
 //
 
@@ -1291,7 +1291,7 @@ var defaults = declareSingle_body.defaults =
   ... DeclarationOptions,
 }
 
-let declareSingle = _.routineUnite( declareSingle_head, declareSingle_body );
+let declareSingle = _.routine.uniteCloning_( declareSingle_head, declareSingle_body );
 
 //
 
@@ -1465,7 +1465,7 @@ var defaults = declareMultiple_body.defaults = _.mapExtend( null, declareSingle.
 defaults.names = null;
 delete defaults.name;
 
-let declareMultiple = _.routineUnite( declareMultiple_head, declareMultiple_body );
+let declareMultiple = _.routine.uniteCloning_( declareMultiple_head, declareMultiple_body );
 
 //
 
@@ -1589,7 +1589,7 @@ var defaults = forbid_body.defaults =
 
 }
 
-let forbid = _.routineUnite( declareMultiple_head, forbid_body );
+let forbid = _.routine.uniteCloning_( declareMultiple_head, forbid_body );
 
 //
 
@@ -1751,7 +1751,7 @@ function readOnly_body( o )
 var defaults = readOnly_body.defaults = _.mapExtend( null, declareMultiple.body.defaults );
 defaults.writable = false;
 
-let readOnly = _.routineUnite( declareMultiple_head, readOnly_body );
+let readOnly = _.routine.uniteCloning_( declareMultiple_head, readOnly_body );
 
 //
 

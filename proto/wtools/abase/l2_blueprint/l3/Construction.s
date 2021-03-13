@@ -382,7 +382,7 @@ _retype_body.defaults =
   amending : 'supplement',
 }
 
-let _retype = _.routineUnite( _make_head, _retype_body );
+let _retype = _.routine.uniteCloning_( _make_head, _retype_body );
 
 //
 

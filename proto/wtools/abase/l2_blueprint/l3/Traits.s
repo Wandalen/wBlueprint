@@ -713,7 +713,7 @@ typed_body.defaults =
 
 typed_body.group = { definition : true, trait : true };
 
-let typed = _.routineUnite( typed_head, typed_body );
+let typed = _.routine.uniteCloning_( typed_head, typed_body );
 
 //
 

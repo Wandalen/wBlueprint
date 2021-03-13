@@ -226,7 +226,7 @@ declare_body.defaults =
   val : _.nothing,
 }
 
-let declare = _.routineUnite( declare_head, declare_body );
+let declare = _.routine.uniteCloning_( declare_head, declare_body );
 _.routineEr( declare );
 
 // --
