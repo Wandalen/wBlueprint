@@ -207,8 +207,8 @@ function typed_body( o )
     if( op.primeDefinition && op.secondaryDefinition && !_.boolIs( op.secondaryDefinition._synthetic ) )
     {
 
-      if( _global_.debugger )
-      debugger;
+      // if( _global_.debugger )
+      // debugger;
       _.assert( _.boolIs( op.primeDefinition._synthetic ) );
 
       let prototype = _.prototype.of( op.secondaryDefinition._synthetic );
@@ -290,8 +290,8 @@ function typed_body( o )
   {
     let secondaryDefinition = op.secondaryDefinition;
 
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
 
     if( op.primeDefinition._synthetic === true )
     {
@@ -555,8 +555,8 @@ function typed_body( o )
 
   function allocateTyped( genesis )
   {
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
     _.assert( !!genesis.runtime.typed );
     if( genesis.construction === null )
     genesis.construction = new( _.constructorJoin( genesis.runtime.make, genesis.args ) );
@@ -571,8 +571,8 @@ function typed_body( o )
 
   function allocateUntyped( genesis )
   {
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
 
     if( genesis.runtime.prototype === null && !_.mapIsPure( genesis.construction ) )
     genesis.construction = Object.create( null );
@@ -589,8 +589,8 @@ function typed_body( o )
 
   function retypeMaybe( genesis )
   {
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
 
     if( genesis.construction === null )
     {
@@ -627,8 +627,8 @@ function typed_body( o )
 
   function retypeTyped( genesis )
   {
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
     if( genesis.construction === null )
     {
       genesis.construction = new( _.constructorJoin( genesis.runtime.make, genesis.args ) );
@@ -659,8 +659,8 @@ function typed_body( o )
 
   function retypeUntypedPreserving( genesis )
   {
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
     if( genesis.construction )
     {
       let wasProto = Object.getPrototypeOf( genesis.construction );
@@ -680,8 +680,8 @@ function typed_body( o )
 
   function retypeUntypedForcing( genesis )
   {
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
     if( genesis.construction )
     {
       let wasProto = Object.getPrototypeOf( genesis.construction );
@@ -736,8 +736,8 @@ function constructor( o )
   function blueprintForm2( op )
   {
 
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
 
     if( !op.blueprint.traitsMap.constructor.val )
     return;
@@ -771,8 +771,8 @@ function constructor( o )
 
     function constructionInitEnd( genesis )
     {
-      if( _global_.debugger )
-      debugger;
+      // if( _global_.debugger )
+      // debugger;
       _.assert( !_.primitiveIs( genesis.construction ) );
       if( typed )
       {

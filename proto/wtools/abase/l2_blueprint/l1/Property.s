@@ -40,8 +40,6 @@ function hide( dstPrototype, name, value )
   if( _.containerIs( name ) )
   {
     if( !_.objectIs( name ) )
-    debugger;
-    if( !_.objectIs( name ) )
     name = _.indexExtending( name, ( e ) => { return { [ e ] : undefined } } );
     _.each( name, ( v, n ) =>
     {

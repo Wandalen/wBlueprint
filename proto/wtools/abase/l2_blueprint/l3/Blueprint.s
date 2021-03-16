@@ -379,7 +379,6 @@ function _amend( o )
     }
     else
     {
-      debugger;
       throw _.err( 'Not clear how to extend by blueprint' );
     }
   }

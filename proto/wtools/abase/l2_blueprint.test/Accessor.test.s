@@ -424,7 +424,6 @@ function _objectSetValueNoShadowing( test )
 
   _.accessor._objectInitStorage( obj, o2.normalizedAsuite );
 
-  debugger;
   _.accessor._objectSetValue
   ({
     object : obj,
@@ -440,7 +439,6 @@ function _objectSetValueNoShadowing( test )
   var exp = {};
   test.identical( _.mapBut( proto, [ 'f1' ] ), exp );
 
-  debugger;
 
   /* */
 
@@ -2979,7 +2977,7 @@ function accessorValueOptions( test )
     valueSetting : [ 0, 1 ],
     preservingValue : [ 0, 1 ],
   };
-  var samples = _.eachSample_({ sets }); debugger;
+  var samples = _.eachSample_({ sets });
 
   for( let tops of samples )
   eachCase( tops );
