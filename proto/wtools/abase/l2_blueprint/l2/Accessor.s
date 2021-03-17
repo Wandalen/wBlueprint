@@ -235,7 +235,6 @@ function _normalizedAsuiteForm_body( o )
     o.normalizedAsuite.move = function move( it )
     {
       _.assert( 0, 'not tested' ); /* zzz */
-      debugger;
       return it.src;
     }
   }
@@ -933,8 +932,8 @@ function _objectInitStorage( object, normalizedAsuite )
     initers.add( method.objectInitStorage );
   }
 
-  if( initers.size > 1 )
-  debugger;
+  // if( initers.size > 1 )
+  // debugger;
 
   for( let initer of initers )
   {
@@ -1495,14 +1494,12 @@ function forbid_body( o )
 
   if( _.arrayLike( o.object ) )
   {
-    debugger;
     _.each( o.object, ( object ) =>
     {
       let o2 = _.mapExtend( null, o );
       o2.object = object;
       forbid_body( o2 );
     });
-    debugger;
     return o.object;
   }
 
@@ -1668,7 +1665,6 @@ function _forbidSingle()
 
   function forbidden()
   {
-    debugger;
     throw _.err( messageLine );
   }
 

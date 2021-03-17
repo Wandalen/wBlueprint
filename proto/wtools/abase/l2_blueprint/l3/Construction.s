@@ -151,7 +151,6 @@ function supplement( dstConstruction, src )
 
 function _amendCant( construction, definition, key )
 {
-  debugger;
   throw _.err
   (
     `Definition::${definition.kind} cant extend created construction after initialization.`

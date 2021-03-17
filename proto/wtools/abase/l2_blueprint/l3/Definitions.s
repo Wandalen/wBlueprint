@@ -280,8 +280,8 @@ function prop_body( o )
     _.assert( !_.boolLikeFalse( op.definition.accessor ) );
     _.assert( !_.prototype._ofStandardEntity( prototype ), 'Attempt to pollute _global_.Object.prototype' );
 
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
 
     let val2 = valFrom( prototype, name, op.amending, val );
 
@@ -350,8 +350,8 @@ function prop_body( o )
     _.assert( _.boolIs( op.definition.enumerable ) );
     _.assert( !_.prototype._ofStandardEntity( prototype ), 'Attempt to pollute _global_.Object.prototype' );
 
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
 
     if( prototype )
     {
@@ -403,8 +403,8 @@ function prop_body( o )
 
     _.assert( _.fuzzyIs( blueprint.typed ) );
 
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
 
     if( !isStatic && blueprint.traitsMap.typed.val && blueprint.prototype )
     {
@@ -448,8 +448,8 @@ function prop_body( o )
 
     function constructionInitTyped( genesis )
     {
-      if( _global_.debugger )
-      debugger;
+      // if( _global_.debugger )
+      // debugger;
       _.accessor._objectInitStorage( genesis.construction, normalizedAsuite );
 
       let val2 = valFrom( genesis.construction, name, genesis.amending, val );
@@ -467,8 +467,8 @@ function prop_body( o )
 
     function constructionInitUntyped( genesis )
     {
-      if( _global_.debugger )
-      debugger;
+      // if( _global_.debugger )
+      // debugger;
 
       let val2 = valFrom( genesis.construction, name, genesis.amending, val );
       _.accessor.declareSingle
@@ -489,8 +489,8 @@ function prop_body( o )
 
     function constructionInitUntypedStatic( genesis )
     {
-      if( _global_.debugger )
-      debugger;
+      // if( _global_.debugger )
+      // debugger;
 
       let prototype2 = Object.getPrototypeOf( genesis.construction );
       if( prototype2 && prototype2 === prototype )
@@ -515,8 +515,8 @@ function prop_body( o )
 
     function constructionInitMaybe( genesis )
     {
-      if( _global_.debugger )
-      debugger;
+      // if( _global_.debugger )
+      // debugger;
       if( prototype === null )
       {
         constructionInitUntyped( genesis );
@@ -549,12 +549,11 @@ function prop_body( o )
 
     function constructionInit( genesis )
     {
-      if( _global_.debugger )
-      debugger;
+      // if( _global_.debugger )
+      // debugger;
 
       if( isStatic )
       {
-        debugger;
         let prototype2 = Object.getPrototypeOf( genesis.construction );
         if( prototype2 && prototype2 === prototype )
         return;
@@ -583,8 +582,8 @@ function prop_body( o )
 
     function constructionInit( genesis )
     {
-      if( _global_.debugger )
-      debugger;
+      // if( _global_.debugger )
+      // debugger;
 
       if( isStatic )
       {
@@ -1111,7 +1110,7 @@ function nothing_functor()
   {
     if( o === prototype )
     return prototype;
-    _.assert( o === undefined || _.mapIs( o ) || Object.getPrototypeOf( o ) === prototype ); debugger;
+    _.assert( o === undefined || _.mapIs( o ) || Object.getPrototypeOf( o ) === prototype );
     if( Object.getPrototypeOf( o ) !== prototype )
     Object.setPrototypeOf( o, prototype );
     Object.freeze( o );
@@ -1204,7 +1203,6 @@ function _constant_functor()
 
   function blueprintForm1( op )
   {
-    debugger;
     const val = op.definition.val;
     const name = op.definition.name;
     _.assert( _.strDefined( op.propName ) || _.strDefined( op.definition.name ) );
@@ -1216,7 +1214,6 @@ function _constant_functor()
 
   function blueprintForm2( op )
   {
-    debugger;
     const val = op.definition.val;
     const name = op.definition.name;
 
@@ -1224,8 +1221,8 @@ function _constant_functor()
 
     function constructionInitUntyped( genesis )
     {
-      if( _global_.debugger )
-      debugger;
+      // if( _global_.debugger )
+      // debugger;
 
       let val2 = val;
 
@@ -1364,8 +1361,8 @@ function inherit_body( o )
     let blueprint = op.blueprint;
     let add = op.amending === 'supplement' ? 'unshift' : 'push';
 
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
 
     let result = [];
     result[ add ]( definition.val );
