@@ -10,8 +10,8 @@ if( typeof module !== 'undefined' )
   require( '../../abase/l2_blueprint/Include.s' );
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 // --
 // test
@@ -437,7 +437,7 @@ function _objectSetValueNoShadowing( test )
   test.identical( _.property.of( obj ), exp );
 
   var exp = {};
-  test.identical( _.mapBut( proto, [ 'f1' ] ), exp );
+  test.identical( _.mapBut_( null, proto, [ 'f1' ] ), exp );
 
 
   /* */
@@ -3999,7 +3999,7 @@ function accessorStoringStrategyUnderscoreIniting( test )
 // declare
 // --
 
-let Self =
+const Proto =
 {
 
   name : 'Tools.l2.blueprint.Accessor',
@@ -4042,7 +4042,7 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 

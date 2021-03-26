@@ -3,9 +3,9 @@
 
 'use strict';
 
-let Self = _global_.wTools;
-let _global = _global_;
-let _ = _global_.wTools;
+const Self = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 /**
  * @summary Collection of routines for declaring accessors
@@ -151,7 +151,7 @@ function _normalizedAsuiteForm_body( o )
   _.assert( _.strIs( o.name ) || _.symbolIs( o.name ) );
   _.assert( _.mapIs( o.normalizedAsuite ) );
   _.assert( o.writable === null || _.boolIs( o.writable ) );
-  _.assertMapHasOnly( o.normalizedAsuite, _.accessor.AmethodTypesMap );
+  _.map.assertHasOnly( o.normalizedAsuite, _.accessor.AmethodTypesMap );
   _.assertRoutineOptions( _normalizedAsuiteForm_body, o );
 
   let propName;
@@ -165,7 +165,7 @@ function _normalizedAsuiteForm_body( o )
   }
 
   if( o.suite )
-  _.assertMapHasOnly( o.suite, _.accessor.AmethodTypes );
+  _.map.assertHasOnly( o.suite, _.accessor.AmethodTypes );
 
   // for( let k in o.normalizedAsuite, _.accessor.AmethodTypesMap )
   for( let k in _.accessor.AmethodTypesMap )
@@ -843,7 +843,7 @@ _moveItMake.defaults =
 function _objectSetValue( o )
 {
 
-  _.assertMapHasAll( o, _objectSetValue.defaults );
+  _.map.assertHasAll( o, _objectSetValue.defaults );
 
   let descriptor = Object.getOwnPropertyDescriptor( o.object, o.name );
   // if( descriptor && descriptor.configurable && descriptor.get == undefined && descriptor.set === undefined ) /* yyy */
@@ -1044,7 +1044,7 @@ function suiteSupplement( dst, src )
 function suiteNormalize_body( o )
 {
 
-  _.assertMapHasAll( o, suiteNormalize_body.defaults );
+  _.map.assertHasAll( o, suiteNormalize_body.defaults );
 
   /* */
 
@@ -1126,7 +1126,7 @@ function declareSingle_head( routine, args )
   if( _.boolLikeTrue( o.suite ) )
   o.suite = Object.create( null );
 
-  _.assertMapHasAll( o, routine.defaults );
+  _.map.assertHasAll( o, routine.defaults );
 
   _.accessor._methodsNormalize( o );
   _.accessor._defaultsApply( o );
@@ -1139,7 +1139,7 @@ function declareSingle_head( routine, args )
 function declareSingle_body( o )
 {
 
-  _.assertMapHasAll( o, declareSingle_body.defaults );
+  _.map.assertHasAll( o, declareSingle_body.defaults );
   _.assert( _.boolIs( o.writable ) || o.writable === null );
   _.assert( o.object !== Object, 'Attempt to polute _global_.Object' );
   _.assert( !_.prototype._ofStandardEntity( o.object ), 'Attempt to pollute _global_.Object.prototype' );
@@ -1332,7 +1332,7 @@ let declareSingle = _.routine.uniteCloning_( declareSingle_head, declareSingle_b
  * @param {Object} o - options {@link module:Tools/base/Proto.wTools.accessor~AccessorOptions}.
  *
  * @example
- * let Self = ClassName;
+ * const Self = ClassName;
 function ClassName( o ) { };
  * _.accessor.declare( Self, { a : 'a' }, 'set/get call' )
  * Self.a = 1; // set/get call
@@ -1437,7 +1437,7 @@ function declareMultiple_body( o )
 
     if( _.mapIs( extension ) )
     {
-      _.assertMapHasOnly( extension, _.accessor.DeclarationMultipleToSingleOptions );
+      _.map.assertHasOnly( extension, _.accessor.DeclarationMultipleToSingleOptions );
       _.mapExtend( o2, extension );
       _.assert( !!o2.object );
     }
@@ -1475,7 +1475,7 @@ let declareMultiple = _.routine.uniteCloning_( declareMultiple_head, declareMult
  * @param {Object} o - options {@link module:Tools/base/Proto.wTools.accessor~AccessorOptions}.
  *
  * @example
- * let Self = ClassName;
+ * const Self = ClassName;
 function ClassName( o ) { };
  * _.accessor.forbid( Self, { a : 'a' } )
  * Self.a; // throw an Error
@@ -1656,7 +1656,7 @@ function _forbidSingle()
   o.strict = 0;
   o.prime = 0;
 
-  let o2 = _.mapOnly( o, _.accessor.declare.body.defaults );
+  let o2 = _.mapOnly_( null, o, _.accessor.declare.body.defaults );
   o2.name = o.propName;
   delete o2.names;
   return _.accessor.declareSingle.body( o2 );
@@ -1685,7 +1685,7 @@ var defaults = _forbidSingle.defaults =
  * @param {String} name - name of the property
  *
  * @example
- * let Self = ClassName;
+ * const Self = ClassName;
 function ClassName( o ) { };
  * _.accessor.forbid( Self, { a : 'a' } );
  * _.accessor.ownForbid( Self, 'a' ) // returns true

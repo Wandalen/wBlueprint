@@ -3,9 +3,9 @@
 
 'use strict';
 
-let Self = _global_.wTools;
-let _global = _global_;
-let _ = _global_.wTools;
+const Self = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 //
 
@@ -165,7 +165,7 @@ function prop_head( routine, args )
 function prop_body( o )
 {
 
-  _.assertMapHasAll( o, prop_body.defaults );
+  _.map.assertHasAll( o, prop_body.defaults );
   _.assert( o.val !== undefined );
   _.assert( o.blueprintDepthLimit >= 0 );
   _.assert( _.boolIs( o.writable ) || o.writable === null );
@@ -1048,7 +1048,7 @@ function alias_body( o )
 
 alias_body.defaults =
 {
-  ... _.mapBut( prop.defaults, { methods : null, val : null } ),
+  ... _.mapBut_( null, prop.defaults, { methods : null, val : null } ),
   originalContainer : null,
   originalName : null,
 }
@@ -1100,7 +1100,7 @@ function nothing_functor()
     if( !o )
     return prototype;
 
-    _.assertMapHasOnly( o, routine.defaults );
+    _.map.assertHasOnly( o, routine.defaults );
     return o;
   }
 

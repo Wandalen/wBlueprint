@@ -11,9 +11,10 @@ if( typeof module !== 'undefined' )
   _.include( 'wTesting' );
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
-let select = _globals_.testing.wTools.select;
+const _global = _global_;
+const _ = _global_.wTools;
+const __ = _globals_.testing.wTools;
+let select = __.select;
 
 /* xxx qqq
 
@@ -10006,7 +10007,7 @@ function definePropAliasOptionOriginalContainer( test )
       'p' : '1',
       's' : '2',
     }
-    test.identical( _.mapBut( _.property.onlyExplicit( instance1 ), [ '_' ] ), exp );
+    test.identical( _.mapBut_( null, _.property.onlyExplicit( instance1 ), [ '_' ] ), exp );
 
     var exp =
     {
@@ -10098,7 +10099,7 @@ function definePropAliasOptionOriginalContainer( test )
       'p' : tops.set ? '3' : '1',
       's' : '2',
     }
-    test.identical( _.mapBut( _.property.onlyExplicit( instance1 ), [ '_' ] ), exp );
+    test.identical( _.mapBut_( null, _.property.onlyExplicit( instance1 ), [ '_' ] ), exp );
 
     var exp =
     {
@@ -10166,7 +10167,7 @@ function definePropAliasOptionOriginalContainer( test )
       'p' : '1',
       's' : tops.set ? '3' : '2',
     }
-    test.identical( _.mapBut( _.property.onlyExplicit( instance1 ), [ '_' ] ), exp );
+    test.identical( _.mapBut_( null, _.property.onlyExplicit( instance1 ), [ '_' ] ), exp );
 
     var exp =
     {
@@ -10233,7 +10234,7 @@ function definePropAliasOptionOriginalContainer( test )
     {
       'p' : '1',
     }
-    test.identical( _.mapBut( _.property.onlyExplicit( instance1 ), [ '_' ] ), exp );
+    test.identical( _.mapBut_( null, _.property.onlyExplicit( instance1 ), [ '_' ] ), exp );
 
     var exp =
     {
@@ -10325,7 +10326,7 @@ function definePropAliasOptionOriginalContainer( test )
     {
       'p' : tops.set ? '3' : '1',
     }
-    test.identical( _.mapBut( _.property.onlyExplicit( instance1 ), [ '_' ] ), exp );
+    test.identical( _.mapBut_( null, _.property.onlyExplicit( instance1 ), [ '_' ] ), exp );
 
     var exp =
     {
@@ -10378,7 +10379,7 @@ function definePropAliasOptionOriginalContainer( test )
     {
       'p' : '1',
     }
-    test.identical( _.mapBut( _.property.onlyExplicit( instance1 ), [ '_' ] ), exp );
+    test.identical( _.mapBut_( null, _.property.onlyExplicit( instance1 ), [ '_' ] ), exp );
 
     var exp =
     {
@@ -20313,7 +20314,7 @@ function retypeExtendable( test )
 // declare
 // --
 
-let Self =
+const Proto =
 {
 
   name : 'Tools.l2.blueprint.Blueprint',
@@ -20467,7 +20468,7 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 

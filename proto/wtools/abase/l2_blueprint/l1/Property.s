@@ -3,9 +3,9 @@
 
 'use strict';
 
-let Self = _global_.wTools;
-let _global = _global_;
-let _ = _global_.wTools;
+const Self = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 // --
 // implementation
@@ -74,7 +74,7 @@ function hide( dstPrototype, name, value )
  * @param {object} namesObject - name/value map of constants.
  *
  * @example
- * let Self = ClassName;
+ * const Self = ClassName;
 function ClassName( o ) { };
  * let Constants = { num : 100  };
  * _.property.constant( Self.prototype, Constants );
