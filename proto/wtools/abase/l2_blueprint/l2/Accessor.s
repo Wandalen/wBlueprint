@@ -267,7 +267,7 @@ function _normalizedAsuiteForm_body( o )
     _.assert
     (
       _.definitionIs( o.normalizedAsuite[ k ] ) || _.routineIs( o.normalizedAsuite[ k ] ) || o.normalizedAsuite[ k ] === false,
-      () => `Field "${propName}" is not read only, but setter not found ${_.entity.exportStringShort( o.methods )}`
+      () => `Field "${propName}" is not read only, but setter not found ${_.entity.exportStringShallow( o.methods )}`
     );
   }
 
@@ -583,7 +583,7 @@ function _declaringIsNeeded( o )
     _.assert
     (
       prop.object !== o.object,
-      () => `Attempt to redefine own accessor "${o.name}" of ${_.entity.exportStringShort( o.object )}`
+      () => `Attempt to redefine own accessor "${o.name}" of ${_.entity.exportStringShallow( o.object )}`
     );
 
   }
@@ -1412,8 +1412,8 @@ function declareMultiple_body( o )
   /* verification */
 
   _.assert( !_.primitiveIs( o.methods ) );
-  _.assert( !_.primitiveIs( o.object ), () => 'Expects object {-object-}, but got ' + _.entity.exportStringShort( o.object ) );
-  _.assert( _.objectIs( o.names ), () => 'Expects object {-names-}, but got ' + _.entity.exportStringShort( o.names ) );
+  _.assert( !_.primitiveIs( o.object ), () => 'Expects object {-object-}, but got ' + _.entity.exportStringShallow( o.object ) );
+  _.assert( _.objectIs( o.names ), () => 'Expects object {-names-}, but got ' + _.entity.exportStringShallow( o.names ) );
 
   /* */
 
@@ -1511,8 +1511,8 @@ function forbid_body( o )
 
   /* verification */
 
-  _.assert( !_.primitiveIs( o.object ), () => 'Expects object {-o.object-} but got ' + _.entity.exportStringShort( o.object ) );
-  _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ), () => 'Expects object {-o.names-} as argument but got ' + _.entity.exportStringShort( o.names ) );
+  _.assert( !_.primitiveIs( o.object ), () => 'Expects object {-o.object-} but got ' + _.entity.exportStringShallow( o.object ) );
+  _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ), () => 'Expects object {-o.names-} as argument but got ' + _.entity.exportStringShallow( o.names ) );
 
   /* message */
 
