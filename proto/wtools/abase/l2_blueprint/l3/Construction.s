@@ -3,8 +3,8 @@
 
 'use strict';
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 // --
 // implementation
@@ -151,7 +151,6 @@ function supplement( dstConstruction, src )
 
 function _amendCant( construction, definition, key )
 {
-  debugger;
   throw _.err
   (
     `Definition::${definition.kind} cant extend created construction after initialization.`
@@ -382,7 +381,7 @@ _retype_body.defaults =
   amending : 'supplement',
 }
 
-let _retype = _.routineUnite( _make_head, _retype_body );
+let _retype = _.routine.uniteCloning_( _make_head, _retype_body );
 
 //
 

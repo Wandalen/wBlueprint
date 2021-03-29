@@ -3,9 +3,9 @@
 
 'use strict';
 
-let Self = _global_.wTools;
-let _global = _global_;
-let _ = _global_.wTools;
+const Self = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 let Definition = _.Definition;
 _.routineIs( Definition );
@@ -154,7 +154,11 @@ function typed_body( o )
   o.prototype = !!o.prototype;
 
   _.assert( _.fuzzyIs( o.val ), () => `Expects fuzzy-like argument, but got ${_.entity.strType( o.val )}` );
-  _.assert( o.new === _.nothing || _.boolIs( o.new ), () => `Expects bool-like option::new, but got ${_.entity.strType( o.new )}` );
+  _.assert
+  (
+    o.new === _.nothing || _.boolIs( o.new ),
+    () => `Expects bool-like option::new, but got ${_.entity.strType( o.new )}`
+  );
   _.assert
   (
     o.val !== false || _.primitiveIs( o.prototype )
@@ -203,8 +207,8 @@ function typed_body( o )
     if( op.primeDefinition && op.secondaryDefinition && !_.boolIs( op.secondaryDefinition._synthetic ) )
     {
 
-      if( _global_.debugger )
-      debugger;
+      // if( _global_.debugger )
+      // debugger;
       _.assert( _.boolIs( op.primeDefinition._synthetic ) );
 
       let prototype = _.prototype.of( op.secondaryDefinition._synthetic );
@@ -286,8 +290,8 @@ function typed_body( o )
   {
     let secondaryDefinition = op.secondaryDefinition;
 
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
 
     if( op.primeDefinition._synthetic === true )
     {
@@ -551,8 +555,8 @@ function typed_body( o )
 
   function allocateTyped( genesis )
   {
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
     _.assert( !!genesis.runtime.typed );
     if( genesis.construction === null )
     genesis.construction = new( _.constructorJoin( genesis.runtime.make, genesis.args ) );
@@ -567,8 +571,8 @@ function typed_body( o )
 
   function allocateUntyped( genesis )
   {
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
 
     if( genesis.runtime.prototype === null && !_.mapIsPure( genesis.construction ) )
     genesis.construction = Object.create( null );
@@ -585,8 +589,8 @@ function typed_body( o )
 
   function retypeMaybe( genesis )
   {
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
 
     if( genesis.construction === null )
     {
@@ -623,8 +627,8 @@ function typed_body( o )
 
   function retypeTyped( genesis )
   {
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
     if( genesis.construction === null )
     {
       genesis.construction = new( _.constructorJoin( genesis.runtime.make, genesis.args ) );
@@ -655,8 +659,8 @@ function typed_body( o )
 
   function retypeUntypedPreserving( genesis )
   {
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
     if( genesis.construction )
     {
       let wasProto = Object.getPrototypeOf( genesis.construction );
@@ -676,8 +680,8 @@ function typed_body( o )
 
   function retypeUntypedForcing( genesis )
   {
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
     if( genesis.construction )
     {
       let wasProto = Object.getPrototypeOf( genesis.construction );
@@ -709,7 +713,7 @@ typed_body.defaults =
 
 typed_body.group = { definition : true, trait : true };
 
-let typed = _.routineUnite( typed_head, typed_body );
+let typed = _.routine.uniteCloning_( typed_head, typed_body );
 
 //
 
@@ -732,8 +736,8 @@ function constructor( o )
   function blueprintForm2( op )
   {
 
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
 
     if( !op.blueprint.traitsMap.constructor.val )
     return;
@@ -767,8 +771,8 @@ function constructor( o )
 
     function constructionInitEnd( genesis )
     {
-      if( _global_.debugger )
-      debugger;
+      // if( _global_.debugger )
+      // debugger;
       _.assert( !_.primitiveIs( genesis.construction ) );
       if( typed )
       {

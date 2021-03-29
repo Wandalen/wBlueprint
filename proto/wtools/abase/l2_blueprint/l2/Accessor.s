@@ -3,9 +3,9 @@
 
 'use strict';
 
-let Self = _global_.wTools;
-let _global = _global_;
-let _ = _global_.wTools;
+const Self = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 /**
  * @summary Collection of routines for declaring accessors
@@ -151,7 +151,7 @@ function _normalizedAsuiteForm_body( o )
   _.assert( _.strIs( o.name ) || _.symbolIs( o.name ) );
   _.assert( _.mapIs( o.normalizedAsuite ) );
   _.assert( o.writable === null || _.boolIs( o.writable ) );
-  _.assertMapHasOnly( o.normalizedAsuite, _.accessor.AmethodTypesMap );
+  _.map.assertHasOnly( o.normalizedAsuite, _.accessor.AmethodTypesMap );
   _.assertRoutineOptions( _normalizedAsuiteForm_body, o );
 
   let propName;
@@ -165,7 +165,7 @@ function _normalizedAsuiteForm_body( o )
   }
 
   if( o.suite )
-  _.assertMapHasOnly( o.suite, _.accessor.AmethodTypes );
+  _.map.assertHasOnly( o.suite, _.accessor.AmethodTypes );
 
   // for( let k in o.normalizedAsuite, _.accessor.AmethodTypesMap )
   for( let k in _.accessor.AmethodTypesMap )
@@ -235,7 +235,6 @@ function _normalizedAsuiteForm_body( o )
     o.normalizedAsuite.move = function move( it )
     {
       _.assert( 0, 'not tested' ); /* zzz */
-      debugger;
       return it.src;
     }
   }
@@ -268,7 +267,7 @@ function _normalizedAsuiteForm_body( o )
     _.assert
     (
       _.definitionIs( o.normalizedAsuite[ k ] ) || _.routineIs( o.normalizedAsuite[ k ] ) || o.normalizedAsuite[ k ] === false,
-      () => `Field "${propName}" is not read only, but setter not found ${_.entity.exportStringShort( o.methods )}`
+      () => `Field "${propName}" is not read only, but setter not found ${_.entity.exportStringShallow( o.methods )}`
     );
   }
 
@@ -329,7 +328,7 @@ _normalizedAsuiteForm_body.defaults =
   name : null,
 }
 
-let _normalizedAsuiteForm = _.routineUnite( _normalizedAsuiteForm_head, _normalizedAsuiteForm_body );
+let _normalizedAsuiteForm = _.routine.uniteCloning_( _normalizedAsuiteForm_head, _normalizedAsuiteForm_body );
 
 //
 
@@ -560,7 +559,7 @@ function _objectMethodMoveGet( srcInstance, name )
 
 function _declaringIsNeeded( o )
 {
-  let prop = _.prototype.propertyDescriptorActiveGet( o.object, o.name );
+  let prop = _.property.descriptorActiveOf( o.object, o.name );
   if( prop.descriptor )
   {
 
@@ -581,7 +580,11 @@ function _declaringIsNeeded( o )
     if( o.combining === 'supplement' )
     return false;
 
-    _.assert( prop.object !== o.object, () => `Attempt to redefine own accessor "${o.name}" of ${_.entity.exportStringShort( o.object )}` );
+    _.assert
+    (
+      prop.object !== o.object,
+      () => `Attempt to redefine own accessor "${o.name}" of ${_.entity.exportStringShallow( o.object )}`
+    );
 
   }
   return true;
@@ -840,7 +843,7 @@ _moveItMake.defaults =
 function _objectSetValue( o )
 {
 
-  _.assertMapHasAll( o, _objectSetValue.defaults );
+  _.map.assertHasAll( o, _objectSetValue.defaults );
 
   let descriptor = Object.getOwnPropertyDescriptor( o.object, o.name );
   // if( descriptor && descriptor.configurable && descriptor.get == undefined && descriptor.set === undefined ) /* yyy */
@@ -929,8 +932,8 @@ function _objectInitStorage( object, normalizedAsuite )
     initers.add( method.objectInitStorage );
   }
 
-  if( initers.size > 1 )
-  debugger;
+  // if( initers.size > 1 )
+  // debugger;
 
   for( let initer of initers )
   {
@@ -1041,7 +1044,7 @@ function suiteSupplement( dst, src )
 function suiteNormalize_body( o )
 {
 
-  _.assertMapHasAll( o, suiteNormalize_body.defaults );
+  _.map.assertHasAll( o, suiteNormalize_body.defaults );
 
   /* */
 
@@ -1096,7 +1099,7 @@ var defaults = suiteNormalize_body.defaults =
   ... DeclarationOptions,
 }
 
-let suiteNormalize = _.routineUnite( declareSingle_head, suiteNormalize_body );
+let suiteNormalize = _.routine.uniteCloning_( declareSingle_head, suiteNormalize_body );
 
 //
 
@@ -1123,7 +1126,7 @@ function declareSingle_head( routine, args )
   if( _.boolLikeTrue( o.suite ) )
   o.suite = Object.create( null );
 
-  _.assertMapHasAll( o, routine.defaults );
+  _.map.assertHasAll( o, routine.defaults );
 
   _.accessor._methodsNormalize( o );
   _.accessor._defaultsApply( o );
@@ -1136,7 +1139,7 @@ function declareSingle_head( routine, args )
 function declareSingle_body( o )
 {
 
-  _.assertMapHasAll( o, declareSingle_body.defaults );
+  _.map.assertHasAll( o, declareSingle_body.defaults );
   _.assert( _.boolIs( o.writable ) || o.writable === null );
   _.assert( o.object !== Object, 'Attempt to polute _global_.Object' );
   _.assert( !_.prototype._ofStandardEntity( o.object ), 'Attempt to pollute _global_.Object.prototype' );
@@ -1287,7 +1290,7 @@ var defaults = declareSingle_body.defaults =
   ... DeclarationOptions,
 }
 
-let declareSingle = _.routineUnite( declareSingle_head, declareSingle_body );
+let declareSingle = _.routine.uniteCloning_( declareSingle_head, declareSingle_body );
 
 //
 
@@ -1329,7 +1332,7 @@ let declareSingle = _.routineUnite( declareSingle_head, declareSingle_body );
  * @param {Object} o - options {@link module:Tools/base/Proto.wTools.accessor~AccessorOptions}.
  *
  * @example
- * let Self = ClassName;
+ * const Self = ClassName;
 function ClassName( o ) { };
  * _.accessor.declare( Self, { a : 'a' }, 'set/get call' )
  * Self.a = 1; // set/get call
@@ -1409,8 +1412,8 @@ function declareMultiple_body( o )
   /* verification */
 
   _.assert( !_.primitiveIs( o.methods ) );
-  _.assert( !_.primitiveIs( o.object ), () => 'Expects object {-object-}, but got ' + _.entity.exportStringShort( o.object ) );
-  _.assert( _.objectIs( o.names ), () => 'Expects object {-names-}, but got ' + _.entity.exportStringShort( o.names ) );
+  _.assert( !_.primitiveIs( o.object ), () => 'Expects object {-object-}, but got ' + _.entity.exportStringShallow( o.object ) );
+  _.assert( _.objectIs( o.names ), () => 'Expects object {-names-}, but got ' + _.entity.exportStringShallow( o.names ) );
 
   /* */
 
@@ -1434,7 +1437,7 @@ function declareMultiple_body( o )
 
     if( _.mapIs( extension ) )
     {
-      _.assertMapHasOnly( extension, _.accessor.DeclarationMultipleToSingleOptions );
+      _.map.assertHasOnly( extension, _.accessor.DeclarationMultipleToSingleOptions );
       _.mapExtend( o2, extension );
       _.assert( !!o2.object );
     }
@@ -1461,7 +1464,7 @@ var defaults = declareMultiple_body.defaults = _.mapExtend( null, declareSingle.
 defaults.names = null;
 delete defaults.name;
 
-let declareMultiple = _.routineUnite( declareMultiple_head, declareMultiple_body );
+let declareMultiple = _.routine.uniteCloning_( declareMultiple_head, declareMultiple_body );
 
 //
 
@@ -1472,7 +1475,7 @@ let declareMultiple = _.routineUnite( declareMultiple_head, declareMultiple_body
  * @param {Object} o - options {@link module:Tools/base/Proto.wTools.accessor~AccessorOptions}.
  *
  * @example
- * let Self = ClassName;
+ * const Self = ClassName;
 function ClassName( o ) { };
  * _.accessor.forbid( Self, { a : 'a' } )
  * Self.a; // throw an Error
@@ -1491,14 +1494,12 @@ function forbid_body( o )
 
   if( _.arrayLike( o.object ) )
   {
-    debugger;
     _.each( o.object, ( object ) =>
     {
       let o2 = _.mapExtend( null, o );
       o2.object = object;
       forbid_body( o2 );
     });
-    debugger;
     return o.object;
   }
 
@@ -1510,8 +1511,8 @@ function forbid_body( o )
 
   /* verification */
 
-  _.assert( !_.primitiveIs( o.object ), () => 'Expects object {-o.object-} but got ' + _.entity.exportStringShort( o.object ) );
-  _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ), () => 'Expects object {-o.names-} as argument but got ' + _.entity.exportStringShort( o.names ) );
+  _.assert( !_.primitiveIs( o.object ), () => 'Expects object {-o.object-} but got ' + _.entity.exportStringShallow( o.object ) );
+  _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ), () => 'Expects object {-o.names-} as argument but got ' + _.entity.exportStringShallow( o.names ) );
 
   /* message */
 
@@ -1585,7 +1586,7 @@ var defaults = forbid_body.defaults =
 
 }
 
-let forbid = _.routineUnite( declareMultiple_head, forbid_body );
+let forbid = _.routine.uniteCloning_( declareMultiple_head, forbid_body );
 
 //
 
@@ -1599,7 +1600,7 @@ function _forbidSingle()
 
   /* */
 
-  let propertyDescriptor = _.prototype.propertyDescriptorActiveGet( o.object, o.propName );
+  let propertyDescriptor = _.property.descriptorActiveOf( o.object, o.propName );
   if( propertyDescriptor.descriptor )
   {
     _.assert( _.strIs( o.combining ), 'forbid : if accessor overided expect ( o.combining ) is', _.accessor.Combining.join() );
@@ -1655,7 +1656,7 @@ function _forbidSingle()
   o.strict = 0;
   o.prime = 0;
 
-  let o2 = _.mapOnly( o, _.accessor.declare.body.defaults );
+  let o2 = _.mapOnly_( null, o, _.accessor.declare.body.defaults );
   o2.name = o.propName;
   delete o2.names;
   return _.accessor.declareSingle.body( o2 );
@@ -1664,7 +1665,6 @@ function _forbidSingle()
 
   function forbidden()
   {
-    debugger;
     throw _.err( messageLine );
   }
 
@@ -1685,7 +1685,7 @@ var defaults = _forbidSingle.defaults =
  * @param {String} name - name of the property
  *
  * @example
- * let Self = ClassName;
+ * const Self = ClassName;
 function ClassName( o ) { };
  * _.accessor.forbid( Self, { a : 'a' } );
  * _.accessor.ownForbid( Self, 'a' ) // returns true
@@ -1747,7 +1747,7 @@ function readOnly_body( o )
 var defaults = readOnly_body.defaults = _.mapExtend( null, declareMultiple.body.defaults );
 defaults.writable = false;
 
-let readOnly = _.routineUnite( declareMultiple_head, readOnly_body );
+let readOnly = _.routine.uniteCloning_( declareMultiple_head, readOnly_body );
 
 //
 

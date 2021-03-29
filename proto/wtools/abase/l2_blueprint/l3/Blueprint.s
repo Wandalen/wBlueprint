@@ -3,8 +3,8 @@
 
 'use strict';
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 // --
 // implementation
@@ -379,7 +379,6 @@ function _amend( o )
     }
     else
     {
-      debugger;
       throw _.err( 'Not clear how to extend by blueprint' );
     }
   }

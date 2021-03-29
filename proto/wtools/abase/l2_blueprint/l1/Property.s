@@ -3,9 +3,9 @@
 
 'use strict';
 
-let Self = _global_.wTools;
-let _global = _global_;
-let _ = _global_.wTools;
+const Self = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 // --
 // implementation
@@ -25,30 +25,28 @@ let _ = _global_.wTools;
  *
  * @throws {Exception} If number of arguments is not supported.
  * @throws {Exception} If dstPrototype is not an Object
- * @function hide
+ * @function conceal
  *
  * @namespace Tools.property
  * @module Tools/base/Proto
  */
 
-function hide( dstPrototype, name, value )
+function conceal( dstPrototype, name, value )
 {
 
   _.assert( arguments.length === 2 || arguments.length === 3 );
-  _.assert( !_.primitiveIs( dstPrototype ), () => 'dstPrototype is needed, but got ' + _.entity.exportStringShort( dstPrototype ) );
+  _.assert( !_.primitiveIs( dstPrototype ), () => 'dstPrototype is needed, but got ' + _.entity.exportStringShallow( dstPrototype ) );
 
   if( _.containerIs( name ) )
   {
-    if( !_.objectIs( name ) )
-    debugger;
     if( !_.objectIs( name ) )
     name = _.indexExtending( name, ( e ) => { return { [ e ] : undefined } } );
     _.each( name, ( v, n ) =>
     {
       if( value === undefined )
-      _.property.hide( dstPrototype, n, v );
+      _.property.conceal( dstPrototype, n, v );
       else
-      _.property.hide( dstPrototype, n, value );
+      _.property.conceal( dstPrototype, n, value );
     });
     return;
   }
@@ -76,7 +74,7 @@ function hide( dstPrototype, name, value )
  * @param {object} namesObject - name/value map of constants.
  *
  * @example
- * let Self = ClassName;
+ * const Self = ClassName;
 function ClassName( o ) { };
  * let Constants = { num : 100  };
  * _.property.constant( Self.prototype, Constants );
@@ -95,7 +93,7 @@ function _constant( dstPrototype, name, value )
 {
 
   _.assert( arguments.length === 2 || arguments.length === 3 );
-  _.assert( !_.primitiveIs( dstPrototype ), () => 'dstPrototype is needed, but got ' + _.entity.exportStringShort( dstPrototype ) );
+  _.assert( !_.primitiveIs( dstPrototype ), () => 'dstPrototype is needed, but got ' + _.entity.exportStringShallow( dstPrototype ) );
 
   if( _.containerIs( name ) )
   {
@@ -226,7 +224,7 @@ declare_body.defaults =
   val : _.nothing,
 }
 
-let declare = _.routineUnite( declare_head, declare_body );
+let declare = _.routine.uniteCloning_( declare_head, declare_body );
 _.routineEr( declare );
 
 // --
@@ -236,7 +234,7 @@ _.routineEr( declare );
 let PropertyExtension =
 {
 
-  hide,
+  conceal,
   constant : _constant,
   declare, /* qqq : cover */
 

@@ -3,9 +3,9 @@
 
 'use strict';
 
-let Self = _global_.wTools;
-let _global = _global_;
-let _ = _global_.wTools;
+const Self = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 //
 
@@ -165,7 +165,7 @@ function prop_head( routine, args )
 function prop_body( o )
 {
 
-  _.assertMapHasAll( o, prop_body.defaults );
+  _.map.assertHasAll( o, prop_body.defaults );
   _.assert( o.val !== undefined );
   _.assert( o.blueprintDepthLimit >= 0 );
   _.assert( _.boolIs( o.writable ) || o.writable === null );
@@ -280,8 +280,8 @@ function prop_body( o )
     _.assert( !_.boolLikeFalse( op.definition.accessor ) );
     _.assert( !_.prototype._ofStandardEntity( prototype ), 'Attempt to pollute _global_.Object.prototype' );
 
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
 
     let val2 = valFrom( prototype, name, op.amending, val );
 
@@ -350,8 +350,8 @@ function prop_body( o )
     _.assert( _.boolIs( op.definition.enumerable ) );
     _.assert( !_.prototype._ofStandardEntity( prototype ), 'Attempt to pollute _global_.Object.prototype' );
 
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
 
     if( prototype )
     {
@@ -403,8 +403,8 @@ function prop_body( o )
 
     _.assert( _.fuzzyIs( blueprint.typed ) );
 
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
 
     if( !isStatic && blueprint.traitsMap.typed.val && blueprint.prototype )
     {
@@ -448,8 +448,8 @@ function prop_body( o )
 
     function constructionInitTyped( genesis )
     {
-      if( _global_.debugger )
-      debugger;
+      // if( _global_.debugger )
+      // debugger;
       _.accessor._objectInitStorage( genesis.construction, normalizedAsuite );
 
       let val2 = valFrom( genesis.construction, name, genesis.amending, val );
@@ -467,8 +467,8 @@ function prop_body( o )
 
     function constructionInitUntyped( genesis )
     {
-      if( _global_.debugger )
-      debugger;
+      // if( _global_.debugger )
+      // debugger;
 
       let val2 = valFrom( genesis.construction, name, genesis.amending, val );
       _.accessor.declareSingle
@@ -489,8 +489,8 @@ function prop_body( o )
 
     function constructionInitUntypedStatic( genesis )
     {
-      if( _global_.debugger )
-      debugger;
+      // if( _global_.debugger )
+      // debugger;
 
       let prototype2 = Object.getPrototypeOf( genesis.construction );
       if( prototype2 && prototype2 === prototype )
@@ -515,8 +515,8 @@ function prop_body( o )
 
     function constructionInitMaybe( genesis )
     {
-      if( _global_.debugger )
-      debugger;
+      // if( _global_.debugger )
+      // debugger;
       if( prototype === null )
       {
         constructionInitUntyped( genesis );
@@ -549,12 +549,11 @@ function prop_body( o )
 
     function constructionInit( genesis )
     {
-      if( _global_.debugger )
-      debugger;
+      // if( _global_.debugger )
+      // debugger;
 
       if( isStatic )
       {
-        debugger;
         let prototype2 = Object.getPrototypeOf( genesis.construction );
         if( prototype2 && prototype2 === prototype )
         return;
@@ -583,8 +582,8 @@ function prop_body( o )
 
     function constructionInit( genesis )
     {
-      if( _global_.debugger )
-      debugger;
+      // if( _global_.debugger )
+      // debugger;
 
       if( isStatic )
       {
@@ -692,7 +691,7 @@ prop_body.defaults =
 
 prop_body.group = { definition : true, named : true };
 
-let prop = _.routineUnite( prop_head, prop_body );
+let prop = _.routine.uniteCloning_( prop_head, prop_body );
 _.routineEr( prop, _singleArgumentHead );
 
 /*
@@ -761,7 +760,7 @@ props_body.defaults =
   ... prop.defaults,
 }
 
-let props = _.routineUnite( prop_head, props_body );
+let props = _.routine.uniteCloning_( prop_head, props_body );
 props.group = _.mapExtend( null, prop.group );
 props.group.named = false;
 _.routineEr( props, _singleArgumentHead );
@@ -779,7 +778,7 @@ val_body.defaults =
   valToIns : 'val',
 }
 
-let val = _.routineUnite( prop_head, val_body );
+let val = _.routine.uniteCloning_( prop_head, val_body );
 val.group = _.mapExtend( null, prop.group );
 _.routineEr( val, _singleArgumentHead );
 
@@ -796,7 +795,7 @@ vals_body.defaults =
   valToIns : 'val',
 }
 
-let vals = _.routineUnite( prop_head, vals_body );
+let vals = _.routine.uniteCloning_( prop_head, vals_body );
 vals.group = _.mapExtend( null, val.group );
 vals.group.named = false;
 _.routineEr( vals, _singleArgumentHead );
@@ -814,7 +813,7 @@ shallow_body.defaults =
   valToIns : 'shallow',
 }
 
-let shallow = _.routineUnite( prop_head, shallow_body );
+let shallow = _.routine.uniteCloning_( prop_head, shallow_body );
 shallow.group = _.mapExtend( null, prop.group );
 _.routineEr( shallow, _singleArgumentHead );
 
@@ -831,7 +830,7 @@ shallows_body.defaults =
   valToIns : 'shallow',
 }
 
-let shallows = _.routineUnite( prop_head, shallows_body );
+let shallows = _.routine.uniteCloning_( prop_head, shallows_body );
 shallows.group = _.mapExtend( null, shallow.group );
 shallows.group.named = false;
 _.routineEr( shallows, _singleArgumentHead );
@@ -849,7 +848,7 @@ deep_body.defaults =
   valToIns : 'deep',
 }
 
-let deep = _.routineUnite( prop_head, deep_body );
+let deep = _.routine.uniteCloning_( prop_head, deep_body );
 deep.group = _.mapExtend( null, prop.group );
 _.routineEr( deep, _singleArgumentHead );
 
@@ -866,7 +865,7 @@ deeps_body.defaults =
   valToIns : 'deep',
 }
 
-let deeps = _.routineUnite( prop_head, deeps_body );
+let deeps = _.routine.uniteCloning_( prop_head, deeps_body );
 deeps.group = _.mapExtend( null, deep.group );
 deeps.group.named = false;
 _.routineEr( deeps, _singleArgumentHead );
@@ -884,7 +883,7 @@ call_body.defaults =
   valToIns : 'call',
 }
 
-let call = _.routineUnite( prop_head, call_body );
+let call = _.routine.uniteCloning_( prop_head, call_body );
 call.group = _.mapExtend( null, prop.group );
 _.routineEr( call, _singleArgumentHead );
 
@@ -901,7 +900,7 @@ calls_body.defaults =
   valToIns : 'call',
 }
 
-let calls = _.routineUnite( prop_head, calls_body );
+let calls = _.routine.uniteCloning_( prop_head, calls_body );
 calls.group = _.mapExtend( null, call.group );
 calls.group.named = false;
 _.routineEr( calls, _singleArgumentHead );
@@ -919,7 +918,7 @@ new_body.defaults =
   valToIns : 'new',
 }
 
-let _new = _.routineUnite( prop_head, new_body );
+let _new = _.routine.uniteCloning_( prop_head, new_body );
 _new.group = _.mapExtend( null, prop.group );
 _.routineEr( _new, _singleArgumentHead );
 
@@ -936,7 +935,7 @@ news_body.defaults =
   valToIns : 'new',
 }
 
-let _news = _.routineUnite( prop_head, news_body );
+let _news = _.routine.uniteCloning_( prop_head, news_body );
 _news.group = _.mapExtend( null, _new.group );
 _news.group.named = false;
 _.routineEr( _news, _singleArgumentHead );
@@ -954,7 +953,7 @@ static_body.defaults =
   static : 1,
 }
 
-let _static = _.routineUnite( prop_head, static_body );
+let _static = _.routine.uniteCloning_( prop_head, static_body );
 _static.group = _.mapExtend( null, prop.group );
 _.routineEr( _static, _singleArgumentHead );
 
@@ -971,7 +970,7 @@ statics_body.defaults =
   static : 1,
 }
 
-let _statics = _.routineUnite( prop_head, statics_body );
+let _statics = _.routine.uniteCloning_( prop_head, statics_body );
 _statics.group = _.mapExtend( null, _static.group );
 _statics.group.named = false;
 _.routineEr( _statics, _singleArgumentHead );
@@ -1049,12 +1048,12 @@ function alias_body( o )
 
 alias_body.defaults =
 {
-  ... _.mapBut( prop.defaults, { methods : null, val : null } ),
+  ... _.mapBut_( null, prop.defaults, { methods : null, val : null } ),
   originalContainer : null,
   originalName : null,
 }
 
-let alias = _.routineUnite( alias_head, alias_body );
+let alias = _.routine.uniteCloning_( alias_head, alias_body );
 alias.group = _.mapExtend( null, prop.group );
 _.routineEr( alias );
 
@@ -1085,7 +1084,7 @@ function nothing_functor()
   _.definition.retype( prototype );
   Object.freeze( prototype );
 
-  let nothing = _.routineUnite( _head, nothing_body );
+  let nothing = _.routine.uniteCloning_( _head, nothing_body );
   return nothing;
 
   /* */
@@ -1101,7 +1100,7 @@ function nothing_functor()
     if( !o )
     return prototype;
 
-    _.assertMapHasOnly( o, routine.defaults );
+    _.map.assertHasOnly( o, routine.defaults );
     return o;
   }
 
@@ -1111,7 +1110,7 @@ function nothing_functor()
   {
     if( o === prototype )
     return prototype;
-    _.assert( o === undefined || _.mapIs( o ) || Object.getPrototypeOf( o ) === prototype ); debugger;
+    _.assert( o === undefined || _.mapIs( o ) || Object.getPrototypeOf( o ) === prototype );
     if( Object.getPrototypeOf( o ) !== prototype )
     Object.setPrototypeOf( o, prototype );
     Object.freeze( o );
@@ -1156,7 +1155,7 @@ let nothing = nothing_functor();
 //
 // nothing_body.group = { definition : true, named : false };
 //
-// let nothing = _.routineUnite( _singleArgumentHead, nothing_body );
+// let nothing = _.routine.uniteCloning_( _singleArgumentHead, nothing_body );
 
 //
 
@@ -1204,7 +1203,6 @@ function _constant_functor()
 
   function blueprintForm1( op )
   {
-    debugger;
     const val = op.definition.val;
     const name = op.definition.name;
     _.assert( _.strDefined( op.propName ) || _.strDefined( op.definition.name ) );
@@ -1216,7 +1214,6 @@ function _constant_functor()
 
   function blueprintForm2( op )
   {
-    debugger;
     const val = op.definition.val;
     const name = op.definition.name;
 
@@ -1224,8 +1221,8 @@ function _constant_functor()
 
     function constructionInitUntyped( genesis )
     {
-      if( _global_.debugger )
-      debugger;
+      // if( _global_.debugger )
+      // debugger;
 
       let val2 = val;
 
@@ -1312,11 +1309,11 @@ _amendment_body.defaults =
 
 _amendment_body.group = { definition : true, named : false };
 
-let _amendment = _.routineUnite( _amendment_head, _amendment_body );
+let _amendment = _.routine.uniteCloning_( _amendment_head, _amendment_body );
 
 //
 
-let extension = _.routineUnite({ head : _amendment_head, body : _amendment_body, name : 'extension' });
+let extension = _.routine.uniteCloning_({ head : _amendment_head, body : _amendment_body, name : 'extension' });
 
 extension.defaults =
 {
@@ -1331,7 +1328,7 @@ _.routineEr( extension, _singleArgumentHead );
 
 //
 
-let supplementation = _.routineUnite({ head : _amendment_head, body : _amendment_body, name : 'supplementation' });
+let supplementation = _.routine.uniteCloning_({ head : _amendment_head, body : _amendment_body, name : 'supplementation' });
 
 supplementation.defaults =
 {
@@ -1364,8 +1361,8 @@ function inherit_body( o )
     let blueprint = op.blueprint;
     let add = op.amending === 'supplement' ? 'unshift' : 'push';
 
-    if( _global_.debugger )
-    debugger;
+    // if( _global_.debugger )
+    // debugger;
 
     let result = [];
     result[ add ]( definition.val );
@@ -1407,7 +1404,7 @@ inherit_body.defaults =
 
 inherit_body.group = { definition : true, named : false };
 
-let inherit = _.routineUnite( _pairArgumentsHead, inherit_body );
+let inherit = _.routine.uniteCloning_( _pairArgumentsHead, inherit_body );
 
 // --
 //

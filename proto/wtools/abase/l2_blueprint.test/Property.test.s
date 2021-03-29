@@ -10,8 +10,8 @@ if( typeof module !== 'undefined' )
   require( '../../abase/l2_blueprint/Include.s' );
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 // --
 // test
@@ -145,14 +145,14 @@ function declare( test )
   var obj1 = Object.create( null );
   _.property.declare( obj1, { name : 'a1', get : false, set : set1 } );
   var exp = {};
-  test.identical( _.mapBut( obj1, { a1 : null } ), exp );
+  test.identical( _.mapBut_( null, obj1, { a1 : null } ), exp );
   // test.identical( obj1.a1, undefined );
   test.shouldThrowErrorSync( () => obj1.a1 );
   test.identical( obj1[ Symbol.for( 'a1' ) ], undefined );
 
   var exp = {};
   obj1.a1 = 2;
-  test.identical( _.mapBut( obj1, { a1 : null } ), exp );
+  test.identical( _.mapBut_( null, obj1, { a1 : null } ), exp );
   // test.identical( obj1.a1, undefined );
   test.shouldThrowErrorSync( () => obj1.a1 );
   test.identical( obj1[ Symbol.for( 'a1' ) ], 2 );
@@ -222,7 +222,7 @@ function declare( test )
 // declare
 // --
 
-let Self =
+const Proto =
 {
 
   name : 'Tools.l2.blueprint.Property',
@@ -241,7 +241,7 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 

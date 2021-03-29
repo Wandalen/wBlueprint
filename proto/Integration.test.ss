@@ -14,8 +14,8 @@ if( typeof module !== 'undefined' )
 //
 
 let _ = _globals_.testing.wTools;
-let fileProvider = _.fileProvider;
-let path = fileProvider.path;
+const fileProvider = _.fileProvider;
+const path = fileProvider.path;
 
 // --
 // context
@@ -99,7 +99,7 @@ function production( test )
   if( isFork )
   version = _.git.path.nativize( remotePath );
   else
-  version = _.npm.versionRemoteRetrive( `npm:///${ mdl.name }!alpha` ) === '' ? 'latest' : 'alpha';
+  version = mdl.version;
 
   if( !version )
   throw _.err( 'Cannot obtain version to install' );
@@ -190,7 +190,7 @@ function production( test )
   {
     if( _.strHas( err.message, 'npm ERR! ERROR: Repository not found' ) )
     {
-      _.errAttend( err );
+      _.error.attend( err );
       return a.shell( `npm i --production` );
     }
     throw _.err( err );
@@ -250,7 +250,7 @@ function samples( test )
 
     if( _.longHas( found[ i ].exts, 'throwing' ) )
     {
-      appStartNonThrowing({ execPath : found[ i ].relative })
+      appStartNonThrowing({ execPath : found[ i ].relative, outputPiping : 0 })
       .then( ( op ) =>
       {
         console.log( _.time.spent( startTime ) );
@@ -330,6 +330,7 @@ function eslint( test )
       '--ignore-pattern', '*.xml',
       '--ignore-pattern', '*.css',
       '--ignore-pattern', '_asset',
+      '--ignore-pattern', '_*',
       '--ignore-pattern', 'out',
       '--ignore-pattern', '*.tgs',
       '--ignore-pattern', '*.bat',
@@ -353,7 +354,7 @@ function eslint( test )
   })
   .then( ( op ) =>
   {
-    test.identical( op.exitCode, 0 ); debugger;
+    test.identical( op.exitCode, 0 );
     if( op.output.length < 1000 )
     logger.log( op.output );
     return null;
@@ -434,7 +435,7 @@ build.timeOut = 900000;
 // declare
 // --
 
-let Self =
+const Proto =
 {
 
   name : 'Integration',
@@ -462,7 +463,7 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 _global_.wTester.test( Self.name );
 

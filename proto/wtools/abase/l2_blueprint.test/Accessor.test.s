@@ -10,8 +10,8 @@ if( typeof module !== 'undefined' )
   require( '../../abase/l2_blueprint/Include.s' );
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 // --
 // test
@@ -424,7 +424,6 @@ function _objectSetValueNoShadowing( test )
 
   _.accessor._objectInitStorage( obj, o2.normalizedAsuite );
 
-  debugger;
   _.accessor._objectSetValue
   ({
     object : obj,
@@ -438,9 +437,8 @@ function _objectSetValueNoShadowing( test )
   test.identical( _.property.of( obj ), exp );
 
   var exp = {};
-  test.identical( _.mapBut( proto, [ 'f1' ] ), exp );
+  test.identical( _.mapBut_( null, proto, [ 'f1' ] ), exp );
 
-  debugger;
 
   /* */
 
@@ -2688,7 +2686,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : true
   }
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
   var exp =
   {
     'a' : 'a1',
@@ -2705,7 +2703,7 @@ function accessorUnfunctGetSuite( test )
   test.identical( object.a, exp.a );
   test.identical( object.b, exp.b );
   var exp = { 'writable' : false, 'enumerable' : false, 'configurable' : false, 'value' : 'abc3' }
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
 
   /* */
 
@@ -2735,7 +2733,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : false,
   }
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
   var exp =
   {
     'a' : 'a1',
@@ -2758,7 +2756,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : false,
   }
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
 
   /* */
 
@@ -2788,7 +2786,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : true,
   }
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
   var exp =
   {
     'a' : 'a1',
@@ -2807,7 +2805,7 @@ function accessorUnfunctGetSuite( test )
   test.identical( object.a, exp.a );
   test.identical( object.b, exp.b );
   var exp = { 'writable' : false, 'enumerable' : false, 'configurable' : false, 'value' : 'abc3' };
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
 
   /* */
 
@@ -2837,7 +2835,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : true
   }
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
   var exp =
   {
     'a' : 'a1',
@@ -2856,7 +2854,7 @@ function accessorUnfunctGetSuite( test )
   test.identical( object.a, exp.a );
   test.identical( object.b, exp.b );
   var exp = { 'writable' : false, 'enumerable' : false, 'configurable' : false, 'value' : 'abc3' };
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
 
   /* */
 
@@ -2887,7 +2885,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : true
   }
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
   var exp =
   {
     'a' : 'a1',
@@ -2906,7 +2904,7 @@ function accessorUnfunctGetSuite( test )
   test.identical( object.a, exp.a );
   test.identical( object.b, exp.b );
   var exp = { 'writable' : false, 'enumerable' : false, 'configurable' : false, 'value' : 'abc3' };
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
 
   /* */
 
@@ -2936,7 +2934,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : false
   }
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
   var exp =
   {
     'a' : 'a1',
@@ -2961,7 +2959,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : false
   }
-  test.identical( _.prototype.propertyDescriptorGet( object, '_' ).descriptor, exp );
+  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
 
   /* */
 
@@ -2979,7 +2977,7 @@ function accessorValueOptions( test )
     valueSetting : [ 0, 1 ],
     preservingValue : [ 0, 1 ],
   };
-  var samples = _.eachSample_({ sets }); debugger;
+  var samples = _.eachSample_({ sets });
 
   for( let tops of samples )
   eachCase( tops );
@@ -4001,7 +3999,7 @@ function accessorStoringStrategyUnderscoreIniting( test )
 // declare
 // --
 
-let Self =
+const Proto =
 {
 
   name : 'Tools.l2.blueprint.Accessor',
@@ -4044,7 +4042,7 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 
