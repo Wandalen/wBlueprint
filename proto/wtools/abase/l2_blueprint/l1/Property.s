@@ -25,13 +25,13 @@ const _ = _global_.wTools;
  *
  * @throws {Exception} If number of arguments is not supported.
  * @throws {Exception} If dstPrototype is not an Object
- * @function hide
+ * @function conceal
  *
  * @namespace Tools.property
  * @module Tools/base/Proto
  */
 
-function hide( dstPrototype, name, value )
+function conceal( dstPrototype, name, value )
 {
 
   _.assert( arguments.length === 2 || arguments.length === 3 );
@@ -44,9 +44,9 @@ function hide( dstPrototype, name, value )
     _.each( name, ( v, n ) =>
     {
       if( value === undefined )
-      _.property.hide( dstPrototype, n, v );
+      _.property.conceal( dstPrototype, n, v );
       else
-      _.property.hide( dstPrototype, n, value );
+      _.property.conceal( dstPrototype, n, value );
     });
     return;
   }
@@ -234,7 +234,7 @@ _.routineEr( declare );
 let PropertyExtension =
 {
 
-  hide,
+  conceal,
   constant : _constant,
   declare, /* qqq : cover */
 
