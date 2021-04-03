@@ -2,10 +2,13 @@ format: outwillfile-2.0
 root:
   - wBlueprint.out
 consistency:
-  ../.ex.will.yml: &ref_0
+  wBlueprint.out.will.yml: &ref_0
+    hash: 85036985b74d6e56b776e3a9c4fea02e
+    size: 38985
+  ../.ex.will.yml: &ref_1
     hash: 7f16b7905c40f2370ff4e0ae119fa205
     size: 1907
-  ../.im.will.yml: &ref_1
+  ../.im.will.yml: &ref_2
     hash: 44faa290b280b1924d0bae6f17700ed3
     size: 4707
 module:
@@ -20,19 +23,19 @@ module:
         things alternatives cant do.
       enabled: 1
       version: 0.4.0
-      interpreters: &ref_2
+      interpreters:
         - njs >= 10.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords: &ref_3
+      keywords:
         - tools
         - wTools
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: &ref_4
+      contributors:
         - Kostiantyn Wandalen <wanalen@01.school>
       npm.name: wblueprint
-      npm.scripts: &ref_5
+      npm.scripts:
         test: wtest .run proto/**
         docgen: wdocgen .build proto
     path:
@@ -698,6 +701,24 @@ module:
           content: prime
         inherit:
           - files.transpile
+      exported.proto.export:
+        opts:
+          filePath: 'reflector::exported.proto.export'
+        criterion:
+          generated: 1
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
+      exported.files.proto.export:
+        opts:
+          filePath: 'reflector::exported.files.proto.export'
+        criterion:
+          generated: 1
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
     build:
       proto.export:
         steps:
@@ -786,8 +807,9 @@ module:
           content: proto
           export: 1
     consistency:
-      ../.ex.will.yml: *ref_0
-      ../.im.will.yml: *ref_1
+      wBlueprint.out.will.yml: *ref_0
+      ../.ex.will.yml: *ref_1
+      ../.im.will.yml: *ref_2
   ../:
     about:
       name: wBlueprint
@@ -799,13 +821,21 @@ module:
         things alternatives cant do.
       enabled: 1
       version: 0.4.0
-      interpreters: *ref_2
-      keywords: *ref_3
+      interpreters:
+        - njs >= 10.0.0
+        - chrome >= 60.0.0
+        - firefox >= 60.0.0
+      keywords:
+        - tools
+        - wTools
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: *ref_4
+      contributors:
+        - Kostiantyn Wandalen <wanalen@01.school>
       npm.name: wblueprint
-      npm.scripts: *ref_5
+      npm.scripts:
+        test: wtest .run proto/**
+        docgen: wdocgen .build proto
     path:
       module.willfiles:
         criterion:
@@ -1457,3 +1487,6 @@ module:
       ../.im.will.yml:
         hash: 44faa290b280b1924d0bae6f17700ed3
         size: 4707
+      wBlueprint.out.will.yml:
+        hash: 85036985b74d6e56b776e3a9c4fea02e
+        size: 38985
