@@ -1,10 +1,10 @@
 {
   "name" : "wblueprint",
-  "version" : "0.3.240",
+  "version" : "0.3.241",
   "description" : "Classes defining tool on steroids. Make possible multiple inheritances, removing fields in descendants, defining the schema of structure, typeless objects, generating optimal code for definition, and many cool things alternatives cant do.",
   "author" : "Kostiantyn Wandalen <wanalen@01.school>",
   "license" : "MIT",
-  "main" : "/pro/module/wBlueprint/proto/node_modules/wblueprint",
+  "main" : "proto/node_modules/wblueprint",
   "files" : [ "proto/wtools/abase/l2_blueprint", "proto/wtools/Tools.s", "proto/node_modules" ],
   "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-2", "docgen" : "wdocgen .build proto" },
   "repository" :
