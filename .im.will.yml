@@ -58,8 +58,8 @@ path:
       raw: compiled
       content: prime
   npm.proto.entry:
-    - /pro/module/wBlueprint/proto/wtools/abase/l2_blueprint/Include.s
-    - /pro/module/wBlueprint/proto/node_modules/wblueprint
+    - proto/wtools/abase/l2_blueprint/Include.s
+    - proto/node_modules/wblueprint
 reflector:
   reflect.proto:
     inherit: predefined.*
