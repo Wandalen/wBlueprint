@@ -10,7 +10,7 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( '../../../node_modules/Tools' );
+  const _ = require( '../../../node_modules/Tools' );
 
   require( './l1/Class.s' );
   require( './l1/Property.s' );
