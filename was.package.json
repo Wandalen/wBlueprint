@@ -5,7 +5,7 @@
   "author" : "Kostiantyn Wandalen <wanalen@01.school>",
   "license" : "MIT",
   "main" : "proto/node_modules/wblueprint",
-  "files" : [ "proto/wtools/abase/l2_blueprint", "proto/wtools/Tools.s", "proto/node_modules" ],
+  "files" : [ "proto/wtools/abase/l2_blueprint", "proto/node_modules" ],
   "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-2", "docgen" : "wdocgen .build proto" },
   "repository" :
   {
