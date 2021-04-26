@@ -153,7 +153,7 @@ function define()
 function _define( o )
 {
 
-  _.routineOptions( _define, o );
+  _.routine.options_( _define, o );
   _.assert( arguments.length === 1 );
 
   let runtime = Object.create( _.Blueprint.prototype );
@@ -285,7 +285,7 @@ function _amend( o )
 {
 
   _.assert( arguments.length === 1 );
-  _.routineOptions( _amend, arguments );
+  _.routine.options_( _amend, arguments );
   _.assert( _.longHas( [ 'extend', 'supplement' ], o.amending ) );
   _.assert( _.longHas( [ 'throw', 'amend', 'inherit' ], o.blueprintComposing ) );
 
@@ -471,7 +471,7 @@ function _amend( o )
 
     _.assert( _.strDefined( srcDefinition.name ) );
 
-    let o2 = _.mapExtend( null, o );
+    let o2 = _.props.extend( null, o );
     o2.blueprintDefinitionRewrite = blueprintNamedDefinitionRewrite;
     o2.name = srcDefinition.name;
     o2.defGroup = 'definition.named';
@@ -528,7 +528,7 @@ function _amend( o )
        ( dstDefinition && dstDefinition.blueprintDefinitionRewrite )
     || ( srcDefinition && srcDefinition.blueprintDefinitionRewrite );
 
-    let o2 = _.mapExtend( null, o );
+    let o2 = _.props.extend( null, o );
     o2.blueprintDefinitionRewrite = blueprintUnnamedDefinitionRewrite;
     o2.defGroup = 'definition.unnamed';
 
@@ -580,7 +580,7 @@ function _amend( o )
 
     _.assert( dstDefinition === null || _.definitionIs( dstDefinition ) );
 
-    let o2 = _.mapExtend( null, o );
+    let o2 = _.props.extend( null, o );
     o2.blueprintDefinitionRewrite = blueprintTraitRewrite;
     o2.kind = srcDefinition.kind;
 
@@ -738,7 +738,7 @@ function _form( o )
   _.assert( arguments.length === 1 );
   _.assert( _.blueprint.isDefinitive( o.blueprint ) );
   _.assert( _.longHas( [ 'blueprintForm1', 'blueprintForm2', 'blueprintForm3' ], o.stage ) );
-  _.routineOptions( _form, o );
+  _.routine.options_( _form, o );
 
   _.blueprint.eachDefinition( o.blueprint, ( blueprint, definition, propName ) =>
   {
@@ -993,7 +993,7 @@ function qnameOfDefinition( blueprint, definition )
 var BlueprintExtension =
 {
 
-  // routines
+  // implementation
 
   is,
   isDefinitive,

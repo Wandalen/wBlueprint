@@ -56,7 +56,7 @@ let DefinitionExtension =
 }
 
 _.definition = _.definition || Object.create( null );
-_.mapExtend( _.definition, DefinitionExtension );
+_.props.extend( _.definition, DefinitionExtension );
 
 // --
 // Blueprint

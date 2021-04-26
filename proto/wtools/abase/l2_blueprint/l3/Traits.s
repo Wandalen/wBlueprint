@@ -23,7 +23,7 @@ function _pairArgumentsHead( routine, args )
   else
   o = { val : args[ 0 ] };
 
-  o = _.routineOptions( routine, o );
+  o = _.routine.options_( routine, o );
 
   _.assert( arguments.length === 2 );
   _.assert( args.length === 0 || args.length === 1 || args.length === 2 );
@@ -38,7 +38,7 @@ function callable( o )
 {
   if( !_.mapIs( o ) )
   o = { callback : arguments[ 0 ] };
-  _.routineOptions( callable, o );
+  _.routine.options_( callable, o );
   _.assert( arguments.length === 1 );
   _.assert( _.routineIs( o.val ) );
   o.kind = 'callable';
@@ -125,10 +125,13 @@ function typed_head( routine, args )
   }
   else
   {
+    if( args.length > 0 )
     o = { val : args[ 0 ] };
+    else
+    o = {};
   }
 
-  o = _.routineOptions( routine, o );
+  o = _.routine.options_( routine, o );
 
   _.assert( arguments.length === 2 );
   _.assert( args.length === 0 || args.length === 1 || args.length === 2 );
@@ -139,11 +142,11 @@ function typed_head( routine, args )
 
 function typed_body( o )
 {
-  _.routineOptions( typed_body, o );
+  _.routine.options_( typed_body, o );
 
   if( !_.mapIs( o ) )
-  o = { val : arguments[ 0 ] };
-  _.routineOptions( typed, o );
+  o = arguments.length > 0 ? { val : arguments[ 0 ] } : {};
+  _.routine.options_( typed, o );
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
   if( _.boolLike( o.val ) )
@@ -713,15 +716,15 @@ typed_body.defaults =
 
 typed_body.group = { definition : true, trait : true };
 
-let typed = _.routine.uniteCloning_( typed_head, typed_body );
+let typed = _.routine.uniteCloning_replaceByUnite( typed_head, typed_body );
 
 //
 
 function constructor( o )
 {
   if( !_.mapIs( o ) )
-  o = { val : arguments[ 0 ] };
-  _.routineOptions( constructor, o );
+  o = arguments.length > 0 ? { val : arguments[ 0 ] } : {};
+  _.routine.options_( constructor, o );
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( _.boolLike( o.val ) );
 
@@ -807,8 +810,8 @@ constructor.defaults =
 function extendable( o )
 {
   if( !_.mapIs( o ) )
-  o = { val : arguments[ 0 ] };
-  _.routineOptions( extendable, o );
+  o = arguments.length > 0 ? { val : arguments[ 0 ] } : {};
+  _.routine.options_( extendable, o );
 
   if( _.boolLike( o.val ) )
   o.val = !!o.val;
@@ -848,8 +851,8 @@ extendable.defaults =
 function name( o )
 {
   if( !_.mapIs( o ) )
-  o = { val : arguments[ 0 ] };
-  _.routineOptions( name, o );
+  o = arguments.length > 0 ? { val : arguments[ 0 ] } : {};
+  _.routine.options_( name, o );
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( o.val ) );
   o.blueprintForm1 = blueprintForm1;
@@ -913,7 +916,7 @@ let DefinitionTraitExtension =
 }
 
 _.definition.trait = _.definition.trait || Object.create( null );
-_.mapExtend( _.definition.trait, DefinitionTraitExtension );
+_.props.extend( _.definition.trait, DefinitionTraitExtension );
 _.assert( _.routineIs( _.traitIs ) );
 _.assert( _.definition.trait.is === _.traitIs );
 
@@ -923,7 +926,7 @@ let ToolsExtension =
 {
 }
 
-_.mapExtend( _, ToolsExtension );
+_.props.extend( _, ToolsExtension );
 _.assert( _.routineIs( _.traitIs ) );
 
 // --

@@ -82,14 +82,14 @@ dstNotOwnFromDefinitionStrictlyPrimitive.identity = { propertyMapper : true, pro
 
 function mapSupplementOwnFromDefinition( dstMap, srcMap )
 {
-  return _.mapExtendConditional( _.property.mapper.dstNotOwnFromDefinition(), ... arguments );
+  return _.mapExtendConditional( _.props.mapper.dstNotOwnFromDefinition(), ... arguments );
 }
 
 //
 
 function mapSupplementOwnFromDefinitionStrictlyPrimitives( dstMap, srcMap )
 {
-  return _.mapExtendConditional( _.property.mapper.dstNotOwnFromDefinitionStrictlyPrimitive(), ... arguments );
+  return _.mapExtendConditional( _.props.mapper.dstNotOwnFromDefinitionStrictlyPrimitive(), ... arguments );
 }
 
 // --
@@ -104,7 +104,7 @@ let Transformers =
 
 }
 
-_.property.transformersRegister( Transformers );
+_.props.transformersRegister( Transformers );
 
 let Extension =
 {
@@ -114,7 +114,7 @@ let Extension =
 
 }
 
-_.mapExtend( _, Extension );
+_.props.extend( _, Extension );
 
 // --
 // export

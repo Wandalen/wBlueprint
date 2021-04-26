@@ -39,7 +39,7 @@ function Definition( o )
   return o;
   else
   return new( _.constructorJoin( Definition, arguments ) );
-  _.mapExtend( this, o );
+  _.props.extend( this, o );
   _.assert( _.longHas( _.definition.DefinitionGroup, o.defGroup ) );
   return this;
 }
@@ -251,7 +251,7 @@ function _extend( src )
 let DefinitionExtension =
 {
 
-  // routines
+  // implementation
 
   is : _.definitionIs,
   retype,
@@ -276,7 +276,7 @@ _.define.trait = _.define.trait || Object.create( null );
 _.trait = _.define.trait;
 
 _.definition = _.definition || Object.create( null );
-_.mapExtend( _.definition, DefinitionExtension );
+_.props.extend( _.definition, DefinitionExtension );
 _.assert( _.routineIs( _.definitionIs ) );
 _.assert( _.definition.is === _.definitionIs );
 
@@ -287,7 +287,7 @@ let ToolsExtension =
   Definition,
 }
 
-_.mapExtend( _, ToolsExtension );
+_.props.extend( _, ToolsExtension );
 
 // --
 // export

@@ -44,9 +44,9 @@ function conceal( dstPrototype, name, value )
     _.each( name, ( v, n ) =>
     {
       if( value === undefined )
-      _.property.conceal( dstPrototype, n, v );
+      _.props.conceal( dstPrototype, n, v );
       else
-      _.property.conceal( dstPrototype, n, value );
+      _.props.conceal( dstPrototype, n, value );
     });
     return;
   }
@@ -77,7 +77,7 @@ function conceal( dstPrototype, name, value )
  * const Self = ClassName;
 function ClassName( o ) { };
  * let Constants = { num : 100  };
- * _.property.constant( Self.prototype, Constants );
+ * _.props.constant( Self.prototype, Constants );
  * console.log( Self.prototype ); // returns { num: 100 }
  * Self.prototype.num = 1;// error assign to read only property
  *
@@ -102,9 +102,9 @@ function _constant( dstPrototype, name, value )
     _.each( name, ( v, n ) =>
     {
       if( value === undefined )
-      _.property.constant( dstPrototype, n, v );
+      _.props.constant( dstPrototype, n, v );
       else
-      _.property.constant( dstPrototype, n, value );
+      _.props.constant( dstPrototype, n, value );
     });
     return;
   }
@@ -145,7 +145,7 @@ function declare_head( routine, args )
     o = args[ 0 ];
   }
 
-  _.routineOptions( routine, o );
+  _.routine.options_( routine, o );
 
   if( o.writable === null )
   o.writable = !( o.set === false );
@@ -224,8 +224,8 @@ declare_body.defaults =
   val : _.nothing,
 }
 
-let declare = _.routine.uniteCloning_( declare_head, declare_body );
-_.routineEr( declare );
+let declare = _.routine.uniteCloning_replaceByUnite( declare_head, declare_body );
+_.routine.er( declare );
 
 // --
 // define
@@ -240,8 +240,8 @@ let PropertyExtension =
 
 }
 
-_.property = _.property || Object.create( null );
-_.mapExtend( _.property, PropertyExtension );
+_.props = _.props || Object.create( null );
+_.props.extend( _.props, PropertyExtension );
 
 // --
 // export

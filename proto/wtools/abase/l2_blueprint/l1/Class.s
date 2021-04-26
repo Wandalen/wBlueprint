@@ -43,7 +43,7 @@ let ClassExtension =
 }
 
 _.class = _.class || Object.create( null );
-_.mapExtend( _.class, ClassExtension );
+_.props.extend( _.class, ClassExtension );
 
 // --
 // export

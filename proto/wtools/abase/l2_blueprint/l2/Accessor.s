@@ -139,7 +139,7 @@ function _normalizedAsuiteForm_head( routine, args )
 {
   _.assert( arguments.length === 2 );
   _.assert( args.length === 1 );
-  let o = _.routineOptions( routine, args );
+  let o = _.routine.options_( routine, args );
   return o;
 }
 
@@ -152,7 +152,7 @@ function _normalizedAsuiteForm_body( o )
   _.assert( _.mapIs( o.normalizedAsuite ) );
   _.assert( o.writable === null || _.boolIs( o.writable ) );
   _.map.assertHasOnly( o.normalizedAsuite, _.accessor.AmethodTypesMap );
-  _.assertRoutineOptions( _normalizedAsuiteForm_body, o );
+  _.routine.assertOptions( _normalizedAsuiteForm_body, o );
 
   let propName;
   if( _.symbolIs( o.name ) )
@@ -328,7 +328,7 @@ _normalizedAsuiteForm_body.defaults =
   name : null,
 }
 
-let _normalizedAsuiteForm = _.routine.uniteCloning_( _normalizedAsuiteForm_head, _normalizedAsuiteForm_body );
+let _normalizedAsuiteForm = _.routine.uniteCloning_replaceByUnite( _normalizedAsuiteForm_head, _normalizedAsuiteForm_body );
 
 //
 
@@ -337,7 +337,7 @@ function _normalizedAsuiteUnfunct( o )
 
   _.assert( arguments.length === 1 );
   _.assert( _.mapIs( o.normalizedAsuite ) );
-  _.assertRoutineOptions( _normalizedAsuiteUnfunct, arguments );
+  _.routine.assertOptions( _normalizedAsuiteUnfunct, arguments );
 
   for( let mname in _.accessor.AmethodTypesMap )
   resultUnfunct( mname );
@@ -439,7 +439,7 @@ _amethodUnfunct.defaults =
 function _objectMethodsNamesGet( o )
 {
 
-  _.routineOptions( _objectMethodsNamesGet, o );
+  _.routine.options_( _objectMethodsNamesGet, o );
 
   if( o.anames === null )
   o.anames = Object.create( null );
@@ -510,7 +510,7 @@ function _objectMethodsValidate( o )
 
   _.assert( _.strIs( o.name ) || _.symbolIs( o.name ) );
   _.assert( !!o.object );
-  _.routineOptions( _objectMethodsValidate, o );
+  _.routine.options_( _objectMethodsValidate, o );
 
   let name = _.symbolIs( o.name ) ? Symbol.keyFor( o.name ) : o.name;
   let AmethodTypes = _.accessor.AmethodTypes;
@@ -559,7 +559,7 @@ function _objectMethodMoveGet( srcInstance, name )
 
 function _declaringIsNeeded( o )
 {
-  let prop = _.property.descriptorActiveOf( o.object, o.name );
+  let prop = _.props.descriptorActiveOf( o.object, o.name );
   if( prop.descriptor )
   {
 
@@ -823,7 +823,7 @@ function _amethodFromMove( propName, amethodType, move )
 
 function _moveItMake( o )
 {
-  return _.routineOptions( _moveItMake, arguments );
+  return _.routine.options_( _moveItMake, arguments );
 }
 
 _moveItMake.defaults =
@@ -882,7 +882,7 @@ _objectSetValue.defaults =
 function _objectAddMethods( o )
 {
 
-  _.assertRoutineOptions( _objectAddMethods, o );
+  _.routine.assertOptions( _objectAddMethods, o );
 
   for( let n in o.normalizedAsuite )
   {
@@ -964,7 +964,7 @@ function _objectInitStorage( object, normalizedAsuite )
 function _register( o )
 {
 
-  _.routineOptions( _register, arguments );
+  _.routine.options_( _register, arguments );
   _.assert( _.strDefined( o.declaratorName ) );
   _.assert( _.arrayIs( o.declaratorArgs ) );
 
@@ -1099,7 +1099,7 @@ var defaults = suiteNormalize_body.defaults =
   ... DeclarationOptions,
 }
 
-let suiteNormalize = _.routine.uniteCloning_( declareSingle_head, suiteNormalize_body );
+let suiteNormalize = _.routine.uniteCloning_replaceByUnite( declareSingle_head, suiteNormalize_body );
 
 //
 
@@ -1112,7 +1112,7 @@ function declareSingle_head( routine, args )
 
   _.assert( arguments.length === 2 );
   _.assert( args.length === 1 );
-  _.routineOptions( routine, o );
+  _.routine.options_( routine, o );
   _.assert( !_.primitiveIs( o.object ), 'Expects object as argument but got', o.object );
   _.assert( _.strIs( o.name ) || _.symbolIs( o.name ) );
   _.assert( _.longHas( [ null, 0, false, 1, true, 'rewrite', 'supplement' ], o.combining ), 'not tested' );
@@ -1210,7 +1210,7 @@ function declareSingle_body( o )
 
   /* define accessor */
 
-  let descriptor = _.property.declare.body
+  let descriptor = _.props.declare.body
   ({
     object : o.object,
     name : o.name,
@@ -1257,7 +1257,7 @@ function declareSingle_body( o )
   function register()
   {
 
-    let o2 = _.mapExtend( null, o );
+    let o2 = _.props.extend( null, o );
     o2.names = o.name;
     o2.methods = Object.create( null );
     o2.object = null;
@@ -1290,7 +1290,7 @@ var defaults = declareSingle_body.defaults =
   ... DeclarationOptions,
 }
 
-let declareSingle = _.routine.uniteCloning_( declareSingle_head, declareSingle_body );
+let declareSingle = _.routine.uniteCloning_replaceByUnite( declareSingle_head, declareSingle_body );
 
 //
 
@@ -1379,7 +1379,7 @@ function declareMultiple_head( routine, args )
   if( _.strIs( o.names ) )
   o.names = { [ o.names ] : o.names }
 
-  _.routineOptions( routine, o );
+  _.routine.options_( routine, o );
 
   if( _.boolLike( o.writable ) )
   o.writable = !!o.writable;
@@ -1393,13 +1393,13 @@ function declareMultiple_head( routine, args )
 function declareMultiple_body( o )
 {
 
-  _.assertRoutineOptions( declareMultiple_body, arguments );
+  _.routine.assertOptions( declareMultiple_body, arguments );
 
-  if( _.arrayLike( o.object ) )
+  if( _.argumentsArray.like( o.object ) )
   {
     _.each( o.object, ( object ) =>
     {
-      let o2 = _.mapExtend( null, o );
+      let o2 = _.props.extend( null, o );
       o2.object = object;
       declareMultiple_body( o2 );
     });
@@ -1438,7 +1438,7 @@ function declareMultiple_body( o )
     if( _.mapIs( extension ) )
     {
       _.map.assertHasOnly( extension, _.accessor.DeclarationMultipleToSingleOptions );
-      _.mapExtend( o2, extension );
+      _.props.extend( o2, extension );
       _.assert( !!o2.object );
     }
     else if( _.definitionIs( extension ) )
@@ -1447,7 +1447,7 @@ function declareMultiple_body( o )
     }
     else if( _.routineIs( extension ) && extension.identity && extension.identity.functor )
     {
-      _.mapExtend( o2, { suite : extension } );
+      _.props.extend( o2, { suite : extension } );
     }
     else _.assert( name === extension, `Unexpected type ${_.entity.strType( extension )}` );
 
@@ -1460,11 +1460,11 @@ function declareMultiple_body( o )
 
 }
 
-var defaults = declareMultiple_body.defaults = _.mapExtend( null, declareSingle.defaults );
+var defaults = declareMultiple_body.defaults = _.props.extend( null, declareSingle.defaults );
 defaults.names = null;
 delete defaults.name;
 
-let declareMultiple = _.routine.uniteCloning_( declareMultiple_head, declareMultiple_body );
+let declareMultiple = _.routine.uniteCloning_replaceByUnite( declareMultiple_head, declareMultiple_body );
 
 //
 
@@ -1487,16 +1487,16 @@ function ClassName( o ) { };
 function forbid_body( o )
 {
 
-  _.assertRoutineOptions( forbid_body, arguments );
+  _.routine.assertOptions( forbid_body, arguments );
 
   if( !o.methods )
   o.methods = Object.create( null );
 
-  if( _.arrayLike( o.object ) )
+  if( _.argumentsArray.like( o.object ) )
   {
     _.each( o.object, ( object ) =>
     {
-      let o2 = _.mapExtend( null, o );
+      let o2 = _.props.extend( null, o );
       o2.object = object;
       forbid_body( o2 );
     });
@@ -1504,7 +1504,7 @@ function forbid_body( o )
   }
 
   if( _.objectIs( o.names ) )
-  o.names = _.mapExtend( null, o.names );
+  o.names = _.props.extend( null, o.names );
 
   if( o.prime === null )
   o.prime = !!_.workpiece && _.workpiece.prototypeIsStandard( o.object );
@@ -1534,7 +1534,7 @@ function forbid_body( o )
     for( let n in o.names )
     {
       let name = o.names[ n ];
-      let o2 = _.mapExtend( null, o );
+      let o2 = _.props.extend( null, o );
       o2.propName = name;
       _.assert( n === name, () => 'Key and value should be the same, but ' + _.strQuote( n ) + ' and ' + _.strQuote( name ) + ' are not' );
       let declared = _.accessor._forbidSingle( o2 );
@@ -1555,7 +1555,7 @@ function forbid_body( o )
     for( let n = 0 ; n < namesArray.length ; n++ )
     {
       let name = namesArray[ n ];
-      let o2 = _.mapExtend( null, o );
+      let o2 = _.props.extend( null, o );
       o2.propName = name;
       let delcared = _.accessor._forbidSingle( o2 );
       if( declared )
@@ -1586,13 +1586,13 @@ var defaults = forbid_body.defaults =
 
 }
 
-let forbid = _.routine.uniteCloning_( declareMultiple_head, forbid_body );
+let forbid = _.routine.uniteCloning_replaceByUnite( declareMultiple_head, forbid_body );
 
 //
 
 function _forbidSingle()
 {
-  let o = _.routineOptions( _forbidSingle, arguments );
+  let o = _.routine.options_( _forbidSingle, arguments );
   let messageLine = o.protoName + o.propName + ' : ' + o.message;
 
   _.assert( _.strIs( o.protoName ) );
@@ -1600,7 +1600,7 @@ function _forbidSingle()
 
   /* */
 
-  let propertyDescriptor = _.property.descriptorActiveOf( o.object, o.propName );
+  let propertyDescriptor = _.props.descriptorActiveOf( o.object, o.propName );
   if( propertyDescriptor.descriptor )
   {
     _.assert( _.strIs( o.combining ), 'forbid : if accessor overided expect ( o.combining ) is', _.accessor.Combining.join() );
@@ -1633,7 +1633,7 @@ function _forbidSingle()
   {
 
     _.assert( 0, 'not tested' );
-    let o2 = _.mapExtend( null, o );
+    let o2 = _.props.extend( null, o );
     o2.names = o.propName;
     o2.object = null;
     delete o2.protoName;
@@ -1739,15 +1739,15 @@ function ownForbid( object, name )
 
 function readOnly_body( o )
 {
-  _.assertRoutineOptions( readOnly_body, arguments );
+  _.routine.assertOptions( readOnly_body, arguments );
   _.assert( _.boolLikeFalse( o.writable ) );
   return _.accessor.declare.body( o );
 }
 
-var defaults = readOnly_body.defaults = _.mapExtend( null, declareMultiple.body.defaults );
+var defaults = readOnly_body.defaults = _.props.extend( null, declareMultiple.body.defaults );
 defaults.writable = false;
 
-let readOnly = _.routine.uniteCloning_( declareMultiple_head, readOnly_body );
+let readOnly = _.routine.uniteCloning_replaceByUnite( declareMultiple_head, readOnly_body );
 
 //
 
@@ -1822,8 +1822,8 @@ let ToolsExtension =
 // --
 
 _.accessor = _.accessor || Object.create( null );
-_.mapSupplement( _, ToolsExtension );
-_.mapExtend( _.accessor, AccessorExtension );
+_.props.supplement( _, ToolsExtension );
+_.props.extend( _.accessor, AccessorExtension );
 
 // --
 // export

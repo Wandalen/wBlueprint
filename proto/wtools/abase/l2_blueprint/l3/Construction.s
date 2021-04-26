@@ -61,7 +61,7 @@ function isInstanceOf( construction, runtime )
 
 function amend( o )
 {
-  o = _.routineOptions( amend, arguments );
+  o = _.routine.options_( amend, arguments );
   if( o.dstConstruction === null )
   o.dstConstruction = Object.create( null );
   let amending = o.amending;
@@ -188,7 +188,7 @@ function _make_head( routine, args )
     _.assert( _.mapIs( genesis ) );
   }
 
-  _.routineOptions( routine, genesis );
+  _.routine.options_( routine, genesis );
 
   if( genesis.args === null )
   genesis.args = [];
@@ -213,9 +213,9 @@ function _make3( genesis )
   if( genesis.args === undefined || genesis.args === null )
   genesis.args = [];
 
-  _.assertRoutineOptions( _make3, arguments );
+  _.routine.assertOptions( _make3, arguments );
   _.assert( genesis.construction === null || _.objectIs( genesis.construction ) );
-  _.assert( _.arrayLike( genesis.args ) );
+  _.assert( _.argumentsArray.like( genesis.args ) );
   _.assert( genesis.args.length === 0 || genesis.args.length === 1 );
   _.assert( arguments.length === 1 );
   _.assert( _.fuzzyIs( genesis.runtime.typed ) );
@@ -381,7 +381,7 @@ _retype_body.defaults =
   amending : 'supplement',
 }
 
-let _retype = _.routine.uniteCloning_( _make_head, _retype_body );
+let _retype = _.routine.uniteCloning_replaceByUnite( _make_head, _retype_body );
 
 //
 
@@ -438,11 +438,11 @@ function _initFields( genesis )
   _.assert( _.mapIs( genesis.runtime.propsSupplementation ) );
 
   if( genesis.amending === 'extend' )
-  _.mapExtend( genesis.construction, genesis.runtime.propsExtension );
+  _.props.extend( genesis.construction, genesis.runtime.propsExtension );
   else
-  _.mapSupplement( genesis.construction, genesis.runtime.propsExtension );
+  _.props.supplement( genesis.construction, genesis.runtime.propsExtension );
 
-  _.mapSupplement( genesis.construction, genesis.runtime.propsSupplementation );
+  _.props.supplement( genesis.construction, genesis.runtime.propsSupplementation );
 
   return genesis.construction;
 }
@@ -488,7 +488,7 @@ function _extendArguments( genesis )
 
   _.assert( _.objectIs( genesis.construction ) );
   _.assert( _.blueprint.isRuntime( genesis.runtime ) );
-  _.assert( genesis.args === undefined || _.arrayLike( genesis.args ) );
+  _.assert( genesis.args === undefined || _.argumentsArray.like( genesis.args ) );
   _.assert( genesis.args === undefined || genesis.args.length === 0 || genesis.args.length === 1 );
   _.assert( arguments.length === 1 );
 
@@ -504,7 +504,7 @@ function _extendArguments( genesis )
   _.assert( _.objectIs( o ) );
 
   if( genesis.construction !== o )
-  _.mapExtend( genesis.construction, o );
+  _.props.extend( genesis.construction, o );
 
   return genesis.construction;
 }
