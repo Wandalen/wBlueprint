@@ -214,7 +214,7 @@ function _make3( genesis )
   genesis.args = [];
 
   _.routine.assertOptions( _make3, arguments );
-  _.assert( genesis.construction === null || _.objectIs( genesis.construction ) );
+  _.assert( genesis.construction === null || _.object.isBasic( genesis.construction ) );
   _.assert( _.argumentsArray.like( genesis.args ) );
   _.assert( genesis.args.length === 0 || genesis.args.length === 1 );
   _.assert( arguments.length === 1 );
@@ -431,7 +431,7 @@ _init.defaults =
 function _initFields( genesis )
 {
 
-  _.assert( _.objectIs( genesis.construction ) );
+  _.assert( _.object.isBasic( genesis.construction ) );
   _.assert( _.blueprint.isRuntime( genesis.runtime ) );
   _.assert( arguments.length === 1 );
   _.assert( _.longHas( [ 'extend', 'supplement' ], genesis.amending ) );
@@ -459,7 +459,7 @@ _initFields.defaults =
 function _initDefines( genesis )
 {
 
-  _.assert( _.objectIs( genesis.construction ) );
+  _.assert( _.object.isBasic( genesis.construction ) );
   _.assert( _.blueprint.isRuntime( genesis.runtime ) );
   _.assert( arguments.length === 1 );
   _.assert( _.longHas( [ 'extend', 'supplement' ], genesis.amending ) );
@@ -486,7 +486,7 @@ _initDefines.defaults =
 function _extendArguments( genesis )
 {
 
-  _.assert( _.objectIs( genesis.construction ) );
+  _.assert( _.object.isBasic( genesis.construction ) );
   _.assert( _.blueprint.isRuntime( genesis.runtime ) );
   _.assert( genesis.args === undefined || _.argumentsArray.like( genesis.args ) );
   _.assert( genesis.args === undefined || genesis.args.length === 0 || genesis.args.length === 1 );
@@ -501,7 +501,7 @@ function _extendArguments( genesis )
   if( o === null )
   return genesis.construction;
 
-  _.assert( _.objectIs( o ) );
+  _.assert( _.object.isBasic( o ) );
 
   if( genesis.construction !== o )
   _.props.extend( genesis.construction, o );

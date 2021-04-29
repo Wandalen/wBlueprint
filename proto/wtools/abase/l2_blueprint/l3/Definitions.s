@@ -1274,7 +1274,7 @@ function _amendment_body( o )
 {
 
   _.routine.assertOptions( _amendment_body, arguments );
-  _.assert( _.objectIs( o.val ) );
+  _.assert( _.object.isBasic( o.val ) );
   _.assert( _.blueprintIsDefinitive( o.val ) );
   o.defGroup = 'definition.unnamed';
   o.kind = 'amend';
@@ -1344,7 +1344,7 @@ function inherit_body( o )
 {
 
   _.routine.assertOptions( inherit_body, arguments );
-  _.assert( _.objectIs( o.val ) );
+  _.assert( _.object.isBasic( o.val ) );
   _.assert( _.blueprintIsDefinitive( o.val ) );
   o.defGroup = 'definition.unnamed';
   o.kind = 'inherit';

@@ -206,9 +206,9 @@ function blueprintIsDefinitive( test )
   var instance2 = _.blueprint.construct( Blueprint2 );
   var instance3 = _.blueprint.construct( Blueprint3 );
 
-  test.identical( _.objectIs( Blueprint1.runtime ), true );
-  test.identical( _.objectIs( Blueprint2.runtime ), true );
-  test.identical( _.objectIs( Blueprint3.runtime ), true );
+  test.identical( _.object.isBasic( Blueprint1.runtime ), true );
+  test.identical( _.object.isBasic( Blueprint2.runtime ), true );
+  test.identical( _.object.isBasic( Blueprint3.runtime ), true );
 
   test.identical( _.blueprint.isDefinitive( _.blueprint ), false );
   test.identical( _.blueprint.isDefinitive( _.Blueprint ), false );
@@ -252,9 +252,9 @@ function blueprintIsRuntime( test )
   var instance2 = _.blueprint.construct( Blueprint2 );
   var instance3 = _.blueprint.construct( Blueprint3 );
 
-  test.identical( _.objectIs( Blueprint1.runtime ), true );
-  test.identical( _.objectIs( Blueprint2.runtime ), true );
-  test.identical( _.objectIs( Blueprint3.runtime ), true );
+  test.identical( _.object.isBasic( Blueprint1.runtime ), true );
+  test.identical( _.object.isBasic( Blueprint2.runtime ), true );
+  test.identical( _.object.isBasic( Blueprint3.runtime ), true );
 
   test.identical( _.blueprint.isRuntime( _.blueprint ), false );
   test.identical( _.blueprint.isRuntime( _.Blueprint ), false );
@@ -1637,7 +1637,7 @@ function blueprintUseSingleBlueprint( test )
 
   test.true( Blueprint1.make.prototype === null );
   // test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint2.make.prototype ) );
-  test.true( _.objectIs( instance ) );
+  test.true( _.object.isBasic( instance ) );
   test.true( _.mapIs( instance ) );
   test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
@@ -1680,7 +1680,7 @@ function blueprintUseSingleBlueprint( test )
 
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint1.make.prototype ) );
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint2.make.prototype ) );
-  test.true( _.objectIs( instance ) );
+  test.true( _.object.isBasic( instance ) );
   test.true( !_.mapIs( instance ) );
   test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
@@ -1741,7 +1741,7 @@ function blueprintUseMultipleBlueprints( test )
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint1.make.prototype ) );
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint2.make.prototype ) );
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint3.make.prototype ) );
-  test.true( _.objectIs( instance ) );
+  test.true( _.object.isBasic( instance ) );
   test.true( !_.mapIs( instance ) );
   test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
@@ -9047,8 +9047,8 @@ amending object`;
         test.identical( dstContainer.f2, 1 );
       }
 
-      test.true( _.objectIs( dstContainer._ ) );
-      test.true( _.objectIs( _.prototype.of( dstContainer )._ ) );
+      test.true( _.object.isBasic( dstContainer._ ) );
+      test.true( _.object.isBasic( _.prototype.of( dstContainer )._ ) );
       test.true( _.mapIs( dstContainer ) ^ !!tops.typed );
 
       var got = Object.getOwnPropertyDescriptor( extension.prototype, 'f1' );
@@ -9197,8 +9197,8 @@ amending object by map`;
         }
       }
 
-      test.true( _.objectIs( dstContainer._ ) );
-      test.true( _.objectIs( _.prototype.of( dstContainer )._ ) );
+      test.true( _.object.isBasic( dstContainer._ ) );
+      test.true( _.object.isBasic( _.prototype.of( dstContainer )._ ) );
       test.true( _.mapIs( dstContainer ) ^ !!tops.typed );
 
       var got = Object.getOwnPropertyDescriptor( _.prototype.of( dstContainer ), 'f1' );
@@ -12219,7 +12219,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   var construction1 = Object.create( null )
   test.true( Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === null );
 
   _.construction.extend( construction1, Blueprint1 );
@@ -12230,7 +12230,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   test.identical( _.props.onlyExplicit( construction1 ), exp );
   test.true( !Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === null );
 
   /* */
@@ -12252,7 +12252,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   var construction1 = {};
   test.true( Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === Object.prototype );
 
   _.construction.extend( construction1, Blueprint1 );
@@ -12263,7 +12263,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   test.identical( _.props.onlyExplicit( construction1, { onlyEnumerable : 1 } ), exp );
   test.true( !Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === Object.prototype );
 
   /* */
@@ -12285,7 +12285,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   var construction1 = Object.create( null )
   test.true( Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === null );
 
   _.construction.extend( construction1, Blueprint1 );
@@ -12296,7 +12296,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   test.identical( _.props.onlyExplicit( construction1 ), exp );
   test.true( !Object.isExtensible( construction1 ) );
   test.true( !_.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === Blueprint1.prototype );
 
   /* */
@@ -12318,7 +12318,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   var construction1 = {};
   test.true( Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === Object.prototype );
 
   _.construction.extend( construction1, Blueprint1 );
@@ -12329,7 +12329,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   test.identical( _.props.onlyExplicit( construction1 ), exp );
   test.true( !Object.isExtensible( construction1 ) );
   test.true( !_.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === Blueprint1.prototype );
 
   /* */
@@ -12352,7 +12352,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   var construction1 = Object.create( prototype1 );
   test.true( Object.isExtensible( construction1 ) );
   test.true( !_.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === prototype1 );
 
   _.construction.extend( construction1, Blueprint1 );
@@ -12363,7 +12363,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   test.identical( _.props.onlyExplicit( construction1 ), exp );
   test.true( !Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === null );
 
   /* */
@@ -12386,7 +12386,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   var construction1 = Object.create( prototype1 );
   test.true( Object.isExtensible( construction1 ) );
   test.true( !_.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === prototype1 );
 
   _.construction.extend( construction1, Blueprint1 );
@@ -12397,7 +12397,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   test.identical( _.props.onlyExplicit( construction1 ), exp );
   test.true( !Object.isExtensible( construction1 ) );
   test.true( !_.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === Blueprint1.prototype );
 
   /* */
@@ -12419,7 +12419,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   var construction1 = Object.create( null )
   test.true( Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === null );
 
   _.construction.extend( construction1, Blueprint1 );
@@ -12430,7 +12430,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   test.identical( _.props.onlyExplicit( construction1 ), exp );
   test.true( !Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === null );
 
   /* */
@@ -12452,7 +12452,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   var construction1 = {};
   test.true( Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === Object.prototype );
 
   _.construction.extend( construction1, Blueprint1 );
@@ -12463,7 +12463,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   test.identical( _.props.onlyExplicit( construction1, { onlyEnumerable : 1 } ), exp );
   test.true( !Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === Object.prototype );
 
   /* */
@@ -12486,7 +12486,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   var construction1 = Object.create( prototype1 );
   test.true( Object.isExtensible( construction1 ) );
   test.true( !_.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === prototype1 );
 
   _.construction.extend( construction1, Blueprint1 );
@@ -12497,7 +12497,7 @@ function constructionExtendWithBlueprintWithNothing( test )
   test.identical( _.props.onlyExplicit( construction1 ), exp );
   test.true( !Object.isExtensible( construction1 ) );
   test.true( !_.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === prototype1 );
 
   /* */
@@ -12522,7 +12522,7 @@ function constructionExtendWithNothing( test )
   construction1.f1 = '1';
   test.true( Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === null );
 
   _.construction.extend( construction1, extension );
@@ -12533,7 +12533,7 @@ function constructionExtendWithNothing( test )
   test.identical( _.props.onlyExplicit( construction1 ), exp );
   test.true( Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === null );
 
   /* */
@@ -12549,7 +12549,7 @@ function constructionExtendWithNothing( test )
   construction1.f1 = '1';
   test.true( Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === Object.prototype );
 
   _.construction.extend( construction1, extension );
@@ -12560,7 +12560,7 @@ function constructionExtendWithNothing( test )
   test.identical( _.props.onlyExplicit( construction1, { onlyEnumerable : 1 } ), exp );
   test.true( Object.isExtensible( construction1 ) );
   test.true( _.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === Object.prototype );
 
   /* */
@@ -12577,7 +12577,7 @@ function constructionExtendWithNothing( test )
   construction1.f1 = '1';
   test.true( Object.isExtensible( construction1 ) );
   test.true( !_.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === prototype1 );
 
   _.construction.extend( construction1, extension );
@@ -12588,7 +12588,7 @@ function constructionExtendWithNothing( test )
   test.identical( _.props.onlyExplicit( construction1 ), exp );
   test.true( Object.isExtensible( construction1 ) );
   test.true( !_.mapIs( construction1 ) );
-  test.true( _.objectIs( construction1 ) );
+  test.true( _.object.isBasic( construction1 ) );
   test.true( _.prototype.of( construction1 ) === prototype1 );
 
   /* */
@@ -12784,7 +12784,7 @@ function traitTypedTrivial( test )
   test.identical( prototypes.length, 1 );
   test.true( prototypes[ 0 ] === instance );
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint ) );
-  test.true( _.objectIs( instance ) );
+  test.true( _.object.isBasic( instance ) );
   test.true( _.mapIs( instance ) );
   test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
@@ -12812,7 +12812,7 @@ function traitTypedTrivial( test )
   test.identical( prototypes.length, 1 );
   test.true( prototypes[ 0 ] === instance );
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint ) );
-  test.true( _.objectIs( instance ) );
+  test.true( _.object.isBasic( instance ) );
   test.true( _.mapIs( instance ) );
   test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
@@ -12845,7 +12845,7 @@ function traitTypedTrivial( test )
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, instance ) );
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint.make.prototype ) );
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, _.Construction.prototype ) );
-  test.true( _.objectIs( instance ) );
+  test.true( _.object.isBasic( instance ) );
   test.true( !_.mapIs( instance ) );
   test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
@@ -17347,7 +17347,7 @@ function constructWithoutHelper( test )
   test.identical( prototypes.length, 1 );
   test.true( prototypes[ 0 ] === instance );
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint ) );
-  test.true( _.objectIs( instance ) );
+  test.true( _.object.isBasic( instance ) );
   test.true( _.mapIs( instance ) );
   test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
@@ -17380,7 +17380,7 @@ function constructWithoutHelper( test )
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, instance ) );
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint.make.prototype ) );
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, _.Construction.prototype ) );
-  test.true( _.objectIs( instance ) );
+  test.true( _.object.isBasic( instance ) );
   test.true( !_.mapIs( instance ) );
   test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
@@ -17408,7 +17408,7 @@ function constructWithoutHelper( test )
   test.identical( prototypes.length, 1 );
   test.true( prototypes[ 0 ] === instance );
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint ) );
-  test.true( _.objectIs( instance ) );
+  test.true( _.object.isBasic( instance ) );
   test.true( _.mapIs( instance ) );
   test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
@@ -17441,7 +17441,7 @@ function constructWithoutHelper( test )
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, instance ) );
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint.make.prototype ) );
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, _.Construction.prototype ) );
-  test.true( _.objectIs( instance ) );
+  test.true( _.object.isBasic( instance ) );
   test.true( !_.mapIs( instance ) );
   test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
@@ -17495,7 +17495,7 @@ function constructWithArgumentMap( test )
   test.identical( prototypes.length, 1 );
   test.true( prototypes[ 0 ] === instance );
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint ) );
-  test.true( _.objectIs( instance ) );
+  test.true( _.object.isBasic( instance ) );
   test.true( _.mapIs( instance ) );
   test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
@@ -17534,7 +17534,7 @@ function constructWithArgumentMap( test )
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, instance ) );
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint.make.prototype ) );
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, _.Construction.prototype ) );
-  test.true( _.objectIs( instance ) );
+  test.true( _.object.isBasic( instance ) );
   test.true( !_.mapIs( instance ) );
   test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
@@ -17568,7 +17568,7 @@ function constructWithArgumentMap( test )
   test.identical( prototypes.length, 1 );
   test.true( prototypes[ 0 ] === instance );
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint ) );
-  test.true( _.objectIs( instance ) );
+  test.true( _.object.isBasic( instance ) );
   test.true( _.mapIs( instance ) );
   test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
@@ -17606,7 +17606,7 @@ function constructWithArgumentMap( test )
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, instance ) );
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint.make.prototype ) );
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance, _.Construction.prototype ) );
-  test.true( _.objectIs( instance ) );
+  test.true( _.object.isBasic( instance ) );
   test.true( !_.mapIs( instance ) );
   test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
@@ -17801,7 +17801,7 @@ function constructWithArgumentInstance( test )
   test.identical( prototypes.length, 1 );
   test.true( prototypes[ 0 ] === instance2 );
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance2, Blueprint ) );
-  test.true( _.objectIs( instance2 ) );
+  test.true( _.object.isBasic( instance2 ) );
   test.true( _.mapIs( instance2 ) );
   test.true( _.aux.is( instance2 ) );
   test.true( !_.instanceIs( instance2 ) );
@@ -17844,7 +17844,7 @@ function constructWithArgumentInstance( test )
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance2, instance2 ) );
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance2, Blueprint.make.prototype ) );
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance2, _.Construction.prototype ) );
-  test.true( _.objectIs( instance2 ) );
+  test.true( _.object.isBasic( instance2 ) );
   test.true( !_.mapIs( instance2 ) );
   test.true( _.aux.is( instance2 ) );
   test.true( !_.instanceIs( instance2 ) );
@@ -17880,7 +17880,7 @@ function constructWithArgumentInstance( test )
   test.identical( prototypes.length, 1 );
   test.true( prototypes[ 0 ] === instance2 );
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance2, Blueprint ) );
-  test.true( _.objectIs( instance2 ) );
+  test.true( _.object.isBasic( instance2 ) );
   test.true( _.mapIs( instance2 ) );
   test.true( _.aux.is( instance2 ) );
   test.true( !_.instanceIs( instance2 ) );
@@ -17921,7 +17921,7 @@ function constructWithArgumentInstance( test )
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance2, instance2 ) );
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance2, Blueprint.make.prototype ) );
   test.true( /*_.prototype.hasPrototype*/_.prototype.has( instance2, _.Construction.prototype ) );
-  test.true( _.objectIs( instance2 ) );
+  test.true( _.object.isBasic( instance2 ) );
   test.true( !_.mapIs( instance2 ) );
   test.true( _.aux.is( instance2 ) );
   test.true( !_.instanceIs( instance2 ) );
@@ -18506,7 +18506,7 @@ function helperConstruct( test )
   test.true( prototypes[ 0 ] === instance );
 
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint1 ) );
-  test.true( _.objectIs( instance ) );
+  test.true( _.object.isBasic( instance ) );
   test.true( _.mapIs( instance ) );
   test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );
@@ -18575,7 +18575,7 @@ function helperConstructAndNew( test )
   test.true( prototypes[ 0 ] === instance );
 
   test.true( !/*_.prototype.hasPrototype*/_.prototype.has( instance, Blueprint ) );
-  test.true( _.objectIs( instance ) );
+  test.true( _.object.isBasic( instance ) );
   test.true( _.mapIs( instance ) );
   test.true( _.aux.is( instance ) );
   test.true( !_.instanceIs( instance ) );

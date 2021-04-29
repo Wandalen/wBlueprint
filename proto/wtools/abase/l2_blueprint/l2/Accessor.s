@@ -482,7 +482,7 @@ function _objectMethodsGet( object, propertyName )
   let result = Object.create( null );
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  _.assert( _.objectIs( object ) );
+  _.assert( _.object.isBasic( object ) );
   _.assert( _.strIs( propertyName ) );
 
   result.grabName = object[ propertyName + 'Grab' ] ? propertyName + 'Grab' : '_' + propertyName + 'Grab';
@@ -650,7 +650,7 @@ function _objectInitStorageUnderscore( object )
   if( !Object.hasOwnProperty.call( object, '_' ) )
   Object.defineProperty( object, '_',
   {
-    value : Object.create( _.objectIs( object._ ) ? object._ : null ),
+    value : Object.create( _.object.isBasic( object._ ) ? object._ : null ),
     enumerable : false,
     writable : false,
     configurable : false,
@@ -1385,7 +1385,7 @@ function declareMultiple_head( routine, args )
   o.writable = !!o.writable;
 
   _.assert( !_.primitiveIs( o.object ), 'Expects object as argument but got', o.object );
-  _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ), 'Expects object names as argument but got', o.names );
+  _.assert( _.object.isBasic( o.names ) || _.arrayIs( o.names ), 'Expects object names as argument but got', o.names );
 
   return o;
 }
@@ -1413,7 +1413,7 @@ function declareMultiple_body( o )
 
   _.assert( !_.primitiveIs( o.methods ) );
   _.assert( !_.primitiveIs( o.object ), () => 'Expects object {-object-}, but got ' + _.entity.exportStringShallow( o.object ) );
-  _.assert( _.objectIs( o.names ), () => 'Expects object {-names-}, but got ' + _.entity.exportStringShallow( o.names ) );
+  _.assert( _.object.isBasic( o.names ), () => 'Expects object {-names-}, but got ' + _.entity.exportStringShallow( o.names ) );
 
   /* */
 
@@ -1503,7 +1503,7 @@ function forbid_body( o )
     return o.object;
   }
 
-  if( _.objectIs( o.names ) )
+  if( _.object.isBasic( o.names ) )
   o.names = _.props.extend( null, o.names );
 
   if( o.prime === null )
@@ -1512,7 +1512,7 @@ function forbid_body( o )
   /* verification */
 
   _.assert( !_.primitiveIs( o.object ), () => 'Expects object {-o.object-} but got ' + _.entity.exportStringShallow( o.object ) );
-  _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ), () => 'Expects object {-o.names-} as argument but got ' + _.entity.exportStringShallow( o.names ) );
+  _.assert( _.object.isBasic( o.names ) || _.arrayIs( o.names ), () => 'Expects object {-o.names-} as argument but got ' + _.entity.exportStringShallow( o.names ) );
 
   /* message */
 
@@ -1527,7 +1527,7 @@ function forbid_body( o )
 
   /* property */
 
-  if( _.objectIs( o.names ) )
+  if( _.object.isBasic( o.names ) )
   {
     let result = Object.create( null );
 
@@ -1596,7 +1596,7 @@ function _forbidSingle()
   let messageLine = o.protoName + o.propName + ' : ' + o.message;
 
   _.assert( _.strIs( o.protoName ) );
-  _.assert( _.objectIs( o.methods ) );
+  _.assert( _.object.isBasic( o.methods ) );
 
   /* */
 

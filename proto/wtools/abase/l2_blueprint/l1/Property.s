@@ -39,7 +39,7 @@ function conceal( dstPrototype, name, value )
 
   if( _.containerIs( name ) )
   {
-    if( !_.objectIs( name ) )
+    if( !_.object.isBasic( name ) )
     name = _.indexExtending( name, ( e ) => { return { [ e ] : undefined } } );
     _.each( name, ( v, n ) =>
     {
@@ -97,7 +97,7 @@ function _constant( dstPrototype, name, value )
 
   if( _.containerIs( name ) )
   {
-    if( !_.objectIs( name ) )
+    if( !_.object.isBasic( name ) )
     name = _.indexExtending( name, ( e ) => { return { [ e ] : undefined } } );
     _.each( name, ( v, n ) =>
     {

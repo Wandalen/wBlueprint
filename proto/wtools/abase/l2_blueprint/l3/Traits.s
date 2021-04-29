@@ -473,7 +473,7 @@ function typed_body( o )
         _.assert( _.routineIs( trait.prototype.make ) );
         _.assert
         (
-          _.objectIs( trait.prototype.prototype )
+          _.object.isBasic( trait.prototype.prototype )
           , `Cant use ${_.blueprint.qnameOf( trait.prototype )} as prototype. This blueprint is not prototyped.`
         );
       }

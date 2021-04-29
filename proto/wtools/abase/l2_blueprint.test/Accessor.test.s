@@ -3335,7 +3335,7 @@ function accessorForbid( test )
   test.case = 'accessor forbid getter&setter';
   var Alpha = { };
   _.accessor.forbid( Alpha, { a : 'a' } );
-  test.true( _.objectIs( Alpha ) );
+  test.true( _.object.isBasic( Alpha ) );
   test.shouldThrowErrorSync( () => Alpha.a = 5, ( err, arg, ok ) =>
   {
     Alpha[ Symbol.for( 'a' ) ] = 5;
@@ -3805,7 +3805,7 @@ function accessorStoringStrategyUnderscoreIniting( test )
   }
   test.identical( obj1._, exp );
 
-  test.true( _.objectIs( obj1._ ) );
+  test.true( _.object.isBasic( obj1._ ) );
 
   /* */
 
@@ -3878,7 +3878,7 @@ function accessorStoringStrategyUnderscoreIniting( test )
     a : 3,
   }
   test.identical( obj1, exp );
-  test.true( _.objectIs( obj1._ ) );
+  test.true( _.object.isBasic( obj1._ ) );
 
   /* */
 
@@ -3893,7 +3893,7 @@ function accessorStoringStrategyUnderscoreIniting( test )
     a : 1,
   }
   test.identical( obj1, exp );
-  test.true( _.objectIs( obj1._ ) );
+  test.true( _.object.isBasic( obj1._ ) );
 
   /* */
 
@@ -3908,7 +3908,7 @@ function accessorStoringStrategyUnderscoreIniting( test )
     a : undefined,
   }
   test.identical( obj1, exp );
-  test.true( _.objectIs( obj1._ ) );
+  test.true( _.object.isBasic( obj1._ ) );
 
   /* */
 
@@ -3923,7 +3923,7 @@ function accessorStoringStrategyUnderscoreIniting( test )
     a : undefined,
   }
   test.identical( obj1, exp );
-  test.true( _.objectIs( obj1._ ) );
+  test.true( _.object.isBasic( obj1._ ) );
 
   /* */
 

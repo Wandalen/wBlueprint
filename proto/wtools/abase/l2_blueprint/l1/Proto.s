@@ -104,7 +104,7 @@ const _ = _global_.wTools;
 
 // {
 //   names = _nameFielded( names );
-//   _.assert( _.objectIs( srcPrototype ) );
+//   _.assert( _.object.isBasic( srcPrototype ) );
 //
 //   do
 //   {
