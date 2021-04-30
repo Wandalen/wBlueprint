@@ -35,7 +35,7 @@ function conceal( dstPrototype, name, value )
 {
 
   _.assert( arguments.length === 2 || arguments.length === 3 );
-  _.assert( !_.primitiveIs( dstPrototype ), () => 'dstPrototype is needed, but got ' + _.entity.exportStringShallow( dstPrototype ) );
+  _.assert( !_.primitiveIs( dstPrototype ), () => 'dstPrototype is needed, but got ' + _.entity.exportStringDiagnosticShallow( dstPrototype ) );
 
   if( _.containerIs( name ) )
   {
@@ -93,7 +93,7 @@ function _constant( dstPrototype, name, value )
 {
 
   _.assert( arguments.length === 2 || arguments.length === 3 );
-  _.assert( !_.primitiveIs( dstPrototype ), () => 'dstPrototype is needed, but got ' + _.entity.exportStringShallow( dstPrototype ) );
+  _.assert( !_.primitiveIs( dstPrototype ), () => 'dstPrototype is needed, but got ' + _.entity.exportStringDiagnosticShallow( dstPrototype ) );
 
   if( _.containerIs( name ) )
   {

@@ -6649,9 +6649,9 @@ function definePropAccessorConstructionAmend( test )
       if( k === 'prop' )
       return;
       if( k === 'propKind' )
-      result.push( `${_.entity.exportStringShallow( e )}` );
+      result.push( `${_.entity.exportStringDiagnosticShallow( e )}` );
       else
-      result.push( `${k}:${_.entity.exportStringShallow( e )}` );
+      result.push( `${k}:${_.entity.exportStringDiagnosticShallow( e )}` );
     });
     return result.join( ' ' );
   }
