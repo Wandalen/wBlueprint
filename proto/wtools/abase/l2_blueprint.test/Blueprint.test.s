@@ -6619,7 +6619,7 @@ function definePropAccessorConstructionAmend( test )
   function eachKindOfProp()
   {
 
-    var permutations = _.eachSample_
+    var permutations = _.permutation.eachSample
     ({
       sets :
       {

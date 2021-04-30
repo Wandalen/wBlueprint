@@ -2977,7 +2977,7 @@ function accessorValueOptions( test )
     valueSetting : [ 0, 1 ],
     preservingValue : [ 0, 1 ],
   };
-  var samples = _.eachSample_({ sets });
+  var samples = _.permutation.eachSample({ sets });
 
   for( let tops of samples )
   eachCase( tops );
