@@ -3,9 +3,9 @@
 
 'use strict';
 
-const Self = _global_.wTools.property = _global_.wTools.property || Object.create( null );
 const _global = _global_;
 const _ = _global_.wTools;
+_.props = _.props || Object.create( null );
 
 // --
 //
@@ -105,6 +105,8 @@ let Transformers =
 }
 
 _.props.transformersRegister( Transformers );
+
+//
 
 let Extension =
 {
