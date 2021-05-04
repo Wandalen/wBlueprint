@@ -8360,8 +8360,8 @@ function definePropAccessorRewriting( test )
 function definePropConstructionAmendWithBlueprint( test )
 {
 
-  let escapedNothing = _.escape.nothing;
-  let escapedEscapedNothing = _.escape.left( _.escape.nothing );
+  let escapedNothing = _.escape.escaped.nothing;
+  let escapedEscapedNothing = _.escape.left( _.escape.escaped.nothing );
 
   eachTyped({ amending : 'extend' });
   eachTyped({ amending : 'supplement' });
@@ -8889,10 +8889,10 @@ val : ${_.entity.exportString( tops.val )}, amending polluted map`;
       }
       else if( tops.val === escapedEscapedNothing )
       {
-        test.identical( _.prototype.of( dstContainer ).f1, _.escape.nothing );
-        test.identical( _.prototype.of( dstContainer ).f2, _.escape.nothing );
+        test.identical( _.prototype.of( dstContainer ).f1, _.escape.escaped.nothing );
+        test.identical( _.prototype.of( dstContainer ).f2, _.escape.escaped.nothing );
 
-        test.identical( dstContainer.f1, _.escape.nothing );
+        test.identical( dstContainer.f1, _.escape.escaped.nothing );
         test.identical( dstContainer.f2, 0 );
       }
       else
@@ -9034,10 +9034,10 @@ amending object`;
       }
       else if( tops.val === escapedEscapedNothing )
       {
-        test.identical( _.prototype.of( dstContainer ).f1, _.escape.nothing );
-        test.identical( _.prototype.of( dstContainer ).f2, _.escape.nothing );
-        test.identical( dstContainer.f1, _.escape.nothing );
-        test.identical( dstContainer.f2, _.escape.nothing );
+        test.identical( _.prototype.of( dstContainer ).f1, _.escape.escaped.nothing );
+        test.identical( _.prototype.of( dstContainer ).f2, _.escape.escaped.nothing );
+        test.identical( dstContainer.f1, _.escape.escaped.nothing );
+        test.identical( dstContainer.f2, _.escape.escaped.nothing );
       }
       else
       {
@@ -9138,9 +9138,9 @@ amending object by map`;
         }
         else if( tops.val === escapedEscapedNothing )
         {
-          test.identical( _.prototype.of( dstContainer ).f1, _.escape.nothing );
+          test.identical( _.prototype.of( dstContainer ).f1, _.escape.escaped.nothing );
           test.identical( _.prototype.of( dstContainer ).f2, 0 );
-          test.identical( dstContainer.f1, _.escape.nothing );
+          test.identical( dstContainer.f1, _.escape.escaped.nothing );
           test.identical( dstContainer.f2, 0 );
         }
         else
@@ -9183,10 +9183,10 @@ amending object by map`;
         }
         else if( tops.val === escapedEscapedNothing )
         {
-          test.identical( _.prototype.of( dstContainer ).f1, _.escape.nothing );
-          test.identical( _.prototype.of( dstContainer ).f2, _.escape.nothing );
-          test.identical( dstContainer.f1, _.escape.nothing );
-          test.identical( dstContainer.f2, _.escape.nothing );
+          test.identical( _.prototype.of( dstContainer ).f1, _.escape.escaped.nothing );
+          test.identical( _.prototype.of( dstContainer ).f2, _.escape.escaped.nothing );
+          test.identical( dstContainer.f1, _.escape.escaped.nothing );
+          test.identical( dstContainer.f2, _.escape.escaped.nothing );
         }
         else
         {
@@ -9288,9 +9288,9 @@ amending object by map`;
         }
         else if( tops.val === escapedEscapedNothing )
         {
-          test.identical( _.prototype.of( dstContainer ).f1, _.escape.nothing );
+          test.identical( _.prototype.of( dstContainer ).f1, _.escape.escaped.nothing );
           test.identical( _.prototype.of( dstContainer ).f2, 0 );
-          test.identical( dstContainer.f1, _.escape.nothing );
+          test.identical( dstContainer.f1, _.escape.escaped.nothing );
           test.identical( dstContainer.f2, 0 );
         }
         else
@@ -9333,10 +9333,10 @@ amending object by map`;
         }
         else if( tops.val === escapedEscapedNothing )
         {
-          test.identical( _.prototype.of( dstContainer ).f1, _.escape.nothing );
-          test.identical( _.prototype.of( dstContainer ).f2, _.escape.nothing );
-          test.identical( dstContainer.f1, _.escape.nothing );
-          test.identical( dstContainer.f2, _.escape.nothing );
+          test.identical( _.prototype.of( dstContainer ).f1, _.escape.escaped.nothing );
+          test.identical( _.prototype.of( dstContainer ).f2, _.escape.escaped.nothing );
+          test.identical( dstContainer.f1, _.escape.escaped.nothing );
+          test.identical( dstContainer.f2, _.escape.escaped.nothing );
         }
         else
         {
