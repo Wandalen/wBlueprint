@@ -729,7 +729,7 @@ function props_body( o )
 
   if( _.longIs( o.val ) )
   {
-    return _.map_( o.val, ( e ) => mapEach( e ) );
+    return _.container.map_( o.val, ( e ) => mapEach( e ) );
   }
   else
   {
@@ -739,7 +739,7 @@ function props_body( o )
   function mapEach( map )
   {
     _.assert( _.mapIs( map ) );
-    let r = _.map_( map, ( e, k ) =>
+    let r = _.container.map_( map, ( e, k ) =>
     {
       let o2 = _.props.extend( null, o );
       o2.val = e;
