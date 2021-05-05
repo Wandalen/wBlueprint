@@ -52,7 +52,7 @@ callable.defaults =
   _blueprint : false,
 }
 
-callable.group = { definition : true, trait : true, enabled : false };
+callable.identity = { definition : true, trait : true, enabled : false };
 
 //
 
@@ -714,7 +714,7 @@ typed_body.defaults =
   _secondaryPrototype : _.nothing,
 }
 
-typed_body.group = { definition : true, trait : true };
+typed_body.identity = { definition : true, trait : true };
 
 let typed = _.routine.uniteCloning_replaceByUnite( typed_head, typed_body );
 
@@ -799,7 +799,7 @@ function constructor( o )
 
 }
 
-constructor.group = { definition : true, trait : true };
+constructor.identity = { definition : true, trait : true };
 constructor.defaults =
 {
   val : true,
@@ -839,7 +839,7 @@ function extendable( o )
 
 }
 
-extendable.group = { definition : true, trait : true };
+extendable.identity = { definition : true, trait : true };
 extendable.defaults =
 {
   val : true,
@@ -868,7 +868,7 @@ function name( o )
 
 }
 
-name.group = { definition : true, trait : true };
+name.identity = { definition : true, trait : true };
 name.defaults =
 {
   val : null,

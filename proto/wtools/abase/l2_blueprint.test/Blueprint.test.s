@@ -119,20 +119,20 @@ function eachDefine( o )
     if( !_.routineIs( definition ) )
     continue;
 
-    if( definition.group.enabled === false )
+    if( definition.identity.enabled === false )
     continue;
 
-    if( definition.group.named )
+    if( definition.identity.named )
     {
       if( !o.withNamed )
       continue;
     }
-    else if( !definition.group.named && !definition.group.trait )
+    else if( !definition.identity.named && !definition.identity.trait )
     {
       if( !o.withUnnamed )
       continue;
     }
-    else if( definition.group.trait )
+    else if( definition.identity.trait )
     {
       if( !o.withTraits )
       continue;
@@ -144,8 +144,8 @@ function eachDefine( o )
     element.sample = sampleMap[ name ];
     element.def = _.define[ name ];
     _.assert( _.routineIs( element.sample ), `No routine to make sample for the definition::${name}` );
-    if( definition.group.named )
-    element.group = 'named';
+    if( definition.identity.named )
+    element.identity = 'named';
     add( element );
   }
 
@@ -17176,13 +17176,13 @@ function genericDefineLogistic( test )
 
     test.true( Object.isFrozen( blueprint1 ) );
 
-    if( tops.def.group.trait )
+    if( tops.def.identity.trait )
     {
       var exp = [ 'typed', 'extendable' ];
       exp.push( tops.name );
       test.identical( new Set( _.props.keys( blueprint1.traitsMap ) ), new Set( exp ) );
     }
-    else if( tops.def.group.named )
+    else if( tops.def.identity.named )
     {
       var exp = [ 'c1' ]
       test.identical( new Set( _.props.keys( blueprint1.namedMap ) ), new Set( exp ) );
@@ -17232,7 +17232,7 @@ function genericDefineLogistic( test )
       test.true( def._blueprint === blueprint1 );
     }
 
-    if( tops.def.group.trait )
+    if( tops.def.identity.trait )
     {
       if( blueprint2.traitsMap[ tops.name ]._blueprint === false )
       {
@@ -17243,7 +17243,7 @@ function genericDefineLogistic( test )
         test.true( blueprint2.traitsMap[ tops.name ]._blueprint === blueprint2 );
       }
     }
-    else if( tops.def.group.named )
+    else if( tops.def.identity.named )
     {
       if( blueprint2.namedMap.c2._blueprint === false )
       {
@@ -17255,7 +17255,7 @@ function genericDefineLogistic( test )
       }
     }
 
-    if( tops.def.group.trait )
+    if( tops.def.identity.trait )
     {
 
       test.true( blueprint1.traitsMap[ tops.name ] === def );
@@ -17277,7 +17277,7 @@ function genericDefineLogistic( test )
         new Set( _.props.allKeys( blueprint2.traitsMap[ tops.name ] ) )
       );
     }
-    else if( tops.def.group.named )
+    else if( tops.def.identity.named )
     {
       test.true( blueprint1.namedMap.c1 === def );
       test.true( blueprint2.namedMap.c2 !== def );

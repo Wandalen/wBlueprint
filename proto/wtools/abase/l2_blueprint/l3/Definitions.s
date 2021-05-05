@@ -689,7 +689,7 @@ prop_body.defaults =
 
 }
 
-prop_body.group = { definition : true, named : true };
+prop_body.identity = { definition : true, named : true };
 
 let prop = _.routine.uniteCloning_replaceByUnite( prop_head, prop_body );
 _.routine.er( prop, _singleArgumentHead );
@@ -761,8 +761,8 @@ props_body.defaults =
 }
 
 let props = _.routine.uniteCloning_replaceByUnite( prop_head, props_body );
-props.group = _.props.extend( null, prop.group );
-props.group.named = false;
+props.identity = _.props.extend( null, prop.identity );
+props.identity.named = false;
 _.routine.er( props, _singleArgumentHead );
 
 //
@@ -779,7 +779,7 @@ val_body.defaults =
 }
 
 let val = _.routine.uniteCloning_replaceByUnite( prop_head, val_body );
-val.group = _.props.extend( null, prop.group );
+val.identity = _.props.extend( null, prop.identity );
 _.routine.er( val, _singleArgumentHead );
 
 //
@@ -796,8 +796,8 @@ vals_body.defaults =
 }
 
 let vals = _.routine.uniteCloning_replaceByUnite( prop_head, vals_body );
-vals.group = _.props.extend( null, val.group );
-vals.group.named = false;
+vals.identity = _.props.extend( null, val.identity );
+vals.identity.named = false;
 _.routine.er( vals, _singleArgumentHead );
 
 //
@@ -814,7 +814,7 @@ shallow_body.defaults =
 }
 
 let shallow = _.routine.uniteCloning_replaceByUnite( prop_head, shallow_body );
-shallow.group = _.props.extend( null, prop.group );
+shallow.identity = _.props.extend( null, prop.identity );
 _.routine.er( shallow, _singleArgumentHead );
 
 //
@@ -831,8 +831,8 @@ shallows_body.defaults =
 }
 
 let shallows = _.routine.uniteCloning_replaceByUnite( prop_head, shallows_body );
-shallows.group = _.props.extend( null, shallow.group );
-shallows.group.named = false;
+shallows.identity = _.props.extend( null, shallow.identity );
+shallows.identity.named = false;
 _.routine.er( shallows, _singleArgumentHead );
 
 //
@@ -849,7 +849,7 @@ deep_body.defaults =
 }
 
 let deep = _.routine.uniteCloning_replaceByUnite( prop_head, deep_body );
-deep.group = _.props.extend( null, prop.group );
+deep.identity = _.props.extend( null, prop.identity );
 _.routine.er( deep, _singleArgumentHead );
 
 //
@@ -866,8 +866,8 @@ deeps_body.defaults =
 }
 
 let deeps = _.routine.uniteCloning_replaceByUnite( prop_head, deeps_body );
-deeps.group = _.props.extend( null, deep.group );
-deeps.group.named = false;
+deeps.identity = _.props.extend( null, deep.identity );
+deeps.identity.named = false;
 _.routine.er( deeps, _singleArgumentHead );
 
 //
@@ -884,7 +884,7 @@ call_body.defaults =
 }
 
 let call = _.routine.uniteCloning_replaceByUnite( prop_head, call_body );
-call.group = _.props.extend( null, prop.group );
+call.identity = _.props.extend( null, prop.identity );
 _.routine.er( call, _singleArgumentHead );
 
 //
@@ -901,8 +901,8 @@ calls_body.defaults =
 }
 
 let calls = _.routine.uniteCloning_replaceByUnite( prop_head, calls_body );
-calls.group = _.props.extend( null, call.group );
-calls.group.named = false;
+calls.identity = _.props.extend( null, call.identity );
+calls.identity.named = false;
 _.routine.er( calls, _singleArgumentHead );
 
 //
@@ -919,7 +919,7 @@ new_body.defaults =
 }
 
 let _new = _.routine.uniteCloning_replaceByUnite( prop_head, new_body );
-_new.group = _.props.extend( null, prop.group );
+_new.identity = _.props.extend( null, prop.identity );
 _.routine.er( _new, _singleArgumentHead );
 
 //
@@ -936,8 +936,8 @@ news_body.defaults =
 }
 
 let _news = _.routine.uniteCloning_replaceByUnite( prop_head, news_body );
-_news.group = _.props.extend( null, _new.group );
-_news.group.named = false;
+_news.identity = _.props.extend( null, _new.identity );
+_news.identity.named = false;
 _.routine.er( _news, _singleArgumentHead );
 
 //
@@ -954,7 +954,7 @@ static_body.defaults =
 }
 
 let _static = _.routine.uniteCloning_replaceByUnite( prop_head, static_body );
-_static.group = _.props.extend( null, prop.group );
+_static.identity = _.props.extend( null, prop.identity );
 _.routine.er( _static, _singleArgumentHead );
 
 //
@@ -971,8 +971,8 @@ statics_body.defaults =
 }
 
 let _statics = _.routine.uniteCloning_replaceByUnite( prop_head, statics_body );
-_statics.group = _.props.extend( null, _static.group );
-_statics.group.named = false;
+_statics.identity = _.props.extend( null, _static.identity );
+_statics.identity.named = false;
 _.routine.er( _statics, _singleArgumentHead );
 
 //
@@ -1054,7 +1054,7 @@ alias_body.defaults =
 }
 
 let alias = _.routine.uniteCloning_replaceByUnite( alias_head, alias_body );
-alias.group = _.props.extend( null, prop.group );
+alias.identity = _.props.extend( null, prop.identity );
 _.routine.er( alias );
 
 /* xxx : implement definition::aliases */
@@ -1066,7 +1066,7 @@ _.routine.er( alias );
 function nothing_functor()
 {
 
-  nothing_body.group = { definition : true, named : false };
+  nothing_body.identity = { definition : true, named : false };
   nothing_body.defaults =
   {
     ... PropOptionsLogic,
@@ -1153,7 +1153,7 @@ let nothing = nothing_functor();
 //   _blueprint : false,
 // }
 //
-// nothing_body.group = { definition : true, named : false };
+// nothing_body.identity = { definition : true, named : false };
 //
 // let nothing = _.routine.uniteCloning_replaceByUnite( _singleArgumentHead, nothing_body );
 
@@ -1182,7 +1182,7 @@ function _constant_functor()
     }
   }
 
-  r.constant.group = { definition : true, named : true };
+  r.constant.identity = { definition : true, named : true };
   return r.constant;
 
   /* */
@@ -1307,7 +1307,7 @@ _amendment_body.defaults =
   _blueprint : false,
 }
 
-_amendment_body.group = { definition : true, named : false };
+_amendment_body.identity = { definition : true, named : false };
 
 let _amendment = _.routine.uniteCloning_replaceByUnite( _amendment_head, _amendment_body );
 
@@ -1321,8 +1321,8 @@ extension.defaults =
   amending : 'extend',
 }
 
-_.assert( !!extension.group.definition );
-_.assert( !extension.group.anemd );
+_.assert( !!extension.identity.definition );
+_.assert( !extension.identity.anemd );
 
 _.routine.er( extension, _singleArgumentHead );
 
@@ -1402,7 +1402,7 @@ inherit_body.defaults =
   val : null,
 }
 
-inherit_body.group = { definition : true, named : false };
+inherit_body.identity = { definition : true, named : false };
 
 let inherit = _.routine.uniteCloning_replaceByUnite( _pairArgumentsHead, inherit_body );
 

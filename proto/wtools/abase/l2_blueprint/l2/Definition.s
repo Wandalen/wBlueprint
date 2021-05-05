@@ -215,13 +215,13 @@ function _extend( src )
 
   _.assert
   (
-    _.mapIs( src.group ),
-    () => `Expects defined \`group\`, but routine::${src.name} does not have such`
+    _.mapIs( src.identity ),
+    () => `Expects defined \`identity\`, but routine::${src.name} does not have such`
   );
-  _.assert( !!src.group.definition );
+  _.assert( !!src.identity.definition );
   _.assert( _.define.trait === _.trait );
 
-  if( src.group.trait )
+  if( src.identity.trait )
   {
     _.define.trait[ src.name ] = src;
     _.define[ src.name ] = src;
@@ -229,7 +229,7 @@ function _extend( src )
   else
   {
     _.define[ src.name ] = src;
-    if( src.group.named )
+    if( src.identity.named )
     _.define.named[ src.name ] = src;
     else
     _.define.unnamed[ src.name ] = src;
