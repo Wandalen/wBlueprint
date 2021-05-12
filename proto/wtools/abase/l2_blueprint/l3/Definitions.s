@@ -61,7 +61,7 @@ function _singleArgumentHead( routine, args )
   o = _.routine.options_( routine, o );
 
   _.assert( arguments.length === 2 );
-  _.assert( args.length === 0 || args.length === 1 );
+  _.assert( args.length === 0 || args.length === 1, () => `Expects optional argument, but got ${args.length} arguments` );
   _.assert( _.mapIs( o ) );
 
   return o;
@@ -1094,7 +1094,7 @@ function nothing_functor()
     let o = args[ 0 ];
 
     _.assert( arguments.length === 2 );
-    _.assert( args.length === 0 || args.length === 1 );
+    _.assert( args.length === 0 || args.length === 1, () => `Expects optional argument, but got ${args.length} arguments` );
     _.assert( o === undefined || _.mapIs( o ) );
 
     if( !o )
