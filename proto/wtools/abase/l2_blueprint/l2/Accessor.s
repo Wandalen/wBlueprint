@@ -573,7 +573,7 @@ function _declaringIsNeeded( o )
     _.assert
     (
       !!o.combining
-      , 'Overriding of accessor is not allowed, to allow it set option::combining'
+      , 'Overriding of accessor is not allowed, to allow it set option::combining to rewrite'
     );
     _.assert( o.combining === 'rewrite' || o.combining === 'append' || o.combining === 'supplement', 'not implemented' );
 
