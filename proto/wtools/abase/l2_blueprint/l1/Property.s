@@ -241,7 +241,7 @@ let PropertyExtension =
 }
 
 _.props = _.props || Object.create( null );
-_.props.extend( _.props, PropertyExtension );
+/* _.props.extend */Object.assign( _.props, PropertyExtension );
 
 // --
 // export

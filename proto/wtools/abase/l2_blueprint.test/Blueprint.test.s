@@ -14867,7 +14867,7 @@ function traitTypedPrototypeBlueprint( test )
   test.identical( prototypes1.length, 1 );
 
   var instance2 = _.blueprint.construct( Blueprint2 );
-  var prototypes2 = _.prototype.each( instance2 );
+  const prototypes2 = _.prototype.each( instance2 );
   test.identical( prototypes2.length, 1 );
 
   /* */

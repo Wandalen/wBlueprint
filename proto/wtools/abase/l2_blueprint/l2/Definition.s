@@ -276,7 +276,7 @@ _.define.trait = _.define.trait || Object.create( null );
 _.trait = _.define.trait;
 
 _.definition = _.definition || Object.create( null );
-_.props.extend( _.definition, DefinitionExtension );
+/* _.props.extend */Object.assign( _.definition, DefinitionExtension );
 _.assert( _.routineIs( _.definitionIs ) );
 _.assert( _.definition.is === _.definitionIs );
 

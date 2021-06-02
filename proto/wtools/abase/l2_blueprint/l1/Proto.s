@@ -226,7 +226,7 @@ let PrototypeExtension =
 }
 
 _.prototype = _.prototype || Object.create( null );
-_.props.extend( _.prototype, PrototypeExtension );
+/* _.props.extend */Object.assign( _.prototype, PrototypeExtension );
 
 // --
 // export

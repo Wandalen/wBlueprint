@@ -1418,7 +1418,7 @@ let DefinitionExtension =
   PropOptionsAccessor,
 }
 
-_.props.extend( _.definition, DefinitionExtension );
+/* _.props.extend */Object.assign( _.definition, DefinitionExtension );
 
 let BlueprintExtension =
 {
@@ -1430,7 +1430,7 @@ let BlueprintExtension =
 }
 
 _.blueprint = _.blueprint || Object.create( null );
-_.props.extend( _.blueprint, BlueprintExtension );
+/* _.props.extend */Object.assign( _.blueprint, BlueprintExtension );
 
 let DefineExtension =
 {

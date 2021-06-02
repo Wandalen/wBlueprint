@@ -146,7 +146,7 @@ function typed_body( o )
 
   if( !_.mapIs( o ) )
   o = arguments.length > 0 ? { val : arguments[ 0 ] } : {};
-  _.routine.options_( typed, o );
+  _.routine.optionsWithoutUndefined( typed, o );
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
   if( _.boolLike( o.val ) )
@@ -916,7 +916,7 @@ let DefinitionTraitExtension =
 }
 
 _.definition.trait = _.definition.trait || Object.create( null );
-_.props.extend( _.definition.trait, DefinitionTraitExtension );
+/* _.props.extend */Object.assign( _.definition.trait, DefinitionTraitExtension );
 _.assert( _.routineIs( _.traitIs ) );
 _.assert( _.definition.trait.is === _.traitIs );
 

@@ -43,7 +43,7 @@ let ClassExtension =
 }
 
 _.class = _.class || Object.create( null );
-_.props.extend( _.class, ClassExtension );
+/* _.props.extend */Object.assign( _.class, ClassExtension );
 
 // --
 // export

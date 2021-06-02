@@ -1823,7 +1823,7 @@ let ToolsExtension =
 
 _.accessor = _.accessor || Object.create( null );
 _.props.supplement( _, ToolsExtension );
-_.props.extend( _.accessor, AccessorExtension );
+/* _.props.extend */Object.assign( _.accessor, AccessorExtension );
 
 // --
 // export
