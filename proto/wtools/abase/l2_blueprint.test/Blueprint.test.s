@@ -1940,7 +1940,7 @@ function defineProp( test )
       deep1 : _.define.deep([ 2, 2 ]),
       deep2 : _.define.deep([ [ 2, 2 ], { a : 2 } ]),
     }
-    var instance1 = _.blueprint.construct( options )
+    var instance1 = _.blueprint.construct( options );
     test.identical( instance1, exp );
 
     test.true( !!options.deep1.val );
