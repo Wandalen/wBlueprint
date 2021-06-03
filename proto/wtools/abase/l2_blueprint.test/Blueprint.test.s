@@ -7,7 +7,7 @@ if( typeof module !== 'undefined' )
 {
   const _ = require( '../../../node_modules/Tools' );
   require( '../../abase/l2_blueprint/Include.s' );
-  // _.include( 'wReplicator' );
+  // _.include( 'wReplicate' );
   _.include( 'wTesting' );
 }
 
@@ -119,6 +119,8 @@ function eachDefine( o )
     if( !_.routineIs( definition ) )
     continue;
 
+    if( !definition.identity )
+    continue;
     if( definition.identity.enabled === false )
     continue;
 
@@ -17089,10 +17091,6 @@ function genericDefineLogistic( test )
 
   function eachCase( tops )
   {
-
-    // if( tops.name !== 'constant' )
-    // return;
-    // debugger;
 
     /* */
 
