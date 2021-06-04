@@ -40,7 +40,7 @@ function callable( o )
   o = { callback : arguments[ 0 ] };
   _.routine.options_( callable, o );
   _.assert( arguments.length === 1 );
-  _.assert( _.routineIs( o.val ) );
+  _.assert( _.routineIs( o.callback ) );
   o.kind = 'callable';
   return _.definition._traitMake( o );
   // return _.definition._traitMake( 'callable', o );
