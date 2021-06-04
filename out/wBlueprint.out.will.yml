@@ -2,15 +2,9 @@ format: outwillfile-2.0
 root:
   - wBlueprint.out
 consistency:
-  wBlueprint.out.will.yml: &ref_0
-    hash: a1a3d2d3be700f9ed91d336029ed1c99
-    size: 38381
-  ../.ex.will.yml: &ref_1
-    hash: 7f16b7905c40f2370ff4e0ae119fa205
-    size: 1907
-  ../.im.will.yml: &ref_2
-    hash: 8b8dfd5cb09aaa475c2c5aee402bb605
-    size: 4605
+  ../will.yml: &ref_0
+    hash: 969efe74f916e395555eb74b5bb19607
+    size: 6341
 module:
   wBlueprint.out:
     about:
@@ -23,19 +17,19 @@ module:
         things alternatives cant do.
       enabled: 1
       version: 0.4.0
-      interpreters:
+      license: MIT
+      npm.name: wblueprint
+      author: Kostiantyn Wandalen <wanalen@01.school>
+      keywords: &ref_1
+        - tools
+        - wTools
+      contributors: &ref_2
+        - Kostiantyn Wandalen <wanalen@01.school>
+      interpreters: &ref_3
         - njs >= 10.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords:
-        - tools
-        - wTools
-      license: MIT
-      author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors:
-        - Kostiantyn Wandalen <wanalen@01.school>
-      npm.name: wblueprint
-      npm.scripts:
+      npm.scripts: &ref_4
         test: wtest .run proto/**
         docgen: wdocgen .build proto
     path:
@@ -50,15 +44,11 @@ module:
       module.original.willfiles:
         criterion:
           predefined: 1
-        path:
-          - ../.ex.will.yml
-          - ../.im.will.yml
+        path: ../will.yml
       module.peer.willfiles:
         criterion:
           predefined: 1
-        path:
-          - ../.ex.will.yml
-          - ../.im.will.yml
+        path: ../will.yml
       module.peer.in:
         criterion:
           predefined: 1
@@ -66,7 +56,7 @@ module:
       download:
         criterion:
           predefined: 1
-        path: ../
+        path: ..
       repository:
         path: 'git+https:///github.com/Wandalen/wBlueprint.git'
       origins:
@@ -143,6 +133,10 @@ module:
           raw: compiled
           content: prime
         path: '{path::out.*=}/source/Index.s'
+      npm.proto.entry:
+        path:
+          - ../proto/wtools/abase/l2_blueprint/Include.s
+          - ../proto/node_modules/wblueprint
       exported.dir.proto.export:
         criterion:
           generated: 1
@@ -157,8 +151,10 @@ module:
         path:
           - ../proto
           - ../proto/Integration.test.ss
+          - ../proto/node_modules
+          - ../proto/node_modules/Tools
+          - ../proto/node_modules/wblueprint
           - ../proto/wtools
-          - ../proto/wtools/Tools.s
           - ../proto/wtools/abase
           - ../proto/wtools/abase/l2_blueprint
           - ../proto/wtools/abase/l2_blueprint/Include.s
@@ -327,7 +323,7 @@ module:
           prefixPath: ../proto
         mandatory: 1
         dstRewritingOnlyPreserving: 1
-        linking: hardLinkMaybe
+        linkingAction: hardLinkMaybe
         criterion:
           generated: 1
           content: proto
@@ -695,24 +691,6 @@ module:
           content: prime
         inherit:
           - files.transpile
-      exported.proto.export:
-        opts:
-          filePath: 'reflector::exported.proto.export'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
-      exported.files.proto.export:
-        opts:
-          filePath: 'reflector::exported.files.proto.export'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
     build:
       proto.export:
         steps:
@@ -801,9 +779,7 @@ module:
           content: proto
           export: 1
     consistency:
-      wBlueprint.out.will.yml: *ref_0
-      ../.ex.will.yml: *ref_1
-      ../.im.will.yml: *ref_2
+      ../will.yml: *ref_0
   ../:
     about:
       name: wBlueprint
@@ -815,34 +791,22 @@ module:
         things alternatives cant do.
       enabled: 1
       version: 0.4.0
-      interpreters:
-        - njs >= 10.0.0
-        - chrome >= 60.0.0
-        - firefox >= 60.0.0
-      keywords:
-        - tools
-        - wTools
       license: MIT
-      author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors:
-        - Kostiantyn Wandalen <wanalen@01.school>
       npm.name: wblueprint
-      npm.scripts:
-        test: wtest .run proto/**
-        docgen: wdocgen .build proto
+      author: Kostiantyn Wandalen <wanalen@01.school>
+      keywords: *ref_1
+      contributors: *ref_2
+      interpreters: *ref_3
+      npm.scripts: *ref_4
     path:
       module.willfiles:
         criterion:
           predefined: 1
-        path:
-          - .ex.will.yml
-          - .im.will.yml
+        path: will.yml
       module.original.willfiles:
         criterion:
           predefined: 1
-        path:
-          - .ex.will.yml
-          - .im.will.yml
+        path: will.yml
       module.peer.willfiles:
         criterion:
           predefined: 1
@@ -858,7 +822,7 @@ module:
       download:
         criterion:
           predefined: 1
-        path: ./
+        path: .
       repository:
         path: 'git+https:///github.com/Wandalen/wBlueprint.git'
       origins:
@@ -935,6 +899,10 @@ module:
           raw: compiled
           content: prime
         path: '{path::out.*=}/source/Index.s'
+      npm.proto.entry:
+        path:
+          - proto/wtools/abase/l2_blueprint/Include.s
+          - proto/node_modules/wblueprint
     submodule:
       wTools:
         path: 'npm:///wTools'
@@ -1471,10 +1439,6 @@ module:
           - 'build::release'
           - 'build::npm'
     consistency:
-      ../.ex.will.yml:
-        hash: 7f16b7905c40f2370ff4e0ae119fa205
-        size: 1907
-      ../.im.will.yml:
-        hash: 8b8dfd5cb09aaa475c2c5aee402bb605
-        size: 4605
-      wBlueprint.out.will.yml: *ref_0
+      ../will.yml:
+        hash: 969efe74f916e395555eb74b5bb19607
+        size: 6341

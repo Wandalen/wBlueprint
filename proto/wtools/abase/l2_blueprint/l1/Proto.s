@@ -104,7 +104,7 @@ const _ = _global_.wTools;
 
 // {
 //   names = _nameFielded( names );
-//   _.assert( _.objectIs( srcPrototype ) );
+//   _.assert( _.object.isBasic( srcPrototype ) );
 //
 //   do
 //   {
@@ -226,7 +226,7 @@ let PrototypeExtension =
 }
 
 _.prototype = _.prototype || Object.create( null );
-_.mapExtend( _.prototype, PrototypeExtension );
+/* _.props.extend */Object.assign( _.prototype, PrototypeExtension );
 
 // --
 // export

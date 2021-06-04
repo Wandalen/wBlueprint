@@ -5,7 +5,7 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( '../../../wtools/Tools.s' );
+  const _ = require( '../../../node_modules/Tools' );
   _.include( 'wTesting' );
   require( '../../abase/l2_blueprint/Include.s' );
 }
@@ -434,7 +434,7 @@ function _objectSetValueNoShadowing( test )
   });
 
   var exp = { f1 : 2 };
-  test.identical( _.property.of( obj ), exp );
+  test.identical( _.props.of( obj ), exp );
 
   var exp = {};
   test.identical( _.mapBut_( null, proto, [ 'f1' ] ), exp );
@@ -1694,7 +1694,7 @@ function accessorOptionAddingMethods( test )
     strict : 0,
     addingMethods : 1,
   });
-  test.identical( _.property.onlyOwn( dst, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.props.onlyOwn( dst, { onlyEnumerable : 0 } ), exp );
   test.true( _.routineIs( dst.aGrab ) );
   test.true( _.routineIs( dst.aGet ) );
   test.true( _.routineIs( dst.aPut ) );
@@ -1737,7 +1737,7 @@ function accessorOptionAddingMethods( test )
     strict : 0,
     addingMethods : 1,
   });
-  test.identical( _.property.onlyOwn( dst, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.props.onlyOwn( dst, { onlyEnumerable : 0 } ), exp );
 
   var exp =
   {
@@ -1780,7 +1780,7 @@ function accessorOptionAddingMethods( test )
     strict : 0,
     addingMethods : 1,
   });
-  test.identical( _.property.onlyOwn( dst, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.props.onlyOwn( dst, { onlyEnumerable : 0 } ), exp );
 
   var exp =
   {
@@ -1798,7 +1798,7 @@ function accessorOptionAddingMethods( test )
 
   function put_functor( o )
   {
-    o = _.routineOptions( put_functor, arguments );
+    o = _.routine.options_( put_functor, arguments );
     let symbol = Symbol.for( o.propName );
     return function put( val )
     {
@@ -2147,7 +2147,7 @@ function accessorDeducingMethods( test )
 
   function symbolPut_functor( o )
   {
-    o = _.routineOptions( symbolPut_functor, arguments );
+    o = _.routine.options_( symbolPut_functor, arguments );
     let symbol = Symbol.for( o.propName );
     return function put( val )
     {
@@ -2609,7 +2609,7 @@ function accessorUnfunctGetSuite( test )
   {
 
     _.assert( arguments.length === 1, 'Expects single argument' );
-    _.routineOptions( get_functor, o );
+    _.routine.options_( get_functor, o );
     _.assert( _.strDefined( o.propName ) );
 
     if( o.accessor.configurable === null )
@@ -2686,7 +2686,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : true
   }
-  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
+  test.identical( _.props.descriptorOf( object, '_' ).descriptor, exp );
   var exp =
   {
     'a' : 'a1',
@@ -2703,7 +2703,7 @@ function accessorUnfunctGetSuite( test )
   test.identical( object.a, exp.a );
   test.identical( object.b, exp.b );
   var exp = { 'writable' : false, 'enumerable' : false, 'configurable' : false, 'value' : 'abc3' }
-  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
+  test.identical( _.props.descriptorOf( object, '_' ).descriptor, exp );
 
   /* */
 
@@ -2733,7 +2733,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : false,
   }
-  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
+  test.identical( _.props.descriptorOf( object, '_' ).descriptor, exp );
   var exp =
   {
     'a' : 'a1',
@@ -2756,7 +2756,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : false,
   }
-  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
+  test.identical( _.props.descriptorOf( object, '_' ).descriptor, exp );
 
   /* */
 
@@ -2786,7 +2786,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : true,
   }
-  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
+  test.identical( _.props.descriptorOf( object, '_' ).descriptor, exp );
   var exp =
   {
     'a' : 'a1',
@@ -2805,7 +2805,7 @@ function accessorUnfunctGetSuite( test )
   test.identical( object.a, exp.a );
   test.identical( object.b, exp.b );
   var exp = { 'writable' : false, 'enumerable' : false, 'configurable' : false, 'value' : 'abc3' };
-  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
+  test.identical( _.props.descriptorOf( object, '_' ).descriptor, exp );
 
   /* */
 
@@ -2835,7 +2835,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : true
   }
-  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
+  test.identical( _.props.descriptorOf( object, '_' ).descriptor, exp );
   var exp =
   {
     'a' : 'a1',
@@ -2854,7 +2854,7 @@ function accessorUnfunctGetSuite( test )
   test.identical( object.a, exp.a );
   test.identical( object.b, exp.b );
   var exp = { 'writable' : false, 'enumerable' : false, 'configurable' : false, 'value' : 'abc3' };
-  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
+  test.identical( _.props.descriptorOf( object, '_' ).descriptor, exp );
 
   /* */
 
@@ -2885,7 +2885,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : true
   }
-  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
+  test.identical( _.props.descriptorOf( object, '_' ).descriptor, exp );
   var exp =
   {
     'a' : 'a1',
@@ -2904,7 +2904,7 @@ function accessorUnfunctGetSuite( test )
   test.identical( object.a, exp.a );
   test.identical( object.b, exp.b );
   var exp = { 'writable' : false, 'enumerable' : false, 'configurable' : false, 'value' : 'abc3' };
-  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
+  test.identical( _.props.descriptorOf( object, '_' ).descriptor, exp );
 
   /* */
 
@@ -2934,7 +2934,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : false
   }
-  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
+  test.identical( _.props.descriptorOf( object, '_' ).descriptor, exp );
   var exp =
   {
     'a' : 'a1',
@@ -2959,7 +2959,7 @@ function accessorUnfunctGetSuite( test )
     'enumerable' : true,
     'configurable' : false
   }
-  test.identical( _.property.descriptorOf( object, '_' ).descriptor, exp );
+  test.identical( _.props.descriptorOf( object, '_' ).descriptor, exp );
 
   /* */
 
@@ -2977,7 +2977,7 @@ function accessorValueOptions( test )
     valueSetting : [ 0, 1 ],
     preservingValue : [ 0, 1 ],
   };
-  var samples = _.eachSample_({ sets });
+  var samples = _.permutation.eachSample({ sets });
 
   for( let tops of samples )
   eachCase( tops );
@@ -3335,7 +3335,7 @@ function accessorForbid( test )
   test.case = 'accessor forbid getter&setter';
   var Alpha = { };
   _.accessor.forbid( Alpha, { a : 'a' } );
-  test.true( _.objectIs( Alpha ) );
+  test.true( _.object.isBasic( Alpha ) );
   test.shouldThrowErrorSync( () => Alpha.a = 5, ( err, arg, ok ) =>
   {
     Alpha[ Symbol.for( 'a' ) ] = 5;
@@ -3491,7 +3491,7 @@ function accessorStoringStrategyUnderscoreBasic( test )
     f2 : undefined,
     _ : {}
   }
-  test.identical( _.property.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.props.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
 
   var exp =
   {
@@ -3500,7 +3500,7 @@ function accessorStoringStrategyUnderscoreBasic( test )
     _ : { f2 : 3 }
   }
   ins1.f2 = 3;
-  test.identical( _.property.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.props.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
 
   /* */
 
@@ -3519,7 +3519,7 @@ function accessorStoringStrategyUnderscoreBasic( test )
     f2 : 2,
     _ : { f2 : 2 }
   }
-  test.identical( _.property.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.props.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
 
   var exp =
   {
@@ -3528,7 +3528,7 @@ function accessorStoringStrategyUnderscoreBasic( test )
     _ : { f2 : 3 }
   }
   ins1.f2 = 3;
-  test.identical( _.property.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.props.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
 
   /* */
 
@@ -3548,7 +3548,7 @@ function accessorStoringStrategyUnderscoreBasic( test )
     f2 : 2,
     _ : { f2 : 2 }
   }
-  test.identical( _.property.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.props.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
 
   var exp =
   {
@@ -3557,7 +3557,7 @@ function accessorStoringStrategyUnderscoreBasic( test )
     _ : { f2 : 3 }
   }
   ins1.f2 = 3;
-  test.identical( _.property.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.props.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
 
   /* */
 
@@ -3577,7 +3577,7 @@ function accessorStoringStrategyUnderscoreBasic( test )
     f2 : 2,
     _ : { f2 : 2 }
   }
-  test.identical( _.property.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.props.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
 
   var exp =
   {
@@ -3586,7 +3586,7 @@ function accessorStoringStrategyUnderscoreBasic( test )
     _ : { f2 : 3 }
   }
   ins1.f2 = 3;
-  test.identical( _.property.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.props.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
 
   /* */
 
@@ -3606,7 +3606,7 @@ function accessorStoringStrategyUnderscoreBasic( test )
     f2 : 2,
     _ : { f2 : 2 }
   }
-  test.identical( _.property.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.props.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
 
   var exp =
   {
@@ -3615,7 +3615,7 @@ function accessorStoringStrategyUnderscoreBasic( test )
     _ : { f2 : 2 }
   }
   test.shouldThrowErrorSync( () => ins1.f2 = 3 );
-  test.identical( _.property.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.props.onlyOwn( ins1, { onlyEnumerable : 0 } ), exp );
 
   /* */
 
@@ -3640,12 +3640,12 @@ function accessorStoringStrategyUnderscorePrototyped( test )
   {
     f1 : undefined,
   }
-  test.identical( _.property.of( ins1 ), exp );
+  test.identical( _.props.of( ins1 ), exp );
   test.identical( _.prototype.each( ins1 ).length, 2 );
   var exp =
   {
   }
-  test.identical( _.property.of( ins1._ ), exp );
+  test.identical( _.props.of( ins1._ ), exp );
   test.identical( _.prototype.each( ins1._ ).length, 1 );
 
   test.description = 'set'; /* */
@@ -3655,13 +3655,13 @@ function accessorStoringStrategyUnderscorePrototyped( test )
   {
     f1 : 2,
   }
-  test.identical( _.property.of( ins1 ), exp );
+  test.identical( _.props.of( ins1 ), exp );
   test.identical( _.prototype.each( ins1 ).length, 2 );
   var exp =
   {
     f1 : 2,
   }
-  test.identical( _.property.of( ins1._ ), exp );
+  test.identical( _.props.of( ins1._ ), exp );
   test.identical( _.prototype.each( ins1._ ).length, 1 );
   test.true( _.prototype.each( ins1._ )[ 1 ] === proto1._ );
 
@@ -3679,18 +3679,18 @@ function accessorStoringStrategyUnderscorePrototyped( test )
   {
     f1 : undefined,
   }
-  test.identical( _.property.of( ins1 ), exp );
+  test.identical( _.props.of( ins1 ), exp );
   test.identical( _.prototype.each( ins1 ).length, 2 );
   var exp =
   {
   }
-  test.identical( _.property.of( ins1._ ), exp );
+  test.identical( _.props.of( ins1._ ), exp );
   test.identical( _.prototype.each( ins1._ ).length, 2 );
   test.true( _.prototype.each( ins1._ )[ 1 ] === proto1._ );
   var exp =
   {
   }
-  test.identical( _.property.of( proto1._ ), exp );
+  test.identical( _.props.of( proto1._ ), exp );
 
   test.description = 'set'; /* */
 
@@ -3699,19 +3699,19 @@ function accessorStoringStrategyUnderscorePrototyped( test )
   {
     f1 : 2,
   }
-  test.identical( _.property.of( ins1 ), exp );
+  test.identical( _.props.of( ins1 ), exp );
   test.identical( _.prototype.each( ins1 ).length, 2 );
   var exp =
   {
     f1 : 2,
   }
-  test.identical( _.property.of( ins1._ ), exp );
+  test.identical( _.props.of( ins1._ ), exp );
   test.identical( _.prototype.each( ins1._ ).length, 2 );
   test.true( _.prototype.each( ins1._ )[ 1 ] === proto1._ );
   var exp =
   {
   }
-  test.identical( _.property.of( proto1._ ), exp );
+  test.identical( _.props.of( proto1._ ), exp );
 
   /* */
 
@@ -3728,20 +3728,20 @@ function accessorStoringStrategyUnderscorePrototyped( test )
   {
     f1 : 1,
   }
-  test.identical( _.property.of( ins1 ), exp );
+  test.identical( _.props.of( ins1 ), exp );
   test.identical( _.prototype.each( ins1 ).length, 2 );
   var exp =
   {
     f1 : 1,
   }
-  test.identical( _.property.of( ins1._ ), exp );
+  test.identical( _.props.of( ins1._ ), exp );
   test.identical( _.prototype.each( ins1._ ).length, 2 );
   test.true( _.prototype.each( ins1._ )[ 1 ] === proto1._ );
   var exp =
   {
     f1 : 1,
   }
-  test.identical( _.property.of( proto1._ ), exp );
+  test.identical( _.props.of( proto1._ ), exp );
 
   test.description = 'set'; /* */
 
@@ -3750,20 +3750,20 @@ function accessorStoringStrategyUnderscorePrototyped( test )
   {
     f1 : 2,
   }
-  test.identical( _.property.of( ins1 ), exp );
+  test.identical( _.props.of( ins1 ), exp );
   test.identical( _.prototype.each( ins1 ).length, 2 );
   var exp =
   {
     f1 : 2,
   }
-  test.identical( _.property.of( ins1._ ), exp );
+  test.identical( _.props.of( ins1._ ), exp );
   test.identical( _.prototype.each( ins1._ ).length, 2 );
   test.true( _.prototype.each( ins1._ )[ 1 ] === proto1._ );
   var exp =
   {
     f1 : 1,
   }
-  test.identical( _.property.of( proto1._ ), exp );
+  test.identical( _.props.of( proto1._ ), exp );
 
   /* */
 
@@ -3805,7 +3805,7 @@ function accessorStoringStrategyUnderscoreIniting( test )
   }
   test.identical( obj1._, exp );
 
-  test.true( _.objectIs( obj1._ ) );
+  test.true( _.object.isBasic( obj1._ ) );
 
   /* */
 
@@ -3878,7 +3878,7 @@ function accessorStoringStrategyUnderscoreIniting( test )
     a : 3,
   }
   test.identical( obj1, exp );
-  test.true( _.objectIs( obj1._ ) );
+  test.true( _.object.isBasic( obj1._ ) );
 
   /* */
 
@@ -3893,7 +3893,7 @@ function accessorStoringStrategyUnderscoreIniting( test )
     a : 1,
   }
   test.identical( obj1, exp );
-  test.true( _.objectIs( obj1._ ) );
+  test.true( _.object.isBasic( obj1._ ) );
 
   /* */
 
@@ -3908,7 +3908,7 @@ function accessorStoringStrategyUnderscoreIniting( test )
     a : undefined,
   }
   test.identical( obj1, exp );
-  test.true( _.objectIs( obj1._ ) );
+  test.true( _.object.isBasic( obj1._ ) );
 
   /* */
 
@@ -3923,7 +3923,7 @@ function accessorStoringStrategyUnderscoreIniting( test )
     a : undefined,
   }
   test.identical( obj1, exp );
-  test.true( _.objectIs( obj1._ ) );
+  test.true( _.object.isBasic( obj1._ ) );
 
   /* */
 

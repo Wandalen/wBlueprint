@@ -39,7 +39,7 @@ function Definition( o )
   return o;
   else
   return new( _.constructorJoin( Definition, arguments ) );
-  _.mapExtend( this, o );
+  _.props.extend( this, o );
   _.assert( _.longHas( _.definition.DefinitionGroup, o.defGroup ) );
   return this;
 }
@@ -215,13 +215,13 @@ function _extend( src )
 
   _.assert
   (
-    _.mapIs( src.group ),
-    () => `Expects defined \`group\`, but routine::${src.name} does not have such`
+    _.mapIs( src.identity ),
+    () => `Expects defined \`identity\`, but routine::${src.name} does not have such`
   );
-  _.assert( !!src.group.definition );
+  _.assert( !!src.identity.definition );
   _.assert( _.define.trait === _.trait );
 
-  if( src.group.trait )
+  if( src.identity.trait )
   {
     _.define.trait[ src.name ] = src;
     _.define[ src.name ] = src;
@@ -229,7 +229,7 @@ function _extend( src )
   else
   {
     _.define[ src.name ] = src;
-    if( src.group.named )
+    if( src.identity.named )
     _.define.named[ src.name ] = src;
     else
     _.define.unnamed[ src.name ] = src;
@@ -251,7 +251,7 @@ function _extend( src )
 let DefinitionExtension =
 {
 
-  // routines
+  // implementation
 
   is : _.definitionIs,
   retype,
@@ -276,7 +276,7 @@ _.define.trait = _.define.trait || Object.create( null );
 _.trait = _.define.trait;
 
 _.definition = _.definition || Object.create( null );
-_.mapExtend( _.definition, DefinitionExtension );
+/* _.props.extend */Object.assign( _.definition, DefinitionExtension );
 _.assert( _.routineIs( _.definitionIs ) );
 _.assert( _.definition.is === _.definitionIs );
 
@@ -287,7 +287,7 @@ let ToolsExtension =
   Definition,
 }
 
-_.mapExtend( _, ToolsExtension );
+_.props.extend( _, ToolsExtension );
 
 // --
 // export

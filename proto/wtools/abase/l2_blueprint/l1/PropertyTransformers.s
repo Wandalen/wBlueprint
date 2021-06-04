@@ -3,9 +3,9 @@
 
 'use strict';
 
-const Self = _global_.wTools.property = _global_.wTools.property || Object.create( null );
 const _global = _global_;
 const _ = _global_.wTools;
+_.props = _.props || Object.create( null );
 
 // --
 //
@@ -65,7 +65,7 @@ function dstNotOwnFromDefinitionStrictlyPrimitive()
       _.assert
       (
         !_.consequenceIs( srcElement ) && ( _.primitiveIs( srcElement ) || _.routineIs( srcElement ) ),
-        () => `${ _.entity.exportStringShallow( dstContainer ) } has non-primitive element "${ key }" use _.define.own instead`
+        () => `${ _.entity.exportStringDiagnosticShallow( dstContainer ) } has non-primitive element "${ key }" use _.define.own instead`
       );
       dstContainer[ key ] = srcElement;
     }
@@ -82,14 +82,14 @@ dstNotOwnFromDefinitionStrictlyPrimitive.identity = { propertyMapper : true, pro
 
 function mapSupplementOwnFromDefinition( dstMap, srcMap )
 {
-  return _.mapExtendConditional( _.property.mapper.dstNotOwnFromDefinition(), ... arguments );
+  return _.mapExtendConditional( _.props.mapper.dstNotOwnFromDefinition(), ... arguments );
 }
 
 //
 
 function mapSupplementOwnFromDefinitionStrictlyPrimitives( dstMap, srcMap )
 {
-  return _.mapExtendConditional( _.property.mapper.dstNotOwnFromDefinitionStrictlyPrimitive(), ... arguments );
+  return _.mapExtendConditional( _.props.mapper.dstNotOwnFromDefinitionStrictlyPrimitive(), ... arguments );
 }
 
 // --
@@ -104,7 +104,9 @@ let Transformers =
 
 }
 
-_.property.transformersRegister( Transformers );
+_.props.transformersRegister( Transformers );
+
+//
 
 let Extension =
 {
@@ -114,7 +116,7 @@ let Extension =
 
 }
 
-_.mapExtend( _, Extension );
+_.props.extend( _, Extension );
 
 // --
 // export

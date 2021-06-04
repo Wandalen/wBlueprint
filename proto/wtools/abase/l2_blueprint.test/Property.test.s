@@ -5,7 +5,7 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( '../../../wtools/Tools.s' );
+  const _ = require( '../../../node_modules/Tools' );
   _.include( 'wTesting' );
   require( '../../abase/l2_blueprint/Include.s' );
 }
@@ -22,28 +22,28 @@ function _constant( test )
 
   test.case = 'second argument is map';
   var dstMap = {};
-  _.property.constant( dstMap, { a : 5 } );
+  _.props.constant( dstMap, { a : 5 } );
   var descriptor = Object.getOwnPropertyDescriptor( dstMap, 'a' );
   test.identical( descriptor.writable, false );
   test.identical( dstMap.a, 5 );
 
   test.case = 'rewrites existing field';
   var dstMap = { a : 5 };
-  _.property.constant( dstMap, { a : 1 } );
+  _.props.constant( dstMap, { a : 1 } );
   var descriptor = Object.getOwnPropertyDescriptor( dstMap, 'a' );
   test.identical( descriptor.writable, false );
   test.identical( dstMap.a, 1 );
 
   test.case = '3 arguments';
   var dstMap = {};
-  _.property.constant( dstMap, 'a', 5 );
+  _.props.constant( dstMap, 'a', 5 );
   var descriptor = Object.getOwnPropertyDescriptor( dstMap, 'a' );
   test.identical( descriptor.writable, false );
   test.identical( dstMap.a, 5 );
 
   test.case = '2 arguments, no value';
   var dstMap = {};
-  _.property.constant( dstMap, 'a' );
+  _.props.constant( dstMap, 'a' );
   var descriptor = Object.getOwnPropertyDescriptor( dstMap, 'a' );
   test.identical( descriptor.writable, false );
   test.identical( dstMap.a, undefined );
@@ -51,7 +51,7 @@ function _constant( test )
 
   test.case = 'second argument is array';
   var dstMap = {};
-  _.property.constant( dstMap, [ 'a' ], 5 );
+  _.props.constant( dstMap, [ 'a' ], 5 );
   var descriptor = Object.getOwnPropertyDescriptor( dstMap, 'a' );
   test.identical( descriptor.writable, false );
   test.identical( dstMap.a, 5 );
@@ -62,19 +62,19 @@ function _constant( test )
   test.case = 'empty call';
   test.shouldThrowErrorSync( function()
   {
-    _.property.constant( );
+    _.props.constant( );
   });
 
   test.case = 'invalid first argument type';
   test.shouldThrowErrorSync( function()
   {
-    _.property.constant( 1, { a : 'a' } );
+    _.props.constant( 1, { a : 'a' } );
   });
 
   test.case = 'invalid second argument type';
   test.shouldThrowErrorSync( function()
   {
-    _.property.constant( {}, 13 );
+    _.props.constant( {}, 13 );
   });
 
 }
@@ -88,7 +88,7 @@ function declare( test )
 
   test.case = 'basic';
   var obj1 = Object.create( null );
-  _.property.declare( obj1, { name : 'a1', get : get1, set : set1 } );
+  _.props.declare( obj1, { name : 'a1', get : get1, set : set1 } );
   var exp = { a1 : undefined };
   test.identical( obj1, exp );
   test.identical( obj1.a1, undefined );
@@ -114,7 +114,7 @@ function declare( test )
 
   test.case = 'set : false';
   var obj1 = Object.create( null );
-  _.property.declare( obj1, { name : 'a1', get : get1, set : false } );
+  _.props.declare( obj1, { name : 'a1', get : get1, set : false } );
   var exp = { a1 : undefined };
   test.identical( obj1, exp );
   test.identical( obj1.a1, undefined );
@@ -143,7 +143,7 @@ function declare( test )
 
   test.case = 'get : false';
   var obj1 = Object.create( null );
-  _.property.declare( obj1, { name : 'a1', get : false, set : set1 } );
+  _.props.declare( obj1, { name : 'a1', get : false, set : set1 } );
   var exp = {};
   test.identical( _.mapBut_( null, obj1, { a1 : null } ), exp );
   // test.identical( obj1.a1, undefined );
@@ -172,7 +172,7 @@ function declare( test )
 
   test.case = 'val';
   var obj1 = Object.create( null );
-  _.property.declare( obj1, { name : 'a1', val : 1 } );
+  _.props.declare( obj1, { name : 'a1', val : 1 } );
   var exp = { a1 : 1 };
   test.identical( obj1, exp );
   test.identical( obj1.a1, 1 );
@@ -200,9 +200,9 @@ function declare( test )
   return;
 
   test.case = 'get : false , val : 1';
-  test.shouldThrowErrorSync( () => _.property.declare( obj1, { name : 'a1', get : false, set : set1, val : 1 } ) );
+  test.shouldThrowErrorSync( () => _.props.declare( obj1, { name : 'a1', get : false, set : set1, val : 1 } ) );
   test.case = 'set : false , val : 1';
-  test.shouldThrowErrorSync( () => _.property.declare( obj1, { name : 'a1', get : get1, set : false, val : 1 } ) );
+  test.shouldThrowErrorSync( () => _.props.declare( obj1, { name : 'a1', get : get1, set : false, val : 1 } ) );
 
   /* */
 
