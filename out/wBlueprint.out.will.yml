@@ -3,8 +3,8 @@ root:
   - wBlueprint.out
 consistency:
   ../will.yml: &ref_0
-    hash: 969efe74f916e395555eb74b5bb19607
-    size: 6341
+    hash: 0f779f0998d59b84259e875db4f32ee6
+    size: 6434
 module:
   wBlueprint.out:
     about:
@@ -175,8 +175,10 @@ module:
           - ../proto/wtools/abase/l2_blueprint.test
           - ../proto/wtools/abase/l2_blueprint.test/Accessor.test.s
           - ../proto/wtools/abase/l2_blueprint.test/Blueprint.test.s
+          - ../proto/wtools/abase/l2_blueprint.test/Definition.test.s
           - ../proto/wtools/abase/l2_blueprint.test/Etc.test.s
           - ../proto/wtools/abase/l2_blueprint.test/Property.test.s
+          - ../proto/wtools/abase/l2_blueprint.test/Trait.test.s
           - ../proto/wtools/amid
           - ../proto/wtools/atop
     submodule:
@@ -184,6 +186,12 @@ module:
         path: 'npm:///wTools'
         autoExporting: 0
         enabled: 0
+      eslint:
+        path: 'npm:///eslint#7.1.0'
+        autoExporting: 0
+        enabled: 0
+        criterion:
+          development: 1
     reflector:
       reflect.proto.debug.raw:
         src:
@@ -908,6 +916,12 @@ module:
         path: 'npm:///wTools'
         autoExporting: 0
         enabled: 0
+      eslint:
+        path: 'npm:///eslint#7.1.0'
+        autoExporting: 0
+        enabled: 0
+        criterion:
+          development: 1
     reflector:
       reflect.proto.debug.raw:
         src:
@@ -1440,5 +1454,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: 969efe74f916e395555eb74b5bb19607
-        size: 6341
+        hash: 0f779f0998d59b84259e875db4f32ee6
+        size: 6434
