@@ -291,3 +291,8 @@ submodule:
   wTools:
     path: 'npm:///wTools'
     enabled: 0
+  eslint:
+    path: 'npm:///eslint#7.1.0'
+    enabled: 0
+    criterion:
+      development: 1

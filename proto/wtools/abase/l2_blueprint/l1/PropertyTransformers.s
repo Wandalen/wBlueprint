@@ -65,7 +65,8 @@ function dstNotOwnFromDefinitionStrictlyPrimitive()
       _.assert
       (
         !_.consequenceIs( srcElement ) && ( _.primitiveIs( srcElement ) || _.routineIs( srcElement ) ),
-        () => `${ _.entity.exportStringDiagnosticShallow( dstContainer ) } has non-primitive element "${ key }" use _.define.own instead`
+        () => `${ _.entity.exportStringDiagnosticShallow( dstContainer ) } has non-primitive element "${ key }",`
+        + ` use _.define.own instead`
       );
       dstContainer[ key ] = srcElement;
     }
