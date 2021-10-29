@@ -3,8 +3,8 @@ root:
   - wBlueprint.out
 consistency:
   ../will.yml: &ref_0
-    hash: 0f779f0998d59b84259e875db4f32ee6
-    size: 6434
+    hash: 380e52e9d4bbf6d165abd514737c6f59
+    size: 6293
 module:
   wBlueprint.out:
     about:
@@ -373,9 +373,6 @@ module:
           content: npm
         inherit:
           - module.export
-      npm.publish:
-        opts:
-          shell: npm publish
       npm.generate.debug.raw:
         opts:
           entryPath: 'path::entry.out.*=1'
@@ -711,12 +708,6 @@ module:
           - 'step::doc.export'
         criterion:
           content: doc
-          export: 1
-      npm.export:
-        steps:
-          - 'step::npm.publish'
-        criterion:
-          content: npm
           export: 1
       export:
         steps:
@@ -1052,9 +1043,6 @@ module:
           content: npm
         inherit:
           - module.export
-      npm.publish:
-        opts:
-          shell: npm publish
       npm.generate.debug.raw:
         opts:
           entryPath: 'path::entry.out.*=1'
@@ -1391,12 +1379,6 @@ module:
         criterion:
           content: doc
           export: 1
-      npm.export:
-        steps:
-          - 'step::npm.publish'
-        criterion:
-          content: npm
-          export: 1
       export:
         steps:
           - 'build::proto.export'
@@ -1454,5 +1436,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: 0f779f0998d59b84259e875db4f32ee6
-        size: 6434
+        hash: 380e52e9d4bbf6d165abd514737c6f59
+        size: 6293
