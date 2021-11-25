@@ -20317,6 +20317,7 @@ const Proto =
 
   name : 'Tools.l2.blueprint.Blueprint',
   silencing : 1,
+  routineTimeOut : 10000,
 
   context :
   {
