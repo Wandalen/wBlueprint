@@ -3,8 +3,8 @@ root:
   - wBlueprint.out
 consistency:
   ../will.yml: &ref_0
-    hash: 380e52e9d4bbf6d165abd514737c6f59
-    size: 6293
+    hash: 70f7e538d8d78b004c2735be38194d81
+    size: 6301
 module:
   wBlueprint.out:
     about:
@@ -1436,5 +1436,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: 380e52e9d4bbf6d165abd514737c6f59
-        size: 6293
+        hash: 70f7e538d8d78b004c2735be38194d81
+        size: 6301
